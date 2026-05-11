@@ -822,9 +822,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     <div class="shelf">
       <div class="shelf-header">
         <div class="shelf-title">Tonight's Cards</div>
-        <div class="shelf-link" onclick="toast('Full library in Connect →')">2 today</div>
+        <div class="shelf-link" id="tonightCount">2 today</div>
       </div>
-      <div class="shelf-row">
+      <div class="shelf-row" id="tonightShelf">
 
         <div class="conv-card card-family" onclick="openCard('family')">
           <div class="conv-card-label">Family</div>
@@ -847,9 +847,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     <div class="shelf">
       <div class="shelf-header">
         <div class="shelf-title">Wit &amp; Wonder</div>
-        <div class="shelf-link" onclick="toast('More in Connect →')">3 jokes · 3 riddles</div>
+        <div class="shelf-link" id="wwCount">loading...</div>
       </div>
-      <div class="shelf-row">
+      <div class="shelf-row" id="wwShelf">
 
         <div class="ww-card" id="ww1" onclick="openWW('ww1')">
           <div class="ww-card-top">
@@ -889,9 +889,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     <div class="shelf">
       <div class="shelf-header">
         <div class="shelf-title">Discover You</div>
-        <div class="shelf-link" onclick="toast('All 30 quizzes in Connect →')">3 free tonight</div>
+        <div class="shelf-link" id="quizCount">loading...</div>
       </div>
-      <div class="shelf-row">
+      <div class="shelf-row" id="quizShelf">
 
         <div class="quiz-card quiz-vibe" onclick="toast('Quiz opens here — launching soon')">
           <div class="quiz-label">Light Identity</div>
@@ -1797,6 +1797,25 @@ function initCardFlips() {
     card.parentNode.insertBefore(wrap, card);
     wrap.querySelector('.card-face').appendChild(card);
   });
+}
+
+// Update shelf counts dynamically
+function updateShelfCounts(tonightCards, wwCards, quizCards) {
+  const tier = CC.getTier ? CC.getTier() : 'free';
+  const tierMax = {free: 2, connect: 5, insight: 8, legacy: 99};
+  const max = tierMax[tier] || 2;
+
+  const tc = document.getElementById('tonightCount');
+  const ww = document.getElementById('wwCount');
+  const qc = document.getElementById('quizCount');
+
+  if (tc) tc.textContent = Math.min(tonightCards, max) + ' today';
+  if (ww && wwCards) {
+    const jokes = wwCards.filter(c => c.fields?.Type === 'Joke').length;
+    const riddles = wwCards.filter(c => c.fields?.Type === 'Riddle').length;
+    ww.textContent = jokes + ' jokes · ' + riddles + ' riddles';
+  }
+  if (qc && quizCards) qc.textContent = Math.min(quizCards, 3) + ' free tonight';
 }
 
 // Initialize flips after Airtable loads
