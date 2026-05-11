@@ -1572,7 +1572,7 @@ async function atFetch(table, formula, max=20) {
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 async function loadTonightCards() {
-  const recs = await atFetch('Conversation Cards', "AND({Gather Pool}=1,{Edition Key}='family',{Active}=1)");
+  const recs = await atFetch('Conversation Cards', "AND({Edition Key}='family',{Edition Key}='family',{Active}=1)");
   if (!recs || recs.length < 2) return;
   const picked = shuffle(recs).slice(0,2);
   const cards = document.querySelectorAll('.shelf-row .conv-card');
@@ -1586,7 +1586,7 @@ async function loadTonightCards() {
 }
 
 async function loadWitWonder() {
-  const recs = await atFetch('Wit and Wonder', "AND({Gather Pool}=1,{Active}=1)");
+  const recs = await atFetch('Wit and Wonder', "AND({Edition Key}='family',{Active}=1)");
   if (!recs || recs.length < 3) return;
   const facts   = shuffle(recs.filter(r => !['Riddle','Joke'].includes(r.fields?.Type?.name)));
   const riddles = shuffle(recs.filter(r => r.fields?.Type?.name === 'Riddle'));
