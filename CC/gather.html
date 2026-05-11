@@ -191,6 +191,12 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
   padding:0 .9rem .25rem;
   overflow-x:auto;scrollbar-width:none;
 }
+.shelf-row.full-width{
+  justify-content:space-between;
+}
+.shelf-row.full-width .conv-card{
+  flex:1;max-width:calc(50% - .35rem);
+}
 .shelf-row::-webkit-scrollbar{display:none;}
 
 /* ── CONVERSATION CARDS (shelf 1) ── */
@@ -878,6 +884,42 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
 
 /* HERO FRONT — same as before but as back face of flip */
 .hero-front-face{transform:rotateY(180deg);}
+
+/* ── RETENTION BANNER ── */
+.retention-banner{
+  margin:.75rem .9rem;padding:.85rem 1rem;
+  background:rgba(201,125,58,.08);
+  border:1.5px solid rgba(201,125,58,.2);
+  border-radius:var(--r-md);
+  display:none;
+  animation:fadeUp .5s ease both;
+}
+.retention-banner.show{display:block;}
+.retention-banner-title{
+  font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
+  margin-bottom:.3rem;
+}
+.retention-banner-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.85rem;color:rgba(242,232,216,.6);line-height:1.55;
+  margin-bottom:.6rem;
+}
+.retention-banner-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.retention-btn-save{
+  font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem .8rem;border-radius:999px;cursor:pointer;
+  background:rgba(201,125,58,.2);border:1px solid rgba(201,125,58,.35);
+  color:var(--amber);transition:all .2s;
+}
+.retention-btn-upgrade{
+  font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem .8rem;border-radius:999px;cursor:pointer;
+  background:linear-gradient(135deg,var(--amber),var(--amber2));
+  border:none;color:#fff;transition:all .2s;
+}
 </style>
   <script src="/cc-auth.js"></script>
   <script src="/cc-cards.js"></script>
@@ -911,8 +953,19 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
       </div>
     </div>
 
+    <!-- ── DATA RETENTION BANNER (free users approaching 12-month limit) ── -->
+    <div class="retention-banner" id="retentionBanner">
+      <div class="retention-banner-title">⏳ Your feed history expires soon</div>
+      <div class="retention-banner-text">Free accounts keep 12 months of posts. Yours expire in <span id="retentionDays">30</span> days — save what matters or upgrade to keep everything.</div>
+      <div class="retention-banner-actions">
+        <button class="retention-btn-save" onclick="exportFeedData()">Export my posts</button>
+        <button class="retention-btn-upgrade" onclick="triggerAccount('upgrade to save feed history')">Keep everything →</button>
+      </div>
+    </div>
+
+
     <!-- ── HERO: TONIGHT'S EXPERIENCE ── -->
-    <div class="hero-card" onclick="openCard('tonight')">
+    <div class="hero-card" onclick="openHeroCard()">
       <div class="hero-bg"></div>
       <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);"></div>
       <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);"></div>
@@ -1157,6 +1210,25 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
         <button class="response-share" onclick="shareAnswer()">Share with circle</button>
       </div>
     </div>
+
+    <!-- ── WRITE YOUR EXPERIENCE ── -->
+    <div class="shelf" style="margin-top:1.8rem;margin-bottom:.5rem;">
+      <div class="shelf-header">
+        <div class="shelf-title">Write Your Experience</div>
+      </div>
+      <div style="padding:0 .9rem 1rem;">
+        <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);padding:1.2rem 1.1rem;cursor:pointer;transition:border-color .2s;" onclick="triggerAccount('write your experience')">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(242,232,216,.32);line-height:1.65;">
+            What came up for you tonight? A moment, a memory, something that surprised you.
+          </div>
+          <div style="margin-top:.85rem;display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">Start writing →</div>
+            <div style="font-size:.6rem;color:rgba(242,232,216,.18);font-style:italic;">Saved to your leaf</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- WIT & WONDER FULLSCREEN -->
@@ -1166,6 +1238,27 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     <div class="ww-screen-q" id="wwQ">I speak without a mouth and hear without ears.</div>
     <div class="ww-screen-reveal" id="wwReveal">An echo.</div>
     <button class="ww-reveal-btn" id="wwRevealBtn" onclick="revealWW()">Tap to reveal ↓</button>
+  </div>
+
+  <!-- ── BOTTOM NAV ── -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="window.location.href='gather.html'">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" onclick="window.location.href='circles.html'">
+      <div class="nav-icon">◎</div>
+      <div class="nav-label">Circles</div>
+    </div>
+    <div class="nav-compose" onclick="openCard('tonight')">✦</div>
+    <div class="nav-item" onclick="window.location.href='journal.html'">
+      <div class="nav-icon">✦</div>
+      <div class="nav-label">Journal</div>
+    </div>
+    <div class="nav-item" onclick="triggerAccount('your profile')">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">Me</div>
+    </div>
   </div>
 
 </div>
@@ -1377,6 +1470,46 @@ var CARDS={
   kids:{hasFlip:false,label:'Everyone',badge:'Conversations',q:'"What\'s something you\'re really proud of that you haven\'t told anyone yet?"',hint:'Big or small — it counts.',push:'What made it feel worth being proud of?',story:'Who would you most want to tell?',social:'Does anyone here already know?',bg:'linear-gradient(175deg,#1a0840 0%,#3a1268 35%,#2a1058 65%,#120630 100%)',labelColor:'var(--purple2)'},
   friends:{hasFlip:true,label:'Friendship Edition',badge:'Conversations',q:'"What\'s something about this friendship you\'ve never actually said out loud?"',hint:'Say it now.',push:'What stopped you from saying it before?',story:'When did you first feel it?',social:'Is it something you think they already know?',bg:'linear-gradient(175deg,#0a1830 0%,#1a3568 35%,#162a55 65%,#081520 100%)',labelColor:'var(--navy2)'}
 };
+
+
+function openHeroCard() {
+  var user = CC.getUser ? CC.getUser() : null;
+  var tier = user ? (user.tier || 'free') : 'free';
+  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
+  var level = tierOrder[tier] || 0;
+
+  if (level === 0) {
+    // Gather/free — show upgrade prompt
+    triggerAccount('unlock the full hero card experience');
+    return;
+  }
+
+  // Connect+ — open card with appropriate layers
+  var heroQ = document.getElementById('heroQuestion');
+  var q = heroQ ? heroQ.textContent : '"What's something people misunderstand about you at first?"';
+  var hint = level >= 1 ? 'Think of a time someone misread you. Was it funny, frustrating, or secretly revealing?' : '';
+  var push = level >= 1 ? 'Has that misunderstanding ever worked in your favor?' : '';
+  var story = level >= 2 ? 'When did you realize people see you differently than you see yourself?' : '';
+  var social = level >= 3 ? 'Who in this room do you think you've misread before?' : '';
+
+  document.getElementById('cfLabel').textContent = 'This Week's Experience';
+  document.getElementById('cfLabel').style.color = 'var(--amber2)';
+  document.getElementById('cfBadge').textContent = 'Curated Connections';
+  document.getElementById('cfQuestion').textContent = q;
+  document.getElementById('cfHint').textContent = hint;
+  document.getElementById('d1t').textContent = push;
+  document.getElementById('d2t').textContent = story;
+  document.getElementById('d3t').textContent = social;
+  document.getElementById('cardScreen').style.background = 'linear-gradient(175deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%)';
+  document.getElementById('cardBack').classList.remove('open');
+  document.getElementById('cfFlipBtn').textContent = level >= 2 ? 'Flip for deeper prompts ↓' : '';
+  if (document.getElementById('cfFlipBtn')) document.getElementById('cfFlipBtn').style.display = level >= 2 ? 'block' : 'none';
+  document.getElementById('wwScreen').classList.remove('open');
+  document.getElementById('cardScreen').style.display = 'flex';
+  document.getElementById('cardBack').style.display = 'none';
+  document.getElementById('cardOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
 function openCard(id){
   
@@ -1598,40 +1731,151 @@ async function loadTonightCards() {
   renderTonightCards(shelf, recs);
 }
 
-function renderTonightCards(shelf, recs) {
-  const user = CC.getUser ? CC.getUser() : null;
-  const tier = user ? (user.tier || 'free') : 'free';
-  const tierMax = {free:2, connect:5, insight:8, legacy:99};
-  const max = tierMax[tier] || 2;
-  const picked = shuffle(recs).slice(0, max);
+// Store live card data from Airtable
+var LIVE_CARDS = {};
 
-  const editionClass = {
+function renderTonightCards(shelf, recs) {
+  var user = CC.getUser ? CC.getUser() : null;
+  var tier = user ? (user.tier || 'free') : 'free';
+  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
+  var tierLevel = tierOrder[tier] || 0;
+  var tierMax = {free:2,connect:5,insight:8,legacy:99};
+  var max = tierMax[tier] || 2;
+  var picked = shuffle(recs).slice(0, max);
+
+  var editionClass = {
     'Family':'card-family','Couples':'card-couples','Faith':'card-faith',
     'Dinner Table':'card-dinner','Friends':'card-friends','Teen':'card-kids',
     'Team':'card-friends','Road Trip':'card-travel','Legacy':'card-legacy',
     'Get Real':'card-getreal','Grandparents':'card-family','Kids':'card-family'
   };
+  var editionBg = {
+    'Family':'linear-gradient(175deg,#3a1400,#7a3810,#5a2808,#2a1000)',
+    'Couples':'linear-gradient(175deg,#3a0818,#7a1030,#5a0820,#2a0410)',
+    'Faith':'linear-gradient(175deg,#1a1040,#381868,#281050,#100828)',
+    'Dinner Table':'linear-gradient(175deg,#0a2818,#1a5030,#0e3820,#061808)',
+    'Friends':'linear-gradient(175deg,#1a2840,#2a4070,#1e3060,#0e1830)',
+    'Legacy':'linear-gradient(175deg,#201800,#402800,#301c00,#180e00)',
+    'Get Real':'linear-gradient(175deg,#200808,#3c1010,#280c0c,#140606)'
+  };
 
-  shelf.innerHTML = picked.map(rec => {
-    const f = rec.fields;
-    const edition = f.Edition?.name || f.Edition || 'Family';
-    const cls = editionClass[edition] || 'card-family';
-    return '<div class="conv-card ' + cls + '" onclick="openCard(\'' + edition.toLowerCase().replace(/ /g,'-') + '\')">'
-      + '<div class="conv-card-label">' + edition + '</div>'
-      + '<div class="conv-card-q">"' + (f.Prompt || '') + '"</div>'
-      + (f.Hint ? '<div class="conv-card-hint">' + f.Hint + '</div>' : '')
-      + '<div class="conv-card-tap">Tap to open</div>'
-      + '</div>';
-  }).join('');
+  // Store card data keyed by index — no quote issues
+  window.LIVE_CARDS = window.LIVE_CARDS || {};
 
-  const tc = document.getElementById('tonightCount');
+  var html = '';
+  picked.forEach(function(rec, idx) {
+    var f = rec.fields;
+    var edition = (f.Edition && f.Edition.name) ? f.Edition.name : (f.Edition || 'Family');
+    var cls = editionClass[edition] || 'card-family';
+    var bg = editionBg[edition] || editionBg['Family'];
+    var key = 'c' + idx;
+
+    window.LIVE_CARDS[key] = {
+      label: edition + ' Edition',
+      q: '"' + (f.Prompt || '') + '"',
+      hint: f.Hint || '',
+      insight: f['Insight Layer'] || '',
+      legacy: f['Legacy Layer'] || '',
+      bg: bg
+    };
+
+    // Use data attribute to avoid ALL quote nesting in onclick
+    html += '<div class="conv-card ' + cls + '" data-ckey="' + key + '" onclick="openLiveCard(this.dataset.ckey)">'
+         + '<div class="conv-card-label">' + edition + '</div>'
+         + '<div class="conv-card-q">"' + (f.Prompt || '') + '"</div>'
+         + (f.Hint ? '<div class="conv-card-hint">' + f.Hint + '</div>' : '')
+         + '<div class="conv-card-tap">Tap to open</div>'
+         + '</div>';
+  });
+
+  // Locked upgrade card — clean HTML, no quote nesting
+  if (tierLevel < 3) {
+    var nextTier = ['Connect','Insight','Legacy'][tierLevel] || 'Connect';
+    var nextPrice = ['$4.99/mo','$9.99/mo','$19.99/mo'][tierLevel] || '$4.99/mo';
+    html += '<div class="conv-card card-locked" data-tier="' + nextTier + '" onclick="triggerAccount(this.dataset.tier)"'
+          + ' style="background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.12);'
+          + 'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.45rem;">'
+          + '<div style="font-size:1.2rem;opacity:.25;">🔒</div>'
+          + '<div style="font-size:.52rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">' + nextTier + '</div>'
+          + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:.78rem;color:rgba(242,232,216,.28);line-height:1.4;">More cards &amp;<br>deeper questions</div>'
+          + '<div style="font-size:.58rem;font-weight:700;color:rgba(201,125,58,.35);margin-top:.1rem;">' + nextPrice + ' &#8594;</div>'
+          + '</div>';
+  }
+
+  shelf.innerHTML = html;
+
+  // Spread 2 cards evenly
+  if (picked.length === 2) {
+    shelf.style.cssText = 'display:flex;gap:.65rem;padding:0 .9rem .25rem;overflow-x:auto;scrollbar-width:none;';
+    shelf.querySelectorAll('.conv-card').forEach(function(c) { c.style.flex = '1'; });
+  }
+
+  var tc = document.getElementById('tonightCount');
   if (tc) tc.textContent = picked.length + ' today';
+}
+
+function openLiveCard(key) {
+  var c = window.LIVE_CARDS && window.LIVE_CARDS[key];
+  if (!c) return;
+  var user = CC.getUser ? CC.getUser() : null;
+  var tier = user ? (user.tier || 'free') : 'free';
+  var level = {free:0,connect:1,insight:2,legacy:3}[tier] || 0;
+
+  document.getElementById('cfLabel').textContent = c.label;
+  document.getElementById('cfLabel').style.color = 'var(--amber2)';
+  document.getElementById('cfBadge').textContent = 'Curated Connections';
+  document.getElementById('cfQuestion').textContent = c.q;
+  document.getElementById('cfHint').textContent = level >= 1 ? c.hint : '';
+  document.getElementById('d1t').textContent = level >= 1 ? c.hint : '';
+  document.getElementById('d2t').textContent = level >= 2 ? c.insight : '';
+  document.getElementById('d3t').textContent = level >= 3 ? c.legacy : '';
+  document.getElementById('cardScreen').style.background = c.bg;
+  document.getElementById('cardBack').classList.remove('open');
+  document.getElementById('cfFlipBtn').textContent = 'Flip for deeper prompts ↓';
+  document.getElementById('wwScreen').classList.remove('open');
+  document.getElementById('cardScreen').style.display = 'flex';
+  document.getElementById('cardBack').style.display = 'none';
+  document.getElementById('cardOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+
+function openLiveCard(cardKey) {
+  var c = LIVE_CARDS[cardKey];
+  if (!c) return;
+  var user = CC.getUser ? CC.getUser() : null;
+  var tier = user ? (user.tier || 'free') : 'free';
+  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
+  var level = tierOrder[tier] || 0;
+
+  document.getElementById('cfLabel').textContent = c.label;
+  document.getElementById('cfLabel').style.color = c.labelColor || 'var(--amber2)';
+  document.getElementById('cfBadge').textContent = c.badge || 'Curated Connections';
+  document.getElementById('cfQuestion').textContent = c.q;
+  document.getElementById('cfHint').textContent = level >= 1 ? c.hint : '';
+
+  // Depth layers by tier
+  document.getElementById('d1t').textContent = level >= 1 ? (c.hint || '') : '';
+  document.getElementById('d2t').textContent = level >= 2 ? (c.insight || '') : '';
+  document.getElementById('d3t').textContent = level >= 3 ? (c.legacy || '') : '';
+
+  document.getElementById('cardScreen').style.background = c.bg;
+  document.getElementById('cardBack').style.background = c.bg.replace('175deg','185deg');
+  document.getElementById('cardBack').classList.remove('open');
+  document.getElementById('cfFlipBtn').textContent = 'Flip for deeper prompts ↓';
+  document.getElementById('wwScreen').classList.remove('open');
+  document.getElementById('cardScreen').style.display = 'flex';
+  document.getElementById('cardBack').style.display = 'none';
+  document.getElementById('cardOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 
 
 
 
+
+var LIVE_WW = {};
 
 async function loadWitWonder() {
   const recs = await airtableFetch('Wit and Wonder', '{Active}=TRUE', 40);
@@ -1643,31 +1887,87 @@ async function loadWitWonder() {
   const facts   = shuffle(recs.filter(r => !['Riddle','Joke','Brain Teaser'].includes(r.fields?.Type?.name)));
   const picks   = [riddles[0], jokes[0], brains[0], riddles[1], facts[0]].filter(Boolean).slice(0, 5);
 
+  const wwBgs = [
+    'linear-gradient(175deg,#0a1a2a,#0a2a3e,#081822)',
+    'linear-gradient(175deg,#1a0830,#351258,#1a0838)',
+    'linear-gradient(175deg,#0a2010,#0e4020,#082810)',
+    'linear-gradient(175deg,#2a1000,#4a2008,#2a1400)',
+    'linear-gradient(175deg,#1a1840,#2a2868,#181638)'
+  ];
+
   const cards = document.querySelectorAll('.ww-card');
   picks.forEach((rec, i) => {
     if (!cards[i]) return;
     const f = rec.fields;
+    const type = f.Type?.name || 'Curiosity';
+    const wwKey = 'ww_live_' + i;
+
+    // Store live data
+    LIVE_WW[wwKey] = {
+      type: type,
+      q: f.Prompt || '',
+      a: f.Answer || '',
+      bridge: f['Conversation Bridge'] || '',
+      bg: wwBgs[i] || wwBgs[0]
+    };
+
+    // Update card display
     const typeEl = cards[i].querySelector('.ww-type');
     const qEl    = cards[i].querySelector('.ww-q');
-    const revEl  = cards[i].querySelector('.ww-reveal');
     const tapEl  = cards[i].querySelector('.ww-tap');
-    if (typeEl) typeEl.textContent = f.Type?.name || 'Curiosity';
+    if (typeEl) typeEl.textContent = type;
     if (qEl)    qEl.textContent    = f.Prompt || '';
-    if (revEl) {
-      if (f['Conversation Bridge']) {
-        revEl.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + f['Conversation Bridge'];
-      } else {
-        revEl.textContent = f.Answer || '';
-      }
-    }
-    if (tapEl) tapEl.textContent = (f.Type?.name === 'Joke') ? 'Tap for punchline' : 'Tap for answer';
+    if (tapEl)  tapEl.textContent  = (type === 'Joke') ? 'Tap for punchline' : 'Tap for answer';
+
+    // Update onclick to use live key
+    cards[i].setAttribute('data-wwkey', wwKey);
+    cards[i].setAttribute('onclick', 'openLiveWW(this.dataset.wwkey)');
   });
+
+  // Add locked upgrade card if needed
+  const user = CC.getUser ? CC.getUser() : null;
+  const tier = user ? (user.tier || 'free') : 'free';
+  const tierLevel = {free:0,connect:1,insight:2,legacy:3}[tier] || 0;
+  const wwShelf = document.getElementById('wwShelf');
+  if (wwShelf && tierLevel < 2) {
+    const lockedCard = document.createElement('div');
+    lockedCard.className = 'ww-card';
+    lockedCard.style.cssText = 'background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.5rem;padding:1rem;cursor:pointer;';
+    lockedCard.onclick = function() { triggerAccount('upgrade for more Wit & Wonder'); };
+    lockedCard.innerHTML = '<div style="font-size:1.2rem;opacity:.3;">🔒</div>'
+      + '<div style="font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.4);">More in Connect</div>'
+      + '<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.75rem;color:rgba(242,232,216,.25);line-height:1.4;">Brain teasers,<br>human behavior & more</div>';
+    wwShelf.appendChild(lockedCard);
+  }
 
   const wwCount = document.getElementById('wwCount');
   if (wwCount) {
     const j = jokes.length; const r = riddles.length;
     wwCount.textContent = (j ? j + ' joke' + (j>1?'s':'') : '') + (j&&r?' · ':'') + (r ? r + ' riddle' + (r>1?'s':'') : '');
   }
+}
+
+function openLiveWW(keyOrEl) { var wwKey = (typeof keyOrEl === 'string') ? keyOrEl : keyOrEl.dataset.wwkey;
+  var w = LIVE_WW[wwKey];
+  if (!w) return;
+  document.getElementById('wwType').textContent = w.type;
+  document.getElementById('wwQ').textContent = w.q;
+  var revealEl = document.getElementById('wwReveal');
+  if (revealEl) {
+    if (w.bridge) {
+      revealEl.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + w.bridge;
+    } else {
+      revealEl.textContent = w.a;
+    }
+    revealEl.classList.remove('open');
+  }
+  var revBtn = document.getElementById('wwRevealBtn');
+  if (revBtn) { revBtn.textContent = 'Tap to reveal ↓'; revBtn.style.display = 'block'; }
+  document.getElementById('wwScreen').style.background = w.bg;
+  document.getElementById('cardScreen').style.display = 'none';
+  document.getElementById('wwScreen').style.display = 'flex';
+  document.getElementById('cardOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 
@@ -1734,11 +2034,53 @@ async function loadCircles() {
   row.innerHTML = html;
 }
 
+
+function checkRetentionBanner() {
+  const user = CC.getUser ? CC.getUser() : null;
+  if (!user) return;
+  const tier = user.tier || 'free';
+  if (tier !== 'free') return; // Only show for free users
+
+  const createdAt = user.createdAt || user.created_at;
+  if (!createdAt) return;
+
+  const created = new Date(createdAt);
+  const now = new Date();
+  const ageMs = now - created;
+  const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+  const daysUntilExpiry = 365 - ageDays;
+
+  // Show banner if within 60 days of expiry
+  if (daysUntilExpiry <= 60 && daysUntilExpiry > 0) {
+    const banner = document.getElementById('retentionBanner');
+    const daysEl = document.getElementById('retentionDays');
+    if (banner) banner.classList.add('show');
+    if (daysEl) daysEl.textContent = daysUntilExpiry;
+  }
+}
+
+function exportFeedData() {
+  toast('Preparing your data export...');
+  // In Phase 3 this will generate a real download
+  // For now, acknowledge and log
+  setTimeout(() => {
+    toast('Export feature coming soon — we'll email it to you');
+  }, 1500);
+}
+
+// Set feed_expires_at when user signs up (called from onboarding)
+function setFeedExpiry(uid) {
+  const expiresAt = new Date();
+  expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+  return expiresAt.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadTonightCards();
   loadWitWonder();
   loadGatherQuiz();
   loadCircles();
+  checkRetentionBanner();
 });
 </script>
 
@@ -1769,20 +2111,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Show upgrade nudge for free users at bottom of page
-  if (tier === 'free') {
-    const nudge = document.createElement('div');
-    nudge.style.cssText = 'text-align:center;padding:1.5rem 1.2rem;margin:1rem 0;';
-    nudge.innerHTML = `
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.45);margin-bottom:.8rem;">
-        You're in Gather — the free daily experience.<br>Connect unlocks everything.
-      </div>
-      <a href="onboarding.html?tier=connect" style="display:inline-block;padding:.7rem 1.8rem;background:linear-gradient(135deg,#c97d3a,#e89448);border-radius:999px;font-family:Nunito,sans-serif;font-size:.82rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:.04em;">
-        Unlock Connect — $4.99/mo →
-      </a>
-    `;
-    const scroll = document.querySelector('.scroll');
-    if (scroll) scroll.appendChild(nudge);
-  }
+  // upgrade nudge removed — lives in locked card slots instead
 });
 </script>
 
