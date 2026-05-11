@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>A Gift for Her Story — Curated Connections™</title>
+<meta name="description" content="In honor of Mother's Day 2026 — start preserving your mother's story today. Free Living Legacy leaf. No credit card required."/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --gold: #c9973a;
+  --gold2: #e8b84b;
+  --cream: #f4ede0;
+  --cream2: #ede2cf;
+  --ink: #1a1208;
+  --muted: rgba(26,18,8,.45);
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* GRAIN */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .04;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: multiply;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1.8rem 4rem;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201,151,58,.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(201,151,58,.1) 0%, transparent 50%),
+    var(--cream);
+}
+
+.hero-leaf {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  animation: sway 4s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+.eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp .6s .1s ease both;
+}
+
+.hero-title {
+  font-size: clamp(2.8rem, 9vw, 5.5rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 1.4rem;
+  max-width: 680px;
+  opacity: 0;
+  animation: fadeUp .7s .2s ease both;
+}
+
+.hero-title strong {
+  font-weight: 400;
+  color: var(--gold);
+  font-style: normal;
+}
+
+.hero-sub {
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 500px;
+  margin-bottom: 2.8rem;
+  font-style: italic;
+  opacity: 0;
+  animation: fadeUp .7s .35s ease both;
+}
+
+.cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .9rem;
+  opacity: 0;
+  animation: fadeUp .7s .5s ease both;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 1.1rem 2.8rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: .04em;
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 8px 32px rgba(201,151,58,.35);
+  transition: all .22s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201,151,58,.45);
+}
+
+.code-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: rgba(201,151,58,.1);
+  border: 1.5px solid rgba(201,151,58,.3);
+  border-radius: 999px;
+  padding: .55rem 1.2rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: .82rem;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: .06em;
+}
+
+.code-pill span {
+  background: var(--gold);
+  color: white;
+  border-radius: 999px;
+  padding: .12rem .5rem;
+  font-size: .7rem;
+  letter-spacing: .08em;
+}
+
+.hero-note {
+  margin-top: 1.2rem;
+  font-size: .88rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* DIVIDER */
+.divider {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: rgba(201,151,58,.45);
+  font-size: 1.1rem;
+  letter-spacing: .4em;
+}
+
+/* WHAT IS THIS */
+.what {
+  padding: 4rem 1.8rem 5rem;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.what-eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: .55rem;
+  font-weight: 800;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.what-head {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+}
+
+.what-body {
+  font-size: 1.15rem;
+  color: var(--muted);
+  line-height: 1.85;
+  font-style: italic;
+}
+
+/* HOW IT WORKS */
+.how {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 5rem 1.8rem;
+}
+
+.how-inner {
+  max-width: 580px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.how-eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: .55rem;
+  font-weight: 800;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.how-head {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 3rem;
+  line-height: 1.25;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  gap: 1.2rem;
+  text-align: left;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.step:last-child { border-bottom: none; }
+
+.step-num {
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--gold);
+  font-family: 'Nunito', sans-serif;
+  min-width: 28px;
+  padding-top: .2rem;
+}
+
+.step-text strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: .3rem;
+}
+
+.step-text span {
+  font-size: .95rem;
+  color: rgba(244,237,224,.5);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* CLOSE */
+.close {
+  padding: 5rem 1.8rem 6rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(201,151,58,.12) 0%, transparent 60%),
+    var(--cream);
+}
+
+.close-leaf { font-size: 2.5rem; display: block; margin-bottom: 1.2rem; }
+
+.close-head {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 300;
+  font-style: italic;
+  margin-bottom: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.close-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 2.5rem;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+}
+
+.close-legal {
+  font-size: .75rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 1.5rem;
+  line-height: 1.8;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* DESKTOP */
+@media (min-width: 768px) {
+  .hero { padding: 6rem 2rem 5rem; }
+  .what { padding: 6rem 2rem 7rem; }
+  .how { padding: 6rem 2rem; }
+  .close { padding: 6rem 2rem 8rem; }
+  .steps { gap: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-leaf">🍃</span>
+  <div class="eyebrow">Mother's Day 2026 · Curated Connections™</div>
+  <h1 class="hero-title">
+    Her story deserves<br>to be <strong>kept forever.</strong>
+  </h1>
+  <p class="hero-sub">
+    In honor of Mother's Day, every family receives a free Living Legacy leaf —
+    a permanent place to preserve your mother's voice, stories, and memory.
+  </p>
+  <div class="cta-group">
+    <a href="legacy.html" class="btn-primary">Start Her Leaf — It's Free →</a>
+    <div class="code-pill">
+      Use code <span>MOTHERS2026</span> at checkout
+    </div>
+  </div>
+  <p class="hero-note">No credit card required · Free through May 2026</p>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+<!-- WHAT IS THIS -->
+<section class="what reveal">
+  <div class="what-eyebrow">What is a Living Legacy Leaf</div>
+  <h2 class="what-head">A permanent archive<br>for the people you love most.</h2>
+  <p class="what-body">
+    A Living Legacy leaf is a private space where your family gathers to preserve
+    someone's story — their voice, their recipes, their memories, the things they
+    say at dinner that nobody ever writes down. Built by everyone who loves them.
+    Kept forever. Yours to hold long after they're gone.
+  </p>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-inner">
+    <div class="how-eyebrow">How It Works</div>
+    <h2 class="how-head">Three steps.<br>A lifetime of stories.</h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-text">
+          <strong>Start her leaf</strong>
+          <span>Enter her name and a few details. Takes less than two minutes. No account required to begin.</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-text">
+          <strong>Invite the people who love her</strong>
+          <span>Send a link to siblings, cousins, grandchildren. Each person adds their piece of her story.</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-text">
+          <strong>Watch it grow</strong>
+          <span>Photos, voice notes, stories, recipes — everything lives in one place, preserved permanently.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section class="close">
+  <span class="close-leaf">🌳</span>
+  <h2 class="close-head reveal">People forget voices<br>frightfully fast.</h2>
+  <p class="close-sub reveal">
+    Start preserving hers today — while you still have the chance.
+    This gift is free. The story it holds is priceless.
+  </p>
+  <div class="reveal">
+    <a href="legacy.html" class="btn-primary">Begin Her Living Legacy →</a>
+  </div>
+  <p class="close-legal">
+    Free Living Legacy leaf with code MOTHERS2026 · Valid through May 2026<br>
+    © 2026 RespondIQ, LLC · Curated Connections™ · For entertainment and personal connection only
+  </p>
+</section>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

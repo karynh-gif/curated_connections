@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Living Legacy — Curated Connections</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ivory:#f8f2e8;
+  --parchment:#f2e8d5;
+  --parchment2:#e8d9c0;
+  --bark:#2a1800;
+  --bark-mid:rgba(42,24,0,.58);
+  --bark-soft:rgba(42,24,0,.36);
+  --bark-ghost:rgba(42,24,0,.16);
+  --gold:#b8860b;
+  --gold2:#d4a017;
+  --gold-soft:rgba(184,134,11,.42);
+  --gold-ghost:rgba(184,134,11,.14);
+  --r-md:16px;--r-lg:22px;--r-xl:28px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--ivory);font-family:'DM Sans',sans-serif;color:var(--bark);-webkit-font-smoothing:antialiased;}
+
+/* Parchment grain */
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.042'/%3E%3C/svg%3E");
+  background-size:180px;pointer-events:none;z-index:9999;}
+
+/* Ambient warmth */
+body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(220,185,90,.16) 0%,transparent 52%),
+             radial-gradient(ellipse at 15% 85%,rgba(190,150,60,.09) 0%,transparent 48%),
+             radial-gradient(ellipse at 88% 60%,rgba(200,165,70,.07) 0%,transparent 44%);
+  pointer-events:none;z-index:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes breathe{0%,100%{opacity:.45}50%{opacity:.8}}
+@keyframes drift{0%{transform:translateY(0);opacity:0}15%{opacity:.48}85%{opacity:.32}100%{transform:translateY(-48px);opacity:0}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes shimmer{0%,100%{opacity:.5}50%{opacity:.85}}
+
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;background:var(--ivory);position:relative;overflow:hidden;z-index:1;}
+
+/* TOPBAR */
+.topbar{padding:.9rem 1.1rem .75rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;z-index:10;}
+.tb-names{display:flex;align-items:center;gap:.28rem;}
+.tb-gather{font-family:'Pacifico',cursive;font-size:1.12rem;color:var(--gold);}
+.tb-sep{font-family:'Pacifico',cursive;font-size:.9rem;color:var(--gold-ghost);}
+.tb-tier{font-family:'Pacifico',cursive;font-size:1.12rem;color:rgba(80,50,8,.74);}
+.tb-date{font-size:.44rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(184,134,11,.36);margin-top:.05rem;}
+.tb-right{display:flex;align-items:center;gap:.4rem;}
+.tb-btn{width:28px;height:28px;border-radius:50%;background:rgba(184,134,11,.08);border:1px solid rgba(184,134,11,.16);display:flex;align-items:center;justify-content:center;font-size:.68rem;cursor:pointer;}
+.tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#d4a840,#9a7020);display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;color:#fff;cursor:pointer;border:1px solid rgba(184,134,11,.2);}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;position:relative;z-index:1;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* HERO GREETING */
+.greeting{padding:2.4rem 1.4rem 1.6rem;text-align:center;animation:fadeUp .6s ease both;}
+.greeting-label{font-size:.52rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.5);margin-bottom:.65rem;}
+.greeting-title{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:300;color:var(--bark);line-height:1.35;margin-bottom:.6rem;}
+.greeting-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:var(--bark-soft);line-height:1.7;}
+
+/* Gold divider */
+.gold-line{width:36px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.4),transparent);margin:1.6rem auto;}
+
+/* TODAY'S INVITATION — the gentle daily prompt */
+.invitation{margin:0 1.2rem 1.8rem;background:linear-gradient(145deg,rgba(248,236,200,.7),rgba(235,220,180,.6));border:1px solid rgba(184,134,11,.2);border-radius:var(--r-xl);padding:1.5rem 1.4rem;cursor:pointer;position:relative;overflow:hidden;animation:fadeUp .6s .1s ease both;transition:all .25s;}
+.invitation:hover{border-color:rgba(184,134,11,.35);}
+.invitation::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(220,185,90,.2),transparent 60%);pointer-events:none;}
+.inv-label{font-size:.5rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.6);margin-bottom:.5rem;position:relative;z-index:1;}
+.inv-prompt{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--bark);line-height:1.6;margin-bottom:.9rem;position:relative;z-index:1;}
+.inv-person{font-size:.65rem;color:var(--bark-soft);margin-bottom:1rem;position:relative;z-index:1;display:flex;align-items:center;gap:.35rem;}
+.inv-person-av{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,rgba(232,210,140,.9),rgba(210,185,110,.85));border:1px solid rgba(184,134,11,.3);display:flex;align-items:center;justify-content:center;font-size:.62rem;}
+.inv-action{position:relative;z-index:1;display:flex;gap:.5rem;}
+.inv-btn{flex:1;padding:.65rem;border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.9rem;text-align:center;cursor:pointer;transition:all .2s;}
+.inv-btn-write{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;font-style:italic;}
+.inv-btn-voice{background:rgba(255,255,255,.5);border:1px solid rgba(184,134,11,.22);color:var(--bark-mid);}
+
+/* SECTION LABEL */
+.section-lbl{font-size:.52rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.45);padding:0 1.4rem;margin-bottom:1rem;animation:fadeUp .6s .2s ease both;}
+
+/* FOUR PATHS */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;padding:0 1.2rem;margin-bottom:2rem;animation:fadeUp .6s .25s ease both;}
+
+.path{border-radius:var(--r-lg);padding:1.3rem 1.1rem 1.2rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.5rem;}
+.path:active{transform:scale(.97);}
+
+.path-tree{background:linear-gradient(145deg,rgba(235,220,175,.8),rgba(220,200,150,.7));border:1px solid rgba(184,134,11,.22);}
+.path-leaf{background:linear-gradient(145deg,rgba(240,228,195,.8),rgba(225,210,170,.7));border:1px solid rgba(184,134,11,.18);}
+.path-archive{background:linear-gradient(145deg,rgba(228,215,185,.8),rgba(215,200,160,.7));border:1px solid rgba(184,134,11,.16);}
+.path-contribute{background:linear-gradient(145deg,rgba(242,232,205,.8),rgba(228,215,178,.7));border:1px solid rgba(184,134,11,.14);}
+
+.path::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,235,150,.25),transparent 65%);pointer-events:none;}
+.path-icon{font-size:1.5rem;line-height:1;position:relative;z-index:1;}
+.path-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--bark);line-height:1.25;position:relative;z-index:1;}
+.path-desc{font-size:.65rem;color:var(--bark-soft);line-height:1.5;position:relative;z-index:1;}
+.path-arrow{font-size:.62rem;color:var(--gold-soft);position:relative;z-index:1;margin-top:.2rem;}
+
+/* RECENT MEMORY */
+.recent{margin:0 1.2rem 1.6rem;animation:fadeUp .6s .35s ease both;}
+.recent-lbl{font-size:.52rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.45);margin-bottom:.75rem;}
+.memory-card{background:rgba(248,242,232,.7);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-lg);padding:1.1rem 1.15rem;cursor:pointer;transition:border-color .2s;}
+.memory-card:hover{border-color:rgba(184,134,11,.28);}
+.memory-who{display:flex;align-items:center;gap:.45rem;margin-bottom:.65rem;}
+.memory-av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,rgba(232,210,140,.9),rgba(210,185,110,.85));border:1px solid rgba(184,134,11,.25);display:flex;align-items:center;justify-content:center;font-size:.72rem;}
+.memory-name{font-size:.78rem;font-weight:500;color:var(--bark-mid);}
+.memory-time{font-size:.55rem;color:var(--bark-ghost);margin-left:auto;}
+.memory-text{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-style:italic;color:var(--bark);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.memory-chapter{font-size:.5rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,134,11,.48);margin-bottom:.35rem;}
+
+/* AMBIENT PARTICLES */
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:drift var(--d,10s) var(--dl,0s) ease-in-out infinite;z-index:0;}
+
+/* ── TREE SCREEN ── */
+.tree-screen{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;height:100%;background:var(--ivory);z-index:200;display:flex;flex-direction:column;transition:transform .42s cubic-bezier(.25,.46,.45,.94);}
+.tree-screen.open{transform:translateX(-50%) translateY(0);}
+.screen-top{padding:.9rem 1.1rem .75rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(184,134,11,.1);position:relative;z-index:10;background:rgba(248,242,232,.96);}
+.screen-back{background:none;border:none;font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--bark-soft);cursor:pointer;padding:.18rem 0;}
+.screen-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--bark);}
+.tree-canvas{flex:1;position:relative;overflow:hidden;}
+.tree-svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+
+/* Leaf nodes */
+.leaf{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:opacity .4s ease;}
+.leaf:active{opacity:.72;}
+.leaf-ring{border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;}
+.leaf-full .leaf-ring{background:radial-gradient(135deg,rgba(248,236,200,.92),rgba(232,210,140,.88));border:1.5px solid rgba(184,134,11,.42);box-shadow:0 0 16px 4px rgba(184,134,11,.16),0 3px 10px rgba(42,24,0,.1);}
+.leaf-full .leaf-ring::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(184,134,11,.1),transparent 70%);animation:breathe 5s ease-in-out infinite;}
+.leaf-anc .leaf-ring{background:radial-gradient(135deg,rgba(232,218,182,.88),rgba(208,188,138,.82));border:1.5px solid rgba(155,118,18,.32);box-shadow:0 0 10px 2px rgba(155,118,18,.1),0 2px 8px rgba(42,24,0,.12);filter:sepia(.18);}
+.leaf-empty .leaf-ring{background:rgba(248,242,232,.5);border:1px dashed rgba(184,134,11,.18);}
+.leaf-name{font-family:'Cormorant Garamond',serif;font-size:.62rem;font-weight:400;color:var(--bark-mid);text-align:center;line-height:1.2;}
+.leaf-full .leaf-name{color:var(--bark);font-weight:500;}
+.leaf-anc .leaf-name{color:var(--bark-soft);}
+.story-dot{position:absolute;bottom:1px;right:1px;width:6px;height:6px;border-radius:50%;background:var(--gold);border:1.5px solid var(--ivory);box-shadow:0 0 5px rgba(184,134,11,.4);}
+.voice-dot{position:absolute;bottom:1px;left:1px;width:5px;height:5px;border-radius:50%;background:#c05038;border:1.5px solid var(--ivory);}
+.you-tag{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:.4rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
+
+/* ── PERSON STORY SCREEN ── */
+.story-screen{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;height:100%;background:var(--ivory);z-index:300;display:flex;flex-direction:column;transition:transform .42s cubic-bezier(.25,.46,.45,.94);}
+.story-screen.open{transform:translateX(-50%) translateY(0);}
+.story-scroll{flex:1;overflow-y:auto;padding:2.8rem 1.6rem 5rem;}
+.story-scroll::-webkit-scrollbar{display:none;}
+.person-hero-name{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--bark);line-height:1.2;margin-bottom:.3rem;}
+.person-hero-years{font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,134,11,.52);margin-bottom:1.8rem;}
+.person-gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.38),transparent);margin-bottom:1.8rem;}
+.story-block{margin-bottom:2.2rem;}
+.story-chapter-lbl{font-size:.48rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.48);margin-bottom:.7rem;}
+.story-text{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-style:italic;color:var(--bark);line-height:1.8;}
+.voice-block{background:rgba(192,80,56,.06);border:1px solid rgba(192,80,56,.16);border-radius:var(--r-md);padding:.85rem 1rem;margin-bottom:2rem;cursor:pointer;display:flex;align-items:center;gap:.65rem;}
+.voice-block-icon{font-size:1.1rem;}
+.voice-block-text{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--bark-mid);}
+.voice-block-dur{font-size:.55rem;color:var(--bark-ghost);margin-left:auto;}
+.prompt-block{background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1.4rem;cursor:pointer;}
+.prompt-block-lbl{font-size:.48rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.52);margin-bottom:.35rem;}
+.prompt-block-text{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--bark-mid);line-height:1.6;}
+.add-memory-btn{width:100%;padding:.88rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;cursor:pointer;margin-bottom:.5rem;letter-spacing:.02em;}
+.story-cancel{width:100%;padding:.6rem;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--bark-soft);cursor:pointer;}
+
+/* ── MY LEAF SCREEN ── */
+.leaf-screen{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;height:100%;background:var(--ivory);z-index:200;display:flex;flex-direction:column;transition:transform .42s cubic-bezier(.25,.46,.45,.94);}
+.leaf-screen.open{transform:translateX(-50%) translateY(0);}
+.leaf-scroll{flex:1;overflow-y:auto;padding:2.4rem 1.6rem 5rem;}
+.leaf-scroll::-webkit-scrollbar{display:none;}
+.leaf-greeting{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:300;color:var(--bark);line-height:1.3;margin-bottom:.4rem;}
+.leaf-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--bark-soft);line-height:1.65;margin-bottom:1.8rem;}
+.leaf-gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.38),transparent);margin-bottom:1.8rem;}
+.prompt-card{background:linear-gradient(145deg,rgba(248,236,200,.7),rgba(235,220,180,.6));border:1px solid rgba(184,134,11,.2);border-radius:var(--r-xl);padding:1.5rem 1.4rem;margin-bottom:1rem;cursor:pointer;position:relative;overflow:hidden;}
+.prompt-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(220,185,90,.18),transparent 60%);pointer-events:none;}
+.prompt-chapter{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.58);margin-bottom:.55rem;position:relative;z-index:1;}
+.prompt-q{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--bark);line-height:1.65;margin-bottom:1rem;position:relative;z-index:1;}
+.prompt-actions{display:flex;gap:.48rem;position:relative;z-index:1;}
+.pa-write{flex:1;padding:.62rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.88rem;font-style:italic;cursor:pointer;text-align:center;}
+.pa-voice{flex:1;padding:.62rem;background:rgba(255,255,255,.5);border:1px solid rgba(184,134,11,.22);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.88rem;font-style:italic;color:var(--bark-mid);cursor:pointer;text-align:center;}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(248,242,232,.96);border-top:1px solid rgba(184,134,11,.12);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
+.bn{display:flex;flex-direction:column;align-items:center;gap:.18rem;cursor:pointer;opacity:.32;transition:opacity .2s;min-width:44px;}
+.bn.active{opacity:1;}
+.bn-i{font-size:.95rem;line-height:1;}
+.bn-l{font-size:.42rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--bark-mid);}
+.bn.active .bn-l{color:var(--gold);}
+.bn-ctr{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:.82rem;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgba(184,134,11,.35);margin-top:-8px;border:2px solid var(--ivory);}
+
+/* OVERLAY */
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(42,24,0,.35);z-index:190;display:none;backdrop-filter:blur(2px);animation:fadeIn .2s ease both;}
+.overlay.open{display:block;}
+
+/* TOAST */
+.toast{display:none;position:fixed;bottom:5.2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bark);border-radius:999px;padding:.42rem .95rem;font-size:.66rem;font-weight:500;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .24s;pointer-events:none;}
+.toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Ambient particles -->
+  <div class="particle" style="width:3px;height:3px;top:18%;left:14%;background:rgba(184,134,11,.45);box-shadow:0 0 8px 3px rgba(184,134,11,.25);--d:10s;--dl:-2s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:38%;left:75%;background:rgba(184,134,11,.35);box-shadow:0 0 6px 2px rgba(184,134,11,.2);--d:13s;--dl:-6s;"></div>
+  <div class="particle" style="width:2px;height:2px;top:62%;left:32%;background:rgba(184,134,11,.3);box-shadow:0 0 5px 2px rgba(184,134,11,.16);--d:16s;--dl:-9s;"></div>
+  <div class="particle" style="width:3px;height:3px;top:22%;left:84%;background:rgba(184,134,11,.38);box-shadow:0 0 7px 3px rgba(184,134,11,.22);--d:11s;--dl:-1s;"></div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="tb-names">
+        <div class="tb-gather">Gather</div>
+        <div class="tb-sep">✦</div>
+        <div class="tb-tier">Living Legacy</div>
+      </div>
+      <div class="tb-date" id="topDate">Saturday · May 9</div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-btn" onclick="t('Invite family')">📨</div>
+      <div class="tb-av" onclick="openLeafScreen()">K</div>
+    </div>
+  </div>
+
+  <!-- SCROLL -->
+  <div class="scroll" style="padding-bottom:5rem;">
+
+    <!-- GREETING -->
+    <div class="greeting" style="padding:2.8rem 1.4rem 1.4rem;">
+      <div class="greeting-label">Living Legacy</div>
+      <div class="greeting-title" style="font-size:2rem;font-weight:300;margin-bottom:.8rem;">Every life deserves<br>to be remembered fully.</div>
+    </div>
+
+    <!-- TODAY'S INVITATION -->
+    <div class="invitation" onclick="openLeafScreen()">
+      <div class="inv-label" style="font-size:.46rem;">Today's Prompt · Your Leaf</div>
+      <div class="inv-prompt">"What is a belief you hold that your family helped shape — and have you ever told them?"</div>
+      <div class="inv-person">
+        <div class="inv-person-av">🌿</div>
+        <span>This is yours to answer · Life Chapter: Values</span>
+      </div>
+      <div class="inv-action">
+        <button class="inv-btn inv-btn-write" style="font-size:.82rem;">Begin writing →</button>
+        <button class="inv-btn inv-btn-voice" style="font-size:.82rem;" onclick="event.stopPropagation();t('Voice recording opens')">🎙 Speak instead</button>
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- FOUR PATHS -->
+    <div class="section-lbl" style="padding:0 1.4rem;margin-bottom:1.1rem;">Choose your path</div>
+    <div class="paths" style="margin-bottom:2.8rem;">
+
+      <div class="path path-tree" onclick="openTreeScreen()">
+        <div class="path-icon">🌳</div>
+        <div class="path-title">The Family Tree</div>
+        <div class="path-desc">See everyone. Navigate by person. Explore the branches.</div>
+        <div class="path-arrow">Enter the tree →</div>
+      </div>
+
+      <div class="path path-leaf" onclick="openLeafScreen()">
+        <div class="path-icon">🍃</div>
+        <div class="path-title">My Leaf</div>
+        <div class="path-desc">Your story. Your voice. Your answers. One prompt at a time.</div>
+        <div class="path-arrow">Tell your story →</div>
+      </div>
+
+      <div class="path path-archive" onclick="t('Archive opening...')">
+        <div class="path-icon">📖</div>
+        <div class="path-title">The Archive</div>
+        <div class="path-desc">Browse all stories by person, chapter, or time.</div>
+        <div class="path-arrow">Browse stories →</div>
+      </div>
+
+      <div class="path path-contribute" onclick="t('Contribute to a story...')">
+        <div class="path-icon">✦</div>
+        <div class="path-title">Contribute</div>
+        <div class="path-desc">Add your memory of someone. Answer questions about them.</div>
+        <div class="path-arrow">Share a memory →</div>
+      </div>
+
+    </div>
+
+  </div><!-- /scroll -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <div class="bn active"><div class="bn-i">🏠</div><div class="bn-l">Home</div></div>
+    <div class="bn" onclick="openTreeScreen()"><div class="bn-i">🌳</div><div class="bn-l">Tree</div></div>
+    <div class="bn-ctr" onclick="openLeafScreen()">✦</div>
+    <div class="bn" onclick="t('Archive coming soon')"><div class="bn-i">📖</div><div class="bn-l">Archive</div></div>
+    <div class="bn" onclick="t('Invite family to contribute')"><div class="bn-i">📨</div><div class="bn-l">Invite</div></div>
+  </div>
+</div>
+
+<!-- TREE SCREEN -->
+<div class="tree-screen" id="treeScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeTree()">← Home</button>
+    <div class="screen-title">Family Tree</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="tree-canvas">
+    <svg class="tree-svg" viewBox="0 0 390 580" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#b8860b;stop-opacity:.38"/>
+          <stop offset="100%" style="stop-color:#8b6914;stop-opacity:.16"/>
+        </linearGradient>
+        <linearGradient id="thread" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#e8c040;stop-opacity:.06"/>
+          <stop offset="50%" style="stop-color:#e8c040;stop-opacity:.38"/>
+          <stop offset="100%" style="stop-color:#e8c040;stop-opacity:.06"/>
+        </linearGradient>
+      </defs>
+      <!-- Trunk -->
+      <path d="M195 548 C195 528 195 508 195 484" stroke="url(#bg)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      <!-- Parents -->
+      <path d="M195 484 C190 466 148 448 115 432" stroke="url(#bg)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M195 484 C200 466 245 448 272 432" stroke="url(#bg)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Grandparents -->
+      <path d="M115 432 C104 414 72 398 52 380" stroke="url(#bg)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M115 432 C120 414 142 398 158 380" stroke="url(#bg)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M272 432 C264 414 240 398 228 380" stroke="url(#bg)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M272 432 C284 414 308 398 328 380" stroke="url(#bg)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <!-- Great grandparents — very faint -->
+      <path d="M52 380 C42 362 24 345 18 322" stroke="url(#bg)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".42"/>
+      <path d="M52 380 C54 362 64 345 70 322" stroke="url(#bg)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".42"/>
+      <path d="M158 380 C150 362 134 345 126 322" stroke="url(#bg)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".42"/>
+      <path d="M228 380 C222 362 210 345 204 322" stroke="url(#bg)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".42"/>
+      <path d="M328 380 C336 362 348 345 354 322" stroke="url(#bg)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".42"/>
+      <!-- Children -->
+      <path d="M195 548 C184 538 152 532 136 525" stroke="url(#bg)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M195 548 C206 538 236 532 250 525" stroke="url(#bg)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Gold threads -->
+      <path d="M52 380 C104 366 152 366 195 375" stroke="url(#thread)" stroke-width=".7" fill="none" stroke-dasharray="5,6"/>
+      <path d="M228 380 C262 366 296 366 328 380" stroke="url(#thread)" stroke-width=".7" fill="none" stroke-dasharray="5,6"/>
+    </svg>
+
+    <!-- YOU -->
+    <div class="leaf leaf-full" style="left:50%;top:72%;transform:translateX(-50%);" onclick="openPerson('self')">
+      <div class="you-tag">You</div>
+      <div class="leaf-ring" style="width:50px;height:50px;font-size:1.2rem;animation:shimmer 5s ease-in-out infinite;">🌿<div class="story-dot"></div><div class="voice-dot"></div></div>
+      <div class="leaf-name" style="font-size:.68rem;color:var(--bark);">Maren</div>
+    </div>
+    <!-- MOM -->
+    <div class="leaf leaf-full" style="left:22%;top:55%;" onclick="openPerson('mom')">
+      <div class="leaf-ring" style="width:42px;height:42px;font-size:1rem;">👩<div class="story-dot"></div><div class="voice-dot"></div></div>
+      <div class="leaf-name">Mom</div>
+    </div>
+    <!-- DAD -->
+    <div class="leaf leaf-full" style="left:62%;top:55%;" onclick="openPerson('dad')">
+      <div class="leaf-ring" style="width:42px;height:42px;font-size:1rem;">👨<div class="story-dot"></div></div>
+      <div class="leaf-name">Dad</div>
+    </div>
+    <!-- GRANDMA P -->
+    <div class="leaf leaf-anc" style="left:7%;top:38%;" onclick="openPerson('grandmaP')">
+      <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👵<div class="story-dot"></div><div class="voice-dot"></div></div>
+      <div class="leaf-name" style="font-size:.58rem;">Grandma<br>Rose</div>
+    </div>
+    <!-- GRANDPA P -->
+    <div class="leaf leaf-anc" style="left:32%;top:38%;" onclick="openPerson('grandpaP')">
+      <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👴<div class="story-dot"></div></div>
+      <div class="leaf-name" style="font-size:.58rem;">Grandpa<br>Harold</div>
+    </div>
+    <!-- GRANDMA M -->
+    <div class="leaf leaf-anc" style="left:51%;top:38%;" onclick="openPerson('grandmaM')">
+      <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👵<div class="story-dot"></div><div class="voice-dot"></div></div>
+      <div class="leaf-name" style="font-size:.58rem;">Grandma<br>Helen</div>
+    </div>
+    <!-- GRANDPA M -->
+    <div class="leaf leaf-anc" style="left:72%;top:38%;" onclick="openPerson('grandpaM')">
+      <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👴</div>
+      <div class="leaf-name" style="font-size:.58rem;color:var(--bark-ghost);">Grandpa<br>Earl</div>
+    </div>
+    <!-- GREAT GRANDPARENTS — very faint -->
+    <div class="leaf leaf-anc" style="left:1%;top:22%;opacity:.42;" onclick="openPerson('ggp1')">
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👵</div>
+      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Edna</div>
+    </div>
+    <div class="leaf leaf-anc" style="left:13%;top:22%;opacity:.42;" onclick="openPerson('ggp2')">
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👴</div>
+      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Walter</div>
+    </div>
+    <div class="leaf leaf-anc" style="left:28%;top:22%;opacity:.42;" onclick="openPerson('ggp3')">
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👵</div>
+      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Mae</div>
+    </div>
+    <div class="leaf leaf-anc" style="left:49%;top:22%;opacity:.42;" onclick="openPerson('ggp4')">
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👵</div>
+      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Clara</div>
+    </div>
+    <div class="leaf leaf-anc" style="left:82%;top:22%;opacity:.42;" onclick="openPerson('ggp5')">
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👴</div>
+      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Frank</div>
+    </div>
+    <!-- CHILDREN -->
+    <div class="leaf leaf-full" style="left:27%;top:84%;" onclick="openPerson('child1')">
+      <div class="leaf-ring" style="width:30px;height:30px;font-size:.76rem;">👧<div class="story-dot"></div></div>
+      <div class="leaf-name" style="font-size:.55rem;">Emma</div>
+    </div>
+    <div class="leaf leaf-full" style="left:55%;top:84%;" onclick="openPerson('child2')">
+      <div class="leaf-ring" style="width:30px;height:30px;font-size:.76rem;">👦</div>
+      <div class="leaf-name" style="font-size:.55rem;">Liam</div>
+    </div>
+    <!-- ADD -->
+    <div class="leaf leaf-empty" style="left:42%;top:65%;" onclick="t('Add a family member')">
+      <div class="leaf-ring" style="width:28px;height:28px;font-size:.68rem;color:rgba(184,134,11,.32);">＋</div>
+      <div class="leaf-name" style="font-size:.5rem;">Add</div>
+    </div>
+  </div>
+</div>
+
+<!-- MY LEAF SCREEN -->
+<div class="leaf-screen" id="leafScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeLeaf()">← Home</button>
+    <div class="screen-title">My Leaf</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="leaf-scroll">
+    <div class="leaf-greeting">Maren,<br>your story matters.</div>
+    <div class="leaf-sub">Answer at your own pace. Each response becomes part of your leaf — preserved for the people who come after you.</div>
+    <div class="leaf-gold-rule"></div>
+    <div class="prompt-card">
+      <div class="prompt-chapter">Life Chapter · Values</div>
+      <div class="prompt-q">"What is a belief you hold that your family helped shape — and have you ever told them?"</div>
+      <div class="prompt-actions">
+        <button class="pa-write" onclick="t('Journal opens here')">Write your answer</button>
+        <button class="pa-voice" onclick="t('Voice recording opens')">🎙 Record</button>
+      </div>
+    </div>
+    <div class="prompt-card" style="opacity:.7;">
+      <div class="prompt-chapter">Life Chapter · Childhood</div>
+      <div class="prompt-q">"What's a memory from your childhood home that lives in your body — not just your mind?"</div>
+      <div class="prompt-actions">
+        <button class="pa-write" onclick="t('Journal opens here')">Write your answer</button>
+        <button class="pa-voice" onclick="t('Voice recording opens')">🎙 Record</button>
+      </div>
+    </div>
+    <div class="prompt-card" style="opacity:.55;">
+      <div class="prompt-chapter">Life Chapter · Love</div>
+      <div class="prompt-q">"What has loving someone taught you about yourself that nothing else could?"</div>
+      <div class="prompt-actions">
+        <button class="pa-write" onclick="t('Journal opens here')">Write your answer</button>
+        <button class="pa-voice" onclick="t('Voice recording opens')">🎙 Record</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PERSON / STORY SCREEN -->
+<div class="story-screen" id="storyScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeStory()">← Tree</button>
+    <div class="screen-title" id="storyScreenTitle">Their Story</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="story-scroll">
+    <div class="person-hero-name" id="storyName">Grandma Helen</div>
+    <div class="person-hero-years" id="storyYears">1932 – 2015 · Grandmother</div>
+    <div class="person-gold-rule"></div>
+    <div class="story-block" id="storyBlock1">
+      <div class="story-chapter-lbl" id="s1Label">Life Chapter · Wisdom</div>
+      <div class="story-text" id="s1Text">"If I could tell young women one thing — your softness is not your weakness. It is your greatest strength. Don't let the world take it from you."</div>
+    </div>
+    <div class="story-block" id="storyBlock2">
+      <div class="story-chapter-lbl" id="s2Label">Life Chapter · Childhood</div>
+      <div class="story-text" id="s2Text">"We grew up on the farm and I hated it as a child. Couldn't wait to leave. Now it's the place I miss most in the world."</div>
+    </div>
+    <div class="voice-block" id="storyVoice" onclick="t('Playing...')">
+      <div class="voice-block-icon">🎙</div>
+      <div class="voice-block-text" id="storyVoiceText">"Songs my mother used to sing"</div>
+      <div class="voice-block-dur" id="storyVoiceDur">8:14</div>
+    </div>
+    <div class="prompt-block" onclick="t('Prompt opens — add your memory')">
+      <div class="prompt-block-lbl">Contribute a memory</div>
+      <div class="prompt-block-text" id="storyPrompt">"What do you remember about the way she made a room feel?"</div>
+    </div>
+    <button class="add-memory-btn" onclick="t('Your memory is being added...')">Add Your Memory of Them →</button>
+    <button class="story-cancel" onclick="closeStory()">Back to tree</button>
+  </div>
+</div>
+
+<div class="overlay" id="ov"></div>
+<div class="toast" id="toastEl"></div>
+
+<script>
+(function(){var d=new Date(),dy=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];document.getElementById('topDate').textContent=dy[d.getDay()]+' \u00b7 '+mo[d.getMonth()]+' '+d.getDate();})();
+
+function t(m){var e=document.getElementById('toastEl');e.textContent=m;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2600);}
+
+function openTreeScreen(){document.getElementById('treeScreen').classList.add('open');}
+function closeTree(){document.getElementById('treeScreen').classList.remove('open');closeStory();}
+function openLeafScreen(){document.getElementById('leafScreen').classList.add('open');}
+function closeLeaf(){document.getElementById('leafScreen').classList.remove('open');}
+
+var PEOPLE={
+  self:{name:'Maren \u2014 Your Leaf',years:'Living \u00b7 Your story',s1l:'Life Chapter \u00b7 Values',s1t:'"What is a belief you hold that your family helped shape \u2014 and have you ever told them?"',s2l:"Today\u2019s unanswered prompt",s2t:'"What\u2019s a memory from your childhood home that lives in your body \u2014 not just your mind?"',vt:'Voice reflection \u00b7 May 8',vd:'2:14',pt:'"What would you want your children to know about who you were at their age?"'},
+  mom:{name:'Mom',years:'Living \u00b7 Mother',s1l:'Life Chapter \u00b7 Motherhood',s1t:'"The day you were born I understood for the first time what it meant to love someone more than yourself. Everything I did after that was for you."',s2l:'Life Chapter \u00b7 Growing Up',s2t:'"My mother used to say \u2014 tend to the ones in front of you. Don\u2019t wait for the big moments. The small ones are what they remember."',vt:'"What I want you to know about our family"',vd:'6:48',pt:'"What\u2019s something you wish you had said to your own mother while you still could?"'},
+  dad:{name:'Dad',years:'Living \u00b7 Father',s1l:'Life Chapter \u00b7 Purpose',s1t:'"I built things my whole life. Houses mostly. But what I\u2019m most proud of building can\u2019t be measured in square feet."',s2l:'Life Chapter \u00b7 Wisdom',s2t:'"My father told me \u2014 a man\u2019s character is what he does when nobody\u2019s watching. I\u2019ve tried to live by that every single day."',vt:'"Advice I wish someone had given me at 30"',vd:'3:52',pt:'"What did hard work teach you that nothing else could?"'},
+  grandmaP:{name:'Grandma Rose',years:'1928 \u2013 2019 \u00b7 Grandmother',s1l:'Life Chapter \u00b7 Love Story',s1t:'"Harold asked me to dance three times before I said yes. I made him work for it. Best decision I ever made."',s2l:'Life Chapter \u00b7 Childhood',s2t:'"We didn\u2019t have much, but I never once felt poor. Mama made sure of that. Sunday dinners were sacred in our house."',vt:'"What I want my grandchildren to know"',vd:'4:32',pt:'"What was the moment you knew you\u2019d found home?"'},
+  grandpaP:{name:'Grandpa Harold',years:'1925 \u2013 2008 \u00b7 Grandfather',s1l:'Life Chapter \u00b7 Service',s1t:'"When I came home from the war I didn\u2019t talk about it for years. Some things you carry quietly. But I was grateful every single day."',s2l:'Life Chapter \u00b7 Family',s2t:'"The best thing I ever did was choose your grandmother. Everything good in my life started with that one choice."',vt:null,vd:null,pt:'"What do you wish you\u2019d said more often?"'},
+  grandmaM:{name:'Grandma Helen',years:'1932 \u2013 2015 \u00b7 Grandmother',s1l:'Life Chapter \u00b7 Wisdom',s1t:'"If I could tell young women one thing \u2014 your softness is not your weakness. It is your greatest strength. Don\u2019t let the world take it from you."',s2l:'Life Chapter \u00b7 Childhood',s2t:'"We grew up on the farm and I hated it as a child. Couldn\u2019t wait to leave. Now it\u2019s the place I miss most in the world."',vt:'"Songs my mother used to sing"',vd:'8:14',pt:'"What do you remember about the way she made a room feel?"'},
+  grandpaM:{name:'Grandpa Earl',years:'1930 \u2013 2001 \u00b7 Grandfather',s1l:'His story is waiting',s1t:'"No stories have been added yet. Be the first to contribute a memory of him."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you remember about Grandpa Earl that no one else might think to say?"'},
+  child1:{name:'Emma',years:'Living \u00b7 Daughter',s1l:'Her story \u00b7 Just beginning',s1t:'"I want to remember everything. The way she laughs. The things she says that surprise me. I\u2019m writing it all down."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you hope she carries with her from your family?"'},
+  child2:{name:'Liam',years:'Living \u00b7 Son',s1l:'His story \u00b7 Just beginning',s1t:'"No stories added yet. Start his leaf."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you hope he remembers about this time in your family?"'},
+  ggp1:{name:'Edna',years:'Great-Grandmother',s1l:'Her story is waiting',s1t:'"No stories yet. Do you have a memory of Edna? Add it here."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you know or remember about her?"'},
+  ggp2:{name:'Walter',years:'Great-Grandfather',s1l:'His story is waiting',s1t:'"No stories yet."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you know or remember about him?"'},
+  ggp3:{name:'Mae',years:'Great-Grandmother',s1l:'Her story is waiting',s1t:'"No stories yet."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you know or remember about her?"'},
+  ggp4:{name:'Clara',years:'Great-Grandmother',s1l:'Her story is waiting',s1t:'"No stories yet."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you know or remember about her?"'},
+  ggp5:{name:'Frank',years:'Great-Grandfather',s1l:'His story is waiting',s1t:'"No stories yet."',s2l:null,s2t:null,vt:null,vd:null,pt:'"What do you know or remember about him?"'}
+};
+
+function openPerson(id){
+  var p=PEOPLE[id]||PEOPLE.grandmaM;
+  document.getElementById('storyName').textContent=p.name;
+  document.getElementById('storyYears').textContent=p.years;
+  document.getElementById('storyScreenTitle').textContent=p.name.split('\u2014')[0].trim();
+  document.getElementById('s1Label').textContent=p.s1l;
+  document.getElementById('s1Text').textContent=p.s1t;
+  var b2=document.getElementById('storyBlock2');
+  if(p.s2t){document.getElementById('s2Label').textContent=p.s2l;document.getElementById('s2Text').textContent=p.s2t;b2.style.display='';}else{b2.style.display='none';}
+  var sv=document.getElementById('storyVoice');
+  if(p.vt){document.getElementById('storyVoiceText').textContent=p.vt;document.getElementById('storyVoiceDur').textContent=p.vd;sv.style.display='';}else{sv.style.display='none';}
+  document.getElementById('storyPrompt').textContent=p.pt;
+  document.getElementById('storyScreen').classList.add('open');
+}
+
+function closeStory(){document.getElementById('storyScreen').classList.remove('open');}
+</script>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.7rem;color:rgba(255,255,255,.3);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+</body>
+</html>

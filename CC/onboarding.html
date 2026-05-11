@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Welcome — Curated Connections</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06060f;--surface:#0e0e1c;--lift:#16162a;
+  --amber:#ff8c20;--amber2:#ffaa44;--amber-dim:rgba(255,140,32,.15);
+  --cream:#f4ecdc;--cream-dim:#9a8e7a;
+  --teal:#00c49a;
+  --r-md:14px;--r-lg:20px;--r-xl:26px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;overflow:hidden;}
+body::before{content:"";position:fixed;inset:0;
+  background:radial-gradient(ellipse at 25% 0%,rgba(255,140,32,.14) 0%,transparent 50%),
+             radial-gradient(ellipse at 80% 90%,rgba(0,196,154,.07) 0%,transparent 45%);
+  pointer-events:none;z-index:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes breathe{0%,100%{opacity:.4}50%{opacity:.8}}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:1;}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;z-index:5;background:var(--bg);}
+.screen.active{display:flex;}
+
+/* PROGRESS BAR */
+.progress-bar{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(255,255,255,.06);z-index:20;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--amber2));border-radius:0 2px 2px 0;transition:width .4s cubic-bezier(.4,0,.2,1);}
+
+/* SHARED LAYOUT */
+.ob-scroll{flex:1;overflow-y:auto;padding:3.5rem 1.3rem 2rem;}
+.ob-scroll::-webkit-scrollbar{display:none;}
+.ob-header{padding:.9rem 1.1rem .8rem;display:flex;align-items:center;gap:.5rem;flex-shrink:0;}
+.ob-back{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:.9rem;display:flex;align-items:center;gap:.2rem;font-family:'DM Sans',sans-serif;font-size:.8rem;}
+.ob-skip{margin-left:auto;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(255,255,255,.22);cursor:pointer;}
+.ob-step{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,140,32,.4);margin-left:auto;font-family:'Nunito',sans-serif;}
+
+/* Typography */
+.ob-eyebrow{font-size:.48rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,140,32,.45);margin-bottom:.5rem;}
+.ob-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:var(--cream);line-height:1.28;margin-bottom:.4rem;}
+.ob-title strong{font-weight:500;color:var(--amber);}
+.ob-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(244,236,220,.58);line-height:1.68;margin-bottom:1.5rem;}
+
+/* Gold rule */
+.gold-rule{width:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,140,32,.35),transparent);margin:.6rem 0 1.2rem;}
+
+/* Choice cards */
+.choice-grid{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.4rem;}
+.choice-card{background:var(--surface);border:1.5px solid rgba(255,255,255,.08);border-radius:var(--r-xl);padding:1rem 1.1rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.choice-card::before{content:'';position:absolute;inset:0;background:var(--cc-glow,radial-gradient(ellipse at 20% 50%,rgba(255,140,32,.06),transparent 60%));pointer-events:none;}
+.choice-card:hover{border-color:rgba(255,140,32,.25);transform:translateY(-1px);}
+.choice-card:active{transform:scale(.98);}
+.choice-card.sel{background:rgba(255,140,32,.1);border-color:rgba(255,140,32,.45);}
+.choice-card.sel::before{background:radial-gradient(ellipse at 20% 50%,rgba(255,140,32,.12),transparent 60%);}
+.cc-check{position:absolute;top:.85rem;right:.9rem;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.choice-card.sel .cc-check{background:var(--amber);border-color:var(--amber);}
+.cc-check svg{display:none;}
+.choice-card.sel .cc-check svg{display:block;}
+.cc-icon{margin-bottom:.35rem;}
+.cc-icon svg{width:22px;height:22px;}
+.cc-title{font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--cream);margin-bottom:.12rem;}
+.cc-desc{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(244,236,220,.55);line-height:1.52;}
+
+/* Multi-select hint */
+.multi-hint{font-size:.62rem;color:rgba(255,255,255,.28);text-align:center;margin-bottom:.9rem;font-family:'Cormorant Garamond',serif;font-style:italic;}
+
+/* Input fields */
+.field-group{margin-bottom:1.1rem;}
+.field-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,140,32,.42);margin-bottom:.45rem;display:block;}
+.field-inp{width:100%;background:var(--surface);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--cream);padding:.8rem .95rem;outline:none;transition:border-color .2s;}
+.field-inp:focus{border-color:rgba(255,140,32,.4);}
+.field-inp::placeholder{color:rgba(255,255,255,.2);font-style:italic;}
+
+/* Tier preview chips */
+.tier-row{display:flex;flex-direction:column;gap:.42rem;margin-bottom:1.2rem;}
+.tier-opt{display:flex;align-items:center;gap:.65rem;background:var(--surface);border:1.5px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:.8rem .9rem;cursor:pointer;transition:all .18s;position:relative;}
+.tier-opt:hover{border-color:rgba(255,140,32,.22);}
+.tier-opt.sel{border-color:rgba(255,140,32,.4);background:rgba(255,140,32,.07);}
+.tier-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.tier-info{flex:1;}
+.tier-name{font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:var(--cream);}
+.tier-desc{font-size:.65rem;color:rgba(244,236,220,.45);margin-top:.06rem;line-height:1.4;}
+.tier-price{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:rgba(255,140,32,.65);}
+.tier-free{color:rgba(0,196,154,.65);}
+.tier-badge{position:absolute;top:.6rem;right:.8rem;font-size:.44rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,140,32,.15);color:var(--amber);padding:.14rem .4rem;border-radius:999px;font-family:'Nunito',sans-serif;}
+
+/* Primary CTA */
+.cta-btn{width:100%;padding:.95rem;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#fff;border:none;border-radius:var(--r-xl);font-family:'Nunito',sans-serif;font-size:.98rem;font-weight:900;cursor:pointer;letter-spacing:.04em;box-shadow:0 6px 22px rgba(255,140,32,.35);transition:all .2s;margin-bottom:.55rem;}
+.cta-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,140,32,.45);}
+.cta-btn:disabled{opacity:.4;pointer-events:none;}
+.secondary-btn{width:100%;padding:.78rem;background:none;border:1px solid rgba(255,255,255,.1);border-radius:var(--r-xl);font-family:'DM Sans',sans-serif;font-size:.85rem;color:rgba(255,255,255,.35);cursor:pointer;margin-bottom:.45rem;}
+.legal-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.75rem;color:rgba(255,255,255,.2);text-align:center;line-height:1.6;}
+
+/* ══ WELCOME SCREEN ══ */
+.welcome-body{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 1.3rem 2.5rem;}
+.wb-top{padding-top:3rem;text-align:center;}
+.wb-logo{font-family:'Pacifico',cursive;font-size:2.4rem;color:var(--amber);text-shadow:0 0 40px rgba(255,140,32,.3);margin-bottom:.3rem;animation:fadeUp .5s ease both;}
+.wb-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;color:rgba(244,236,220,.55);margin-bottom:2rem;animation:fadeUp .5s .08s ease both;}
+.wb-pillars{display:flex;flex-direction:column;gap:.55rem;margin-bottom:2.5rem;animation:fadeUp .5s .15s ease both;}
+.wb-pillar{display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);}
+.wp-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wp-icon svg{width:18px;height:18px;stroke:rgba(244,236,220,.55);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.wp-text{font-family:'Cormorant Garamond',serif;font-size:.98rem;color:rgba(244,236,220,.65);line-height:1.5;}
+.wb-ctas{animation:fadeUp .5s .22s ease both;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ WELCOME ══ -->
+  <div class="screen active" id="s0">
+    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:0 1.3rem 2.5rem;">
+      <div style="padding-top:3.5rem;text-align:center;">
+        <div style="font-family:'Pacifico',cursive;font-size:2.4rem;color:var(--amber);text-shadow:0 0 40px rgba(255,140,32,.3);margin-bottom:.3rem;animation:fadeUp .5s ease both;">Curated<br>Connections</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(244,236,220,.5);margin-bottom:2.5rem;animation:fadeUp .5s .08s ease both;">The private space where your most<br>important relationships live.</div>
+
+        <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:2.5rem;animation:fadeUp .5s .15s ease both;">
+          <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);">
+            <div style="width:30px;height:30px;border-radius:var(--r-sm);background:rgba(255,140,32,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,140,32,.75)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="14" height="20" rx="2"/><line x1="8" y1="2" x2="8" y2="22"/><line x1="12" y1="9" x2="16" y2="9"/><line x1="12" y1="13" x2="16" y2="13"/></svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.98rem;color:rgba(244,236,220,.65);text-align:left;">Know yourself and the people around you more deeply</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);">
+            <div style="width:30px;height:30px;border-radius:var(--r-sm);background:rgba(0,196,154,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(0,196,154,.75)" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.98rem;color:rgba(244,236,220,.65);text-align:left;">Private circles for the relationships that define you</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);">
+            <div style="width:30px;height:30px;border-radius:var(--r-sm);background:rgba(255,80,56,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,80,56,.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.98rem;color:rgba(244,236,220,.65);text-align:left;">Games that reveal something true about the people you love</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);">
+            <div style="width:30px;height:30px;border-radius:var(--r-sm);background:rgba(255,210,77,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(200,165,40,.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="2"/><path d="M5 3l4 4M19 3l-4 4"/><path d="M12 10v8"/><path d="M8 14l4 4 4-4"/><path d="M4 21h16"/></svg>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.98rem;color:rgba(244,236,220,.65);text-align:left;">Living Legacy — preserve the people you love</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="animation:fadeUp .5s .22s ease both;">
+        <button class="cta-btn" onclick="go(1)">Get started →</button>
+        <button class="secondary-btn" onclick="go(5)">I already have an account</button>
+        <div class="legal-note">Free to start. For entertainment and personal reflection.<br>No credit card required.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 1 — WHAT BRINGS YOU HERE ══ -->
+  <div class="screen" id="s1">
+    <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+    <div class="ob-header">
+      <button class="ob-back" onclick="go(0)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <div class="ob-step">1 of 4</div>
+    </div>
+    <div class="ob-scroll">
+      <div class="ob-eyebrow" style="animation:fadeUp .4s ease both;">Getting started</div>
+      <div class="ob-title" style="animation:fadeUp .4s .05s ease both;">What brings you<br>to <strong>Curated Connections?</strong></div>
+      <div class="ob-sub" style="animation:fadeUp .4s .1s ease both;">Choose everything that feels right. There are no wrong answers here.</div>
+
+      <div class="multi-hint">Select all that apply</div>
+
+      <div class="choice-grid" style="animation:fadeUp .4s .12s ease both;">
+        <div class="choice-card" onclick="toggleChoice(this)">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">I want to know myself better</div>
+          <div class="cc-desc">Reflection, patterns, understanding why I do what I do</div>
+        </div>
+        <div class="choice-card" onclick="toggleChoice(this)">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">I want deeper connections</div>
+          <div class="cc-desc">With my partner, family, close friends — the people already in my life</div>
+        </div>
+        <div class="choice-card" onclick="toggleChoice(this)">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">I want to preserve family memories</div>
+          <div class="cc-desc">Stories, voices, recipes, history — before they're gone</div>
+        </div>
+        <div class="choice-card" onclick="toggleChoice(this)">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">I want something fun for game night</div>
+          <div class="cc-desc">Games that spark real conversations and reveal something true</div>
+        </div>
+        <div class="choice-card" onclick="toggleChoice(this)">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">I'm going through something</div>
+          <div class="cc-desc">Processing, healing, navigating a hard season quietly</div>
+        </div>
+        <div class="choice-card" onclick="toggleChoice(this)">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">I'm just exploring</div>
+          <div class="cc-desc">No particular reason — I'll figure out what resonates</div>
+        </div>
+      </div>
+
+      <button class="cta-btn" onclick="go(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 — JOURNAL INTENTION ══ -->
+  <div class="screen" id="s2">
+    <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+    <div class="ob-header">
+      <button class="ob-back" onclick="go(1)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <div class="ob-step">2 of 4</div>
+    </div>
+    <div class="ob-scroll">
+      <div class="ob-eyebrow">Your reflection space</div>
+      <div class="ob-title">How do you want to<br>use this <strong>space?</strong></div>
+      <div class="ob-sub">This shapes your experience across the whole ecosystem — prompts, cards, and reflections. You can always change it.</div>
+
+      <div class="choice-grid">
+        <div class="choice-card" onclick="selSingle(this,'goal')">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">A place to get clear</div>
+          <div class="cc-desc">Untangle what I'm thinking. Figure out what I actually feel.</div>
+        </div>
+        <div class="choice-card" onclick="selSingle(this,'goal')">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">A place to process</div>
+          <div class="cc-desc">Work through things I haven't said out loud. Heavy seasons.</div>
+        </div>
+        <div class="choice-card" onclick="selSingle(this,'goal')">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">A place to notice what's good</div>
+          <div class="cc-desc">Gratitude, warmth, the small things worth keeping.</div>
+        </div>
+        <div class="choice-card" onclick="selSingle(this,'goal')">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">A place to grow intentionally</div>
+          <div class="cc-desc">Patterns, habits, who I want to become.</div>
+        </div>
+        <div class="choice-card" onclick="selSingle(this,'goal')">
+          <div class="cc-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="cc-title">All of the above honestly</div>
+          <div class="cc-desc">It depends on the day. I want prompts that meet me where I am.</div>
+        </div>
+      </div>
+
+      <button class="cta-btn" onclick="go(3)">Continue →</button>
+      <button class="ob-skip" style="display:block;width:100%;text-align:center;padding:.5rem;margin-bottom:.5rem;" onclick="go(3)">Skip for now</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3 — TIER CHOICE ══ -->
+  <div class="screen" id="s3">
+    <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+    <div class="ob-header">
+      <button class="ob-back" onclick="go(2)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <div class="ob-step">3 of 4</div>
+    </div>
+    <div class="ob-scroll">
+      <div class="ob-eyebrow">Choose your experience</div>
+      <div class="ob-title">Start wherever<br>feels <strong>right.</strong></div>
+      <div class="ob-sub">You can upgrade anytime. Nothing is locked forever.</div>
+
+      <div class="tier-row">
+        <div class="tier-opt" onclick="selTier(this,'gather')" style="border-color:rgba(0,196,154,.3);background:rgba(0,196,154,.05);">
+          <div class="tier-dot" style="background:rgba(0,196,154,.7);"></div>
+          <div class="tier-info">
+            <div class="tier-name">Gather — Free</div>
+            <div class="tier-desc">Conversation cards, Wit & Wonder, Discover You quizzes. Games included. No account required for most features.</div>
+          </div>
+          <div class="tier-price tier-free">Free</div>
+          <div class="tier-badge" style="background:rgba(0,196,154,.12);color:rgba(0,196,154,.8);">Start here</div>
+        </div>
+
+        <div class="tier-opt sel" onclick="selTier(this,'connect')">
+          <div class="tier-dot" style="background:var(--amber);"></div>
+          <div class="tier-info">
+            <div class="tier-name">Connect — $4.99/mo</div>
+            <div class="tier-desc">Everything in Gather plus private journal with Monday Intentions, save cards to journal, share to circles. 90-day storage.</div>
+          </div>
+          <div class="tier-price">$4.99</div>
+          <div class="tier-badge">Most popular</div>
+        </div>
+
+        <div class="tier-opt" onclick="selTier(this,'insight')">
+          <div class="tier-dot" style="background:#8b5cf6;"></div>
+          <div class="tier-info">
+            <div class="tier-name">Insight — $9.99/mo</div>
+            <div class="tier-desc">Everything in Connect plus voice notes, pattern recognition, monthly summaries, Living Legacy included.</div>
+          </div>
+          <div class="tier-price">$9.99</div>
+        </div>
+
+        <div class="tier-opt" onclick="selTier(this,'legacy')">
+          <div class="tier-dot" style="background:#a8863a;"></div>
+          <div class="tier-info">
+            <div class="tier-name">Legacy — $19.99/mo</div>
+            <div class="tier-desc">Full keeper experience. Permanent archive, 5 profiles, Living Legacy, video, storybook export.</div>
+          </div>
+          <div class="tier-price" style="color:#a8863a;">$19.99</div>
+        </div>
+      </div>
+
+      <button class="cta-btn" onclick="go(4)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4 — CREATE ACCOUNT ══ -->
+  <div class="screen" id="s4">
+    <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+    <div class="ob-header">
+      <button class="ob-back" onclick="go(3)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <div class="ob-step">4 of 4</div>
+    </div>
+    <div class="ob-scroll">
+      <div class="ob-eyebrow">Almost there</div>
+      <div class="ob-title">Create your<br><strong>account.</strong></div>
+      <div class="ob-sub">Your content is private. We never sell your data or use it for advertising.</div>
+
+      <div class="field-group">
+        <label class="field-lbl">Your name</label>
+        <input class="field-inp" id="acName" type="text" placeholder="What should we call you?" autocomplete="name"/>
+      </div>
+      <div class="field-group">
+        <label class="field-lbl">Email address</label>
+        <input class="field-inp" id="acEmail" type="email" placeholder="Your email address" autocomplete="email"/>
+      </div>
+      <div class="field-group">
+        <label class="field-lbl">Create a password</label>
+        <input class="field-inp" id="acPass" type="password" placeholder="At least 8 characters" autocomplete="new-password"/>
+      </div>
+
+      <button class="cta-btn" id="createBtn" onclick="createAccount()">Create my account →</button>
+      <div class="legal-note" style="margin-top:.3rem;">By continuing you agree to our Terms of Service and Privacy Policy.<br>For entertainment and personal reflection only.</div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 5 — SIGN IN ══ -->
+  <div class="screen" id="s5">
+    <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+    <div class="ob-header">
+      <button class="ob-back" onclick="go(0)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+    </div>
+    <div class="ob-scroll">
+      <div class="ob-eyebrow">Welcome back</div>
+      <div class="ob-title">Sign back<br><strong>in.</strong></div>
+      <div class="ob-sub">Good to have you here again.</div>
+
+      <div class="field-group">
+        <label class="field-lbl">Email address</label>
+        <input class="field-inp" type="email" placeholder="Your email address" autocomplete="email"/>
+      </div>
+      <div class="field-group">
+        <label class="field-lbl">Password</label>
+        <input class="field-inp" type="password" placeholder="Your password" autocomplete="current-password"/>
+      </div>
+
+      <button class="cta-btn" onclick="t('Signing in...')">Sign in →</button>
+      <button class="secondary-btn" onclick="t('Password reset email sent')">Forgot password?</button>
+    </div>
+  </div>
+
+  <!-- ══ WELCOME IN ══ -->
+  <div class="screen" id="s6">
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;">
+      <div style="font-family:'Pacifico',cursive;font-size:2rem;color:var(--amber);margin-bottom:.4rem;animation:fadeUp .5s ease both;">You're in.</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:rgba(244,236,220,.6);line-height:1.7;max-width:270px;margin:0 auto 2rem;animation:fadeUp .5s .08s ease both;" id="welcomeMsg">Welcome to Curated Connections.<br>Your space is ready.</div>
+
+      <div style="width:100%;max-width:320px;animation:fadeUp .5s .15s ease both;">
+        <div style="background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-xl);padding:1rem 1.1rem;margin-bottom:1rem;text-align:left;">
+          <div style="font-size:.46rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,140,32,.45);margin-bottom:.65rem;">Your first week</div>
+          <div style="display:flex;flex-direction:column;gap:.55rem;">
+            <div style="display:flex;align-items:center;gap:.55rem;">
+              <div style="width:8px;height:8px;border-radius:50%;background:rgba(0,196,154,.6);flex-shrink:0;"></div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(244,236,220,.65);">Your reflection space opens Monday morning</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.55rem;">
+              <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,140,32,.6);flex-shrink:0;"></div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(244,236,220,.65);">New conversation cards daily</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.55rem;">
+              <div style="width:8px;height:8px;border-radius:50%;background:rgba(139,92,246,.6);flex-shrink:0;"></div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(244,236,220,.65);">Invite people to your first Circle</div>
+            </div>
+          </div>
+        </div>
+        <button class="cta-btn" onclick="t('Opening Gather...')">Open Curated Connections →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="display:none;position:fixed;bottom:3rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,28,.96);border:1px solid rgba(255,140,32,.2);border-radius:999px;padding:.4rem .9rem;font-size:.68rem;color:var(--cream);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;" id="toastEl"></div>
+
+<script>
+let current = 0;
+
+function go(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s' + n).classList.add('active');
+  current = n;
+  window.scrollTo(0, 0);
+}
+
+function toggleChoice(el) {
+  el.classList.toggle('sel');
+}
+
+function selSingle(el, group) {
+  document.querySelectorAll(`[onclick*="${group}"]`).forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function selTier(el) {
+  document.querySelectorAll('.tier-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function createAccount() {
+  const name = document.getElementById('acName').value.trim();
+  const email = document.getElementById('acEmail').value.trim();
+  const pass = document.getElementById('acPass').value;
+  if (!name) { t('What should we call you?'); return; }
+  if (!email || !email.includes('@')) { t('A valid email is needed'); return; }
+  if (pass.length < 8) { t('Password needs at least 8 characters'); return; }
+  const first = name.split(' ')[0];
+  document.getElementById('welcomeMsg').innerHTML =
+    `Welcome, ${first}.<br>Your journal is waiting.`;
+  go(6);
+}
+
+function t(m) {
+  const e = document.getElementById('toastEl');
+  e.textContent = m; e.style.display = 'block'; e.style.opacity = '1';
+  e.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(e._t);
+  e._t = setTimeout(() => {
+    e.style.opacity = '0';
+    setTimeout(() => e.style.display = 'none', 300);
+  }, 2600);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Game Night — Curated Connections</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Nunito:wght@700;800;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06060f;--surface:#0e0e1c;--lift:#16162a;
+  --amber:#ff8c20;--amber2:#ffaa44;
+  --coral:#ff5038;--coral2:#ff7055;
+  --teal:#00c49a;--teal2:#00e5b4;
+  --gold:#ffd24d;--gold2:#ffbc00;
+  --purple:#8b5cf6;--purple2:#a78bfa;
+  --cream:#f4ecdc;--cream-dim:#9a8e7a;
+  --r-md:14px;--r-lg:20px;--r-xl:26px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;overflow:hidden;}
+body::before{content:"";position:fixed;inset:0;
+  background:radial-gradient(ellipse at 20% 0%,rgba(255,140,32,.12) 0%,transparent 50%),
+             radial-gradient(ellipse at 85% 85%,rgba(255,80,56,.1) 0%,transparent 45%),
+             radial-gradient(ellipse at 50% 50%,rgba(139,92,246,.05) 0%,transparent 60%);
+  pointer-events:none;z-index:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glow{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:1;}
+
+/* TOPBAR */
+.topbar{padding:.72rem 1rem .62rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:rgba(6,6,15,.88);border-bottom:1px solid rgba(255,140,32,.1);backdrop-filter:blur(14px);position:relative;z-index:10;}
+.tb-brand{display:flex;align-items:center;gap:.28rem;}
+.tb-gather{font-family:'Pacifico',cursive;font-size:1.1rem;color:var(--amber);}
+.tb-sep{font-family:'Pacifico',cursive;font-size:.85rem;color:rgba(255,140,32,.25);}
+.tb-page{font-family:'Pacifico',cursive;font-size:1.1rem;color:rgba(255,80,56,.8);}
+.tb-sub{font-size:.44rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,140,32,.35);margin-top:.04rem;}
+
+/* SCROLL */
+.portal-scroll{flex:1;overflow-y:auto;padding:.6rem 0 5.5rem;}
+.portal-scroll::-webkit-scrollbar{display:none;}
+
+/* Hero */
+.portal-hero{padding:1.4rem 1.1rem .8rem;text-align:center;animation:fadeUp .4s ease both;}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--cream);line-height:1.3;margin-bottom:.3rem;}
+.ph-sub{font-size:.75rem;color:var(--cream-dim);line-height:1.6;}
+
+/* Section labels */
+.sec-lbl{font-size:.5rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,140,32,.45);padding:0 1.1rem;margin-bottom:.65rem;}
+
+/* ══ MAIN GAME CARDS ══ */
+.game-card-hero{margin:0 .9rem .6rem;border-radius:var(--r-xl);position:relative;overflow:hidden;cursor:pointer;transition:all .22s;animation:fadeUp .4s ease both;}
+.game-card-hero:hover{transform:translateY(-2px);}
+.game-card-hero:active{transform:scale(.98);}
+
+/* Really Bad Day */
+.rbd-card{background:linear-gradient(145deg,#1a0c08,#2a0e08);border:1.5px solid rgba(255,80,56,.25);}
+.rbd-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,80,56,.2),transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(255,140,32,.1),transparent 50%);pointer-events:none;}
+
+/* That Tracks */
+.tt-card{background:linear-gradient(145deg,#080e1a,#0a1228);border:1.5px solid rgba(139,92,246,.25);}
+.tt-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(139,92,246,.2),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(0,196,154,.08),transparent 50%);pointer-events:none;}
+
+.ghc-inner{padding:1.3rem 1.2rem;position:relative;z-index:1;}
+.ghc-emoji-row{display:flex;gap:.35rem;margin-bottom:.7rem;}
+.deck-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.22rem .65rem;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.55);font-family:'Nunito',sans-serif;}
+.ghc-title{font-family:'Pacifico',cursive;font-size:1.8rem;color:var(--cream);line-height:1.1;margin-bottom:.3rem;text-shadow:0 2px 20px rgba(0,0,0,.5);}
+.rbd-card .ghc-title{color:#fff;}
+.ghc-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(244,236,220,.65);margin-bottom:.85rem;line-height:1.55;}
+.ghc-meta{display:flex;align-items:center;gap:.55rem;margin-bottom:1rem;}
+.ghc-meta-item{display:flex;align-items:center;gap:.22rem;font-size:.65rem;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif;font-weight:700;}
+.ghc-meta-dot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.2);}
+.ghc-actions{display:flex;gap:.42rem;}
+.play-btn{flex:1.4;padding:.75rem;border:none;border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:900;cursor:pointer;letter-spacing:.04em;transition:all .2s;}
+.rbd-play{background:linear-gradient(135deg,var(--coral),var(--coral2));color:#fff;box-shadow:0 4px 16px rgba(255,80,56,.4);}
+.rbd-play:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,80,56,.5);}
+.tt-play{background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;box-shadow:0 4px 16px rgba(139,92,246,.4);}
+.tt-play:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(139,92,246,.5);}
+.how-btn{flex:1;padding:.75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:rgba(255,255,255,.4);cursor:pointer;text-align:center;transition:all .18s;}
+.how-btn:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6);}
+
+/* Floating deck chips on cards */
+.floating-chips{position:absolute;top:.9rem;right:.9rem;display:flex;flex-direction:column;gap:.25rem;z-index:2;}
+.fc{font-size:.58rem;font-weight:800;color:#fff;border-radius:999px;padding:.18rem .52rem;font-family:'Nunito',sans-serif;animation:float 3s ease-in-out infinite;}
+.fc:nth-child(2){animation-delay:.4s;}
+.fc:nth-child(3){animation-delay:.8s;}
+
+/* ══ COMING SOON GAMES ══ */
+.coming-section{padding:.6rem 0 0;}
+.coming-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;padding:0 .9rem;}
+.coming-card{background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);padding:.85rem .8rem;position:relative;overflow:hidden;}
+.coming-card::before{content:'';position:absolute;inset:0;background:var(--cc-glow,radial-gradient(ellipse at 30% 30%,rgba(255,140,32,.06),transparent 60%));pointer-events:none;}
+.cc-icon{font-size:1.4rem;margin-bottom:.35rem;}
+.cc-name{font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;color:var(--cream);margin-bottom:.12rem;}
+.cc-desc{font-size:.68rem;color:var(--cream-dim);line-height:1.45;margin-bottom:.55rem;}
+.cc-soon{font-size:.48rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);font-family:'Nunito',sans-serif;background:rgba(255,255,255,.06);border-radius:999px;padding:.16rem .45rem;display:inline-block;}
+
+/* ══ HOW TO PLAY SHEET ══ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:199;display:none;backdrop-filter:blur(4px);}
+.overlay.open{display:block;animation:fadeUp .2s ease both;}
+.how-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;background:linear-gradient(180deg,var(--lift),var(--bg));border-radius:24px 24px 0 0;border-top:1.5px solid rgba(255,255,255,.1);padding:1.3rem 1.3rem 3rem;z-index:300;transition:transform .36s cubic-bezier(.34,1.1,.64,1);max-height:85vh;overflow-y:auto;}
+.how-sheet::-webkit-scrollbar{display:none;}
+.how-sheet.open{transform:translateX(-50%) translateY(0);}
+.hs-handle{width:28px;height:2.5px;background:rgba(255,255,255,.14);border-radius:2px;margin:0 auto .9rem;}
+.hs-game{font-family:'Pacifico',cursive;font-size:1.3rem;margin-bottom:.2rem;}
+.hs-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--cream-dim);margin-bottom:1.1rem;}
+.hs-step{display:flex;gap:.6rem;margin-bottom:.8rem;align-items:flex-start;}
+.hs-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:900;color:#fff;flex-shrink:0;margin-top:.08rem;}
+.hs-step-text{flex:1;}
+.hs-step-title{font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:var(--cream);margin-bottom:.18rem;}
+.hs-step-desc{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--cream-dim);line-height:1.58;}
+.hs-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);margin:.9rem 0;}
+.hs-wheel-section{background:var(--surface);border-radius:var(--r-lg);padding:.8rem .9rem;margin-bottom:1rem;}
+.hs-wheel-lbl{font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,140,32,.5);margin-bottom:.55rem;font-family:'Nunito',sans-serif;}
+.wheel-outcome{display:flex;align-items:center;gap:.5rem;margin-bottom:.38rem;}
+.wo-emoji{font-size:.9rem;flex-shrink:0;width:20px;}
+.wo-name{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--cream);}
+.wo-desc{font-size:.65rem;color:var(--cream-dim);}
+.hs-play-btn{width:100%;padding:.9rem;border:none;border-radius:var(--r-lg);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;color:#fff;cursor:pointer;margin-top:.8rem;letter-spacing:.04em;}
+
+/* Bottom nav */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,6,15,.92);border-top:1px solid rgba(255,140,32,.1);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
+.bn{display:flex;flex-direction:column;align-items:center;gap:.18rem;cursor:pointer;opacity:.3;transition:opacity .2s;min-width:44px;}
+.bn.active{opacity:1;}
+.bn-i{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+.bn-l{font-size:.42rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,236,220,.6);}
+.bn.active .bn-l{color:var(--coral);}
+.bn-ctr{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--coral2));display:flex;align-items:center;justify-content:center;font-size:.82rem;color:#fff;cursor:pointer;box-shadow:0 3px 14px rgba(255,80,56,.4);margin-top:-7px;border:2px solid var(--bg);}
+
+.toast{display:none;position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,28,.96);border:1px solid rgba(255,140,32,.2);border-radius:999px;padding:.4rem .9rem;font-size:.68rem;color:var(--cream);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
+.toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
+
+/* SVG nav icons */
+.bn-i svg{width:20px;height:20px;display:block;}
+.bn{color:rgba(244,236,220,.28);}
+.bn.active{color:var(--amber, #ff8c20);}
+.bn:not(.active):hover{color:rgba(244,236,220,.45);}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div>
+      <div class="tb-brand">
+        <div class="tb-gather">Gather</div>
+        <div class="tb-sep">✦</div>
+        <div class="tb-page">Game Night</div>
+      </div>
+      <div class="tb-sub">Pick your chaos</div>
+    </div>
+  </div>
+
+  <div class="portal-scroll">
+
+    <div class="portal-hero">
+      <div class="ph-title">What are we<br>playing tonight?</div>
+      <div class="ph-sub">Games that reveal something true about the people you're with.</div>
+    </div>
+
+    <!-- REALLY BAD DAY -->
+    <div class="sec-lbl">Ready to play</div>
+
+    <div class="game-card-hero rbd-card" style="animation-delay:.05s;">
+      <div class="floating-chips">
+        <div class="fc" style="background:rgba(255,80,56,.6);">😱 Really Bad Day</div>
+        <div class="fc" style="background:rgba(0,196,154,.55);">🎯 Survive This</div>
+        <div class="fc" style="background:rgba(255,210,77,.55);color:#333;">✨ Best Day Ever</div>
+      </div>
+      <div class="ghc-inner">
+        <div class="ghc-title">Really Bad Day™</div>
+        <div class="ghc-tagline">"How well can you predict the Judge?"</div>
+        <div class="ghc-meta">
+          <div class="ghc-meta-item">👥 3–8 players</div>
+          <div class="ghc-meta-dot"></div>
+          <div class="ghc-meta-item">⏱ 20–45 min</div>
+          <div class="ghc-meta-dot"></div>
+          <div class="ghc-meta-item">🎡 6 decks</div>
+        </div>
+        <div class="ghc-actions">
+          <button class="play-btn rbd-play" onclick="t('Opening Really Bad Day...')">Play Now →</button>
+          <div class="how-btn" onclick="openHow('rbd')">How to play</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THAT TRACKS -->
+    <div class="game-card-hero tt-card" style="animation-delay:.1s;">
+      <div class="floating-chips">
+        <div class="fc" style="background:rgba(139,92,246,.65);">🎭 That Tracks</div>
+        <div class="fc" style="background:rgba(0,196,154,.45);">🔥 Plot Twists</div>
+      </div>
+      <div class="ghc-inner">
+        <div class="ghc-title" style="color:var(--purple2);">That Tracks™</div>
+        <div class="ghc-tagline">"Play the card that fits the prompt best."</div>
+        <div class="ghc-meta">
+          <div class="ghc-meta-item">👥 3–10 players</div>
+          <div class="ghc-meta-dot"></div>
+          <div class="ghc-meta-item">⏱ 30–60 min</div>
+          <div class="ghc-meta-dot"></div>
+          <div class="ghc-meta-item">🃏 Plot Twists</div>
+        </div>
+        <div class="ghc-actions">
+          <button class="play-btn tt-play" onclick="t('Opening That Tracks...')">Play Now →</button>
+          <div class="how-btn" onclick="openHow('tt')">How to play</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMING SOON -->
+    <div class="coming-section">
+      <div class="sec-lbl" style="margin-top:.6rem;">Coming soon</div>
+      <div class="coming-grid">
+
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(255,210,77,.08),transparent 60%);">
+          <div class="cc-icon">🃏</div>
+          <div class="cc-name">No Way!</div>
+          <div class="cc-desc">Lay down cards and bluff. The app knows exactly who's lying.</div>
+          <div class="cc-soon">Multiplayer · Soon</div>
+        </div>
+
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(0,196,154,.08),transparent 60%);">
+          <div class="cc-icon">🐟</div>
+          <div class="cc-name">Go Fish</div>
+          <div class="cc-desc">The classic — but the app deals, tracks, and catches cheaters.</div>
+          <div class="cc-soon">Kids friendly · Soon</div>
+        </div>
+
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(255,80,56,.08),transparent 60%);">
+          <div class="cc-icon">👑</div>
+          <div class="cc-name">Old Maid</div>
+          <div class="cc-desc">Nobody wants to be left holding it. Digital twist incoming.</div>
+          <div class="cc-soon">Kids mode · Soon</div>
+        </div>
+
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(139,92,246,.08),transparent 60%);">
+          <div class="cc-icon">🌀</div>
+          <div class="cc-name">Crazy Eights</div>
+          <div class="cc-desc">Fast, chaotic, and no physical deck required.</div>
+          <div class="cc-soon">All ages · Soon</div>
+        </div>
+
+      </div>
+
+      <!-- Kids mode banner -->
+      <div style="margin:1rem .9rem 0;background:linear-gradient(135deg,rgba(255,210,77,.1),rgba(255,140,32,.06));border:1px solid rgba(255,210,77,.2);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.7rem;">
+        <div style="font-size:1.5rem;">🧒</div>
+        <div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;color:var(--gold);margin-bottom:.1rem;">Kids Mode · Coming Soon</div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.38);line-height:1.5;">Go Fish, No Way!, Old Maid — family versions for all ages playing together.</div>
+        </div>
+      </div>
+
+      <!-- Join with code — ACTIVE -->
+      <div style="margin:.6rem .9rem 0;background:rgba(255,140,32,.07);border:1.5px solid rgba(255,140,32,.22);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.65rem;cursor:pointer;" onclick="t('Opening Join with Code...')">
+        <div style="font-size:1.4rem;flex-shrink:0;">🔗</div>
+        <div style="flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--amber);margin-bottom:.1rem;">Join with Code</div>
+          <div style="font-size:.72rem;color:rgba(244,236,220,.55);line-height:1.5;">Everyone on their own phone. No passing required. Enter a 4-digit code and you're in.</div>
+        </div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--amber);flex-shrink:0;">Enter →</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <div class="bn" onclick="t('Home')"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1H15v-6H9v6H4a1 1 0 0 1-1-1V10.5z"/></svg></div><div class="bn-l">Home</div></div>
+    <div class="bn" onclick="t('Circles')"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg></div><div class="bn-l">Circles</div></div>
+    <div class="bn-ctr">🎮</div>
+    <div class="bn active"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg></div><div class="bn-l">Games</div></div>
+    <div class="bn" onclick="t('Profile')"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="bn-l">Me</div></div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeHow()"></div>
+
+<!-- HOW TO PLAY SHEET -->
+<div class="how-sheet" id="howSheet">
+  <div class="hs-handle"></div>
+  <div id="howContent"></div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+const HOW = {
+  rbd: {
+    color: '#ff5038',
+    title: 'Really Bad Day™',
+    tagline: 'Rank the scenarios. Predict the Judge. Spin the wheel.',
+    steps: [
+      {title:'The Judge draws a card',desc:'Six scenarios appear — all bad, absurd, or mortifying. The Judge ranks them privately from least bad (1) to worst (5).'},
+      {title:'Pass the phone',desc:'Each player predicts exactly how the Judge ranked them. You\'re not ranking how bad YOU think they are — you\'re trying to think like the Judge.'},
+      {title:'Score by match',desc:'Every token you placed correctly scores its number in points. Get token 4 right — you earn 4 points. The Judge scores equal to whoever scored highest.'},
+      {title:'Spin the wheel',desc:'The wheel modifies scores for the round. +1 to all, double top, Judge Jackpot, Token 5 counts triple, steal a point — anything can happen.'},
+      {title:'Rotate and repeat',desc:'Judge passes left. Deck rotates every round. Six decks total: Really Bad Day, Survive This, Best Day Ever, Most Likely To, That\'s My Life, Would You Rather.'}
+    ],
+    wheel: [
+      {e:'😌',name:'Face Value',desc:'Score the number of each token you got right'},
+      {e:'🎁',name:'+1 to All',desc:'Everyone who matched gets a bonus point'},
+      {e:'🔥',name:'Double Top',desc:'Highest scorer this round doubles their points'},
+      {e:'👑',name:'Judge Jackpot',desc:'Judge scores double their usual amount'},
+      {e:'💀',name:'Token 5 Triple',desc:'Anyone who got token 5 right scores triple'},
+      {e:'😈',name:'Steal a Point',desc:'Highest scorer takes 1 from last place'}
+    ],
+    btnColor: 'linear-gradient(135deg,#ff5038,#ff7055)',
+    btnText: 'Let\'s play →'
+  },
+  tt: {
+    color: '#8b5cf6',
+    title: 'That Tracks™',
+    tagline: 'Play the card that fits the prompt. The Card Holder picks the best match.',
+    steps: [
+      {title:'The Card Holder draws a prompt',desc:'A green prompt card describes a type of person or situation. The Card Holder sits out this round — they pick the winner.'},
+      {title:'Everyone else plays a hand card',desc:'You have 7 cards in your hand. Pick the one that best fits the prompt. Write-in cards let you write anything once per game.'},
+      {title:'Submissions are revealed',desc:'All cards go in anonymously. The Card Holder reads them without knowing who played what — then picks the best match.'},
+      {title:'Winner takes the card',desc:'Whoever the Card Holder picks wins the round and takes the prompt card. Winner becomes the next Card Holder.'},
+      {title:'Plot Twists change everything',desc:'Some rounds carry a built-in twist — Blind Pick, Hot Seat, People\'s Choice, Wild Card. Hand twists let you flip, steal, or write in.'}
+    ],
+    wheel: [
+      {e:'🔄',name:'Flip It',desc:'Play the opposite of the prompt — double points if picked'},
+      {e:'✍️',name:'Write It',desc:'Skip your hand — write anything you want'},
+      {e:'😤',name:'Steal It',desc:'Argue your card was better after the pick'},
+      {e:'👥',name:'People\'s Choice',desc:'Everyone votes instead of just the Card Holder'},
+      {e:'🙈',name:'Blind Pick',desc:'Card Holder picks without reading cards aloud'},
+      {e:'🎭',name:'Hot Seat',desc:'Names revealed before the Card Holder picks'}
+    ],
+    btnColor: 'linear-gradient(135deg,#8b5cf6,#a78bfa)',
+    btnText: 'Let\'s play →'
+  }
+};
+
+function openHow(game){
+  const h=HOW[game];
+  document.getElementById('howContent').innerHTML=`
+    <div class="hs-game" style="color:${h.color}">${h.title}</div>
+    <div class="hs-tagline">${h.tagline}</div>
+    ${h.steps.map((s,i)=>`
+      <div class="hs-step">
+        <div class="hs-num" style="background:${h.color};opacity:${.6+i*.1}">${i+1}</div>
+        <div class="hs-step-text">
+          <div class="hs-step-title">${s.title}</div>
+          <div class="hs-step-desc">${s.desc}</div>
+        </div>
+      </div>`).join('')}
+    <div class="hs-divider"></div>
+    <div class="hs-wheel-section">
+      <div class="hs-wheel-lbl">${game==='rbd'?'🎡 Wheel outcomes':'🃏 Plot Twists'}</div>
+      ${h.wheel.map(w=>`
+        <div class="wheel-outcome">
+          <div class="wo-emoji">${w.e}</div>
+          <div><div class="wo-name">${w.name}</div><div class="wo-desc">${w.desc}</div></div>
+        </div>`).join('')}
+    </div>
+    <button class="hs-play-btn" style="background:${h.btnColor}" onclick="closeHow();t('Opening ${h.title}...')">${h.btnText}</button>
+  `;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('howSheet').classList.add('open');
+}
+
+function closeHow(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('howSheet').classList.remove('open');
+}
+
+// Swipe down to close
+const sheet=document.getElementById('howSheet');
+let sy=0;
+sheet.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
+sheet.addEventListener('touchmove',e=>{
+  const dy=e.touches[0].clientY-sy;
+  if(dy>0) sheet.style.transform=`translateX(-50%) translateY(${dy}px)`;
+},{passive:true});
+sheet.addEventListener('touchend',e=>{
+  const dy=e.changedTouches[0].clientY-sy;
+  sheet.style.transform='';
+  if(dy>80) closeHow();
+});
+
+function t(m){
+  const e=document.getElementById('toastEl');
+  e.textContent=m;e.classList.add('show');
+  clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2600);
+}
+</script>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.65rem;color:rgba(255,255,255,.2);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+</body>
+</html>

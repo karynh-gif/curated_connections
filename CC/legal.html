@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Legal — Curated Connections</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Nunito:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ivory:#f4e8d4;--parchment:#ece0c8;
+  --espresso:#281600;--bark:rgba(40,22,0,.72);
+  --bark-mid:rgba(40,22,0,.52);--bark-soft:rgba(40,22,0,.38);
+  --bark-ghost:rgba(40,22,0,.1);
+  --amber:#c97d3a;--gold:#8a6010;
+  --teal:rgba(62,128,112,.65);
+  --r-md:14px;--r-lg:20px;--r-xl:26px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--ivory);font-family:'DM Sans',sans-serif;color:var(--espresso);-webkit-font-smoothing:antialiased;}
+body::before{content:"";position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  background-size:180px;pointer-events:none;z-index:0;}
+
+.page{max-width:680px;margin:0 auto;padding:2.5rem 1.5rem 5rem;position:relative;z-index:1;}
+
+/* Header */
+.legal-header{text-align:center;padding-bottom:2rem;border-bottom:1px solid var(--bark-ghost);margin-bottom:2rem;}
+.lh-brand{font-size:.5rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.5rem;}
+.lh-title{font-family:'Pacifico',cursive;font-size:1.8rem;color:var(--amber);margin-bottom:.3rem;}
+.lh-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:var(--bark-mid);line-height:1.65;}
+.lh-updated{font-size:.62rem;color:var(--bark-soft);margin-top:.6rem;letter-spacing:.06em;}
+
+/* Tab navigation */
+.tabs{display:flex;gap:0;background:var(--parchment);border-radius:var(--r-lg);padding:.25rem;margin-bottom:2rem;border:1px solid var(--bark-ghost);}
+.tab{flex:1;padding:.55rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--bark-soft);text-align:center;cursor:pointer;border-radius:var(--r-md);transition:all .2s;letter-spacing:.04em;}
+.tab.active{background:var(--ivory);color:var(--espresso);box-shadow:0 2px 8px rgba(40,22,0,.1);}
+
+/* Sections */
+.section{display:none;}
+.section.active{display:block;}
+
+/* Document styling */
+.disclaimer-banner{background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.25);border-radius:var(--r-lg);padding:1rem 1.1rem;margin-bottom:1.5rem;}
+.db-eyebrow{font-size:.48rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:.35rem;}
+.db-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--espresso);line-height:1.68;font-weight:500;}
+
+.doc-section{margin-bottom:1.8rem;}
+.doc-h1{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:var(--espresso);margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid var(--bark-ghost);}
+.doc-h2{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--espresso);margin-bottom:.4rem;margin-top:1rem;letter-spacing:.02em;}
+.doc-p{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark);line-height:1.72;margin-bottom:.65rem;}
+.doc-p strong{font-weight:600;color:var(--espresso);}
+.doc-ul{margin:.4rem 0 .8rem 1.1rem;}
+.doc-ul li{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark);line-height:1.68;margin-bottom:.28rem;}
+.doc-contact{background:rgba(255,252,244,.7);border:1px solid var(--bark-ghost);border-radius:var(--r-md);padding:.85rem 1rem;margin-top:1.5rem;}
+.dc-label{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.35rem;}
+.dc-text{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--bark-mid);line-height:1.6;}
+
+/* Gold rule */
+.gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(138,96,16,.4),transparent);margin:1.5rem 0;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="legal-header">
+    <div class="lh-brand">Curated Connections · RespondIQ LLC</div>
+    <div class="lh-title">Legal</div>
+    <div class="lh-sub">Clear, plain language. No surprises.</div>
+    <div class="lh-updated">Last updated · May 2026</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('disclaimer')">Disclaimer</div>
+    <div class="tab" onclick="showTab('terms')">Terms</div>
+    <div class="tab" onclick="showTab('privacy')">Privacy</div>
+  </div>
+
+  <!-- ══ DISCLAIMER ══ -->
+  <div class="section active" id="disclaimer">
+    <div class="disclaimer-banner">
+      <div class="db-eyebrow">Entertainment Disclaimer</div>
+      <div class="db-text">Curated Connections is designed for entertainment, connection, and personal reflection. It is not a clinical tool, diagnostic system, or substitute for professional mental health, medical, or legal advice.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h1">For Fun. For Connection. For Reflection.</div>
+      <div class="doc-p">Curated Connections — including all games, quizzes, conversation cards, journal prompts, and reflection tools — is an entertainment and personal enrichment platform. Think of it like a thoughtful card game, a journal, or a conversation starter. Nothing more.</div>
+      <div class="doc-p">Our content is designed to spark meaningful conversations and personal reflection. It is created in the same spirit as personality quizzes, trivia games, and social card games. We do not practice psychology, therapy, counseling, or medicine.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">What we are</div>
+      <div class="doc-ul">
+        <li>A social entertainment app with games, prompts, and conversation cards</li>
+        <li>A personal journaling and reflection platform</li>
+        <li>A family memory and legacy preservation tool</li>
+        <li>A connection experience for friends, families, and couples</li>
+      </div>
+
+      <div class="doc-h2">What we are not</div>
+      <div class="doc-ul">
+        <li>A mental health diagnostic or treatment tool</li>
+        <li>A substitute for therapy, counseling, or professional advice</li>
+        <li>A medical, legal, or financial advisory service</li>
+        <li>A crisis intervention resource</li>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">If you're in crisis</div>
+      <div class="doc-p">If you or someone you know is experiencing a mental health crisis, please reach out to a qualified professional or crisis service. In the US, you can call or text <strong>988</strong> (Suicide and Crisis Lifeline) anytime, 24/7.</div>
+    </div>
+
+    <div class="gold-rule"></div>
+
+    <div class="doc-section">
+      <div class="doc-p" style="font-size:.88rem;color:var(--bark-soft);">By using Curated Connections you acknowledge that the content is for entertainment and personal reflection purposes only, and that RespondIQ LLC makes no representations regarding clinical accuracy or therapeutic benefit.</div>
+    </div>
+  </div>
+
+  <!-- ══ TERMS OF SERVICE ══ -->
+  <div class="section" id="terms">
+    <div class="doc-section">
+      <div class="doc-h1">Terms of Service</div>
+      <div class="doc-p">These Terms govern your use of Curated Connections, operated by RespondIQ LLC. By using the app you agree to these Terms. If you don't agree, please don't use the service.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Who can use Curated Connections</div>
+      <div class="doc-p">You must be at least 13 years old to create an account. Users under 18 should have parental awareness of their use. Some features — including journal storage and Living Legacy — require account creation.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Your account</div>
+      <div class="doc-p">You are responsible for keeping your account credentials secure. You may not share your account with others or use the service for commercial purposes without our written permission.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Your content</div>
+      <div class="doc-p"><strong>You own your content.</strong> Journal entries, voice recordings, photos, stories, and anything you contribute to Living Legacy belong to you. We do not claim ownership of your personal content.</div>
+      <div class="doc-p">By uploading content you grant RespondIQ LLC a limited license to store and display it within the service on your behalf. We do not sell, share, or use your personal content for advertising.</div>
+      <div class="doc-p">You agree not to upload content that is illegal, harmful to others, or violates third-party rights.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Subscriptions and billing</div>
+      <div class="doc-p">Paid tiers (Connect $4.99/mo, Insight $9.99/mo, Legacy $19.99/mo, Living Legacy $4.99/mo) are billed monthly. You may cancel at any time. Cancellation takes effect at the end of the current billing period. We do not offer refunds for partial periods.</div>
+      <div class="doc-p"><strong>Data on cancellation:</strong> Connect subscribers retain 90-day access to saved content after cancellation. Legacy subscribers retain permanent access to Legacy archive content regardless of subscription status.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Storage billing</div>
+      <div class="doc-p">Each subscription tier includes a base storage allowance for photos, voice recordings, and video content — primarily used in Living Legacy contributions.</div>
+      <div class="doc-ul">
+        <li>Gather — no storage included</li>
+        <li>Connect — 1GB included</li>
+        <li>Insight — 5GB included</li>
+        <li>Legacy — 10GB included</li>
+      </div>
+      <div class="doc-p">When your storage usage exceeds your tier's included allowance, additional storage is billed at <strong>$2.99 per GB per month</strong>. This cost is passed through to you at cost — we do not mark it up. You will be notified before any storage overage charges are applied and given the option to manage your storage.</div>
+      <div class="doc-p">You can view your current storage usage, delete uploaded files, and manage your storage at any time from your account settings. Deleting a Living Legacy contribution permanently removes it from storage.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">What we provide</div>
+      <div class="doc-p">We provide the service as-is. We work hard to keep it running reliably but we cannot guarantee uninterrupted access. We are not liable for indirect, incidental, or consequential damages arising from your use of the service.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Changes to these Terms</div>
+      <div class="doc-p">We may update these Terms occasionally. We'll notify you of significant changes via email or in-app notice. Continued use after notice constitutes acceptance.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Governing law</div>
+      <div class="doc-p">These Terms are governed by the laws of the State of Kansas, United States, without regard to conflict of law principles.</div>
+    </div>
+
+    <div class="doc-contact">
+      <div class="dc-label">Questions about these Terms</div>
+      <div class="dc-text">RespondIQ LLC · Maren Calloway<br>joincuratedconnections.com<br>620-234-0454</div>
+    </div>
+  </div>
+
+  <!-- ══ PRIVACY POLICY ══ -->
+  <div class="section" id="privacy">
+    <div class="doc-section">
+      <div class="doc-h1">Privacy Policy</div>
+      <div class="doc-p">We take your privacy seriously — especially because this app holds personal reflections, family memories, and meaningful content. Here is exactly what we collect, why, and how we protect it.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">What we collect</div>
+      <div class="doc-ul">
+        <li><strong>Account information</strong> — name, email address, password (encrypted)</li>
+        <li><strong>Content you create</strong> — journal entries, saved cards, voice recordings, photos, Living Legacy contributions</li>
+        <li><strong>Usage information</strong> — which features you use, game sessions played, general app activity</li>
+        <li><strong>Payment information</strong> — processed securely through Stripe. We never store card numbers.</li>
+        <li><strong>Device information</strong> — device type, operating system, for technical support purposes</li>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">What we do not collect</div>
+      <div class="doc-ul">
+        <li>We do not sell your data to advertisers or third parties</li>
+        <li>We do not use your journal entries or personal content for advertising</li>
+        <li>We do not share your personal content without your explicit consent</li>
+        <li>We do not use your data to train AI models without separate consent</li>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">How we use your information</div>
+      <div class="doc-ul">
+        <li>To provide and improve the service</li>
+        <li>To process payments and manage subscriptions</li>
+        <li>To send service-related communications (not marketing without consent)</li>
+        <li>To support you when you contact us</li>
+        <li>To maintain platform security</li>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Your content and storage</div>
+      <div class="doc-p"><strong>Journal entries</strong> — Connect subscribers: stored for 90 days after last activity. Insight and Legacy subscribers: stored for the duration of their subscription plus a 90-day grace period. Legacy archive content is stored permanently.</div>
+      <div class="doc-p"><strong>Living Legacy contributions</strong> — stored permanently regardless of the contributing account's status. The keeper of a Legacy account controls the archive.</div>
+      <div class="doc-p"><strong>Voice and video recordings</strong> — stored securely and accessible only to you and anyone you explicitly share them with.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Sharing and circles</div>
+      <div class="doc-p">When you choose to share a reflection or moment to a Circle, that content becomes visible to the members of that Circle. Sharing is always your choice — nothing is shared automatically. You can remove shared content from a Circle at any time.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Your rights</div>
+      <div class="doc-ul">
+        <li><strong>Access</strong> — request a copy of all data we hold about you</li>
+        <li><strong>Correction</strong> — update or correct your personal information</li>
+        <li><strong>Deletion</strong> — request deletion of your account and associated data</li>
+        <li><strong>Export</strong> — download your journal entries and content at any time</li>
+        <li><strong>Opt-out</strong> — unsubscribe from marketing communications at any time</li>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Children's privacy</div>
+      <div class="doc-p">We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us and we will delete it promptly.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Security</div>
+      <div class="doc-p">We use industry-standard encryption for data in transit and at rest. Passwords are hashed and never stored in plain text. Payment data is handled entirely by Stripe and never touches our servers.</div>
+    </div>
+
+    <div class="doc-section">
+      <div class="doc-h2">Changes to this policy</div>
+      <div class="doc-p">We will notify you of material changes to this Privacy Policy via email and in-app notice at least 14 days before they take effect.</div>
+    </div>
+
+    <div class="doc-contact">
+      <div class="dc-label">Privacy questions or data requests</div>
+      <div class="dc-text">RespondIQ LLC · Maren Calloway<br>joincuratedconnections.com<br>620-234-0454</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active', ['disclaimer','terms','privacy'][i]===id);
+  });
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

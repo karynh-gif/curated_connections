@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Journal — Curated Connections</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ivory:#f4e8d4;
+  --parchment:#ece0c8;
+  --parchment2:#e4d4b8;
+  --paper:#e8d8c0;
+  --espresso:#281600;
+  --espresso2:#301a00;
+  --bark:rgba(40,22,0,.72);
+  --bark-mid:rgba(40,22,0,.52);
+  --bark-soft:rgba(40,22,0,.42);
+  --bark-ghost:rgba(40,22,0,.13);
+  --teal-mute:rgba(88,118,106,.58);
+  --teal-soft:rgba(88,118,106,.44);
+  --teal-ghost:rgba(88,118,106,.1);
+  --gold:#8a6010;
+  --gold-soft:rgba(138,96,16,.4);
+  --gold-ghost:rgba(138,96,16,.12);
+  --amber:#c97d3a;
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:26px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:#f4e8d4;font-family:'DM Sans',sans-serif;color:var(--espresso);-webkit-font-smoothing:antialiased;overflow:hidden;}
+
+/* Subtle parchment grain */
+body::before{content:"";position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
+  background-size:180px;pointer-events:none;z-index:9999;}
+
+/* Warm light — sunrise from top left */
+body::after{content:"";position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse at 15% 0%,rgba(235,195,110,.22) 0%,transparent 52%),
+    radial-gradient(ellipse at 85% 90%,rgba(215,170,80,.1) 0%,transparent 48%),
+    radial-gradient(ellipse at 50% 50%,rgba(230,185,100,.06) 0%,transparent 70%);
+  pointer-events:none;z-index:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes breathe{0%,100%{opacity:.45}50%{opacity:.8}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes inkIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;background:var(--ivory);position:relative;overflow:hidden;z-index:1;}
+
+/* ── TOPBAR ── */
+.topbar{
+  padding:.8rem 1.1rem .7rem;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  background:rgba(248,242,232,.95);
+  border-bottom:1px solid rgba(138,96,16,.1);
+  position:relative;z-index:10;
+}
+.tb-brand{display:flex;align-items:center;gap:.28rem;}
+.tb-gather{font-family:'Pacifico',cursive;font-size:1.1rem;color:var(--amber);}
+.tb-sep{font-family:'Pacifico',cursive;font-size:.88rem;color:rgba(138,96,16,.28);}
+.tb-tier{font-family:'Pacifico',cursive;font-size:1.1rem;color:rgba(78,110,98,.76);}
+.tb-sub{font-size:.44rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--bark-soft);margin-top:.05rem;}
+.tb-right{display:flex;gap:.38rem;}
+.tb-btn{width:28px;height:28px;border-radius:50%;background:var(--gold-ghost);border:1px solid var(--gold-soft);display:flex;align-items:center;justify-content:center;font-size:.68rem;cursor:pointer;color:var(--espresso2);transition:all .2s;}
+
+/* ── SCREENS ── */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;z-index:5;background:var(--ivory);}
+.screen.active{display:flex;}
+
+/* ── JOURNAL HOME ── */
+.journal-scroll{flex:1;overflow-y:auto;padding:.4rem 0 5.5rem;background:var(--ivory);}
+.journal-scroll::-webkit-scrollbar{display:none;}
+
+/* Day greeting — literary, unhurried */
+.greeting{padding:1.6rem 1.3rem .5rem;animation:fadeUp .5s ease both;}
+.greeting-eyebrow{font-size:.46rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.5rem;}
+.greeting-name{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;color:var(--espresso);line-height:1.2;margin-bottom:.18rem;letter-spacing:.01em;}
+.greeting-date{font-size:.6rem;color:var(--bark-soft);letter-spacing:.06em;}
+
+/* Gold rule separator */
+.gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:1.1rem 1.3rem 1.3rem;}
+
+/* Streak — minimal, not gamified */
+.streak-row{display:flex;align-items:center;gap:.5rem;padding:0 1.3rem .9rem;}
+.streak-dot{width:7px;height:7px;border-radius:50%;background:var(--bark-ghost);transition:all .3s;}
+.streak-dot.done{background:rgba(88,118,106,.65);}
+.streak-dot.today{background:rgba(88,118,106,.38);animation:breathe 3s ease-in-out infinite;}
+.streak-lbl{font-size:.55rem;color:var(--bark-soft);}
+
+/* Section anchor */
+.sec-anchor{padding:1.4rem 1.3rem 0;margin-bottom:.7rem;animation:fadeUp .5s ease both;}
+.sec-title{font-size:.46rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(88,118,106,.5);}
+
+/* ── MONDAY INTENTION ── pinned, gold, literary ── */
+.intention{margin:0 1.1rem 1.6rem;animation:fadeUp .5s .06s ease both;}
+.int-card{background:linear-gradient(145deg,rgba(248,232,192,.85),rgba(240,220,168,.65));border:1px solid rgba(138,96,16,.15);border-radius:var(--r-xl);padding:1.3rem 1.25rem;position:relative;overflow:hidden;box-shadow:0 3px 14px rgba(138,96,16,.08),0 1px 3px rgba(138,96,16,.05);}
+.int-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(220,185,90,.14),transparent 60%);pointer-events:none;}
+.int-pin{font-size:.42rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;display:flex;align-items:center;gap:.3rem;position:relative;z-index:1;}
+.int-prompt{font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-style:italic;color:var(--espresso);line-height:1.66;margin-bottom:1rem;position:relative;z-index:1;font-weight:400;}
+.int-response{font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:rgba(30,16,0,.86);line-height:1.78;padding:.82rem 1rem;background:rgba(255,252,240,.55);border-radius:var(--r-md);border-left:2px solid rgba(138,96,16,.3);margin-bottom:.9rem;position:relative;z-index:1;display:none;}
+.int-response.show{display:block;}
+.int-edit{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(138,96,16,.75);cursor:pointer;position:relative;z-index:1;}
+.int-week-badge{position:absolute;top:.85rem;right:.9rem;font-size:.4rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(138,96,16,.08);padding:.16rem .42rem;border-radius:999px;border:1px solid rgba(138,96,16,.18);}
+
+/* ── DAILY HOPE ── sacred, centered, breathable ── */
+.hope-section{text-align:center;border-top:1px solid rgba(40,22,0,.07);border-bottom:1px solid rgba(40,22,0,.07);margin:0 0 1.8rem;padding:1.5rem 1.3rem;background:rgba(245,235,215,.25);animation:fadeUp .5s .1s ease both;}
+.hope-eyebrow{font-size:.44rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:.45rem;}
+.hope-eyebrow-star{font-size:.5rem;opacity:.5;}
+.hope-quote{font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-style:italic;color:var(--espresso);line-height:1.82;margin:0 .5rem;font-weight:400;}
+.hope-divider{width:20px;height:1px;background:rgba(138,96,16,.25);margin:.9rem auto;}
+.hope-attr{font-size:.5rem;letter-spacing:.12em;color:var(--bark-soft);}
+
+/* ── TODAY'S PROMPT ── */
+.prompt-section{margin:0 1.1rem 1.2rem;animation:fadeUp .5s .14s ease both;}
+.prompt-card{background:var(--parchment);border:1px solid rgba(40,22,0,.08);border-radius:var(--r-xl);padding:1.25rem 1.2rem;position:relative;overflow:hidden;cursor:pointer;transition:all .22s;box-shadow:0 2px 12px rgba(40,22,0,.055),0 1px 2px rgba(40,22,0,.03);}
+.prompt-card:hover{border-color:rgba(88,118,106,.2);}
+.prompt-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(220,185,120,.1),transparent 55%);pointer-events:none;}
+.pc-eyebrow{font-size:.44rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-soft);margin-bottom:.3rem;position:relative;z-index:1;}
+.pc-chapter{font-size:.6rem;color:var(--bark-soft);margin-bottom:.45rem;position:relative;z-index:1;}
+.pc-question{font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-style:italic;color:var(--espresso);line-height:1.68;margin-bottom:1.1rem;position:relative;z-index:1;font-weight:400;}
+.pc-actions{display:flex;gap:.42rem;position:relative;z-index:1;}
+.pc-write{flex:1;padding:.65rem;background:rgba(88,118,106,.08);border:1px solid rgba(88,118,106,.18);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:rgba(75,108,96,.9);text-align:center;cursor:pointer;transition:all .18s;}
+.pc-write:hover{background:rgba(88,118,106,.13);}
+.pc-voice{padding:.65rem .9rem;background:rgba(30,16,0,.04);border:1px solid rgba(30,16,0,.1);border-radius:var(--r-md);font-size:.72rem;color:var(--bark-soft);cursor:pointer;display:flex;align-items:center;gap:.28rem;position:relative;}
+.pc-voice-lock{position:absolute;top:-7px;right:-4px;font-size:.36rem;font-weight:800;background:rgba(160,60,80,.75);color:#fff;padding:.1rem .28rem;border-radius:3px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;}
+
+/* ── OPEN WRITE ── */
+.open-write{margin:0 1.1rem 1.8rem;display:flex;align-items:flex-start;gap:.6rem;padding:.75rem .95rem;border:1px dashed rgba(40,22,0,.09);border-radius:var(--r-md);cursor:pointer;transition:all .2s;animation:fadeUp .5s .18s ease both;background:rgba(255,250,240,.3);}
+.open-write:hover{border-color:rgba(88,118,106,.2);background:rgba(88,118,106,.04);}
+.ow-icon{font-size:.9rem;opacity:.3;margin-top:.1rem;}
+.ow-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.35);line-height:1.5;}
+
+/* ── PAST ENTRIES ── */
+.entries-wrap{margin:0 1.1rem;}
+.entry-card{background:rgba(250,244,232,.6);border:1px solid rgba(40,22,0,.06);border-radius:var(--r-lg);padding:.9rem .95rem;margin-bottom:.5rem;cursor:pointer;transition:all .2s;animation:fadeUp .5s ease both;box-shadow:0 2px 10px rgba(40,22,0,.05),0 1px 2px rgba(40,22,0,.03);}
+.entry-card:hover{border-color:rgba(88,118,106,.15);background:rgba(88,118,106,.03);box-shadow:0 4px 18px rgba(40,22,0,.07),0 1px 4px rgba(40,22,0,.04);}
+.entry-card.saved-card{border-color:rgba(138,96,16,.1);background:rgba(252,244,228,.7);box-shadow:0 2px 10px rgba(138,96,16,.06),0 1px 3px rgba(138,96,16,.04);}
+.entry-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:.32rem;}
+.entry-date{font-size:.5rem;font-weight:600;letter-spacing:.08em;color:var(--bark-soft);}
+.entry-tag{font-size:.46rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-soft);}
+.entry-tag.gold-tag{color:rgba(138,96,16,.6);}
+.entry-prompt{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--bark-mid);margin-bottom:.35rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+.entry-body{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--espresso);line-height:1.68;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* ── WRITE SCREEN ── */
+.write-inner{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--ivory);}
+.write-top{padding:.7rem .9rem .6rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bark-ghost);flex-shrink:0;}
+.write-back{background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--bark-soft);cursor:pointer;}
+.write-title{font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-soft);}
+.write-save{background:rgba(88,118,106,.08);border:1px solid rgba(88,118,106,.2);border-radius:999px;padding:.26rem .72rem;font-size:.6rem;font-weight:700;color:rgba(72,106,94,.85);cursor:pointer;font-family:'Nunito',sans-serif;letter-spacing:.04em;transition:all .18s;}
+.write-save:hover{background:rgba(88,118,106,.14);}
+.write-save.saved{color:rgba(78,110,98,1);background:rgba(88,118,106,.14);}
+
+.write-prompt-header{padding:.9rem 1.2rem .7rem;border-bottom:1px solid var(--bark-ghost);flex-shrink:0;}
+.wph-chapter{font-size:.46rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-soft);margin-bottom:.3rem;}
+.wph-prompt{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--bark-mid);line-height:1.58;}
+
+.write-field{flex:1;position:relative;overflow:hidden;}
+.write-ta{width:100%;height:100%;background:none;border:none;outline:none;resize:none;font-family:'Cormorant Garamond',serif;font-size:1.18rem;color:var(--espresso);line-height:1.92;letter-spacing:.01em;font-weight:400;padding:1.1rem 1.2rem 3rem;-webkit-font-smoothing:antialiased;}
+.write-ta::placeholder{color:rgba(30,16,0,.22);font-style:italic;}
+.write-wc{position:absolute;bottom:.9rem;right:1.1rem;font-size:.5rem;color:var(--bark-ghost);font-family:'DM Sans',sans-serif;}
+
+.write-bar{padding:.52rem .9rem .65rem;display:flex;align-items:center;gap:.4rem;border-top:1px solid var(--bark-ghost);flex-shrink:0;background:rgba(248,242,232,.96);}
+.wbar-btn{display:flex;align-items:center;gap:.26rem;background:none;border:1px solid var(--bark-ghost);border-radius:999px;padding:.28rem .6rem;font-size:.58rem;color:var(--bark-soft);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;transition:all .18s;}
+.wbar-btn:hover{border-color:rgba(88,118,106,.25);color:rgba(72,106,94,.8);}
+.wbar-lock{position:relative;}
+.wbar-lock::after{content:'✦ Insight';position:absolute;top:-8px;right:-4px;font-size:.36rem;font-weight:800;background:rgba(160,60,80,.72);color:#fff;padding:.1rem .28rem;border-radius:3px;letter-spacing:.05em;text-transform:uppercase;}
+.wbar-spacer{flex:1;}
+.wbar-done{padding:.38rem .88rem;background:rgba(88,118,106,.12);border:1px solid rgba(88,118,106,.25);border-radius:999px;font-size:.66rem;font-weight:800;color:rgba(72,106,94,.9);cursor:pointer;font-family:'Nunito',sans-serif;letter-spacing:.04em;transition:all .18s;}
+.wbar-done:hover{background:rgba(88,118,106,.18);}
+
+/* ── ENTRY VIEW ── */
+.entry-view-scroll{flex:1;overflow-y:auto;padding:1.4rem 1.3rem 5rem;background:var(--ivory);}
+.entry-view-scroll::-webkit-scrollbar{display:none;}
+.ev-date{font-size:.5rem;letter-spacing:.1em;color:var(--bark-soft);margin-bottom:.28rem;}
+.ev-chapter{font-size:.46rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-soft);margin-bottom:.8rem;}
+.ev-prompt{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:var(--bark-mid);line-height:1.62;margin-bottom:1.3rem;padding-bottom:1.1rem;border-bottom:1px solid var(--bark-ghost);}
+.ev-body{font-family:'Cormorant Garamond',serif;font-size:1.18rem;color:var(--espresso);line-height:1.95;letter-spacing:.01em;font-weight:400;}
+.ev-actions{display:flex;gap:.45rem;margin-top:2rem;}
+.ev-btn{flex:1;padding:.65rem;background:rgba(255,255,255,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:.7rem;color:var(--bark-mid);text-align:center;cursor:pointer;transition:all .18s;}
+.ev-btn:hover{border-color:rgba(18,140,120,.3);}
+.ev-keep{flex:1;padding:.65rem;background:rgba(88,118,106,.09);border:1px solid rgba(88,118,106,.2);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:.7rem;color:rgba(72,106,94,.88);text-align:center;cursor:pointer;}
+
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(248,242,232,.96);border-top:1px solid rgba(138,96,16,.12);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
+.bn{display:flex;flex-direction:column;align-items:center;gap:.18rem;cursor:pointer;opacity:.3;transition:opacity .2s;min-width:44px;}
+.bn.active{opacity:1;}
+.bn-i{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+.bn-l{font-size:.42rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bark-mid);}
+.bn.active .bn-l{color:rgba(78,110,98,.8);}
+.bn-ctr{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(88,118,106,.82),rgba(68,100,88,.88));display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgba(88,118,106,.2);margin-top:-7px;border:2px solid var(--ivory);}
+
+/* ── SUNDAY CLOSING ── */
+.closing-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;background:linear-gradient(180deg,var(--parchment),var(--ivory));border-radius:24px 24px 0 0;border-top:2px solid rgba(138,96,16,.22);padding:1.4rem 1.3rem 2.8rem;z-index:300;transition:transform .38s cubic-bezier(.34,1.1,.64,1);}
+.closing-sheet.open{transform:translateX(-50%) translateY(0);}
+.cs-handle{width:28px;height:2.5px;background:rgba(138,96,16,.18);border-radius:2px;margin:0 auto .9rem;}
+.cs-lbl{font-size:.48rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(138,96,16,.55);margin-bottom:.45rem;}
+.cs-q{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--espresso);line-height:1.4;margin-bottom:1.1rem;}
+.cs-ta{width:100%;background:rgba(255,255,255,.6);border:1px solid rgba(30,16,0,.12);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.98rem;color:var(--espresso);line-height:1.65;padding:.8rem .9rem;outline:none;resize:none;min-height:80px;margin-bottom:.75rem;}
+.cs-ta::placeholder{color:var(--bark-ghost);font-style:italic;}
+.cs-close{width:100%;padding:.8rem;background:linear-gradient(135deg,rgba(138,96,16,.75),rgba(110,75,10,.8));color:#fff;border:none;border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;letter-spacing:.04em;}
+
+.overlay{position:fixed;inset:0;background:rgba(30,16,0,.3);z-index:290;display:none;backdrop-filter:blur(2px);animation:fadeIn .2s ease both;}
+.overlay.open{display:block;}
+.toast{display:none;position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--espresso2);border-radius:999px;padding:.4rem .9rem;font-size:.66rem;font-weight:500;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
+.toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
+
+/* SVG nav icons */
+.bn-i svg{width:20px;height:20px;display:block;}
+.bn{color:rgba(244,236,220,.28);}
+.bn.active{color:var(--amber, #ff8c20);}
+.bn:not(.active):hover{color:rgba(244,236,220,.45);}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div>
+      <div class="tb-brand">
+        <div class="tb-gather">Gather</div>
+        <div class="tb-sep">✦</div>
+        <div class="tb-tier">Connect</div>
+      </div>
+      <div class="tb-sub">Your Journal</div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-btn" onclick="openClosing()">🌙</div>
+      <div class="tb-btn" onclick="t('Settings coming soon')">⚙️</div>
+    </div>
+  </div>
+
+  <!-- ══ HOME ══ -->
+  <div class="screen active" id="homeScreen">
+    <div class="journal-scroll">
+
+      <div class="greeting">
+        <div class="greeting-eyebrow" id="dayLine">Saturday · A quiet morning</div>
+        <div class="greeting-name" id="greetName">Good morning, Maren.</div>
+        <div class="greeting-date" id="greetDate">May 9, 2026</div>
+      </div>
+
+      <div class="streak-row">
+        <div id="streakDots" style="display:flex;gap:.22rem;"></div>
+        <div class="streak-lbl" id="streakLbl">3 days this week</div>
+      </div>
+
+      <div class="gold-rule"></div>
+
+      <!-- Monday Intention -->
+      <div class="sec-anchor"><div class="sec-title">This Week's Intention</div></div>
+      <div class="intention">
+        <div class="int-card" onclick="openWrite('intention','MI001','What\'s one thing you want to protect this week?','Growth')">
+          <div class="int-week-badge">Pinned all week</div>
+          <div class="int-pin">📌 Monday Intention</div>
+          <div class="int-prompt">"What's one thing you want to protect this week?"</div>
+          <div class="int-response show">The slow mornings before everyone wakes up. That hour is mine and I keep giving it away.</div>
+          <div class="int-edit" onclick="event.stopPropagation();openWrite('intention','MI001','What\'s one thing you want to protect this week?','Growth')">Edit your answer →</div>
+        </div>
+      </div>
+
+      <!-- Daily Hope -->
+      <div class="hope-section">
+        <div class="hope-eyebrow">
+          <span class="hope-eyebrow-star">✦</span>
+          Daily Hope
+          <span class="hope-eyebrow-star">✦</span>
+        </div>
+        <div class="hope-quote">"You don't have to move mountains today. Just show up as yourself — that's already enough."</div>
+        <div class="hope-divider"></div>
+        <div class="hope-attr">Curated Connections · Daily Hope</div>
+      </div>
+
+      <!-- Today's Prompt -->
+      <div class="sec-anchor"><div class="sec-title">Today's Prompt</div></div>
+      <div class="prompt-section">
+        <div class="prompt-card" onclick="openWrite('prompt','J003','When did you last feel like the best version of yourself — what were you doing?','Identity')">
+          <div class="pc-eyebrow">Today's Reflection</div>
+          <div class="pc-chapter">Life Chapter · Identity</div>
+          <div class="pc-question">"When did you last feel like the best version of yourself — what were you doing?"</div>
+          <div class="pc-actions">
+            <div class="pc-write" onclick="event.stopPropagation();openWrite('prompt','J003','When did you last feel like the best version of yourself — what were you doing?','Identity')">Begin writing →</div>
+            <div class="pc-voice">
+              <span class="pc-voice-lock">✦ Insight</span>
+              🎙 Voice
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Free write -->
+      <div class="open-write" onclick="openWrite('open','FREE','What\'s on your mind today?','Open')">
+        <div class="ow-icon">✏️</div>
+        <div class="ow-text">Write freely — no prompt, just your thoughts today...</div>
+      </div>
+
+      <!-- Past entries -->
+      <div class="sec-anchor"><div class="sec-title">Recent Entries</div></div>
+      <div class="entries-wrap">
+
+        <div class="entry-card" onclick="openEntry('e1')">
+          <div class="entry-meta">
+            <div class="entry-date">Friday · May 8</div>
+            <div class="entry-tag">Hard Seasons</div>
+          </div>
+          <div class="entry-prompt">"What's one thing you're carrying that you haven't said out loud?"</div>
+          <div class="entry-body">The distance between my sister and me isn't really about the argument anymore. It's about all the years before it that we never addressed...</div>
+        </div>
+
+        <div class="entry-card saved-card" onclick="openEntry('e2')">
+          <div class="entry-meta">
+            <div class="entry-date">Thursday · May 7</div>
+            <div class="entry-tag gold-tag">💾 Saved from card</div>
+          </div>
+          <div class="entry-prompt">"What's something people misunderstand about you at first?"</div>
+          <div class="entry-body">People think I'm confident because I'm direct. But the directness comes from anxiety, not confidence. I figure if I say it first no one can use it against me...</div>
+        </div>
+
+        <div class="entry-card" onclick="openEntry('e3')">
+          <div class="entry-meta">
+            <div class="entry-date">Monday · May 5</div>
+            <div class="entry-tag">Growth</div>
+          </div>
+          <div class="entry-prompt">"What's one small shift you want to make this week?"</div>
+          <div class="entry-body">I want to stop answering emails before I've had coffee. It starts the day reactive instead of intentional and I've known this for two years...</div>
+        </div>
+
+        <div class="entry-card" onclick="openEntry('e4')">
+          <div class="entry-meta">
+            <div class="entry-date">Sunday · May 4</div>
+            <div class="entry-tag">Sunday Closing</div>
+          </div>
+          <div class="entry-prompt">"Was this week worth it?"</div>
+          <div class="entry-body">Mostly. Thursday wasn't. But Wednesday evening when we all sat outside after dinner — that was the whole week in one hour...</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ WRITE SCREEN ══ -->
+  <div class="screen" id="writeScreen">
+    <div class="write-inner">
+      <div class="write-top">
+        <button class="write-back" onclick="closeWrite()">← Journal</button>
+        <div class="write-title" id="writeTitle">Today's Prompt</div>
+        <button class="write-save" id="writeSaveBtn" onclick="saveEntry()">Save</button>
+      </div>
+      <div class="write-prompt-header">
+        <div class="wph-chapter" id="writeChapter">Life Chapter · Identity</div>
+        <div class="wph-prompt" id="writePrompt">"When did you last feel like the best version of yourself?"</div>
+      </div>
+      <div class="write-field">
+        <textarea class="write-ta" id="writeTa" placeholder="Begin writing... there's no rush, no right answer. This space is entirely yours." oninput="wc()"></textarea>
+        <div class="write-wc" id="wcEl">0 words</div>
+      </div>
+      <div class="write-bar">
+        <button class="wbar-btn" onclick="t('Photo attach coming soon')">📷 Photo</button>
+        <button class="wbar-btn wbar-lock" onclick="t('Voice notes unlock at Insight')">🎙 Voice</button>
+        <div class="wbar-spacer"></div>
+        <button class="wbar-done" onclick="saveEntry()">Save entry →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ENTRY VIEW ══ -->
+  <div class="screen" id="entryScreen">
+    <div class="write-top">
+      <button class="write-back" onclick="closeEntry()">← Journal</button>
+      <div class="write-title">Your Entry</div>
+      <div style="width:52px;"></div>
+    </div>
+    <div class="entry-view-scroll">
+      <div class="ev-date" id="evDate">Friday · May 8, 2026</div>
+      <div class="ev-chapter" id="evChapter">Hard Seasons</div>
+      <div class="ev-prompt" id="evPrompt">"What's one thing you're carrying today that you haven't said out loud?"</div>
+      <div class="ev-body" id="evBody">The distance between my sister and me isn't really about the argument anymore. It's about all the years before it that we never addressed. The argument was just the first time one of us was honest enough to let it show.
+
+I've been carrying this for eight months. I've written around it in here but never directly at it. Today I am.
+
+I miss her. I think she misses me too. I think we're both waiting for the other one to say it first, which is the most us thing imaginable.</div>
+      <div class="ev-actions">
+        <div class="ev-btn" onclick="t('Downloaded')">Download</div>
+        <div class="ev-btn" onclick="openWrite('edit','e1','What are you carrying?','Hard Seasons')">Edit</div>
+        <div class="ev-keep" onclick="t('Kept forever ✦')">✦ Keep forever</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <div class="bn" onclick="t('Home')"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1H15v-6H9v6H4a1 1 0 0 1-1-1V10.5z"/></svg></div><div class="bn-l">Home</div></div>
+    <div class="bn" onclick="t('Circles')"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg></div><div class="bn-l">Circles</div></div>
+    <div class="bn-ctr" onclick="openWrite('open','FREE','What\'s on your mind today?','Open')">✦</div>
+    <div class="bn active"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="14" height="20" rx="2"/><line x1="4" y1="8" x2="8" y2="8"/><line x1="8" y1="2" x2="8" y2="22"/><line x1="12" y1="9" x2="16" y2="9"/><line x1="12" y1="13" x2="16" y2="13"/><line x1="12" y1="17" x2="14" y2="17"/></svg></div><div class="bn-l">Journal</div></div>
+    <div class="bn" onclick="t('Profile')"><div class="bn-i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="bn-l">Me</div></div>
+  </div>
+</div>
+
+<!-- OVERLAY + SUNDAY CLOSING -->
+<div class="overlay" id="ov" onclick="closeClosing()"></div>
+<div class="closing-sheet" id="closingSheet">
+  <div class="cs-handle"></div>
+  <div class="cs-lbl">🌙 Sunday Closing</div>
+  <div class="cs-q">"Did you get to protect it?"</div>
+  <textarea class="cs-ta" placeholder="A sentence or two is enough. Just close the week..."></textarea>
+  <button class="cs-close" onclick="t('Week closed ✦ See you Monday');closeClosing()">Close the week →</button>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+// Date + greeting
+(function(){
+  var d=new Date();
+  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var h=d.getHours();
+  var dayName=days[d.getDay()];
+  var tone=d.getDay()===1?'Your week begins':d.getDay()===0?'A gentle close':d.getDay()===6?'A quiet morning':'Take it easy today';
+  var gr=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('dayLine').textContent=dayName+' \u00b7 '+tone;
+  document.getElementById('greetName').textContent=gr+', Maren.';
+  document.getElementById('greetDate').textContent=months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+
+  // Streak dots
+  var wrap=document.getElementById('streakDots');
+  var done=3;
+  var today=d.getDay()===0?6:d.getDay()-1;
+  for(var i=0;i<7;i++){
+    var dot=document.createElement('div');
+    dot.className='streak-dot'+(i<done?' done':i===today?' today':'');
+    wrap.appendChild(dot);
+  }
+})();
+
+var CUR={type:'',id:'',text:'',chapter:''};
+
+function openWrite(type,id,text,chapter){
+  CUR={type,id,text,chapter};
+  document.getElementById('writeChapter').textContent='Life Chapter \u00b7 '+chapter;
+  document.getElementById('writePrompt').textContent=type==='open'?'Open reflection \u2014 no prompt today.':'\u201c'+text+'\u201d';
+  document.getElementById('writeTitle').textContent=type==='intention'?'Monday Intention':type==='open'?'Free Write':'Today\u2019s Prompt';
+  document.getElementById('writeTa').value='';
+  document.getElementById('wcEl').textContent='0 words';
+  var btn=document.getElementById('writeSaveBtn');
+  btn.textContent='Save';btn.classList.remove('saved');
+  showScreen('writeScreen');
+  setTimeout(function(){document.getElementById('writeTa').focus();},320);
+}
+function closeWrite(){showScreen('homeScreen');}
+function saveEntry(){
+  var tx=document.getElementById('writeTa').value.trim();
+  if(!tx){t('Write something first');return;}
+  var btn=document.getElementById('writeSaveBtn');
+  btn.textContent='Saved \u2756';btn.classList.add('saved');
+  setTimeout(function(){closeWrite();t('Entry saved \u2756');},650);
+}
+function wc(){
+  var w=document.getElementById('writeTa').value.trim().split(/\s+/).filter(function(x){return x.length>0;});
+  document.getElementById('wcEl').textContent=w.length+' word'+(w.length===1?'':'s');
+}
+
+var ENTRIES={
+  e1:{date:'Friday \u00b7 May 8, 2026',chapter:'Hard Seasons',prompt:"What\u2019s one thing you\u2019re carrying that you haven\u2019t said out loud?",body:"The distance between my sister and me isn\u2019t really about the argument anymore. It\u2019s about all the years before it that we never addressed. The argument was just the first time one of us was honest enough to let it show.\n\nI\u2019ve been carrying this for eight months. I\u2019ve written around it in here but never directly at it. Today I am.\n\nI miss her. I think she misses me too. I think we\u2019re both waiting for the other one to say it first, which is the most us thing imaginable."},
+  e2:{date:'Thursday \u00b7 May 7, 2026',chapter:'Saved from card',prompt:"What\u2019s something people misunderstand about you at first?",body:"People think I\u2019m confident because I\u2019m direct. But the directness comes from anxiety, not confidence. I figure if I say it first no one can use it against me.\n\nThe irony is that the directness makes me seem more confident, so people trust me with things, which makes me more anxious, which makes me more direct.\n\nIt\u2019s a whole thing."},
+  e3:{date:'Monday \u00b7 May 5, 2026',chapter:'Growth',prompt:"What\u2019s one small shift you want to make this week?",body:"I want to stop answering emails before I\u2019ve had coffee. It starts the day reactive instead of intentional and I\u2019ve known this for two years.\n\nThis week I mean it. Coffee first. Then the world."},
+  e4:{date:'Sunday \u00b7 May 4, 2026',chapter:'Sunday Closing',prompt:"Was this week worth it?",body:"Mostly. Thursday wasn\u2019t. But Wednesday evening when we all sat outside after dinner \u2014 that was the whole week in one hour.\n\nI\u2019m going to try to have more Wednesday evenings."}
+};
+function openEntry(id){
+  var e=ENTRIES[id];if(!e)return;
+  document.getElementById('evDate').textContent=e.date;
+  document.getElementById('evChapter').textContent=e.chapter;
+  document.getElementById('evPrompt').textContent='\u201c'+e.prompt+'\u201d';
+  document.getElementById('evBody').textContent=e.body;
+  showScreen('entryScreen');
+}
+function closeEntry(){showScreen('homeScreen');}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+function openClosing(){
+  document.getElementById('ov').classList.add('open');
+  document.getElementById('closingSheet').classList.add('open');
+}
+function closeClosing(){
+  document.getElementById('ov').classList.remove('open');
+  document.getElementById('closingSheet').classList.remove('open');
+}
+function t(m){
+  var e=document.getElementById('toastEl');
+  e.textContent=m;e.classList.add('show');
+  clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('show');},2600);
+}
+</script>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.65rem;color:rgba(40,22,0,.35);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+</body>
+</html>

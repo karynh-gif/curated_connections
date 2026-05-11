@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Save to Journal — Curated Connections</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06060f;--surface:#0e0e1c;--lift:#16162a;
+  --amber:#ff8c20;--amber2:#ffaa44;
+  --cream:#f4ecdc;--cream-dim:#9a8e7a;
+  --teal:#00c49a;
+  --gold:#ffd24d;
+  --r-md:14px;--r-lg:20px;--r-xl:26px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;overflow:hidden;}
+body::before{content:"";position:fixed;inset:0;
+  background:radial-gradient(ellipse at 25% 0%,rgba(255,140,32,.14) 0%,transparent 48%),
+             radial-gradient(ellipse at 80% 80%,rgba(0,196,154,.07) 0%,transparent 45%);
+  pointer-events:none;z-index:0;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes savedPop{0%{transform:scale(.85);opacity:0}55%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes checkDraw{from{stroke-dashoffset:40}to{stroke-dashoffset:0}}
+@keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
+
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:1;}
+
+/* DEMO CARD — simulates a Gather card */
+.demo-area{flex:1;display:flex;flex-direction:column;padding:1.2rem .9rem;overflow:hidden;justify-content:center;}
+.demo-label{font-size:.46rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,140,32,.4);margin-bottom:.5rem;text-align:center;}
+.gather-card{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-xl);padding:1.3rem 1.2rem;position:relative;animation:fadeUp .4s ease both;}
+.gc-eyebrow{font-size:.44rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,140,32,.55);margin-bottom:.45rem;}
+.gc-prompt{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:#f5edde;line-height:1.65;margin-bottom:1rem;font-weight:400;}
+.gc-hint{font-size:.75rem;color:rgba(244,236,220,.58);line-height:1.6;margin-bottom:1.1rem;font-family:'Cormorant Garamond',serif;}
+
+/* Card action row */
+.card-actions{display:flex;align-items:center;gap:.42rem;}
+.ca-btn{flex:1;padding:.6rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-size:.65rem;font-weight:700;color:rgba(255,255,255,.35);text-align:center;cursor:pointer;font-family:'Nunito',sans-serif;letter-spacing:.04em;transition:all .18s;}
+.ca-btn:hover{border-color:rgba(255,140,32,.3);color:rgba(255,140,32,.7);}
+.save-btn{flex:1.4;padding:.6rem;background:rgba(255,140,32,.12);border:1px solid rgba(255,140,32,.3);border-radius:var(--r-md);font-size:.65rem;font-weight:800;color:var(--amber);text-align:center;cursor:pointer;font-family:'Nunito',sans-serif;letter-spacing:.04em;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:.3rem;}
+.save-btn:hover{background:rgba(255,140,32,.2);}
+.save-btn.saved{background:rgba(0,196,154,.12);border-color:rgba(0,196,154,.3);color:var(--teal);}
+
+/* OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;display:none;backdrop-filter:blur(3px);}
+.overlay.open{display:block;animation:fadeIn .2s ease both;}
+
+/* ══ SAVE SHEET ══ */
+.save-sheet{
+  position:fixed;bottom:0;left:50%;
+  transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:430px;
+  background:linear-gradient(180deg,#f2e6d0,#f4e8d4);
+  border-radius:24px 24px 0 0;
+  border-top:1px solid rgba(138,96,16,.18);
+  padding:1.3rem 1.3rem 3rem;
+  z-index:300;
+  transition:transform .38s cubic-bezier(.34,1.1,.64,1);
+  max-height:90vh;overflow-y:auto;
+}
+.save-sheet::-webkit-scrollbar{display:none;}
+.save-sheet.open{transform:translateX(-50%) translateY(0);}
+
+/* Sheet uses journal cream palette */
+.ss-handle{width:28px;height:2.5px;background:rgba(40,22,0,.14);border-radius:2px;margin:0 auto .9rem;}
+.ss-eyebrow{font-size:.44rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(40,22,0,.4);margin-bottom:.3rem;}
+.ss-title{font-family:'Pacifico',cursive;font-size:1.2rem;color:#c97d3a;margin-bottom:.2rem;}
+.ss-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(40,22,0,.55);margin-bottom:1.1rem;line-height:1.62;}
+
+/* The prompt being saved */
+.ss-prompt-block{background:rgba(255,252,240,.6);border:1px solid rgba(138,96,16,.15);border-left:3px solid rgba(138,96,16,.3);border-radius:var(--r-md);padding:.8rem .9rem;margin-bottom:1rem;}
+.ss-prompt-label{font-size:.44rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(138,96,16,.5);margin-bottom:.3rem;}
+.ss-prompt-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;color:#281600;line-height:1.68;font-weight:400;}
+
+/* Write your answer */
+.ss-write-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(40,22,0,.4);margin-bottom:.45rem;}
+.ss-textarea{width:100%;background:rgba(255,250,240,.7);border:1px solid rgba(40,22,0,.1);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:#281600;line-height:1.78;padding:.8rem .9rem;outline:none;resize:none;min-height:90px;margin-bottom:.7rem;-webkit-font-smoothing:antialiased;}
+.ss-textarea::placeholder{color:rgba(40,22,0,.22);font-style:italic;}
+.ss-textarea:focus{border-color:rgba(138,96,16,.28);}
+
+/* Where to save */
+.ss-dest-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(40,22,0,.4);margin-bottom:.45rem;}
+.ss-dest-opts{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem;}
+.ss-dest-opt{display:flex;align-items:center;gap:.6rem;background:rgba(255,252,240,.5);border:1.5px solid rgba(40,22,0,.09);border-radius:var(--r-md);padding:.65rem .8rem;cursor:pointer;transition:all .18s;}
+.ss-dest-opt:hover{border-color:rgba(138,96,16,.25);}
+.ss-dest-opt.sel{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.3);}
+.sdo-icon{font-size:1rem;flex-shrink:0;}
+.sdo-info{flex:1;}
+.sdo-name{font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;color:#281600;}
+.sdo-desc{font-size:.63rem;color:rgba(40,22,0,.5);margin-top:.08rem;line-height:1.4;}
+.sdo-check{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(40,22,0,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.ss-dest-opt.sel .sdo-check{background:#c97d3a;border-color:#c97d3a;}
+.sdo-check svg{display:none;}
+.ss-dest-opt.sel .sdo-check svg{display:block;}
+
+/* Share option */
+.ss-share-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(40,22,0,.4);margin-bottom:.45rem;}
+.ss-share-opts{display:flex;gap:.38rem;margin-bottom:1.1rem;}
+.ss-share-opt{flex:1;padding:.55rem .4rem;background:rgba(255,252,240,.5);border:1px solid rgba(40,22,0,.09);border-radius:var(--r-md);text-align:center;cursor:pointer;transition:all .18s;}
+.ss-share-opt:hover{border-color:rgba(138,96,16,.22);}
+.ss-share-opt.sel{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.25);}
+.sso-icon{font-size:.95rem;margin-bottom:.18rem;}
+.sso-name{font-size:.56rem;font-weight:700;color:rgba(40,22,0,.55);font-family:'Nunito',sans-serif;}
+
+/* Save button */
+.ss-save-btn{width:100%;padding:.88rem;background:linear-gradient(135deg,#c97d3a,#e89448);color:#fff;border:none;border-radius:var(--r-lg);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;letter-spacing:.04em;transition:all .2s;box-shadow:0 6px 20px rgba(201,125,58,.3);}
+.ss-save-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,125,58,.4);}
+
+/* ══ SAVED CONFIRMATION ══ */
+.saved-confirm{
+  position:fixed;bottom:0;left:50%;
+  transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:430px;
+  background:linear-gradient(180deg,#f2e6d0,#f4e8d4);
+  border-radius:24px 24px 0 0;
+  border-top:1px solid rgba(138,96,16,.18);
+  padding:2rem 1.5rem 3.5rem;
+  z-index:301;
+  text-align:center;
+  transition:transform .38s cubic-bezier(.34,1.1,.64,1);
+}
+.saved-confirm.open{transform:translateX(-50%) translateY(0);}
+.sc-check{width:64px;height:64px;border-radius:50%;background:rgba(0,196,154,.12);border:2px solid rgba(0,196,154,.3);display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;animation:savedPop .4s cubic-bezier(.34,1.4,.64,1) both;}
+.sc-check svg{animation:checkDraw .4s .2s ease both;}
+.sc-title{font-family:'Pacifico',cursive;font-size:1.35rem;color:#c97d3a;margin-bottom:.3rem;}
+.sc-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(40,22,0,.6);line-height:1.68;margin-bottom:1.3rem;}
+.sc-entry-preview{background:rgba(255,252,240,.6);border:1px solid rgba(138,96,16,.15);border-radius:var(--r-md);padding:.75rem .85rem;margin-bottom:1.2rem;text-align:left;}
+.sc-entry-prompt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:rgba(40,22,0,.45);margin-bottom:.3rem;}
+.sc-entry-response{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#281600;line-height:1.68;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.sc-actions{display:flex;gap:.45rem;}
+.sc-journal-btn{flex:1;padding:.72rem;background:rgba(201,125,58,.12);border:1px solid rgba(201,125,58,.28);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:#c97d3a;cursor:pointer;text-align:center;}
+.sc-done-btn{flex:1;padding:.72rem;background:none;border:1px solid rgba(40,22,0,.12);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(40,22,0,.5);cursor:pointer;text-align:center;}
+
+.toast{display:none;position:fixed;bottom:3rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(14,14,28,.96);border:1px solid rgba(255,140,32,.2);border-radius:999px;padding:.4rem .9rem;font-size:.66rem;color:var(--cream);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
+.toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
+
+/* Card fly-to-journal animation */
+@keyframes cardFly{
+  0%{transform:scale(1);opacity:1;}
+  40%{transform:scale(.96) translateY(-4px);opacity:.9;}
+  100%{transform:scale(.88) translateY(8px);opacity:0;}
+}
+@keyframes journalReceive{
+  0%{transform:scale(1);}
+  30%{transform:scale(1.18);}
+  60%{transform:scale(.95);}
+  100%{transform:scale(1);}
+}
+@keyframes sparkle{
+  0%{opacity:0;transform:scale(0) rotate(0deg);}
+  50%{opacity:1;transform:scale(1.2) rotate(180deg);}
+  100%{opacity:0;transform:scale(0) rotate(360deg);}
+}
+@keyframes savedGlow{
+  0%{box-shadow:0 0 0 0 rgba(0,196,154,.6);}
+  50%{box-shadow:0 0 0 12px rgba(0,196,154,0);}
+  100%{box-shadow:0 0 0 0 rgba(0,196,154,0);}
+}
+.gather-card.flying{animation:cardFly .4s ease forwards;}
+.save-btn.receiving{animation:journalReceive .4s ease;}
+.sparkle-dot{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--gold);pointer-events:none;animation:sparkle .6s ease forwards;}
+
+/* Ceremonial save sheet enhancements */
+.ss-title{font-family:'Pacifico',cursive;font-size:1.35rem;color:#c97d3a;margin-bottom:.25rem;}
+.ss-keeping{display:flex;align-items:center;gap:.4rem;background:rgba(201,125,58,.08);border:1px solid rgba(201,125,58,.18);border-radius:999px;padding:.28rem .75rem;margin-bottom:1rem;width:fit-content;}
+.ss-keeping-dot{width:7px;height:7px;border-radius:50%;background:rgba(0,196,154,.7);animation:breathe 2s ease-in-out infinite;}
+.ss-keeping-text{font-size:.56rem;font-weight:700;color:rgba(40,22,0,.5);font-family:'Nunito',sans-serif;letter-spacing:.06em;}
+
+/* Confirmation ceremony */
+.sc-date{font-size:.52rem;color:rgba(40,22,0,.35);letter-spacing:.1em;margin-bottom:.6rem;font-family:'DM Sans',sans-serif;}
+
+
+/* SVG nav icons */
+.bn-i svg{width:20px;height:20px;display:block;}
+.bn{color:rgba(244,236,220,.28);}
+.bn.active{color:var(--amber, #ff8c20);}
+.bn:not(.active):hover{color:rgba(244,236,220,.45);}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIMULATED GATHER CARD -->
+  <div class="demo-area">
+    <div class="demo-label">↓ Tap "Save to Journal" on any card</div>
+    <div class="gather-card">
+      <div class="gc-eyebrow">✦ Today's Reflection · Identity</div>
+      <div class="gc-prompt">"When did you last feel like the best version of yourself — what were you doing?"</div>
+      <div class="gc-hint">Think about a moment when you weren't performing for anyone. Just present, capable, and exactly who you want to be.</div>
+      <div class="card-actions">
+        <div class="ca-btn" onclick="t('↑ This landed')">↑ Landed</div>
+        <div class="ca-btn" onclick="t('↓ Not for me')">↓ Pass</div>
+        <div class="save-btn" id="saveCardBtn" onclick="openSaveSheet()">📓 Save to Journal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- ══ SAVE SHEET ══ -->
+<div class="save-sheet" id="saveSheet">
+  <div class="ss-handle"></div>
+  <div class="ss-eyebrow">✦ Save to Journal</div>
+  <div class="ss-title">Preserve this moment.</div>
+  <div class="ss-keeping">
+    <div class="ss-keeping-dot"></div>
+    <div class="ss-keeping-text">This will live in your journal forever</div>
+  </div>
+  <div class="ss-sub">Your answer stays private. Only what you choose to share leaves this journal.</div>
+
+  <!-- The prompt -->
+  <div class="ss-prompt-block">
+    <div class="ss-prompt-label">The prompt</div>
+    <div class="ss-prompt-text">"When did you last feel like the best version of yourself — what were you doing?"</div>
+  </div>
+
+  <!-- Write answer -->
+  <div class="ss-write-lbl">Your answer (optional)</div>
+  <textarea class="ss-textarea" id="userAnswer" placeholder="Write something, or just save the prompt and come back to it later..."></textarea>
+
+  <!-- Where to save -->
+  <div class="ss-dest-lbl">Save to</div>
+  <div class="ss-dest-opts">
+    <div class="ss-dest-opt sel" onclick="selDest(this)">
+      <div class="sdo-icon">📓</div>
+      <div class="sdo-info">
+        <div class="sdo-name">My Journal</div>
+        <div class="sdo-desc">Private — only you can see this</div>
+      </div>
+      <div class="sdo-check">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+          <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="0"/>
+        </svg>
+      </div>
+    </div>
+    <div class="ss-dest-opt" onclick="selDest(this)">
+      <div class="sdo-icon">◎</div>
+      <div class="sdo-info">
+        <div class="sdo-name">Share with a Circle</div>
+        <div class="sdo-desc">Offer this reflection to someone who matters</div>
+      </div>
+      <div class="sdo-check">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+          <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="ss-dest-opt" onclick="selDest(this)">
+      <div class="sdo-icon">🌳</div>
+      <div class="sdo-info">
+        <div class="sdo-name">Add to Living Legacy</div>
+        <div class="sdo-desc">Preserved permanently in your family archive</div>
+      </div>
+      <div class="sdo-check">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+          <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Also share -->
+  <div class="ss-share-lbl">Also share this with</div>
+  <div class="ss-share-opts">
+    <div class="ss-share-opt" onclick="this.classList.toggle('sel')">
+      <div class="sso-icon">🏡</div>
+      <div class="sso-name">Calloway Family</div>
+    </div>
+    <div class="ss-share-opt" onclick="this.classList.toggle('sel')">
+      <div class="sso-icon">🌿</div>
+      <div class="sso-name">Thursday Crew</div>
+    </div>
+    <div class="ss-share-opt" onclick="this.classList.toggle('sel')">
+      <div class="sso-icon">🕯️</div>
+      <div class="sso-name">Just Us</div>
+    </div>
+  </div>
+
+  <button class="ss-save-btn" onclick="saveEntry()">Save this reflection →</button>
+</div>
+
+<!-- ══ SAVED CONFIRMATION ══ -->
+<div class="saved-confirm" id="savedConfirm">
+  <div class="ss-handle"></div>
+  <div class="sc-check">
+    <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
+      <path d="M2 11L10 19L26 2" stroke="#00c49a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="0" style="animation:checkDraw .45s .1s ease both;"/>
+    </svg>
+  </div>
+  <div class="sc-date" id="scDate">Saturday · May 9, 2026</div>
+  <div class="sc-title">Saved to your journal.</div>
+  <div class="sc-sub" id="scSub">This reflection is yours now. Come back to it whenever you're ready.</div>
+  <div class="sc-entry-preview" id="scPreview">
+    <div class="sc-entry-prompt">"When did you last feel like the best version of yourself?"</div>
+    <div class="sc-entry-response" id="scResponse">Tap to write your answer...</div>
+  </div>
+  <div class="sc-actions">
+    <div class="sc-journal-btn" onclick="t('Opening your journal...');closeAll()">Open in Journal →</div>
+    <div class="sc-done-btn" onclick="closeAll()">Done</div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+function openSaveSheet(){
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('saveSheet').classList.add('open');
+}
+
+function selDest(el){
+  document.querySelectorAll('.ss-dest-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function saveEntry(){
+  if(navigator.vibrate) navigator.vibrate([10, 50, 10]);
+  const answer=document.getElementById('userAnswer').value.trim();
+  const sub=document.getElementById('scSub');
+  const response=document.getElementById('scResponse');
+
+  // Update confirmation with their answer
+  if(answer){
+    response.textContent=answer;
+    sub.textContent='This reflection is yours now. Come back to it whenever you\'re ready.';
+  } else {
+    response.textContent='Prompt saved. Your answer is waiting whenever you\'re ready to write it.';
+    sub.textContent='No rush. The question will be there when you open your journal.';
+  }
+
+  // Check if sharing to circles
+  const sharedTo=document.querySelectorAll('.ss-share-opt.sel');
+  if(sharedTo.length>0){
+    sub.textContent='Saved privately and offered to your circle.';
+  }
+
+  // Close save sheet, open confirmation
+  document.getElementById('saveSheet').classList.remove('open');
+  setTimeout(()=>{
+    document.getElementById('savedConfirm').classList.add('open');
+  },180);
+
+  // Set date
+  const d=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('scDate').textContent=days[d.getDay()]+' · '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+
+  // Sparkles + animate card
+  const card=document.querySelector('.gather-card');
+  if(card){ card.classList.add('flying'); }
+
+  // Update the card button
+  const btn=document.getElementById('saveCardBtn');
+  setTimeout(()=>{
+    btn.classList.add('saved','receiving');
+    btn.innerHTML='✦ Saved';
+    spawnSparkles(btn);
+  }, 300);
+}
+
+function spawnSparkles(el){
+  const rect=el.getBoundingClientRect();
+  for(let i=0;i<6;i++){
+    const dot=document.createElement('div');
+    dot.className='sparkle-dot';
+    const angle=(i/6)*Math.PI*2;
+    const r=24+Math.random()*16;
+    dot.style.left=(rect.left+rect.width/2+Math.cos(angle)*r-3)+'px';
+    dot.style.top=(rect.top+rect.height/2+Math.sin(angle)*r-3)+'px';
+    dot.style.animationDelay=(i*0.05)+'s';
+    dot.style.background=['#ffd24d','#ff8c20','#00c49a','#ff5038'][i%4];
+    document.body.appendChild(dot);
+    setTimeout(()=>dot.remove(),800);
+  }
+}
+
+function closeAll(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('saveSheet').classList.remove('open');
+  document.getElementById('savedConfirm').classList.remove('open');
+}
+
+function t(m){
+  const e=document.getElementById('toastEl');
+  e.textContent=m;e.classList.add('show');
+  clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2600);
+}
+
+// Swipe down dismiss
+function addSwipe(id, fn){
+  const el=document.getElementById(id);
+  let sy=0;
+  el.addEventListener('touchstart',e=>{sy=e.touches[0].clientY;},{passive:true});
+  el.addEventListener('touchmove',e=>{
+    const dy=e.touches[0].clientY-sy;
+    if(dy>0) el.style.transform=`translateX(-50%) translateY(${dy}px)`;
+  },{passive:true});
+  el.addEventListener('touchend',e=>{
+    const dy=e.changedTouches[0].clientY-sy;
+    el.style.transform='';
+    if(dy>80) fn();
+  });
+}
+addSwipe('saveSheet', closeAll);
+addSwipe('savedConfirm', closeAll);
+</script>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.65rem;color:rgba(40,22,0,.35);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+</body>
+</html>
