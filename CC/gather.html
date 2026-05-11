@@ -912,54 +912,37 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     </div>
 
     <!-- ── HERO: TONIGHT'S EXPERIENCE ── -->
-    <div class="hero-card-scene" onclick="heroFlipCard()">
-      <div class="hero-card-inner" id="heroCardInner">
-
-        <!-- BACK — shown first -->
-        <div class="hero-back-face">
-          <div class="hero-back-brand">Curated Connections</div>
-          <div class="hero-back-label">This Week's Experience</div>
-          <div class="hero-back-tap">✦ tap to reveal ✦</div>
-          <!-- Ambient particles on back -->
-          <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);z-index:2;"></div>
-          <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);z-index:2;"></div>
-          <div class="hero-particle" style="width:4px;height:4px;background:rgba(42,138,114,.5);bottom:35%;left:15%;animation:pulse 2.8s 1.2s ease-in-out infinite;box-shadow:0 0 7px 2px rgba(42,138,114,.3);z-index:2;"></div>
+    <div class="hero-card" onclick="openCard('tonight')">
+      <div class="hero-bg"></div>
+      <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);"></div>
+      <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);"></div>
+      <div class="hero-particle" style="width:4px;height:4px;background:rgba(42,138,114,.5);bottom:35%;left:15%;animation:pulse 2.8s 1.2s ease-in-out infinite;box-shadow:0 0 7px 2px rgba(42,138,114,.3);"></div>
+      <div class="hero-particle" style="width:3px;height:3px;background:rgba(201,125,58,.4);bottom:28%;right:24%;animation:pulse 4s 0s ease-in-out infinite;box-shadow:0 0 5px 2px rgba(201,125,58,.25);"></div>
+      <div class="hero-inner">
+        <div class="hero-label">This Week's Experience</div>
+        <div class="hero-question" id="heroQuestion">
+          "What's something people misunderstand about you at first?"
         </div>
-
-        <!-- FRONT — question + actions -->
-        <div class="hero-front-face">
-          <div class="hero-bg"></div>
-          <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);"></div>
-          <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);"></div>
-
-          <div class="hero-inner" onclick="event.stopPropagation()">
-            <div class="hero-label">This Week's Experience</div>
-            <div class="hero-question" id="heroQuestion">
-              "What's something people misunderstand about you at first?"
-            </div>
-
-            <!-- Flip section (hidden until toggled) -->
-            <div class="hero-flip" id="heroFlip">
-              <div class="hero-flip-label">Go deeper</div>
-              <div class="hero-flip-item"><strong>Push:</strong> Has that misunderstanding ever worked in your favor?</div>
-              <div class="hero-flip-item"><strong>Story:</strong> When did you realize people saw you differently than you see yourself?</div>
-              <div class="hero-flip-item"><strong>Social:</strong> Who at this table do you feel like you've misread before?</div>
-            </div>
-
+        <div class="hero-flip" id="heroFlip">
+          <div class="hero-flip-label">Go deeper</div>
+          <div class="hero-flip-item"><strong>Push:</strong> Has that misunderstanding ever worked in your favor?</div>
+          <div class="hero-flip-item"><strong>Story:</strong> When did you realize people saw you differently than you see yourself?</div>
+          <div class="hero-flip-item"><strong>Social:</strong> Who at this table do you feel like you've misread before?</div>
+        </div>
         <div class="hero-icon-bar">
-          <button class="hib-btn" onclick="toggleFlip()">
+          <button class="hib-btn" onclick="event.stopPropagation();toggleFlip()">
             <div class="hib-icon hib-flip">↻</div>
             <div class="hib-label">Flip</div>
           </button>
-          <button class="hib-btn" onclick="openResponse('tonight')">
+          <button class="hib-btn" onclick="event.stopPropagation();openResponse('tonight')">
             <div class="hib-icon hib-answer">✦</div>
             <div class="hib-label">Answer</div>
           </button>
-          <button class="hib-btn" onclick="triggerAccount('share this card')">
+          <button class="hib-btn" onclick="event.stopPropagation();triggerAccount('share this card')">
             <div class="hib-icon hib-share">↗</div>
             <div class="hib-label">Share</div>
           </button>
-          <button class="hib-btn" onclick="triggerAccount('play together')">
+          <button class="hib-btn" onclick="event.stopPropagation();triggerAccount('play together')">
             <div class="hib-icon hib-play">
               <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="7" cy="11" r="3" stroke="rgba(255,255,255,.8)" stroke-width="1.5"/>
@@ -974,8 +957,6 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
         </div>
       </div>
     </div>
-      </div><!-- /hero-card-inner -->
-    </div><!-- /hero-card-scene -->
 
     <!-- ── SHELF 1: TONIGHT'S CARDS ── -->
     <div class="shelf">
@@ -1610,162 +1591,86 @@ async function airtableFetch(table, formula, max) {
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 async function loadTonightCards() {
-  const shelf = document.querySelector('.shelf-row');
+  const shelf = document.getElementById('tonightShelf');
   if (!shelf) return;
-
-  // Clear hardcoded placeholder cards immediately
-  shelf.innerHTML = '<div class="conv-card card-family" style="opacity:.3;min-width:210px;height:160px;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:rgba(242,232,216,.3);font-style:italic;">Loading...</div>';
-
-  const recs = await airtableFetch('Conversation Cards', "{Active}=TRUE", 30);
-  if (!recs || !recs.length) {
-    // Fall back to any active cards
-    const fallback = await airtableFetch('Conversation Cards', "{Active}=TRUE", 20);
-    if (!fallback || !fallback.length) { shelf.innerHTML = ''; return; }
-    renderTonightCards(shelf, fallback);
-    return;
-  }
+  const recs = await airtableFetch('Conversation Cards', '{Active}=TRUE', 30);
+  if (!recs || !recs.length) return;
   renderTonightCards(shelf, recs);
 }
 
 function renderTonightCards(shelf, recs) {
   const user = CC.getUser ? CC.getUser() : null;
   const tier = user ? (user.tier || 'free') : 'free';
-  const tierOrder = {free:0,connect:1,insight:2,legacy:3};
-  const tierLevel = tierOrder[tier] || 0;
-  const tierMax = {free:2,connect:5,insight:8,legacy:99};
+  const tierMax = {free:2, connect:5, insight:8, legacy:99};
   const max = tierMax[tier] || 2;
   const picked = shuffle(recs).slice(0, max);
-  const deckMap = {'Family':'dk-family','Couples':'dk-couples','Faith':'dk-faith',
-    'Dinner Table':'dk-dinner','Friends':'dk-friends','Teen':'dk-faith',
-    'Team':'dk-friends','Road Trip':'dk-friends','Legacy':'dk-legacy',
-    'Get Real':'dk-getreal','Grandparents':'dk-family','Kids':'dk-family'};
 
-  shelf.innerHTML = picked.map((rec, idx) => {
+  const editionClass = {
+    'Family':'card-family','Couples':'card-couples','Faith':'card-faith',
+    'Dinner Table':'card-dinner','Friends':'card-friends','Teen':'card-kids',
+    'Team':'card-friends','Road Trip':'card-travel','Legacy':'card-legacy',
+    'Get Real':'card-getreal','Grandparents':'card-family','Kids':'card-family'
+  };
+
+  shelf.innerHTML = picked.map(rec => {
     const f = rec.fields;
     const edition = f.Edition?.name || f.Edition || 'Family';
-    const dk = deckMap[edition] || 'dk-family';
-    const cid = 'cc' + idx + (Date.now() % 9999);
-    const connectText = f.Hint || '';
-    const insightText = f['Insight Layer'] || '';
-    const legacyText  = f['Legacy Layer'] || '';
-    const cl = (connectText && tierLevel >= 1) ?
-      `<div class="cc-depth-divider" id="d1${cid}"></div><div class="cc-depth-layer connect" id="l1${cid}"><div class="cc-depth-header"><span class="cc-depth-name">Connect</span><button class="cc-depth-toggle" onclick="ccToggle(event,'t1${cid}',this)">hide ▴</button></div><div class="cc-depth-text" id="t1${cid}">${connectText}</div></div>` : '';
-    const il = (insightText && tierLevel >= 2) ?
-      `<div class="cc-depth-divider" id="d2${cid}"></div><div class="cc-depth-layer insight" id="l2${cid}"><div class="cc-depth-header"><span class="cc-depth-name">Insight</span><button class="cc-depth-toggle" onclick="ccToggle(event,'t2${cid}',this)">hide ▴</button></div><div class="cc-depth-text" id="t2${cid}">${insightText}</div></div>` : '';
-    const ll = (legacyText && tierLevel >= 3) ?
-      `<div class="cc-depth-divider" id="d3${cid}"></div><div class="cc-depth-layer legacy-layer" id="l3${cid}"><div class="cc-depth-header"><span class="cc-depth-name">Legacy</span><button class="cc-depth-toggle" onclick="ccToggle(event,'t3${cid}',this)">hide ▴</button></div><div class="cc-depth-text" id="t3${cid}">${legacyText}</div></div>` : '';
-    return `<div class="cc-card-scene ${dk}" onclick="ccFlip('${cid}')"><div class="cc-card-inner" id="${cid}"><div class="cc-card-back"><div class="cc-back-brand">Curated Connections</div><div class="cc-back-deck">${edition} Edition</div><div class="cc-back-tap">✦ tap to reveal ✦</div></div><div class="cc-card-front"><div class="cc-front-top"><div class="cc-front-label">${edition.toUpperCase()}</div><div class="cc-front-q">"${f.Prompt || ''}"</div></div><div class="cc-depth-layers" id="layers${cid}">${cl}${il}${ll}</div><div class="cc-flip-hint">tap to flip back ↩</div></div></div></div>`;
+    const cls = editionClass[edition] || 'card-family';
+    return '<div class="conv-card ' + cls + '" onclick="openCard(\'' + edition.toLowerCase().replace(/ /g,'-') + '\')">'
+      + '<div class="conv-card-label">' + edition + '</div>'
+      + '<div class="conv-card-q">"' + (f.Prompt || '') + '"</div>'
+      + (f.Hint ? '<div class="conv-card-hint">' + f.Hint + '</div>' : '')
+      + '<div class="conv-card-tap">Tap to open</div>'
+      + '</div>';
   }).join('');
+
   const tc = document.getElementById('tonightCount');
   if (tc) tc.textContent = picked.length + ' today';
 }
 
 
-function heroFlipCard() {
-  const inner = document.getElementById('heroCardInner');
-  if (inner) inner.classList.toggle('flipped');
-}
 
-function ccFlip(cid) {
-  const inner = document.getElementById(cid);
-  if (!inner) return;
-  const flipping = inner.classList.toggle('flipped');
-  if (flipping) { setTimeout(() => ccRevealLayers(cid), 440); }
-  else { ['d1','d2','d3','l1','l2','l3'].forEach(p => { const el = document.getElementById(p+cid); if(el) el.classList.remove('vis'); }); }
-}
-function ccRevealLayers(cid) {
-  const tier = (CC.getUser && CC.getUser()) ? (CC.getUser().tier || 'free') : 'free';
-  const lvl = {free:0,connect:1,insight:2,legacy:3}[tier] || 0;
-  if (lvl === 0) return;
-  [['1',1,0],['2',2,480],['3',3,960]].forEach(([n,minLvl,delay]) => {
-    if (lvl >= minLvl) {
-      const d = document.getElementById('d'+n+cid); const l = document.getElementById('l'+n+cid);
-      if (d && l) setTimeout(() => { d.classList.add('vis'); l.classList.add('vis'); }, delay);
-    }
-  });
-}
-function ccToggle(e, tid, btn) {
-  e.stopPropagation();
-  const el = document.getElementById(tid);
-  if (!el) return;
-  btn.textContent = el.classList.toggle('collapsed') ? 'show ▾' : 'hide ▴';
-}
+
 
 
 async function loadWitWonder() {
   const recs = await airtableFetch('Wit and Wonder', '{Active}=TRUE', 40);
   if (!recs || !recs.length) return;
+
   const riddles = shuffle(recs.filter(r => r.fields?.Type?.name === 'Riddle'));
   const jokes   = shuffle(recs.filter(r => r.fields?.Type?.name === 'Joke'));
   const brains  = shuffle(recs.filter(r => r.fields?.Type?.name === 'Brain Teaser'));
   const facts   = shuffle(recs.filter(r => !['Riddle','Joke','Brain Teaser'].includes(r.fields?.Type?.name)));
-  const picks   = [riddles[0],jokes[0],brains[0],riddles[1],facts[0]].filter(Boolean).slice(0,5);
+  const picks   = [riddles[0], jokes[0], brains[0], riddles[1], facts[0]].filter(Boolean).slice(0, 5);
 
-  // Find the ww shelf row and replace with flip cards
-  const wwShelf = document.querySelector('.ww-row');
-  if (!wwShelf) {
-    // Fall back to updating existing ww-cards
-    const cards = document.querySelectorAll('.ww-card');
-    picks.forEach((rec,i) => {
-      if (!cards[i]) return;
-      const f = rec.fields;
-      const t = cards[i].querySelector('.ww-type');
-      const q = cards[i].querySelector('.ww-q');
-      const rv = cards[i].querySelector('.ww-reveal');
-      if (t) t.textContent = f.Type?.name || 'Curiosity';
-      if (q) q.textContent = f.Prompt || '';
-      if (rv) rv.textContent = f.Answer || f['Conversation Bridge'] || '';
-    });
-    return;
-  }
-
-  wwShelf.innerHTML = picks.map((rec, i) => {
+  const cards = document.querySelectorAll('.ww-card');
+  picks.forEach((rec, i) => {
+    if (!cards[i]) return;
     const f = rec.fields;
-    const type = f.Type?.name || 'Curiosity';
-    const wid = 'ww' + i + (Date.now() % 9999);
-    const revealText = f.Answer || '';
-    const bridge = f['Conversation Bridge'] || '';
-    return `<div class="ww-card-scene" onclick="wwFlip('${wid}')">
-      <div class="ww-card-inner" id="${wid}">
-        <div class="ww-card-back">
-          <div class="ww-back-brand">Curated Connections</div>
-          <div class="ww-back-deck">Wit &amp; Wonder</div>
-          <div class="ww-back-tap">✦ tap ✦</div>
-        </div>
-        <div class="ww-card-front-face">
-          <div class="ww-front-top">
-            <div class="ww-front-type">${type.toUpperCase()}</div>
-            <div class="ww-front-q">${f.Prompt || ''}</div>
-          </div>
-          <div class="ww-reveal-wrap">
-            ${revealText ? `<div class="ww-reveal-tap" onclick="wwReveal(event,'wr${wid}')">tap for ${type==='Riddle'?'answer':'punchline'} ▾</div><div class="ww-reveal-content" id="wr${wid}">${revealText}${bridge ? '<div class="ww-bridge">'+bridge+'</div>' : ''}</div>` : ''}
-          </div>
-          <div class="ww-flip-hint">tap to flip back ↩</div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+    const typeEl = cards[i].querySelector('.ww-type');
+    const qEl    = cards[i].querySelector('.ww-q');
+    const revEl  = cards[i].querySelector('.ww-reveal');
+    const tapEl  = cards[i].querySelector('.ww-tap');
+    if (typeEl) typeEl.textContent = f.Type?.name || 'Curiosity';
+    if (qEl)    qEl.textContent    = f.Prompt || '';
+    if (revEl) {
+      if (f['Conversation Bridge']) {
+        revEl.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + f['Conversation Bridge'];
+      } else {
+        revEl.textContent = f.Answer || '';
+      }
+    }
+    if (tapEl) tapEl.textContent = (f.Type?.name === 'Joke') ? 'Tap for punchline' : 'Tap for answer';
+  });
 
-  // Update ww count label
   const wwCount = document.getElementById('wwCount');
   if (wwCount) {
     const j = jokes.length; const r = riddles.length;
-    wwCount.textContent = (j?j+' joke'+(j>1?'s':''):'') + (j&&r?' · ':'') + (r?r+' riddle'+(r>1?'s':''):'');
+    wwCount.textContent = (j ? j + ' joke' + (j>1?'s':'') : '') + (j&&r?' · ':'') + (r ? r + ' riddle' + (r>1?'s':'') : '');
   }
 }
 
-function wwFlip(wid) {
-  const inner = document.getElementById(wid);
-  if (inner) inner.classList.toggle('flipped');
-}
-function wwReveal(e, wrid) {
-  e.stopPropagation();
-  const el = document.getElementById(wrid);
-  if (!el) return;
-  el.classList.toggle('open');
-  const btn = el.previousElementSibling;
-  if (btn) btn.style.display = el.classList.contains('open') ? 'none' : 'block';
-}
+
 
 
 async function loadGatherQuiz() {
