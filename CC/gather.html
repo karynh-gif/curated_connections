@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Gather — Curated Connections</title>
+<link rel="stylesheet" href="/atmosphere.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,600&family=Nunito:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 /* ── TOKENS ── */
@@ -660,11 +661,11 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
 .card-dots{position:absolute;top:.6rem;right:.6rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;background:rgba(255,255,255,.08);font-size:.7rem;color:rgba(242,232,216,.4);transition:all .15s;z-index:5;}
 .card-dots:hover{background:rgba(255,255,255,.14);color:rgba(242,232,216,.7);}
 
-/* ── CARD FLIP SYSTEM ── */
-.card-deck-wrap{perspective:1000px;cursor:pointer;margin-bottom:.75rem;}
-.card-inner{position:relative;width:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
-.card-inner.flipped{transform:rotateY(180deg);}
-.card-face,.card-back-face{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;overflow:hidden;}
+
+
+
+
+
 .card-back-face{
   position:absolute;inset:0;
   transform:rotateY(180deg);
@@ -678,21 +679,19 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
 .card-deck-tap{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.4);}
 .card-deck-pattern{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,rgba(201,125,58,.5) 0px,rgba(201,125,58,.5) 1px,transparent 1px,transparent 12px),repeating-linear-gradient(-45deg,rgba(201,125,58,.5) 0px,rgba(201,125,58,.5) 1px,transparent 1px,transparent 12px);pointer-events:none;}
 
-/* DEPTH LAYERS */
-.card-layers{display:none;margin-top:.5rem;flex-direction:column;gap:.4rem;}
-.card-layers.visible{display:flex;}
-.depth-layer{border-radius:14px;overflow:hidden;}
-.depth-layer-btn{width:100%;padding:.75rem 1rem;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;transition:all .2s;}
-.depth-layer-btn.connect{background:rgba(201,125,58,.12);color:rgba(201,125,58,.8);}
-.depth-layer-btn.insight{background:rgba(107,60,162,.12);color:rgba(155,109,212,.8);}
-.depth-layer-btn.legacy{background:rgba(184,134,11,.12);color:rgba(184,134,11,.8);}
-.depth-layer-btn.locked{opacity:.35;cursor:default;}
-.depth-layer-content{display:none;padding:.75rem 1rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;line-height:1.65;color:rgba(242,232,216,.75);}
-.depth-layer-content.open{display:block;}
-.depth-chevron{font-size:.6rem;transition:transform .2s;}
-.depth-chevron.open{transform:rotate(180deg);}
 
-/* ── DECK-SPECIFIC CARD BACK COLORS ── */
+
+
+
+
+
+
+
+
+
+
+
+
 .card-back-face[data-deck="Family"],
 .card-back-face[data-deck="family"] {
   background: linear-gradient(145deg, #1a1008, #2a1c08);
@@ -733,10 +732,157 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
 }
 .card-back-face[data-deck="seasonal"] .card-deck-brand { color: #60b060; text-shadow: 0 0 20px rgba(80,160,80,.3); }
 .card-back-face[data-deck="seasonal"] .card-deck-tap { color: rgba(80,160,80,.4); }
+
+/* ══════════════════════════════════════════
+   CC CARD FLIP SYSTEM v2
+   Every card face-down first.
+   Depth layers inside the card, never outside.
+   Back mirrors front in color.
+══════════════════════════════════════════ */
+
+/* SCENE WRAPPER */
+.cc-card-scene{flex-shrink:0;width:210px;min-height:230px;perspective:1000px;cursor:pointer;animation:cardIn .4s ease both;}
+.cc-card-inner{position:relative;width:100%;min-height:230px;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+.cc-card-inner.flipped{transform:rotateY(180deg);}
+.cc-card-back,.cc-card-front{position:absolute;inset:0;border-radius:var(--r-lg);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+
+/* BACK FACE */
+.cc-card-back{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5rem 1rem;position:relative;}
+.cc-card-back::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(255,255,255,.12),transparent 45%);pointer-events:none;}
+.cc-card-back::after{content:'';position:absolute;inset:0;opacity:.055;background-image:repeating-linear-gradient(45deg,currentColor 0,currentColor 1px,transparent 1px,transparent 14px),repeating-linear-gradient(-45deg,currentColor 0,currentColor 1px,transparent 1px,transparent 14px);pointer-events:none;}
+.cc-back-brand{font-family:'Pacifico',cursive;font-size:.98rem;margin-bottom:.28rem;position:relative;z-index:1;text-shadow:0 0 20px rgba(0,0,0,.4);}
+.cc-back-deck{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.72rem;font-weight:300;letter-spacing:.07em;opacity:.42;margin-bottom:1.1rem;position:relative;z-index:1;}
+.cc-back-tap{font-family:'Nunito',sans-serif;font-size:.46rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;opacity:.32;position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
+
+/* FRONT FACE */
+.cc-card-front{transform:rotateY(180deg);display:flex;flex-direction:column;}
+.cc-card-front::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.12),transparent 40%);pointer-events:none;border-radius:var(--r-lg);}
+.cc-front-top{padding:1.1rem 1rem .7rem;flex-shrink:0;position:relative;z-index:1;}
+.cc-front-label{font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.45rem;opacity:.8;}
+.cc-front-q{font-family:'Cormorant Garamond',serif;font-size:.97rem;font-style:italic;color:var(--cream);line-height:1.5;}
+.cc-front-hint{font-size:.65rem;color:rgba(242,232,216,.48);margin-top:.4rem;line-height:1.4;}
+.cc-flip-hint{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.12);text-align:right;padding:.2rem .9rem .5rem;position:relative;z-index:1;}
+
+/* DEPTH LAYERS — inside card front, fade in after flip */
+.cc-depth-layers{flex-shrink:0;position:relative;z-index:1;}
+.cc-depth-divider{height:1px;background:rgba(255,255,255,.07);margin:0 1rem;opacity:0;transition:opacity .4s ease;}
+.cc-depth-divider.vis{opacity:1;}
+.cc-depth-layer{opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease;pointer-events:none;}
+.cc-depth-layer.vis{opacity:1;transform:translateY(0);pointer-events:all;}
+.cc-depth-header{display:flex;align-items:center;justify-content:space-between;padding:.48rem 1rem .2rem;}
+.cc-depth-name{font-family:'Nunito',sans-serif;font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;}
+.cc-depth-toggle{background:none;border:none;font-size:.44rem;font-family:'Nunito',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:rgba(242,232,216,.18);padding:0;transition:color .15s;}
+.cc-depth-toggle:hover{color:rgba(242,232,216,.45);}
+.cc-depth-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.83rem;line-height:1.62;padding:0 1rem .7rem;overflow:hidden;max-height:200px;transition:max-height .35s ease,opacity .3s ease,padding .3s ease;}
+.cc-depth-text.collapsed{max-height:0;opacity:0;padding-bottom:0;}
+.connect .cc-depth-name{color:var(--amber);}
+.connect .cc-depth-text{color:rgba(242,232,216,.58);}
+.insight .cc-depth-name{color:var(--purple2);}
+.insight .cc-depth-text{color:rgba(200,175,240,.62);}
+.legacy-layer .cc-depth-name{color:#c9a830;}
+.legacy-layer .cc-depth-text{color:rgba(200,225,175,.62);}
+
+/* DECK THEMES — back + front share same palette */
+.dk-family .cc-card-back{background:linear-gradient(145deg,#1e0c02,#4a2206);border:1px solid rgba(201,125,58,.3);}
+.dk-family .cc-back-brand,.dk-family .cc-back-tap{color:var(--amber);}
+.dk-family .cc-card-back::after{color:var(--amber);}
+.dk-family .cc-card-front{background:linear-gradient(145deg,#3a1800,#7a3810);border:1px solid rgba(201,125,58,.2);}
+.dk-family .cc-front-label{color:var(--amber2);}
+
+.dk-couples .cc-card-back{background:linear-gradient(145deg,#1a0410,#4a0c20);border:1px solid rgba(192,80,120,.28);}
+.dk-couples .cc-back-brand,.dk-couples .cc-back-tap{color:#e06090;}
+.dk-couples .cc-card-back::after{color:#c05070;}
+.dk-couples .cc-card-front{background:linear-gradient(145deg,#3a0818,#7a1030);border:1px solid rgba(192,80,56,.2);}
+.dk-couples .cc-front-label{color:var(--coral2);}
+
+.dk-faith .cc-card-back{background:linear-gradient(145deg,#0e0820,#2a1050);border:1px solid rgba(107,60,162,.3);}
+.dk-faith .cc-back-brand,.dk-faith .cc-back-tap{color:var(--purple2);}
+.dk-faith .cc-card-back::after{color:var(--purple);}
+.dk-faith .cc-card-front{background:linear-gradient(145deg,#1a1040,#381868);border:1px solid rgba(107,60,162,.2);}
+.dk-faith .cc-front-label{color:var(--purple2);}
+
+.dk-dinner .cc-card-back{background:linear-gradient(145deg,#041408,#0e3018);border:1px solid rgba(42,138,114,.28);}
+.dk-dinner .cc-back-brand,.dk-dinner .cc-back-tap{color:var(--teal2);}
+.dk-dinner .cc-card-back::after{color:var(--teal);}
+.dk-dinner .cc-card-front{background:linear-gradient(145deg,#0a2818,#1a5030);border:1px solid rgba(42,138,114,.2);}
+.dk-dinner .cc-front-label{color:var(--teal2);}
+
+.dk-friends .cc-card-back{background:linear-gradient(145deg,#060e1a,#102040);border:1px solid rgba(58,106,170,.28);}
+.dk-friends .cc-back-brand,.dk-friends .cc-back-tap{color:var(--navy2);}
+.dk-friends .cc-card-back::after{color:var(--navy);}
+.dk-friends .cc-card-front{background:linear-gradient(145deg,#1a2840,#2a4070);border:1px solid rgba(58,106,170,.2);}
+.dk-friends .cc-front-label{color:var(--navy2);}
+
+.dk-legacy .cc-card-back{background:linear-gradient(145deg,#100e02,#302808);border:1px solid rgba(184,134,11,.28);}
+.dk-legacy .cc-back-brand,.dk-legacy .cc-back-tap{color:#c9a830;}
+.dk-legacy .cc-card-back::after{color:#c9a830;}
+.dk-legacy .cc-card-front{background:linear-gradient(145deg,#1a1600,#3a3000);border:1px solid rgba(184,134,11,.2);}
+.dk-legacy .cc-front-label{color:#c9a830;}
+
+.dk-getreal .cc-card-back{background:linear-gradient(145deg,#0e0808,#200e0e);border:1px solid rgba(160,50,50,.28);}
+.dk-getreal .cc-back-brand,.dk-getreal .cc-back-tap{color:#c85050;}
+.dk-getreal .cc-card-back::after{color:#c85050;}
+.dk-getreal .cc-card-front{background:linear-gradient(145deg,#1c0c0c,#3c1414);border:1px solid rgba(160,50,50,.2);}
+.dk-getreal .cc-front-label{color:#c85050;}
+
+/* WIT & WONDER — its own universe */
+.ww-card-scene{flex-shrink:0;width:168px;min-height:195px;perspective:900px;cursor:pointer;animation:cardIn .4s ease both;}
+.ww-card-inner{position:relative;width:100%;min-height:195px;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+.ww-card-inner.flipped{transform:rotateY(180deg);}
+.ww-card-back,.ww-card-front-face{position:absolute;inset:0;border-radius:var(--r-lg);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.ww-card-back{background:linear-gradient(145deg,#04080e,#0a1420);border:1px solid rgba(80,140,220,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.2rem .8rem;position:relative;}
+.ww-card-back::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 35% 28%,rgba(80,140,220,.15),transparent 55%);pointer-events:none;}
+.ww-card-back::after{content:'';position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle,rgba(100,160,255,.8) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;}
+.ww-back-brand{font-family:'Pacifico',cursive;font-size:.88rem;color:#6090d8;text-shadow:0 0 20px rgba(80,120,200,.4);margin-bottom:.28rem;position:relative;z-index:1;}
+.ww-back-deck{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.68rem;color:rgba(160,200,255,.38);letter-spacing:.07em;margin-bottom:1rem;position:relative;z-index:1;}
+.ww-back-tap{font-family:'Nunito',sans-serif;font-size:.44rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(80,120,200,.38);position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
+.ww-card-front-face{transform:rotateY(180deg);background:linear-gradient(145deg,#0a1220,#0e1c30);border:1px solid rgba(80,120,200,.15);display:flex;flex-direction:column;}
+.ww-card-front-face::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(80,140,220,.1),transparent 45%);pointer-events:none;border-radius:var(--r-lg);}
+.ww-front-top{padding:.88rem .85rem .55rem;flex-shrink:0;position:relative;z-index:1;}
+.ww-front-type{font-size:.46rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#6090d8;margin-bottom:.38rem;}
+.ww-front-q{font-family:'Cormorant Garamond',serif;font-size:.93rem;font-style:italic;color:var(--cream);line-height:1.44;}
+.ww-reveal-wrap{flex:1;padding:0 .85rem .6rem;position:relative;z-index:1;display:flex;flex-direction:column;justify-content:flex-end;}
+.ww-reveal-tap{font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(96,144,216,.45);cursor:pointer;padding:.4rem 0;}
+.ww-reveal-content{display:none;padding:.5rem 0 .3rem;font-size:.75rem;color:rgba(180,210,255,.62);line-height:1.45;border-top:1px solid rgba(80,120,200,.12);}
+.ww-reveal-content.open{display:block;}
+.ww-bridge{font-size:.65rem;color:rgba(180,210,255,.45);font-style:italic;margin-top:.4rem;line-height:1.4;}
+.ww-flip-hint{font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.1);text-align:right;padding:.2rem .85rem .45rem;position:relative;z-index:1;}
+
+/* ── HERO CARD FLIP ── */
+.hero-card-scene{margin:.85rem .9rem 0;perspective:1200px;cursor:pointer;animation:fadeUp .5s ease both;}
+.hero-card-inner{position:relative;width:100%;min-height:240px;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;border-radius:var(--r-xl);}
+.hero-card-inner.flipped{transform:rotateY(180deg);}
+.hero-back-face,.hero-front-face{position:absolute;inset:0;border-radius:var(--r-xl);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+
+/* HERO BACK — special treatment */
+.hero-back-face{
+  background:linear-gradient(145deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:2.2rem 1.5rem;position:relative;
+}
+.hero-back-face::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28) 0%,transparent 55%),
+             radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22) 0%,transparent 50%);
+  animation:glow 4s ease-in-out infinite;pointer-events:none;}
+.hero-back-face::after{content:'';position:absolute;inset:0;opacity:.04;
+  background-image:repeating-linear-gradient(45deg,rgba(201,125,58,.6) 0,rgba(201,125,58,.6) 1px,transparent 1px,transparent 18px),
+                   repeating-linear-gradient(-45deg,rgba(201,125,58,.6) 0,rgba(201,125,58,.6) 1px,transparent 1px,transparent 18px);
+  pointer-events:none;}
+.hero-back-brand{font-family:'Pacifico',cursive;font-size:1.4rem;color:var(--amber);
+  text-shadow:0 0 30px rgba(201,125,58,.4);margin-bottom:.4rem;position:relative;z-index:1;}
+.hero-back-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;
+  color:rgba(242,232,216,.38);letter-spacing:.06em;margin-bottom:1.6rem;position:relative;z-index:1;}
+.hero-back-tap{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;
+  letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.38);
+  position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
+
+/* HERO FRONT — same as before but as back face of flip */
+.hero-front-face{transform:rotateY(180deg);}
 </style>
   <script src="/cc-auth.js"></script>
   <script src="/cc-cards.js"></script>
   <script src="/cc-seasonal.js"></script>
+  <script src="/atmosphere.js" defer></script>
 </head>
 <body>
 
@@ -766,28 +912,39 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     </div>
 
     <!-- ── HERO: TONIGHT'S EXPERIENCE ── -->
-    <div class="hero-card" onclick="openCard('tonight')">
-      <div class="hero-bg"></div>
+    <div class="hero-card-scene" onclick="heroFlipCard()">
+      <div class="hero-card-inner" id="heroCardInner">
 
-      <!-- Ambient particles -->
-      <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);"></div>
-      <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);"></div>
-      <div class="hero-particle" style="width:4px;height:4px;background:rgba(42,138,114,.5);bottom:35%;left:15%;animation:pulse 2.8s 1.2s ease-in-out infinite;box-shadow:0 0 7px 2px rgba(42,138,114,.3);"></div>
-      <div class="hero-particle" style="width:3px;height:3px;background:rgba(201,125,58,.4);bottom:28%;right:24%;animation:pulse 4s 0s ease-in-out infinite;box-shadow:0 0 5px 2px rgba(201,125,58,.25);"></div>
-
-      <div class="hero-inner">
-        <div class="hero-label">This Week's Experience</div>
-        <div class="hero-question">
-          "What's something people misunderstand about you at first?"
+        <!-- BACK — shown first -->
+        <div class="hero-back-face">
+          <div class="hero-back-brand">Curated Connections</div>
+          <div class="hero-back-label">This Week's Experience</div>
+          <div class="hero-back-tap">✦ tap to reveal ✦</div>
+          <!-- Ambient particles on back -->
+          <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);z-index:2;"></div>
+          <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);z-index:2;"></div>
+          <div class="hero-particle" style="width:4px;height:4px;background:rgba(42,138,114,.5);bottom:35%;left:15%;animation:pulse 2.8s 1.2s ease-in-out infinite;box-shadow:0 0 7px 2px rgba(42,138,114,.3);z-index:2;"></div>
         </div>
 
-        <!-- Flip section (hidden until toggled) -->
-        <div class="hero-flip" id="heroFlip">
-          <div class="hero-flip-label">Go deeper</div>
-          <div class="hero-flip-item"><strong>Push:</strong> Has that misunderstanding ever worked in your favor?</div>
-          <div class="hero-flip-item"><strong>Story:</strong> When did you realize people saw you differently than you see yourself?</div>
-          <div class="hero-flip-item"><strong>Social:</strong> Who at this table do you feel like you've misread before?</div>
-        </div>
+        <!-- FRONT — question + actions -->
+        <div class="hero-front-face">
+          <div class="hero-bg"></div>
+          <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);"></div>
+          <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);"></div>
+
+          <div class="hero-inner" onclick="event.stopPropagation()">
+            <div class="hero-label">This Week's Experience</div>
+            <div class="hero-question" id="heroQuestion">
+              "What's something people misunderstand about you at first?"
+            </div>
+
+            <!-- Flip section (hidden until toggled) -->
+            <div class="hero-flip" id="heroFlip">
+              <div class="hero-flip-label">Go deeper</div>
+              <div class="hero-flip-item"><strong>Push:</strong> Has that misunderstanding ever worked in your favor?</div>
+              <div class="hero-flip-item"><strong>Story:</strong> When did you realize people saw you differently than you see yourself?</div>
+              <div class="hero-flip-item"><strong>Social:</strong> Who at this table do you feel like you've misread before?</div>
+            </div>
 
         <div class="hero-icon-bar">
           <button class="hib-btn" onclick="toggleFlip()">
@@ -817,6 +974,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
         </div>
       </div>
     </div>
+      </div><!-- /hero-card-inner -->
+    </div><!-- /hero-card-scene -->
 
     <!-- ── SHELF 1: TONIGHT'S CARDS ── -->
     <div class="shelf">
@@ -1471,73 +1630,143 @@ async function loadTonightCards() {
 function renderTonightCards(shelf, recs) {
   const user = CC.getUser ? CC.getUser() : null;
   const tier = user ? (user.tier || 'free') : 'free';
-  const tierMax = {free:2, connect:5, insight:8, legacy:99};
+  const tierOrder = {free:0,connect:1,insight:2,legacy:3};
+  const tierLevel = tierOrder[tier] || 0;
+  const tierMax = {free:2,connect:5,insight:8,legacy:99};
   const max = tierMax[tier] || 2;
   const picked = shuffle(recs).slice(0, max);
+  const deckMap = {'Family':'dk-family','Couples':'dk-couples','Faith':'dk-faith',
+    'Dinner Table':'dk-dinner','Friends':'dk-friends','Teen':'dk-faith',
+    'Team':'dk-friends','Road Trip':'dk-friends','Legacy':'dk-legacy',
+    'Get Real':'dk-getreal','Grandparents':'dk-family','Kids':'dk-family'};
 
-  const editionClass = {
-    'Family':'card-family','Couples':'card-couples','Faith':'card-faith',
-    'Dinner Table':'card-dinner','Friends':'card-friends','Teen':'card-kids',
-    'Team':'card-friends','Road Trip':'card-travel','Legacy':'card-legacy',
-    'Get Real':'card-getreal'
-  };
-
-  shelf.innerHTML = picked.map(rec => {
+  shelf.innerHTML = picked.map((rec, idx) => {
     const f = rec.fields;
-    const edition = (f.Edition?.name || f.Edition || 'Family');
-    const cls = editionClass[edition] || 'card-family';
-    return \`<div class="conv-card \${cls}">
-      <div class="conv-card-label">\${edition.toUpperCase()}</div>
-      <div class="conv-card-q">"\${f.Prompt || ''}"</div>
-      \${f.Hint ? \`<div class="conv-card-hint">\${f.Hint}</div>\` : ''}
-      <div class="conv-card-tap">TAP TO OPEN</div>
-    </div>\`;
+    const edition = f.Edition?.name || f.Edition || 'Family';
+    const dk = deckMap[edition] || 'dk-family';
+    const cid = 'cc' + idx + (Date.now() % 9999);
+    const connectText = f.Hint || '';
+    const insightText = f['Insight Layer'] || '';
+    const legacyText  = f['Legacy Layer'] || '';
+    const cl = (connectText && tierLevel >= 1) ?
+      `<div class="cc-depth-divider" id="d1${cid}"></div><div class="cc-depth-layer connect" id="l1${cid}"><div class="cc-depth-header"><span class="cc-depth-name">Connect</span><button class="cc-depth-toggle" onclick="ccToggle(event,'t1${cid}',this)">hide ▴</button></div><div class="cc-depth-text" id="t1${cid}">${connectText}</div></div>` : '';
+    const il = (insightText && tierLevel >= 2) ?
+      `<div class="cc-depth-divider" id="d2${cid}"></div><div class="cc-depth-layer insight" id="l2${cid}"><div class="cc-depth-header"><span class="cc-depth-name">Insight</span><button class="cc-depth-toggle" onclick="ccToggle(event,'t2${cid}',this)">hide ▴</button></div><div class="cc-depth-text" id="t2${cid}">${insightText}</div></div>` : '';
+    const ll = (legacyText && tierLevel >= 3) ?
+      `<div class="cc-depth-divider" id="d3${cid}"></div><div class="cc-depth-layer legacy-layer" id="l3${cid}"><div class="cc-depth-header"><span class="cc-depth-name">Legacy</span><button class="cc-depth-toggle" onclick="ccToggle(event,'t3${cid}',this)">hide ▴</button></div><div class="cc-depth-text" id="t3${cid}">${legacyText}</div></div>` : '';
+    return `<div class="cc-card-scene ${dk}" onclick="ccFlip('${cid}')"><div class="cc-card-inner" id="${cid}"><div class="cc-card-back"><div class="cc-back-brand">Curated Connections</div><div class="cc-back-deck">${edition} Edition</div><div class="cc-back-tap">✦ tap to reveal ✦</div></div><div class="cc-card-front"><div class="cc-front-top"><div class="cc-front-label">${edition.toUpperCase()}</div><div class="cc-front-q">"${f.Prompt || ''}"</div></div><div class="cc-depth-layers" id="layers${cid}">${cl}${il}${ll}</div><div class="cc-flip-hint">tap to flip back ↩</div></div></div></div>`;
   }).join('');
-
-  // Update count label
   const tc = document.getElementById('tonightCount');
   if (tc) tc.textContent = picked.length + ' today';
 }
 
-async function loadWitWonder() {
-  const wwShelf = document.querySelector('.ww-row, .ww-shelf');
-  const recs = await airtableFetch('Wit and Wonder', "{Active}=TRUE", 40);
-  if (!recs || !recs.length) return;
 
+function heroFlipCard() {
+  const inner = document.getElementById('heroCardInner');
+  if (inner) inner.classList.toggle('flipped');
+}
+
+function ccFlip(cid) {
+  const inner = document.getElementById(cid);
+  if (!inner) return;
+  const flipping = inner.classList.toggle('flipped');
+  if (flipping) { setTimeout(() => ccRevealLayers(cid), 440); }
+  else { ['d1','d2','d3','l1','l2','l3'].forEach(p => { const el = document.getElementById(p+cid); if(el) el.classList.remove('vis'); }); }
+}
+function ccRevealLayers(cid) {
+  const tier = (CC.getUser && CC.getUser()) ? (CC.getUser().tier || 'free') : 'free';
+  const lvl = {free:0,connect:1,insight:2,legacy:3}[tier] || 0;
+  if (lvl === 0) return;
+  [['1',1,0],['2',2,480],['3',3,960]].forEach(([n,minLvl,delay]) => {
+    if (lvl >= minLvl) {
+      const d = document.getElementById('d'+n+cid); const l = document.getElementById('l'+n+cid);
+      if (d && l) setTimeout(() => { d.classList.add('vis'); l.classList.add('vis'); }, delay);
+    }
+  });
+}
+function ccToggle(e, tid, btn) {
+  e.stopPropagation();
+  const el = document.getElementById(tid);
+  if (!el) return;
+  btn.textContent = el.classList.toggle('collapsed') ? 'show ▾' : 'hide ▴';
+}
+
+
+async function loadWitWonder() {
+  const recs = await airtableFetch('Wit and Wonder', '{Active}=TRUE', 40);
+  if (!recs || !recs.length) return;
   const riddles = shuffle(recs.filter(r => r.fields?.Type?.name === 'Riddle'));
   const jokes   = shuffle(recs.filter(r => r.fields?.Type?.name === 'Joke'));
   const brains  = shuffle(recs.filter(r => r.fields?.Type?.name === 'Brain Teaser'));
   const facts   = shuffle(recs.filter(r => !['Riddle','Joke','Brain Teaser'].includes(r.fields?.Type?.name)));
+  const picks   = [riddles[0],jokes[0],brains[0],riddles[1],facts[0]].filter(Boolean).slice(0,5);
 
-  // Build a mixed set: prefer riddle, joke, brain teaser, fact variety
-  const picks = [riddles[0], jokes[0], brains[0], riddles[1], facts[0]].filter(Boolean).slice(0,5);
+  // Find the ww shelf row and replace with flip cards
+  const wwShelf = document.querySelector('.ww-row');
+  if (!wwShelf) {
+    // Fall back to updating existing ww-cards
+    const cards = document.querySelectorAll('.ww-card');
+    picks.forEach((rec,i) => {
+      if (!cards[i]) return;
+      const f = rec.fields;
+      const t = cards[i].querySelector('.ww-type');
+      const q = cards[i].querySelector('.ww-q');
+      const rv = cards[i].querySelector('.ww-reveal');
+      if (t) t.textContent = f.Type?.name || 'Curiosity';
+      if (q) q.textContent = f.Prompt || '';
+      if (rv) rv.textContent = f.Answer || f['Conversation Bridge'] || '';
+    });
+    return;
+  }
 
-  // Update ww-row cards
-  const cards = document.querySelectorAll('.ww-card');
-  picks.forEach((rec, i) => {
-    if (!cards[i]) return;
+  wwShelf.innerHTML = picks.map((rec, i) => {
     const f = rec.fields;
-    const t = cards[i].querySelector('.ww-type');
-    const q = cards[i].querySelector('.ww-q');
-    const rv = cards[i].querySelector('.ww-reveal');
-    if (t) t.textContent = f.Type?.name || 'Curiosity';
-    if (q) q.textContent = f.Prompt || '';
-    if (rv) {
-      if (f['Conversation Bridge']) {
-        rv.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + f['Conversation Bridge'];
-      } else {
-        rv.textContent = f.Answer || '';
-      }
-    }
-  });
+    const type = f.Type?.name || 'Curiosity';
+    const wid = 'ww' + i + (Date.now() % 9999);
+    const revealText = f.Answer || '';
+    const bridge = f['Conversation Bridge'] || '';
+    return `<div class="ww-card-scene" onclick="wwFlip('${wid}')">
+      <div class="ww-card-inner" id="${wid}">
+        <div class="ww-card-back">
+          <div class="ww-back-brand">Curated Connections</div>
+          <div class="ww-back-deck">Wit &amp; Wonder</div>
+          <div class="ww-back-tap">✦ tap ✦</div>
+        </div>
+        <div class="ww-card-front-face">
+          <div class="ww-front-top">
+            <div class="ww-front-type">${type.toUpperCase()}</div>
+            <div class="ww-front-q">${f.Prompt || ''}</div>
+          </div>
+          <div class="ww-reveal-wrap">
+            ${revealText ? `<div class="ww-reveal-tap" onclick="wwReveal(event,'wr${wid}')">tap for ${type==='Riddle'?'answer':'punchline'} ▾</div><div class="ww-reveal-content" id="wr${wid}">${revealText}${bridge ? '<div class="ww-bridge">'+bridge+'</div>' : ''}</div>` : ''}
+          </div>
+          <div class="ww-flip-hint">tap to flip back ↩</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
-  // Update count
+  // Update ww count label
   const wwCount = document.getElementById('wwCount');
   if (wwCount) {
     const j = jokes.length; const r = riddles.length;
-    wwCount.textContent = (j ? j + ' joke' + (j>1?'s':'') : '') + (j&&r?' · ':'') + (r ? r + ' riddle' + (r>1?'s':'') : '');
+    wwCount.textContent = (j?j+' joke'+(j>1?'s':''):'') + (j&&r?' · ':'') + (r?r+' riddle'+(r>1?'s':''):'');
   }
 }
+
+function wwFlip(wid) {
+  const inner = document.getElementById(wid);
+  if (inner) inner.classList.toggle('flipped');
+}
+function wwReveal(e, wrid) {
+  e.stopPropagation();
+  const el = document.getElementById(wrid);
+  if (!el) return;
+  el.classList.toggle('open');
+  const btn = el.previousElementSibling;
+  if (btn) btn.style.display = el.classList.contains('open') ? 'none' : 'block';
+}
+
 
 async function loadGatherQuiz() {
   const recs = await airtableFetch('Gather Quizzes', "{Active}=TRUE", 10);
@@ -1655,98 +1884,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
 // ── CARD FLIP + DEPTH LAYERS ──
 
-function flipCard(wrapEl) {
-  const inner = wrapEl.querySelector('.card-inner');
-  if (!inner) return;
-  inner.classList.toggle('flipped');
-  // Show depth layers after flip
-  setTimeout(() => {
-    const layers = wrapEl.querySelector('.card-layers');
-    if (layers && inner.classList.contains('flipped')) {
-      layers.classList.add('visible');
-    }
-  }, 300);
-}
 
-function toggleDepthLayer(btn, tier) {
-  const user = CC.getUser ? CC.getUser() : null;
-  const userTier = user ? (user.tier || 'free') : 'free';
-  const tierOrder = {free:0, connect:1, insight:2, legacy:3};
 
-  if (tierOrder[userTier] < tierOrder[tier]) {
-    // Locked — show upgrade
-    window.location.href = 'onboarding.html?tier=' + tier;
-    return;
-  }
 
-  const content = btn.nextElementSibling;
-  const chevron = btn.querySelector('.depth-chevron');
-  const isOpen = content.classList.contains('open');
-
-  content.classList.toggle('open', !isOpen);
-  if (chevron) chevron.classList.toggle('open', !isOpen);
-}
-
-// Wrap existing conv-cards with flip mechanism
-function initCardFlips() {
-  document.querySelectorAll('.conv-card').forEach(card => {
-    // Skip if already wrapped
-    if (card.closest('.card-deck-wrap')) return;
-
-    const question = card.querySelector('.conv-card-q')?.textContent || '';
-    const hint = card.querySelector('.conv-card-hint')?.textContent || '';
-    const edition = card.dataset.edition || 'Family';
-
-    // Create wrapper
-    const wrap = document.createElement('div');
-    wrap.className = 'card-deck-wrap';
-    wrap.style.minWidth = card.style.minWidth || '280px';
-    wrap.style.maxWidth = card.style.maxWidth || '320px';
-    wrap.style.flexShrink = '0';
-
-    wrap.innerHTML = `
-      <div class="card-inner" onclick="flipCard(this.parentElement)">
-        <!-- CARD BACK -->
-        <div class="card-back-face" data-deck="${edition}">
-          <div class="card-deck-pattern"></div>
-          <div class="card-deck-brand">Curated Connections</div>
-          <div class="card-deck-name">${edition} Edition</div>
-          <div class="card-deck-tap">✦ tap to reveal ✦</div>
-        </div>
-        <!-- CARD FRONT (original card) -->
-        <div class="card-face"></div>
-      </div>
-      <!-- DEPTH LAYERS -->
-      <div class="card-layers">
-        ${hint ? `
-        <div class="depth-layer">
-          <button class="depth-layer-btn connect" onclick="toggleDepthLayer(this,'connect')">
-            <span>Connect</span><span class="depth-chevron">▾</span>
-          </button>
-          <div class="depth-layer-content">${hint}</div>
-        </div>` : ''}
-        <div class="depth-layer">
-          <button class="depth-layer-btn insight" onclick="toggleDepthLayer(this,'insight')">
-            <span>Insight</span><span class="depth-chevron">▾</span>
-          </button>
-          <div class="depth-layer-content insight-content">Loading...</div>
-        </div>
-        <div class="depth-layer">
-          <button class="depth-layer-btn legacy" onclick="toggleDepthLayer(this,'legacy')">
-            <span>Legacy</span><span class="depth-chevron">▾</span>
-          </button>
-          <div class="depth-layer-content legacy-content">Loading...</div>
-        </div>
-      </div>
-    `;
-
-    // Move original card into the front face
-    card.parentNode.insertBefore(wrap, card);
-    wrap.querySelector('.card-face').appendChild(card);
-  });
-}
-
-// Update shelf counts dynamically
 function updateShelfCounts(tonightCards, wwCards, quizCards) {
   const tier = CC.getTier ? CC.getTier() : 'free';
   const tierMax = {free: 2, connect: 5, insight: 8, legacy: 99};
