@@ -110,7 +110,30 @@ body::before{content:"";position:fixed;inset:0;
 .wp-icon svg{width:18px;height:18px;stroke:rgba(244,236,220,.55);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .wp-text{font-family:'Cormorant Garamond',serif;font-size:.98rem;color:rgba(244,236,220,.65);line-height:1.5;}
 .wb-ctas{animation:fadeUp .5s .22s ease both;}
+
+.google-btn{
+  width:100%;padding:.85rem;margin-bottom:.6rem;
+  background:#fff;border:1.5px solid rgba(255,255,255,.15);
+  border-radius:999px;display:flex;align-items:center;justify-content:center;
+  gap:.6rem;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:.88rem;font-weight:600;color:#1a1a1a;
+  transition:all .2s;
+}
+.google-btn:hover{background:rgba(255,255,255,.9);}
+.google-btn svg{width:18px;height:18px;flex-shrink:0;}
+.divider-or{display:flex;align-items:center;gap:.8rem;margin:.5rem 0;font-size:.7rem;color:rgba(242,232,216,.3);}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08);}
 </style>
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyB6wEldIMuAlcnEE9EGnZJ8hufWFFwmDbQ",
+      authDomain: "curated-connections-dcf01.firebaseapp.com",
+      projectId: "curated-connections-dcf01"
+    });
+  </script>
 </head>
 <body>
 <div class="app">
@@ -439,17 +462,137 @@ function selTier(el) {
   el.classList.add('sel');
 }
 
-function createAccount() {
-  const name = document.getElementById('acName').value.trim();
+async function validatePromoCode(code) {
+  if (!code) return null;
+  try {
+    const res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'list',
+        table: 'Promo Codes',
+        filterFormula: `AND({Code}="${code.toUpperCase()}", {Active}=TRUE)`,
+        maxRecords: 1
+      })
+    });
+    const data = await res.json();
+    return data.records?.[0] || null;
+  } catch(e) { return null; }
+}
+
+function getTierFromPromo(rec) {
+  if (!rec) return 'free';
+  const type = rec.fields?.Type || '';
+  if (type === 'Founder') return 'legacy';
+  if (type === 'Campaign') return 'connect';
+  return 'free';
+}
+
+async function createAccount() {
+  const name  = document.getElementById('acName').value.trim();
   const email = document.getElementById('acEmail').value.trim();
-  const pass = document.getElementById('acPass').value;
-  if (!name) { t('What should we call you?'); return; }
+  const pass  = document.getElementById('acPass').value;
+  const promo = document.getElementById('acPromo') ? document.getElementById('acPromo').value.trim() : '';
+  const tier  = new URLSearchParams(window.location.search).get('tier') || 'free';
+
+  if (!name)  { t('What should we call you?'); return; }
   if (!email || !email.includes('@')) { t('A valid email is needed'); return; }
   if (pass.length < 8) { t('Password needs at least 8 characters'); return; }
-  const first = name.split(' ')[0];
-  document.getElementById('welcomeMsg').innerHTML =
-    `Welcome, ${first}.<br>Your journal is waiting.`;
-  go(6);
+
+  const btn = document.getElementById('createBtn');
+  btn.textContent = 'Creating your account...';
+  btn.disabled = true;
+
+  try {
+    // Validate promo code
+    let tier = new URLSearchParams(window.location.search).get('tier') || 'free';
+    let promoRecord = null;
+    if (promo) {
+      btn.textContent = 'Checking promo code...';
+      promoRecord = await validatePromoCode(promo);
+      if (promoRecord) {
+        const promoTier = getTierFromPromo(promoRecord);
+        // Promo tier overrides URL tier if higher
+        const order = {free:0,connect:1,insight:2,legacy:3};
+        if ((order[promoTier]||0) > (order[tier]||0)) tier = promoTier;
+        t('Promo code applied — ' + tier.charAt(0).toUpperCase() + tier.slice(1) + ' access unlocked ✓');
+      } else if (promo) {
+        t('Promo code not found — continuing with free access');
+      }
+    }
+
+    btn.textContent = 'Creating your account...';
+
+    // Create Firebase account
+    const cred = await firebase.auth().createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+
+    // Save to Airtable Users table
+    await saveUserToAirtable(cred.user.uid, email, name, tier, promo);
+
+    // Save session to localStorage
+    localStorage.setItem('cc_user', JSON.stringify({
+      uid: cred.user.uid, email, name, tier
+    }));
+
+    const first = name.split(' ')[0];
+    document.getElementById('welcomeMsg').innerHTML =
+      `Welcome, ${first}.<br>Your account is ready.`;
+    go(6);
+
+  } catch(err) {
+    btn.textContent = 'Create my account →';
+    btn.disabled = false;
+    if (err.code === 'auth/email-already-in-use') {
+      t('That email already has an account — try signing in');
+    } else if (err.code === 'auth/weak-password') {
+      t('Password needs at least 8 characters');
+    } else {
+      t('Something went wrong — please try again');
+      console.error(err);
+    }
+  }
+}
+
+async function signIn() {
+  const email = document.getElementById('acEmail').value.trim();
+  const pass  = document.getElementById('acPass').value;
+  if (!email || !pass) { t('Email and password required'); return; }
+
+  const btn = document.getElementById('createBtn');
+  btn.textContent = 'Signing in...';
+  btn.disabled = true;
+
+  try {
+    const cred = await firebase.auth().signInWithEmailAndPassword(email, pass);
+
+    // Get tier from Airtable
+    const res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'list',
+        table: 'Users',
+        filterFormula: `{email}="${email}"`,
+        maxRecords: 1
+      })
+    });
+    const data = await res.json();
+    const userRec = data.records?.[0];
+    const tier = userRec?.fields?.subscription_tier || 'free';
+    const name = cred.user.displayName || email.split('@')[0];
+
+    localStorage.setItem('cc_user', JSON.stringify({
+      uid: cred.user.uid, email, name, tier
+    }));
+
+    window.location.href = 'gather.html';
+
+  } catch(err) {
+    btn.textContent = 'Sign in →';
+    btn.disabled = false;
+    t('Email or password incorrect');
+  }
 }
 
 function t(m) {
@@ -462,6 +605,78 @@ function t(m) {
     setTimeout(() => e.style.display = 'none', 300);
   }, 2600);
 }
+
+// Save user to Airtable Users table
+async function saveUserToAirtable(uid, email, displayName, tier, promoCode) {
+  try {
+    await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Users',
+        fields: {
+          user_id: uid,
+          email: email,
+          display_name: displayName || email.split('@')[0],
+          subscription_tier: tier || 'free',
+          promo_code_used: promoCode || '',
+          active: true,
+          created_at: new Date().toISOString().split('T')[0]
+        }
+      })
+    });
+  } catch(e) {
+    console.warn('Could not save user to Airtable:', e);
+  }
+}
+
+
+async function signInWithGoogle() {
+  try {
+    const result = await firebase.auth().signInWithPopup(googleProvider);
+    const user = result.user;
+    const isNew = result.additionalUserInfo?.isNewUser;
+    
+    if (isNew) {
+      await saveUserToAirtable(user.uid, user.email, user.displayName || user.email.split('@')[0], 'free', '');
+    } else {
+      // Get existing tier
+      const res = await fetch('/api/airtable', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          action: 'list',
+          table: 'Users',
+          filterFormula: `{email}="${user.email}"`,
+          maxRecords: 1
+        })
+      });
+      const data = await res.json();
+      const tier = data.records?.[0]?.fields?.subscription_tier || 'free';
+      localStorage.setItem('cc_user', JSON.stringify({
+        uid: user.uid, email: user.email,
+        name: user.displayName || user.email.split('@')[0], tier
+      }));
+      window.location.href = 'gather.html';
+      return;
+    }
+
+    localStorage.setItem('cc_user', JSON.stringify({
+      uid: user.uid, email: user.email,
+      name: user.displayName || user.email.split('@')[0], tier: 'free'
+    }));
+    
+    const first = (user.displayName || user.email).split(' ')[0];
+    document.getElementById('welcomeMsg').innerHTML = `Welcome, ${first}.<br>Your account is ready.`;
+    go(6);
+  } catch(err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      t('Google sign-in failed — try email instead');
+    }
+  }
+}
+
 </script>
 </body>
 </html>

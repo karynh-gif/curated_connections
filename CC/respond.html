@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Someone thought of you — Curated Connections™</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Nunito:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:#060c09;color:#f2e8d8;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.1) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(107,60,162,.07) 0%,transparent 45%);pointer-events:none;}
+.wrap{max-width:430px;margin:0 auto;padding:3rem 1.4rem 5rem;position:relative;z-index:1;}
+.brand{font-family:'Pacifico',cursive;font-size:1.1rem;color:#c97d3a;text-align:center;margin-bottom:2rem;text-shadow:0 0 30px rgba(201,125,58,.3);}
+.mode-badge{display:inline-block;font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;padding:.25rem .7rem;border-radius:999px;margin-bottom:1rem;}
+.mode-share{background:rgba(201,125,58,.15);color:#c97d3a;}
+.mode-reflection{background:rgba(107,60,162,.15);color:#9b6dd4;}
+.mode-tribute{background:rgba(42,138,114,.15);color:#3aad90;}
+.from-line{font-size:.85rem;color:rgba(242,232,216,.4);font-style:italic;margin-bottom:1.5rem;line-height:1.6;}
+.from-line strong{color:rgba(242,232,216,.7);font-style:normal;}
+.card-display{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:1.8rem 1.4rem;margin-bottom:2rem;}
+.card-q{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,4vw,1.7rem);font-weight:300;font-style:italic;line-height:1.45;color:#f2e8d8;}
+.answer-section{margin-bottom:1.5rem;}
+.answer-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.5rem;display:block;}
+textarea{width:100%;min-height:140px;padding:1rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:16px;font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:#f2e8d8;resize:none;outline:none;line-height:1.6;transition:border-color .2s;}
+textarea:focus{border-color:rgba(201,125,58,.4);}
+textarea::placeholder{color:rgba(242,232,216,.25);}
+.submit-btn{width:100%;padding:.95rem;background:linear-gradient(135deg,#c97d3a,#e89448);border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;color:#fff;cursor:pointer;box-shadow:0 6px 24px rgba(201,125,58,.35);transition:all .2s;letter-spacing:.04em;}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(201,125,58,.45);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.thank-you{display:none;text-align:center;padding:2rem 0;}
+.ty-icon{font-size:2.5rem;display:block;margin-bottom:1rem;}
+.ty-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;font-style:italic;margin-bottom:.6rem;}
+.ty-sub{font-size:.88rem;color:rgba(242,232,216,.45);line-height:1.7;font-style:italic;margin-bottom:1.5rem;}
+.ty-cta{display:inline-block;padding:.75rem 2rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:#c97d3a;text-decoration:none;letter-spacing:.06em;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeUp .6s ease both;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand fade-in">Curated Connections</div>
+
+  <div id="mainSection" class="fade-in" style="animation-delay:.1s;">
+    <div id="modeBadge" class="mode-badge mode-share">Someone thought of you</div>
+    <div class="from-line" id="fromLine"></div>
+    <div class="card-display">
+      <div class="card-q" id="cardQuestion">Loading...</div>
+    </div>
+    <div class="answer-section">
+      <span class="answer-label">Your answer</span>
+      <textarea id="answerText" placeholder="Write your answer here..."></textarea>
+    </div>
+    <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Send My Answer →</button>
+  </div>
+
+  <div class="thank-you" id="thankYou">
+    <span class="ty-icon">✦</span>
+    <div class="ty-title" id="tyTitle">Thank you.</div>
+    <div class="ty-sub" id="tySub">Your answer has been saved.</div>
+    <a href="index.html" class="ty-cta">Explore Curated Connections →</a>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const mode     = params.get('mode') || 'share';
+const card     = params.get('card') || '';
+const from     = params.get('from') || 'Someone';
+const forName  = params.get('for') || '';
+
+// Set mode badge
+const badge = document.getElementById('modeBadge');
+const fromLine = document.getElementById('fromLine');
+
+if (mode === 'reflection') {
+  badge.className = 'mode-badge mode-reflection';
+  badge.textContent = 'Reflection Request';
+  fromLine.innerHTML = `<strong>${from}</strong> wants to know how you see them.`;
+} else if (mode === 'tribute') {
+  badge.className = 'mode-badge mode-tribute';
+  badge.textContent = 'Tribute';
+  fromLine.innerHTML = `<strong>${from}</strong> asked you about <strong>${forName}</strong>.`;
+} else {
+  badge.className = 'mode-badge mode-share';
+  badge.textContent = 'Someone thought of you';
+  fromLine.innerHTML = `<strong>${from}</strong> read this and thought of you.`;
+}
+
+document.getElementById('cardQuestion').textContent = card || 'No question found.';
+
+// Convert reflection card to mirror version if needed
+if (mode === 'reflection' && card) {
+  const q = document.getElementById('cardQuestion');
+  // Replace "I" with from's name for reflection
+  q.textContent = card.replace(/\bI\b/g, from).replace(/\bmy\b/gi, from + "'s").replace(/\bme\b/g, from);
+}
+
+async function submitAnswer() {
+  const answer = document.getElementById('answerText').value.trim();
+  if (!answer) { alert('Please write your answer first.'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  try {
+    // Save to Airtable Leaf Tags table
+    await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Leaf Tags',
+        fields: {
+          'Tag ID': 'tag-' + Date.now(),
+          'Leaf Subject Name': forName || from,
+          'Source Type': mode === 'reflection' ? 'Reflection' : mode === 'tribute' ? 'Tribute' : 'Shared Card',
+          'Source Content': card,
+          'Tagger Note': answer,
+          'Tagged By User ID': 'external-' + Date.now(),
+          'Keeper Approved': false,
+          'Tagged Date': new Date().toISOString().split('T')[0]
+        }
+      })
+    });
+  } catch(e) {
+    console.warn('Could not save to Airtable');
+  }
+
+  // Show thank you
+  document.getElementById('mainSection').style.display = 'none';
+  const ty = document.getElementById('thankYou');
+  ty.style.display = 'block';
+
+  if (mode === 'reflection') {
+    document.getElementById('tyTitle').textContent = 'Thank you.';
+    document.getElementById('tySub').textContent = from + ' will treasure this. Your answer has been added to their story.';
+  } else if (mode === 'tribute') {
+    document.getElementById('tyTitle').textContent = 'Thank you.';
+    document.getElementById('tySub').textContent = 'Your answer has been added to ' + (forName || 'their') + "'s leaf. That's a gift.";
+  } else {
+    document.getElementById('tyTitle').textContent = 'Sent.';
+    document.getElementById('tySub').textContent = from + ' will see your answer. Thank you for taking a moment.';
+  }
+}
+</script>
+</body>
+</html>

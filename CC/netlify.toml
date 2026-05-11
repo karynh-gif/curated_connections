@@ -79,9 +79,30 @@
   to = "/showcase.html"
   status = 200
 
-[[headers]]
+[
+[[redirects]]
+  from = "/api/stripe-webhook"
+  to = "/.netlify/functions/stripe-webhook"
+  status = 200
+
+[[headers]]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/api/play-live"
+  to = "/.netlify/functions/play-live"
+  status = 200
+
+[[redirects]]
+  from = "/api/circle-invite"
+  to = "/.netlify/functions/circle-invite"
+  status = 200
+
+[[redirects]]
+  from = "/api/storage"
+  to = "/.netlify/functions/storage-tracker"
+  status = 200

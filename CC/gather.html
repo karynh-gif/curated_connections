@@ -656,7 +656,87 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
   body { font-size: 125%; }
   .app { max-width: min(720px, 88vw) !important; }
 }
+
+.card-dots{position:absolute;top:.6rem;right:.6rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;background:rgba(255,255,255,.08);font-size:.7rem;color:rgba(242,232,216,.4);transition:all .15s;z-index:5;}
+.card-dots:hover{background:rgba(255,255,255,.14);color:rgba(242,232,216,.7);}
+
+/* ── CARD FLIP SYSTEM ── */
+.card-deck-wrap{perspective:1000px;cursor:pointer;margin-bottom:.75rem;}
+.card-inner{position:relative;width:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face,.card-back-face{backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;overflow:hidden;}
+.card-back-face{
+  position:absolute;inset:0;
+  transform:rotateY(180deg);
+  background:var(--ink2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.8rem 1.4rem;
+  text-align:center;
+}
+.card-deck-brand{font-family:'Pacifico',cursive;font-size:1.05rem;color:var(--amber);text-shadow:0 0 20px rgba(201,125,58,.3);margin-bottom:.5rem;}
+.card-deck-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.85rem;color:rgba(242,232,216,.4);letter-spacing:.08em;margin-bottom:1.2rem;}
+.card-deck-tap{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.4);}
+.card-deck-pattern{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,rgba(201,125,58,.5) 0px,rgba(201,125,58,.5) 1px,transparent 1px,transparent 12px),repeating-linear-gradient(-45deg,rgba(201,125,58,.5) 0px,rgba(201,125,58,.5) 1px,transparent 1px,transparent 12px);pointer-events:none;}
+
+/* DEPTH LAYERS */
+.card-layers{display:none;margin-top:.5rem;flex-direction:column;gap:.4rem;}
+.card-layers.visible{display:flex;}
+.depth-layer{border-radius:14px;overflow:hidden;}
+.depth-layer-btn{width:100%;padding:.75rem 1rem;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;transition:all .2s;}
+.depth-layer-btn.connect{background:rgba(201,125,58,.12);color:rgba(201,125,58,.8);}
+.depth-layer-btn.insight{background:rgba(107,60,162,.12);color:rgba(155,109,212,.8);}
+.depth-layer-btn.legacy{background:rgba(184,134,11,.12);color:rgba(184,134,11,.8);}
+.depth-layer-btn.locked{opacity:.35;cursor:default;}
+.depth-layer-content{display:none;padding:.75rem 1rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;line-height:1.65;color:rgba(242,232,216,.75);}
+.depth-layer-content.open{display:block;}
+.depth-chevron{font-size:.6rem;transition:transform .2s;}
+.depth-chevron.open{transform:rotate(180deg);}
+
+/* ── DECK-SPECIFIC CARD BACK COLORS ── */
+.card-back-face[data-deck="Family"],
+.card-back-face[data-deck="family"] {
+  background: linear-gradient(145deg, #1a1008, #2a1c08);
+  border: 1px solid rgba(201,125,58,.25);
+}
+.card-back-face[data-deck="Get Real"],
+.card-back-face[data-deck="get_real"] {
+  background: linear-gradient(145deg, #0e0808, #1c0f0f);
+  border: 1px solid rgba(160,50,50,.3);
+}
+.card-back-face[data-deck="get_real"] .card-deck-brand { color: #c85050; text-shadow: 0 0 20px rgba(200,80,80,.3); }
+.card-back-face[data-deck="get_real"] .card-deck-tap { color: rgba(200,80,80,.4); }
+.card-back-face[data-deck="Wit and Wonder"],
+.card-back-face[data-deck="wit_wonder"] {
+  background: linear-gradient(145deg, #080e1a, #0c1428);
+  border: 1px solid rgba(80,120,200,.25);
+}
+.card-back-face[data-deck="wit_wonder"] .card-deck-brand { color: #6090d8; text-shadow: 0 0 20px rgba(80,120,200,.3); }
+.card-back-face[data-deck="wit_wonder"] .card-deck-tap { color: rgba(80,120,200,.4); }
+.card-back-face[data-deck="Legacy"],
+.card-back-face[data-deck="legacy"] {
+  background: linear-gradient(145deg, #0f0e06, #1a1808);
+  border: 1px solid rgba(184,134,11,.25);
+}
+.card-back-face[data-deck="legacy"] .card-deck-brand { color: #c9a830; text-shadow: 0 0 20px rgba(184,134,11,.3); }
+.card-back-face[data-deck="legacy"] .card-deck-tap { color: rgba(184,134,11,.4); }
+.card-back-face[data-deck="Dream Out Loud"],
+.card-back-face[data-deck="dream_out_loud"] {
+  background: linear-gradient(145deg, #080a18, #0e1020);
+  border: 1px solid rgba(120,80,200,.25);
+}
+.card-back-face[data-deck="dream_out_loud"] .card-deck-brand { color: #9060d0; text-shadow: 0 0 20px rgba(120,80,200,.3); }
+.card-back-face[data-deck="dream_out_loud"] .card-deck-tap { color: rgba(120,80,200,.4); }
+.card-back-face[data-deck="Seasonal"],
+.card-back-face[data-deck="seasonal"] {
+  background: linear-gradient(145deg, #081208, #0e1e10);
+  border: 1px solid rgba(80,160,80,.25);
+}
+.card-back-face[data-deck="seasonal"] .card-deck-brand { color: #60b060; text-shadow: 0 0 20px rgba(80,160,80,.3); }
+.card-back-face[data-deck="seasonal"] .card-deck-tap { color: rgba(80,160,80,.4); }
 </style>
+  <script src="/cc-auth.js"></script>
+  <script src="/cc-cards.js"></script>
+  <script src="/cc-seasonal.js"></script>
 </head>
 <body>
 
@@ -760,28 +840,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
           <div class="conv-card-tap">Tap to open</div>
         </div>
 
-        <div class="conv-card card-faith" onclick="openCard('faith')">
-          <div class="conv-card-label">Faith</div>
-          <div class="conv-card-q">"When did your faith feel most real — most alive — to you?"</div>
-          <div class="conv-card-hint">The moment, not the doctrine.</div>
-          <div class="conv-card-tap">Tap to open</div>
-        </div>
-
-        <div class="conv-card card-dinner" onclick="openCard('dinner')">
-          <div class="conv-card-label">Dinner Table</div>
-          <div class="conv-card-q">"What's a belief you hold that most people in your life push back on?"</div>
-          <div class="conv-card-hint">Say it anyway.</div>
-          <div class="conv-card-tap">Tap to open</div>
-        </div>
-
-        <div class="conv-card card-friends" onclick="openCard('friends')">
-          <div class="conv-card-label">Friendship</div>
-          <div class="conv-card-q">"What's something about this friendship that you've never actually said out loud?"</div>
-          <div class="conv-card-hint">Say it now.</div>
-          <div class="conv-card-tap">Tap to open</div>
-        </div>
-
-      </div>
+              </div>
     </div>
 
     <!-- ── SHELF 2: WIT & WONDER ── -->
@@ -819,21 +878,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
           <div class="ww-tap">Tap for answer</div>
         </div>
 
-        <div class="ww-card" id="ww4" onclick="openWW('ww4')">
-          <div class="ww-card-top">
-            <div class="ww-type">Joke</div>
-            <div class="ww-q">I told my wife she should embrace her mistakes.</div>
-          </div>
-          <div class="ww-reveal" id="ww4-r">She gave me a hug.</div>
-          <div class="ww-tap">Tap for punchline</div>
-        </div>
-
-        <div class="ww-card" id="ww5" onclick="openWW('ww5')">
-          <div class="ww-card-top">
-            <div class="ww-type">Brain Teaser</div>
-            <div class="ww-q">A rooster lays an egg on top of a barn roof. Which way does it roll?</div>
-          </div>
-          <div class="ww-reveal" id="ww5-r">Roosters don't lay eggs.</div>
+                  <div class="ww-reveal" id="ww5-r">Roosters don't lay eggs.</div>
           <div class="ww-tap">Tap for answer</div>
         </div>
 
@@ -855,22 +900,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
           <span class="quiz-start">Start →</span>
         </div>
 
-        <div class="quiz-card quiz-table" onclick="toast('Quiz opens here — launching soon')">
-          <div class="quiz-label">Light Identity</div>
-          <div class="quiz-title">What Do You Bring to the Table?</div>
-          <div class="quiz-sub">The thing you give — whether you know it or not.</div>
-          <span class="quiz-start">Start →</span>
-        </div>
-
-        <div class="quiz-card quiz-energy" onclick="toast('Quiz opens here — launching soon')">
-          <div class="quiz-label">Light Identity</div>
-          <div class="quiz-title">What's Your Energy in a Room?</div>
-          <div class="quiz-sub">Four types. Which one shows up for you?</div>
-          <span class="quiz-start">Start →</span>
-        </div>
-
-      </div>
-    </div>
+            </div>
 
     <!-- ══ SOCIAL SECTION ══ -->
     <div style="height:2.2rem;"></div>
@@ -1198,7 +1228,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
         <div class="upgrade-tier-desc">Play Live + session recaps</div>
       </div>
       <div class="upgrade-tier" onclick="window.location='https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02'">
-        <div class="upgrade-tier-name">Deep Connect</div>
+        <div class="upgrade-tier-name">Legacy</div>
         <div class="upgrade-tier-price">$19.99/mo</div>
         <div class="upgrade-tier-desc">Legacy archive + voice + family</div>
       </div>
@@ -1552,17 +1582,17 @@ function showShelfRating(id){
 
 
 
-<script>
-// ══ AIRTABLE DIRECT CONNECTION ══
-const AT_KEY  = 'patXXXXXXXXXXXXXX'; // replaced at deploy
-const AT_BASE = 'appfZxPopcR5cNra0';
-const AT_URL  = `https://api.airtable.com/v0/${AT_BASE}`;
 
-async function atFetch(table, formula, max=20) {
+
+<script>
+// ══ AIRTABLE VIA PROXY ══
+async function airtableFetch(table, formula, max) {
   try {
-    let url = `${AT_URL}/${encodeURIComponent(table)}?maxRecords=${max}`;
-    if (formula) url += `&filterByFormula=${encodeURIComponent(formula)}`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${AT_KEY}` } });
+    const res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action:'list', table, filterFormula:formula, maxRecords:max||20})
+    });
     if (!res.ok) return null;
     const data = await res.json();
     return data.records || null;
@@ -1572,7 +1602,7 @@ async function atFetch(table, formula, max=20) {
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 async function loadTonightCards() {
-  const recs = await atFetch('Conversation Cards', "AND({Edition Key}='family',{Edition Key}='family',{Active}=1)");
+  const recs = await airtableFetch('Conversation Cards', "{Active}=TRUE", 20);
   if (!recs || recs.length < 2) return;
   const picked = shuffle(recs).slice(0,2);
   const cards = document.querySelectorAll('.shelf-row .conv-card');
@@ -1586,7 +1616,7 @@ async function loadTonightCards() {
 }
 
 async function loadWitWonder() {
-  const recs = await atFetch('Wit and Wonder', "AND({Edition Key}='family',{Active}=1)");
+  const recs = await airtableFetch('Wit and Wonder', "{Active}=TRUE", 30);
   if (!recs || recs.length < 3) return;
   const facts   = shuffle(recs.filter(r => !['Riddle','Joke'].includes(r.fields?.Type?.name)));
   const riddles = shuffle(recs.filter(r => r.fields?.Type?.name === 'Riddle'));
@@ -1596,23 +1626,23 @@ async function loadWitWonder() {
   picks.forEach((rec,i) => {
     if (!cards[i]) return;
     const f = rec.fields;
-    const typeEl = cards[i].querySelector('.ww-type');
-    const qEl    = cards[i].querySelector('.ww-q');
-    const revEl  = cards[i].querySelector('.ww-reveal');
-    if (typeEl) typeEl.textContent = f.Type?.name || 'Curiosity';
-    if (qEl)    qEl.textContent = f.Prompt || '';
-    if (revEl) {
+    const t = cards[i].querySelector('.ww-type');
+    const q = cards[i].querySelector('.ww-q');
+    const rv = cards[i].querySelector('.ww-reveal');
+    if (t) t.textContent = f.Type?.name || 'Curiosity';
+    if (q) q.textContent = f.Prompt || '';
+    if (rv) {
       if (f['Conversation Bridge']) {
-        revEl.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + f['Conversation Bridge'];
+        rv.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + f['Conversation Bridge'];
       } else {
-        revEl.textContent = f.Answer || '';
+        rv.textContent = f.Answer || '';
       }
     }
   });
 }
 
 async function loadGatherQuiz() {
-  const recs = await atFetch('Gather Quizzes', "{Active}=1", 10);
+  const recs = await airtableFetch('Gather Quizzes', "{Active}=TRUE", 10);
   if (!recs || !recs.length) return;
   const quiz = recs[new Date().getDay() % recs.length];
   const f = quiz.fields;
@@ -1628,6 +1658,151 @@ document.addEventListener('DOMContentLoaded', () => {
   loadTonightCards();
   loadWitWonder();
   loadGatherQuiz();
+});
+</script>
+
+<script>
+// ── TIER GATING ──
+document.addEventListener('DOMContentLoaded', function() {
+  const user = CC.getUser();
+  const tier = CC.getTier();
+
+  // Update nav avatar if logged in
+  if (user) {
+    const av = document.querySelector('.nav-av, .tb-av');
+    if (av) av.textContent = (user.name || user.email || 'U')[0].toUpperCase();
+  }
+
+  // Lock Discover You quizzes for free users
+  if (!CC.hasFeature('discover_you')) {
+    document.querySelectorAll('.quiz-card').forEach(card => {
+      card.style.opacity = '0.5';
+      card.style.cursor = 'pointer';
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:rgba(6,12,9,.6);';
+      overlay.innerHTML = '<div style="font-family:Nunito,sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#c97d3a;text-transform:uppercase;">Connect →</div>';
+      card.style.position = 'relative';
+      card.appendChild(overlay);
+      overlay.onclick = () => window.location.href = 'onboarding.html?tier=connect';
+    });
+  }
+
+  // Show upgrade nudge for free users at bottom of page
+  if (tier === 'free') {
+    const nudge = document.createElement('div');
+    nudge.style.cssText = 'text-align:center;padding:1.5rem 1.2rem;margin:1rem 0;';
+    nudge.innerHTML = `
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.45);margin-bottom:.8rem;">
+        You're in Gather — the free daily experience.<br>Connect unlocks everything.
+      </div>
+      <a href="onboarding.html?tier=connect" style="display:inline-block;padding:.7rem 1.8rem;background:linear-gradient(135deg,#c97d3a,#e89448);border-radius:999px;font-family:Nunito,sans-serif;font-size:.82rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:.04em;">
+        Unlock Connect — $4.99/mo →
+      </a>
+    `;
+    const scroll = document.querySelector('.scroll');
+    if (scroll) scroll.appendChild(nudge);
+  }
+});
+</script>
+
+<script>
+// ── CARD FLIP + DEPTH LAYERS ──
+
+function flipCard(wrapEl) {
+  const inner = wrapEl.querySelector('.card-inner');
+  if (!inner) return;
+  inner.classList.toggle('flipped');
+  // Show depth layers after flip
+  setTimeout(() => {
+    const layers = wrapEl.querySelector('.card-layers');
+    if (layers && inner.classList.contains('flipped')) {
+      layers.classList.add('visible');
+    }
+  }, 300);
+}
+
+function toggleDepthLayer(btn, tier) {
+  const user = CC.getUser ? CC.getUser() : null;
+  const userTier = user ? (user.tier || 'free') : 'free';
+  const tierOrder = {free:0, connect:1, insight:2, legacy:3};
+
+  if (tierOrder[userTier] < tierOrder[tier]) {
+    // Locked — show upgrade
+    window.location.href = 'onboarding.html?tier=' + tier;
+    return;
+  }
+
+  const content = btn.nextElementSibling;
+  const chevron = btn.querySelector('.depth-chevron');
+  const isOpen = content.classList.contains('open');
+
+  content.classList.toggle('open', !isOpen);
+  if (chevron) chevron.classList.toggle('open', !isOpen);
+}
+
+// Wrap existing conv-cards with flip mechanism
+function initCardFlips() {
+  document.querySelectorAll('.conv-card').forEach(card => {
+    // Skip if already wrapped
+    if (card.closest('.card-deck-wrap')) return;
+
+    const question = card.querySelector('.conv-card-q')?.textContent || '';
+    const hint = card.querySelector('.conv-card-hint')?.textContent || '';
+    const edition = card.dataset.edition || 'Family';
+
+    // Create wrapper
+    const wrap = document.createElement('div');
+    wrap.className = 'card-deck-wrap';
+    wrap.style.minWidth = card.style.minWidth || '280px';
+    wrap.style.maxWidth = card.style.maxWidth || '320px';
+    wrap.style.flexShrink = '0';
+
+    wrap.innerHTML = `
+      <div class="card-inner" onclick="flipCard(this.parentElement)">
+        <!-- CARD BACK -->
+        <div class="card-back-face" data-deck="${edition}">
+          <div class="card-deck-pattern"></div>
+          <div class="card-deck-brand">Curated Connections</div>
+          <div class="card-deck-name">${edition} Edition</div>
+          <div class="card-deck-tap">✦ tap to reveal ✦</div>
+        </div>
+        <!-- CARD FRONT (original card) -->
+        <div class="card-face"></div>
+      </div>
+      <!-- DEPTH LAYERS -->
+      <div class="card-layers">
+        ${hint ? `
+        <div class="depth-layer">
+          <button class="depth-layer-btn connect" onclick="toggleDepthLayer(this,'connect')">
+            <span>Connect</span><span class="depth-chevron">▾</span>
+          </button>
+          <div class="depth-layer-content">${hint}</div>
+        </div>` : ''}
+        <div class="depth-layer">
+          <button class="depth-layer-btn insight" onclick="toggleDepthLayer(this,'insight')">
+            <span>Insight</span><span class="depth-chevron">▾</span>
+          </button>
+          <div class="depth-layer-content insight-content">Loading...</div>
+        </div>
+        <div class="depth-layer">
+          <button class="depth-layer-btn legacy" onclick="toggleDepthLayer(this,'legacy')">
+            <span>Legacy</span><span class="depth-chevron">▾</span>
+          </button>
+          <div class="depth-layer-content legacy-content">Loading...</div>
+        </div>
+      </div>
+    `;
+
+    // Move original card into the front face
+    card.parentNode.insertBefore(wrap, card);
+    wrap.querySelector('.card-face').appendChild(card);
+  });
+}
+
+// Initialize flips after Airtable loads
+const _origDOMReady = document.addEventListener;
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(initCardFlips, 800); // After Airtable loads
 });
 </script>
 </body>

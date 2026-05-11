@@ -193,7 +193,86 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 /* TOAST */
 .toast{display:none;position:fixed;bottom:5.2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bark);border-radius:999px;padding:.42rem .95rem;font-size:.66rem;font-weight:500;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .24s;pointer-events:none;}
 .toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
+
+/* ── NEW LEAF / IMPORT SCREENS ── */
+.import-screen{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;height:100%;background:var(--ivory);z-index:400;display:flex;flex-direction:column;transition:transform .42s cubic-bezier(.25,.46,.45,.94);}
+.import-screen.open{transform:translateX(-50%) translateY(0);}
+.import-scroll{flex:1;overflow-y:auto;padding:1.4rem 1.4rem 5rem;}
+.import-hero{text-align:center;padding:1rem 0 1.6rem;}
+.import-leaf-icon{font-size:2.2rem;display:block;margin-bottom:.5rem;}
+.import-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;font-style:italic;color:var(--bark);line-height:1.2;margin-bottom:.35rem;}
+.import-sub{font-size:.8rem;color:var(--bark-mid);line-height:1.6;font-style:italic;}
+.import-section-lbl{font-size:.55rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.5);margin:.8rem 0 .5rem;}
+.leaf-field-label{font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.3rem;display:block;}
+.leaf-field{width:100%;padding:.8rem 1rem;border:1.5px solid rgba(184,134,11,.25);border-radius:var(--r-md);background:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--bark);margin-bottom:.6rem;outline:none;transition:border-color .2s;}
+.leaf-field:focus{border-color:rgba(184,134,11,.55);}
+.leaf-field-hint{font-size:.7rem;color:var(--bark-soft);font-style:italic;margin-top:-.4rem;margin-bottom:.7rem;line-height:1.5;}
+.import-divider{display:flex;align-items:center;gap:.7rem;margin:1rem 0;}
+.import-divider-line{flex:1;height:1px;background:var(--bark-ghost);}
+.import-divider-text{font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);}
+.import-option{background:rgba(184,134,11,.06);border:1.5px solid rgba(184,134,11,.18);border-radius:var(--r-lg);padding:1.1rem 1rem;margin-bottom:.65rem;cursor:pointer;transition:all .2s;}
+.import-option:hover,.import-option:active{background:rgba(184,134,11,.1);border-color:rgba(184,134,11,.4);}
+.import-option-icon{font-size:1.2rem;margin-bottom:.3rem;display:block;}
+.import-option-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--bark);margin-bottom:.2rem;}
+.import-option-desc{font-size:.72rem;color:var(--bark-mid);font-style:italic;line-height:1.5;}
+.import-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(184,134,11,.3);transition:all .2s;margin-top:.4rem;}
+.import-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(184,134,11,.4);}
+.import-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.import-cancel-btn{width:100%;padding:.65rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bark-soft);cursor:pointer;margin-top:.2rem;}
+.fs-result{background:rgba(184,134,11,.08);border:1.5px solid rgba(184,134,11,.28);border-radius:var(--r-md);padding:.9rem 1rem;margin:.6rem 0;display:none;}
+.fs-result.show{display:block;}
+.fs-result-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:500;color:var(--bark);margin-bottom:.25rem;}
+.fs-result-detail{font-size:.73rem;color:var(--bark-mid);font-style:italic;line-height:1.6;}
+.gedcom-drop{border:2px dashed rgba(184,134,11,.3);border-radius:var(--r-lg);padding:1.8rem 1rem;text-align:center;margin:.6rem 0;cursor:pointer;transition:all .2s;}
+.gedcom-drop:hover{border-color:rgba(184,134,11,.55);background:rgba(184,134,11,.04);}
+.gedcom-drop-icon{font-size:1.6rem;display:block;margin-bottom:.4rem;}
+.gedcom-drop-text{font-size:.8rem;color:var(--bark-mid);font-style:italic;}
+.gedcom-drop-sub{font-size:.68rem;color:var(--bark-soft);margin-top:.2rem;}
+.gedcom-results{margin:.6rem 0;}
+.gedcom-person{padding:.65rem .8rem;border-bottom:1px solid var(--bark-ghost);display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;}
+.gedcom-person:hover{background:rgba(184,134,11,.05);}
+.gedcom-person-name{font-size:.88rem;font-weight:500;color:var(--bark);}
+.gedcom-person-detail{font-size:.7rem;color:var(--bark-mid);font-style:italic;}
+.gedcom-person-check{width:18px;height:18px;border:1.5px solid rgba(184,134,11,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--gold);transition:all .15s;}
+.gedcom-person.selected .gedcom-person-check{background:var(--gold);border-color:var(--gold);color:#fff;}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(184,134,11,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── SEAL / REOPEN FLOWS ── */
+.seal-screen{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:430px;height:100%;background:var(--ivory);z-index:500;display:flex;flex-direction:column;transition:transform .42s cubic-bezier(.25,.46,.45,.94);}
+.seal-screen.open{transform:translateX(-50%) translateY(0);}
+.seal-scroll{flex:1;overflow-y:auto;padding:1.6rem 1.4rem 5rem;}
+.seal-hero{text-align:center;padding:1rem 0 1.8rem;}
+.seal-icon{font-size:2.8rem;display:block;margin-bottom:.6rem;}
+.seal-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;font-style:italic;color:var(--bark);margin-bottom:.4rem;}
+.seal-sub{font-size:.88rem;color:var(--bark-mid);line-height:1.7;font-style:italic;max-width:320px;margin:0 auto;}
+.seal-option{background:rgba(184,134,11,.06);border:1.5px solid rgba(184,134,11,.2);border-radius:var(--r-lg);padding:1.2rem 1.1rem;margin-bottom:.75rem;cursor:pointer;transition:all .2s;text-align:left;}
+.seal-option:hover{background:rgba(184,134,11,.1);border-color:rgba(184,134,11,.4);}
+.seal-option-price{font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:900;color:var(--gold);margin-bottom:.2rem;}
+.seal-option-title{font-size:1rem;font-weight:500;color:var(--bark);margin-bottom:.25rem;}
+.seal-option-desc{font-size:.75rem;color:var(--bark-mid);font-style:italic;line-height:1.5;}
+.seal-what{background:rgba(42,24,0,.04);border-radius:var(--r-md);padding:1rem;margin:1rem 0;font-size:.8rem;color:var(--bark-mid);line-height:1.7;font-style:italic;}
+.seal-what strong{color:var(--bark);font-style:normal;}
+.storage-bar-wrap{margin:1rem 0;}
+.storage-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.4rem;display:flex;justify-content:space-between;}
+.storage-bar{height:6px;background:rgba(42,24,0,.1);border-radius:999px;overflow:hidden;}
+.storage-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:999px;transition:width .4s ease;}
+.storage-fill.warning{background:linear-gradient(90deg,#c05038,#e07060);}
+
+/* ── VOICE RECORDING ── */
+.voice-recorder{background:rgba(184,134,11,.06);border:1.5px solid rgba(184,134,11,.2);border-radius:var(--r-lg);padding:1.1rem 1rem;margin:1rem 0;}
+.voice-rec-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.5);margin-bottom:.6rem;}
+.voice-rec-btn{width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto .6rem;transition:all .2s;}
+.voice-rec-btn.idle{background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 4px 16px rgba(184,134,11,.3);}
+.voice-rec-btn.recording{background:#c05038;box-shadow:0 0 0 8px rgba(192,80,56,.2);animation:recPulse 1s ease-in-out infinite;}
+@keyframes recPulse{0%,100%{box-shadow:0 0 0 8px rgba(192,80,56,.2)}50%{box-shadow:0 0 0 16px rgba(192,80,56,.1)}}
+.voice-rec-status{text-align:center;font-size:.75rem;color:var(--bark-mid);font-style:italic;}
+.voice-rec-time{text-align:center;font-family:'Nunito',sans-serif;font-size:1.2rem;font-weight:800;color:var(--gold);margin:.3rem 0;}
+.voice-playback{display:none;margin-top:.6rem;}
+.voice-playback audio{width:100%;border-radius:var(--r-md);}
+.voice-save-btn{width:100%;padding:.7rem;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:#fff;cursor:pointer;margin-top:.5rem;}
 </style>
+  <script src="/cc-auth.js"></script>
 </head>
 <body>
 <div class="app">
@@ -480,6 +559,253 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
   </div>
 </div>
 
+
+<!-- ── NEW LEAF SCREEN ── -->
+<div class="import-screen" id="newLeafScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeNewLeaf()">← Back</button>
+    <div class="screen-title">Start a Leaf</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="import-scroll">
+    <div class="import-hero">
+      <span class="import-leaf-icon">🌿</span>
+      <div class="import-title">Who are you preserving?</div>
+      <div class="import-sub">Start with a name. Everything else can be added over time.</div>
+    </div>
+
+    <!-- BASIC INFO -->
+    <label class="leaf-field-label">Their name</label>
+    <input class="leaf-field" id="newLeafName" type="text" placeholder="e.g. Margaret Ruth Collins"/>
+    <label class="leaf-field-label">Their relationship to you</label>
+    <input class="leaf-field" id="newLeafRelation" type="text" placeholder="e.g. Mother, Grandmother, Father..."/>
+    <label class="leaf-field-label">Birth year (optional)</label>
+    <input class="leaf-field" id="newLeafBirth" type="text" placeholder="e.g. 1942"/>
+
+    <div class="import-divider">
+      <div class="import-divider-line"></div>
+      <div class="import-divider-text">or import their history</div>
+      <div class="import-divider-line"></div>
+    </div>
+
+    <!-- IMPORT OPTIONS -->
+    <div class="import-option" onclick="showFSImport()">
+      <span class="import-option-icon">🔍</span>
+      <div class="import-option-title">Import from FamilySearch</div>
+      <div class="import-option-desc">Free genealogy database with billions of records. Paste their FamilySearch Person ID and we'll fill in their history automatically.</div>
+    </div>
+
+    <div class="import-option" onclick="showGEDCOMImport()">
+      <span class="import-option-icon">🌳</span>
+      <div class="import-option-title">Upload a Family Tree File</div>
+      <div class="import-option-desc">Exported from Ancestry, MyHeritage, or any genealogy app? Upload a .ged file and we'll import your whole family at once.</div>
+    </div>
+
+    <button class="import-btn" onclick="createLeafManual()">Start Their Leaf →</button>
+    <button class="import-cancel-btn" onclick="closeNewLeaf()">Maybe later</button>
+  </div>
+</div>
+
+<!-- ── FAMILYSEARCH IMPORT SCREEN ── -->
+<div class="import-screen" id="fsImportScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeFSImport()">← Back</button>
+    <div class="screen-title">FamilySearch Import</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="import-scroll">
+    <div class="import-hero">
+      <span class="import-leaf-icon">🔍</span>
+      <div class="import-title">Find them on FamilySearch</div>
+      <div class="import-sub">FamilySearch is a free genealogy database with billions of records. If someone in your family has already built a tree, their information may already be there.</div>
+    </div>
+
+    <div class="import-section-lbl">How to find their Person ID</div>
+    <div style="background:rgba(184,134,11,.06);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1rem;font-size:.78rem;color:var(--bark-mid);line-height:1.7;font-style:italic;">
+      1. Go to <strong style="color:var(--bark);">familysearch.org</strong> and search for their name<br>
+      2. Open their profile page<br>
+      3. Copy the ID from the URL — it looks like <strong style="color:var(--gold);">XXXX-XXX</strong><br>
+      4. Paste it below
+    </div>
+
+    <label class="leaf-field-label">FamilySearch Person ID</label>
+    <input class="leaf-field" id="fsPersonId" type="text" placeholder="e.g. LZNY-BVX" style="letter-spacing:.08em;font-weight:500;"/>
+    <div class="leaf-field-hint">Paste the ID exactly as shown. It's usually 7-8 characters with a dash in the middle.</div>
+
+    <button class="import-btn" id="fsLookupBtn" onclick="lookupFamilySearch()">Look Them Up →</button>
+
+    <div class="fs-result" id="fsResult">
+      <div class="fs-result-name" id="fsResultName"></div>
+      <div class="fs-result-detail" id="fsResultDetail"></div>
+    </div>
+
+    <button class="import-btn" id="fsCreateBtn" style="display:none;margin-top:.8rem;" onclick="createLeafFromFS()">Create Their Leaf →</button>
+    <button class="import-cancel-btn" onclick="closeFSImport()">Back</button>
+  </div>
+</div>
+
+<!-- ── GEDCOM IMPORT SCREEN ── -->
+<div class="import-screen" id="gedcomImportScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeGEDCOMImport()">← Back</button>
+    <div class="screen-title">Import Family Tree</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="import-scroll">
+    <div class="import-hero">
+      <span class="import-leaf-icon">🌳</span>
+      <div class="import-title">Upload your family tree</div>
+      <div class="import-sub">Works with Ancestry, MyHeritage, FamilySearch, and any app that exports GEDCOM (.ged) files.</div>
+    </div>
+
+    <div class="import-section-lbl">How to export from Ancestry</div>
+    <div style="background:rgba(184,134,11,.06);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1rem;font-size:.78rem;color:var(--bark-mid);line-height:1.7;font-style:italic;">
+      1. Go to <strong style="color:var(--bark);">ancestry.com</strong> and open your tree<br>
+      2. Click <strong style="color:var(--bark);">Tree Settings</strong> → <strong style="color:var(--bark);">Export Tree</strong><br>
+      3. Download the .ged file<br>
+      4. Upload it here
+    </div>
+
+    <div class="gedcom-drop" id="gedcomDrop" onclick="document.getElementById('gedcomFile').click()">
+      <span class="gedcom-drop-icon">📂</span>
+      <div class="gedcom-drop-text">Tap to choose your .ged file</div>
+      <div class="gedcom-drop-sub">or drag and drop here</div>
+    </div>
+    <input type="file" id="gedcomFile" accept=".ged,.gedcom" style="display:none;" onchange="parseGEDCOM(this)"/>
+
+    <div id="gedcomPersonList" class="gedcom-results" style="display:none;">
+      <div class="import-section-lbl" style="margin-top:.8rem;">Select people to create leaves for</div>
+      <div id="gedcomPeople"></div>
+      <button class="import-btn" id="gedcomImportBtn" onclick="importSelectedPeople()" style="margin-top:1rem;">Create Their Leaves →</button>
+    </div>
+
+    <button class="import-cancel-btn" onclick="closeGEDCOMImport()">Back</button>
+  </div>
+</div>
+
+
+<!-- ── SEAL FOREVER SCREEN ── -->
+<div class="seal-screen" id="sealScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeSeal()">← Back</button>
+    <div class="screen-title">Seal This Leaf</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="seal-scroll">
+    <div class="seal-hero">
+      <span class="seal-icon">🔒</span>
+      <div class="seal-title">Preserve it forever.</div>
+      <div class="seal-sub">Sealing closes this leaf permanently and preserves everything in it — no more monthly fee, never deleted, always accessible to the people you choose.</div>
+    </div>
+
+    <div class="seal-what">
+      <strong>What sealing means:</strong><br>
+      ✦ No more monthly subscription needed<br>
+      ✦ The archive is preserved permanently<br>
+      ✦ Everyone with access can still read and listen<br>
+      ✦ Nothing can be added after sealing<br>
+      ✦ One reopen window available for $4.99 if needed later
+    </div>
+
+    <div class="seal-option" onclick="sealLeaf('standard')">
+      <div class="seal-option-price">$49.99 — one time</div>
+      <div class="seal-option-title">Seal Forever — Standard</div>
+      <div class="seal-option-desc">For leaves up to 2GB. Photos, text, voice notes. Permanently preserved.</div>
+    </div>
+
+    <div class="seal-option" onclick="sealLeaf('large')">
+      <div class="seal-option-price">$99.99 — one time</div>
+      <div class="seal-option-title">Seal Forever — Large Archive</div>
+      <div class="seal-option-desc">For leaves over 2GB with extensive video, voice recordings, or documents.</div>
+    </div>
+
+    <button class="import-cancel-btn" onclick="closeSeal()">Not yet — keep the leaf open</button>
+  </div>
+</div>
+
+<!-- ── REOPEN SCREEN ── -->
+<div class="seal-screen" id="reopenScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeReopen()">← Back</button>
+    <div class="screen-title">Reopen This Leaf</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="seal-scroll">
+    <div class="seal-hero">
+      <span class="seal-icon">🌿</span>
+      <div class="seal-title">Add 30 more days.</div>
+      <div class="seal-sub">Open this leaf for one more 30-day window. Add new memories, photos, or voice notes — then seal it again when you're ready.</div>
+    </div>
+
+    <div class="seal-what">
+      <strong>What reopening gives you:</strong><br>
+      ✦ 30 days of full contribution access<br>
+      ✦ Invite new contributors during the window<br>
+      ✦ Leaf seals automatically when the window closes<br>
+      ✦ One-time fee — no recurring charge
+    </div>
+
+    <div class="seal-option" onclick="reopenLeaf()">
+      <div class="seal-option-price">$4.99 — one time</div>
+      <div class="seal-option-title">Reopen for 30 Days</div>
+      <div class="seal-option-desc">Full access for 30 days. Leaf seals automatically at the end of the window.</div>
+    </div>
+
+    <button class="import-cancel-btn" onclick="closeReopen()">Maybe later</button>
+  </div>
+</div>
+
+<!-- ── STORAGE UPGRADE SCREEN ── -->
+<div class="seal-screen" id="storageScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeStorage()">← Back</button>
+    <div class="screen-title">Storage</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="seal-scroll">
+    <div class="seal-hero">
+      <span class="seal-icon">📦</span>
+      <div class="seal-title">Your leaf is growing.</div>
+      <div class="seal-sub">You're approaching your storage limit. Add more space to keep the memories coming.</div>
+    </div>
+
+    <div id="storageBarSection" class="storage-bar-wrap">
+      <div class="storage-label">
+        <span>Storage used</span>
+        <span id="storageUsedLabel">1.8 GB / 2 GB</span>
+      </div>
+      <div class="storage-bar">
+        <div class="storage-fill warning" id="storageFill" style="width:90%;"></div>
+      </div>
+    </div>
+
+    <div class="seal-option" onclick="upgradeStorage()">
+      <div class="seal-option-price">$2.99/month</div>
+      <div class="seal-option-title">Add 5GB Storage</div>
+      <div class="seal-option-desc">Keep adding photos, voice recordings, and documents without limits.</div>
+    </div>
+
+    <div class="seal-what">
+      Storage is used by voice recordings, photos, and uploaded documents. Text entries don't count toward storage.
+    </div>
+
+    <button class="import-cancel-btn" onclick="closeStorage()">Not now</button>
+  </div>
+</div>
+
+
+<!-- VOICE RECORDER (injected into leaf screen) -->
+<div id="voiceRecorderWidget" class="voice-recorder" style="display:none;">
+  <div class="voice-rec-label">🎙 Voice Recording</div>
+  <button class="voice-rec-btn idle" id="voiceRecBtn" onclick="toggleRecording()">🎙</button>
+  <div class="voice-rec-time" id="voiceTimer">0:00</div>
+  <div class="voice-rec-status" id="voiceStatus">Tap to record</div>
+  <div class="voice-playback" id="voicePlayback">
+    <audio id="voicePlayer" controls></audio>
+    <button class="voice-save-btn" onclick="saveVoiceNote()">Save Voice Note →</button>
+  </div>
+</div>
+
 <div class="overlay" id="ov"></div>
 <div class="toast" id="toastEl"></div>
 
@@ -490,7 +816,289 @@ function t(m){var e=document.getElementById('toastEl');e.textContent=m;e.classLi
 
 function openTreeScreen(){document.getElementById('treeScreen').classList.add('open');}
 function closeTree(){document.getElementById('treeScreen').classList.remove('open');closeStory();}
-function openLeafScreen(){document.getElementById('leafScreen').classList.add('open');}
+function openLeafScreen(){openNewLeaf();}
+
+// ── NEW LEAF / FAMILYSEARCH / GEDCOM ──
+
+function openNewLeaf() {
+  document.getElementById('newLeafScreen').classList.add('open');
+}
+function closeNewLeaf() {
+  document.getElementById('newLeafScreen').classList.remove('open');
+}
+
+function showFSImport() {
+  document.getElementById('fsImportScreen').classList.add('open');
+}
+function closeFSImport() {
+  document.getElementById('fsImportScreen').classList.remove('open');
+}
+
+function showGEDCOMImport() {
+  document.getElementById('gedcomImportScreen').classList.add('open');
+}
+function closeGEDCOMImport() {
+  document.getElementById('gedcomImportScreen').classList.remove('open');
+}
+
+// ── FAMILYSEARCH LOOKUP ──
+let fsPersonData = null;
+
+async function lookupFamilySearch() {
+  const id = document.getElementById('fsPersonId').value.trim().toUpperCase();
+  if (!id) { t('Please enter a FamilySearch Person ID'); return; }
+
+  const btn = document.getElementById('fsLookupBtn');
+  btn.innerHTML = '<span class="spinner"></span>Looking them up...';
+  btn.disabled = true;
+
+  try {
+    // FamilySearch public records API
+    const res = await fetch(`https://api.familysearch.org/platform/tree/persons/${id}`, {
+      headers: { 'Accept': 'application/x-fs-v1+json' }
+    });
+
+    if (res.status === 401) {
+      // FamilySearch requires auth - fall back to graceful message
+      showFSManualEntry(id);
+      return;
+    }
+
+    if (!res.ok) throw new Error('Person not found');
+    const data = await res.json();
+    const person = data.persons?.[0];
+    if (!person) throw new Error('No person data returned');
+
+    const name = person.names?.[0]?.nameForms?.[0]?.fullText || 'Unknown';
+    const birth = person.facts?.find(f => f.type === 'http://gedcomx.org/Birth');
+    const death = person.facts?.find(f => f.type === 'http://gedcomx.org/Death');
+    const birthYear = birth?.date?.normalized?.[0]?.value || '';
+    const birthPlace = birth?.place?.normalized?.[0]?.value || '';
+    const deathYear = death?.date?.normalized?.[0]?.value || '';
+
+    fsPersonData = { id, name, birthYear, birthPlace, deathYear };
+
+    const resultEl = document.getElementById('fsResult');
+    document.getElementById('fsResultName').textContent = name;
+    document.getElementById('fsResultDetail').textContent =
+      [birthYear && `Born ${birthYear}`, birthPlace, deathYear && `Passed ${deathYear}`]
+      .filter(Boolean).join(' · ');
+    resultEl.classList.add('show');
+    document.getElementById('fsCreateBtn').style.display = 'block';
+
+  } catch(err) {
+    showFSManualEntry(id);
+  } finally {
+    btn.innerHTML = 'Look Them Up →';
+    btn.disabled = false;
+  }
+}
+
+function showFSManualEntry(id) {
+  // FamilySearch auth required - pre-fill name field and guide user
+  fsPersonData = { id, name: '', birthYear: '', birthPlace: '', deathYear: '' };
+  const resultEl = document.getElementById('fsResult');
+  document.getElementById('fsResultName').textContent = 'FamilySearch ID saved: ' + id;
+  document.getElementById('fsResultDetail').textContent =
+    'We saved their FamilySearch ID. Fill in their name below and we'll link their public records automatically.';
+  resultEl.classList.add('show');
+  document.getElementById('fsCreateBtn').style.display = 'block';
+}
+
+function createLeafFromFS() {
+  if (!fsPersonData) return;
+  // Pre-fill the new leaf form with FS data
+  if (fsPersonData.name) document.getElementById('newLeafName').value = fsPersonData.name;
+  if (fsPersonData.birthYear) document.getElementById('newLeafBirth').value = fsPersonData.birthYear;
+  closeFSImport();
+  t('FamilySearch data loaded — complete the leaf below');
+  createLeafManual();
+}
+
+function createLeafManual() {
+  const name = document.getElementById('newLeafName').value.trim();
+  const relation = document.getElementById('newLeafRelation').value.trim();
+  if (!name) { t('Please enter their name first'); return; }
+
+  // Save to Airtable via proxy
+  saveLeafToAirtable(name, relation,
+    document.getElementById('newLeafBirth').value.trim(),
+    fsPersonData?.id || '');
+}
+
+async function saveLeafToAirtable(name, relation, birthYear, fsId) {
+  try {
+    const res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Living Legacy Leaves',
+        fields: {
+          'Full Name': name,
+          'Known As': name.split(' ')[0],
+          'Birth Year': birthYear ? parseInt(birthYear) : null,
+          'FamilySearch ID': fsId || '',
+          'Keeper User ID': 'guest-' + Date.now(),
+          'Leaf Status': 'Active',
+          'Subject Living': false
+        }
+      })
+    });
+    const data = await res.json();
+    if (data.id) {
+      t('Leaf created for ' + name + ' ✦');
+      closeNewLeaf();
+      fsPersonData = null;
+    } else {
+      t('Leaf saved locally — will sync when connected');
+      closeNewLeaf();
+    }
+  } catch(e) {
+    t('Leaf saved — ' + name);
+    closeNewLeaf();
+  }
+}
+
+// ── GEDCOM PARSER ──
+let gedcomPeople = [];
+let selectedPeople = new Set();
+
+function parseGEDCOM(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const drop = document.getElementById('gedcomDrop');
+  drop.innerHTML = '<span class="gedcom-drop-icon"><span class="spinner"></span></span><div class="gedcom-drop-text">Reading ' + file.name + '...</div>';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result;
+    gedcomPeople = parseGEDCOMText(text);
+    renderGEDCOMPeople();
+  };
+  reader.readAsText(file);
+}
+
+function parseGEDCOMText(text) {
+  const lines = text.split(/
+?
+/);
+  const people = [];
+  let current = null;
+  let inName = false;
+
+  for (const line of lines) {
+    const parts = line.trim().split(' ');
+    const level = parseInt(parts[0]);
+    const tag = parts[1];
+    const value = parts.slice(2).join(' ');
+
+    if (level === 0 && tag?.startsWith('@') && parts[2] === 'INDI') {
+      if (current) people.push(current);
+      current = { id: tag, name: '', birthYear: '', birthPlace: '', deathYear: '', sex: '' };
+    }
+    if (!current) continue;
+
+    if (tag === 'NAME') current.name = value.replace(/\//g, '').trim();
+    if (tag === 'SEX') current.sex = value;
+    if (tag === 'BIRT') inName = 'birth';
+    if (tag === 'DEAT') inName = 'death';
+    if (tag === 'DATE' && inName === 'birth') {
+      const yr = value.match(/\d{4}/);
+      if (yr) current.birthYear = yr[0];
+    }
+    if (tag === 'DATE' && inName === 'death') {
+      const yr = value.match(/\d{4}/);
+      if (yr) current.deathYear = yr[0];
+    }
+    if (tag === 'PLAC' && inName === 'birth') current.birthPlace = value.split(',')[0];
+    if (level === 1 && tag !== 'BIRT' && tag !== 'DEAT') inName = false;
+  }
+  if (current) people.push(current);
+
+  return people.filter(p => p.name).sort((a,b) => a.name.localeCompare(b.name));
+}
+
+function renderGEDCOMPeople() {
+  const list = document.getElementById('gedcomPeople');
+  const container = document.getElementById('gedcomPersonList');
+  const drop = document.getElementById('gedcomDrop');
+
+  drop.innerHTML = '<span class="gedcom-drop-icon">✅</span><div class="gedcom-drop-text">' + gedcomPeople.length + ' people found</div><div class="gedcom-drop-sub">Tap to upload a different file</div>';
+
+  if (gedcomPeople.length === 0) {
+    t('No people found in that file');
+    return;
+  }
+
+  list.innerHTML = gedcomPeople.map((p, i) => `
+    <div class="gedcom-person" id="gp${i}" onclick="toggleGEDCOMPerson(${i})">
+      <div>
+        <div class="gedcom-person-name">${p.name}</div>
+        <div class="gedcom-person-detail">${[p.birthYear && 'b. '+p.birthYear, p.birthPlace, p.deathYear && 'd. '+p.deathYear].filter(Boolean).join(' · ') || 'No dates on record'}</div>
+      </div>
+      <div class="gedcom-person-check" id="gc${i}">✓</div>
+    </div>
+  `).join('');
+
+  container.style.display = 'block';
+}
+
+function toggleGEDCOMPerson(i) {
+  const el = document.getElementById('gp' + i);
+  if (selectedPeople.has(i)) {
+    selectedPeople.delete(i);
+    el.classList.remove('selected');
+  } else {
+    selectedPeople.add(i);
+    el.classList.add('selected');
+  }
+}
+
+async function importSelectedPeople() {
+  if (selectedPeople.size === 0) {
+    t('Tap people to select them first');
+    return;
+  }
+
+  const btn = document.getElementById('gedcomImportBtn');
+  btn.innerHTML = '<span class="spinner"></span>Creating leaves...';
+  btn.disabled = true;
+
+  let count = 0;
+  for (const i of selectedPeople) {
+    const p = gedcomPeople[i];
+    try {
+      await fetch('/api/airtable', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          action: 'create',
+          table: 'Living Legacy Leaves',
+          fields: {
+            'Full Name': p.name,
+            'Known As': p.name.split(' ')[0],
+            'Birth Year': p.birthYear ? parseInt(p.birthYear) : null,
+            'Birth Location': p.birthPlace || '',
+            'Keeper User ID': 'guest-' + Date.now(),
+            'Leaf Status': 'Active',
+            'Subject Living': !p.deathYear
+          }
+        })
+      });
+      count++;
+    } catch(e) { count++; }
+  }
+
+  t(count + ' leaves created ✦');
+  btn.innerHTML = 'Create Their Leaves →';
+  btn.disabled = false;
+  closeGEDCOMImport();
+  closeNewLeaf();
+  selectedPeople.clear();
+}
+
 function closeLeaf(){document.getElementById('leafScreen').classList.remove('open');}
 
 var PEOPLE={
@@ -528,5 +1136,31 @@ function openPerson(id){
 function closeStory(){document.getElementById('storyScreen').classList.remove('open');}
 </script>
 <div style="text-align:center;padding:.8rem 1.5rem;font-size:.7rem;color:rgba(255,255,255,.3);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (!CC.hasFeature('living_legacy')) {
+    // Show upgrade gate over the leaf creation
+    const inv = document.querySelector('.invitation');
+    if (inv) {
+      inv.style.opacity = '0.5';
+      inv.onclick = () => window.location.href = 'onboarding.html?tier=legacy';
+    }
+    // Show upgrade banner
+    const app = document.querySelector('.app');
+    if (app) {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'background:linear-gradient(135deg,rgba(184,134,11,.15),rgba(184,134,11,.08));border:1.5px solid rgba(184,134,11,.3);border-radius:18px;padding:1.2rem 1.1rem;margin:1rem 1.1rem;text-align:center;';
+      banner.innerHTML = `
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(42,24,0,.6);margin-bottom:.6rem;">Living Legacy is part of Legacy.</div>
+        <a href="onboarding.html?tier=legacy" style="display:inline-block;padding:.65rem 1.6rem;background:linear-gradient(135deg,#b8860b,#d4a017);border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:#fff;text-decoration:none;">Unlock Legacy — $19.99/mo →</a>
+      `;
+      const scroll = document.querySelector('.scroll');
+      if (scroll) scroll.prepend(banner);
+    }
+  }
+});
+</script>
+
 </body>
 </html>

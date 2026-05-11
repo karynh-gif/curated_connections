@@ -213,6 +213,10 @@ body::before{content:"";position:fixed;inset:0;
 .bn:not(.active):hover{color:rgba(244,236,220,.45);}
 
 </style>
+  <script src="/cc-auth.js"></script>
+  <script src="/cc-cards.js"></script>
+  <script src="/cc-birthday.js"></script>
+  <script src="/cc-seasonal.js"></script>
 </head>
 <body>
 <div class="app">
@@ -692,5 +696,40 @@ addSwipeDismiss('inviteSheet', closeInvite);
 
 </script>
 <div style="text-align:center;padding:.8rem 1.5rem;font-size:.65rem;color:rgba(255,255,255,.2);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const user = CC.getUser ? CC.getUser() : null;
+
+  // Initialize card actions
+  if (CC.initCardActions) CC.initCardActions();
+
+  // Wire invite button
+  const inviteBtn = document.querySelector('[onclick*="invite"], .invite-btn');
+  if (inviteBtn) {
+    inviteBtn.onclick = function() {
+      const circleId = new URLSearchParams(window.location.search).get('circle') || 'default';
+      const circleName = document.title || 'Our Circle';
+      if (CC.copyInviteLink) CC.copyInviteLink(circleId, circleName);
+    };
+  }
+
+  // Check for birthdays
+  const circleId = new URLSearchParams(window.location.search).get('circle');
+  if (circleId && CC.checkBirthdays) {
+    CC.checkBirthdays(circleId).then(cards => {
+      if (cards.length > 0) {
+        CC.showBirthdayDeck('someone in your circle', cards);
+      }
+    });
+  }
+
+  // Inject seasonal shelf
+  if (CC.injectSeasonalShelf) {
+    CC.injectSeasonalShelf(document.querySelector('.scroll, .feed'));
+  }
+});
+</script>
+
 </body>
 </html>
