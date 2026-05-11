@@ -10,8 +10,23 @@
   status = 200
 
 [[redirects]]
-  from = "/"
-  to = "/index.html"
+  from = "/api/stripe-webhook"
+  to = "/.netlify/functions/stripe-webhook"
+  status = 200
+
+[[redirects]]
+  from = "/api/play-live"
+  to = "/.netlify/functions/play-live"
+  status = 200
+
+[[redirects]]
+  from = "/api/circle-invite"
+  to = "/.netlify/functions/circle-invite"
+  status = 200
+
+[[redirects]]
+  from = "/api/storage"
+  to = "/.netlify/functions/storage-tracker"
   status = 200
 
 [[redirects]]
@@ -20,23 +35,33 @@
   status = 200
 
 [[redirects]]
-  from = "/journal"
-  to = "/journal.html"
-  status = 200
-
-[[redirects]]
   from = "/circles"
   to = "/circles.html"
   status = 200
 
 [[redirects]]
-  from = "/join/*"
-  to = "/circle-join.html"
+  from = "/legacy"
+  to = "/legacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/journal"
+  to = "/journal.html"
   status = 200
 
 [[redirects]]
   from = "/games"
   to = "/games.html"
+  status = 200
+
+[[redirects]]
+  from = "/start"
+  to = "/onboarding.html"
+  status = 200
+
+[[redirects]]
+  from = "/join/*"
+  to = "/circle-join.html"
   status = 200
 
 [[redirects]]
@@ -55,16 +80,6 @@
   status = 200
 
 [[redirects]]
-  from = "/legacy"
-  to = "/legacy.html"
-  status = 200
-
-[[redirects]]
-  from = "/start"
-  to = "/onboarding.html"
-  status = 200
-
-[[redirects]]
   from = "/legal"
   to = "/legal.html"
   status = 200
@@ -74,35 +89,9 @@
   to = "/help.html"
   status = 200
 
-[[redirects]]
-  from = "/showcase"
-  to = "/showcase.html"
-  status = 200
-
-[
-[[redirects]]
-  from = "/api/stripe-webhook"
-  to = "/.netlify/functions/stripe-webhook"
-  status = 200
-
-[[headers]]]
+[[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-
-[[redirects]]
-  from = "/api/play-live"
-  to = "/.netlify/functions/play-live"
-  status = 200
-
-[[redirects]]
-  from = "/api/circle-invite"
-  to = "/.netlify/functions/circle-invite"
-  status = 200
-
-[[redirects]]
-  from = "/api/storage"
-  to = "/.netlify/functions/storage-tracker"
-  status = 200
