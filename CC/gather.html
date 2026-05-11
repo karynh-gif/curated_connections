@@ -7,214 +7,52 @@
 <link rel="stylesheet" href="/atmosphere.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,600&family=Nunito:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-/* ── TOKENS ── */
 :root{
-  --ink:       #060c09;
-  --ink2:      #0d1a10;
-  --surface:   #111d14;
-  --card:      #162019;
-  --lift:      #1d2d22;
-  --amber:     #c97d3a;
-  --amber2:    #e89448;
-  --amber-dim: rgba(201,125,58,.18);
-  --gold-line: rgba(201,125,58,.28);
-  --cream:     #f2e8d8;
-  --cream-dim: #c8b99e;
-  --teal:      #2a8a72;
-  --teal2:     #3aad90;
-  --purple:    #6b3ca2;
-  --purple2:   #9b6dd4;
-  --navy:      #1e3d6a;
-  --navy2:     #3a6aaa;
-  --coral:     #c05038;
-  --coral2:    #e07060;
-  --sage:      #3a7a52;
-  --sage2:     #5aaa78;
-  --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-xl: 28px;
-  --shadow: 0 8px 32px rgba(0,0,0,.5);
-  --glow-amber: 0 0 40px rgba(201,125,58,.22);
+  --ink:#060c09;--ink2:#0d1a10;--surface:#111d14;--card:#162019;--lift:#1d2d22;
+  --amber:#c97d3a;--amber2:#e89448;--gold-line:rgba(201,125,58,.28);
+  --cream:#f2e8d8;--cream-dim:#c8b99e;
+  --teal:#2a8a72;--teal2:#3aad90;
+  --purple:#6b3ca2;--purple2:#9b6dd4;
+  --navy:#1e3d6a;--navy2:#3a6aaa;
+  --coral:#c05038;--coral2:#e07060;
+  --r-sm:10px;--r-md:16px;--r-lg:22px;--r-xl:28px;
+  --shadow:0 8px 32px rgba(0,0,0,.5);
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--ink);font-family:'DM Sans',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");background-size:160px;pointer-events:none;z-index:9999;opacity:.4;}
 
-/* Grain */
-body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");background-size:160px;pointer-events:none;z-index:9999;opacity:.4;}
+.app{max-width:430px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;background:var(--ink);position:relative;}
 
-/* App shell */
-.app{
-  max-width:430px;margin:0 auto;
-  min-height:100svh;min-height:100vh;
-  display:flex;flex-direction:column;
-  background:var(--ink);
-  position:relative;
-}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes glow{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
-@keyframes pulse{0%,100%{opacity:.35;transform:scale(.9)}50%{opacity:.75;transform:scale(1.1)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
-@keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-
-/* ── TOPBAR ── */
-.topbar{
-  padding:.9rem 1.1rem .8rem;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
-  background:var(--ink);
-  border-bottom:1px solid rgba(201,125,58,.1);
-}
-.topbar-brand{display:flex;flex-direction:column;}
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem .7rem;position:sticky;top:0;z-index:50;background:rgba(6,12,9,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05);}
+.topbar-brand{}
 .topbar-name{font-family:'Pacifico',cursive;font-size:1.2rem;color:var(--amber);}
-.topbar-date{font-size:.5rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.45);margin-top:.08rem;}
-.topbar-right{display:flex;align-items:center;gap:.45rem;}
-.topbar-btn{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.72rem;cursor:pointer;transition:all .18s;}
-.topbar-btn:hover{background:rgba(255,255,255,.1);}
-.topbar-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#8b5e3c);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff;cursor:pointer;border:1.5px solid rgba(255,255,255,.15);}
+.topbar-date{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.3);margin-top:.1rem;}
+.topbar-right{display:flex;align-items:center;gap:.55rem;}
+.topbar-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;}
+.topbar-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;color:#fff;cursor:pointer;}
 
-/* ── SCROLL CONTENT ── */
-.scroll{flex:1;overflow-y:auto;padding-bottom:5.5rem;}
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;}
 .scroll::-webkit-scrollbar{display:none;}
 
-/* ── HERO CARD — TONIGHT'S EXPERIENCE ── */
-.hero-card{
-  margin:.85rem .9rem 0;
-  border-radius:var(--r-xl);
-  overflow:hidden;
-  position:relative;
-  cursor:pointer;
-  animation:fadeUp .5s ease both;
-}
-
-/* Animated ambient background */
-.hero-bg{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  background:linear-gradient(145deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%);
-  z-index:0;
-}
-.hero-bg::before{
-  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
-  background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28) 0%,transparent 55%),
-             radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22) 0%,transparent 50%);
-  animation:glow 4s ease-in-out infinite;
-}
-
-/* Floating particles */
-.hero-particle{position:absolute;border-radius:50%;pointer-events:none;z-index:1;}
-
-.hero-inner{position:relative;z-index:2;padding:1.6rem 1.5rem 1.4rem;}
-
-.hero-label{
-  font-size:.54rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(201,125,58,.85);margin-bottom:.65rem;
-  display:flex;align-items:center;gap:.35rem;
-}
-.hero-label::before{content:'✦';font-size:.42rem;}
-
-.hero-question{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.35rem,4.5vw,1.7rem);
-  font-style:italic;font-weight:400;
-  color:var(--cream);line-height:1.45;
-  margin-bottom:1.2rem;
-}
-
-/* Flip button area */
-.hero-flip{
-  background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:var(--r-md);
-  padding:.8rem 1rem;
-  margin-bottom:1rem;
-  display:none;
-  animation:fadeUp .35s ease both;
-}
-.hero-flip.open{display:block;}
-.hero-flip-label{font-size:.52rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber2);margin-bottom:.5rem;}
-.hero-flip-item{font-size:.82rem;color:rgba(242,232,216,.78);line-height:1.6;padding:.28rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
-.hero-flip-item:last-child{border-bottom:none;}
-.hero-flip-item strong{color:var(--cream);font-weight:600;}
-
-/* Hero actions */
-.hero-actions{display:flex;gap:.45rem;flex-wrap:wrap;}
-.hero-icon-bar{
-  display:flex;align-items:center;justify-content:space-around;
-  width:100%;padding:.5rem 0 .2rem;
-  border-top:1px solid rgba(255,255,255,.1);
-  margin-top:.6rem;
-}
-.hib-btn{
-  display:flex;flex-direction:column;align-items:center;gap:.28rem;
-  background:none;border:none;cursor:pointer;
-  padding:.4rem .5rem;transition:opacity .18s;
-}
-.hib-btn:hover{opacity:.75;}
-.hib-icon{
-  width:40px;height:40px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.16);
-  transition:all .2s;
-}
-.hib-flip{font-size:1.25rem;color:var(--amber2);}
-.hib-answer{font-size:.88rem;color:rgba(255,255,255,.85);}
-.hib-share{font-size:1.1rem;color:rgba(255,255,255,.85);}
-.hib-play{font-size:1rem;color:rgba(255,255,255,.85);}
-.hib-btn:active .hib-icon{background:rgba(255,255,255,.2);transform:scale(.92);}
-.hib-label{
-  font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:700;
-  letter-spacing:.06em;text-transform:uppercase;
-  color:rgba(255,255,255,.45);
-}
-
-/* ── SHELF ROWS ── */
-.shelf{margin-top:1.6rem;animation:fadeUp .5s ease both;}
-.shelf:nth-child(2){animation-delay:.08s}
-.shelf:nth-child(3){animation-delay:.16s}
-.shelf:nth-child(4){animation-delay:.24s}
-.shelf:nth-child(5){animation-delay:.32s}
-
-.shelf-header{
-  display:flex;align-items:baseline;justify-content:space-between;
-  padding:0 .9rem;margin-bottom:.7rem;
-}
+/* SHELF */
+.shelf{margin-top:1.6rem;}
+.shelf-header{display:flex;align-items:baseline;justify-content:space-between;padding:0 .9rem;margin-bottom:.7rem;}
 .shelf-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);}
 .shelf-link{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:.75;}
-.shelf-link:hover{opacity:1;}
-
-.shelf-row{
-  display:flex;gap:.65rem;
-  padding:0 .9rem .25rem;
-  overflow-x:auto;scrollbar-width:none;
-}
-.shelf-row.full-width{
-  justify-content:space-between;
-}
-.shelf-row.full-width .conv-card{
-  flex:1;max-width:calc(50% - .35rem);
-}
+.shelf-row{display:flex;gap:.65rem;padding:0 .9rem .25rem;overflow-x:auto;scrollbar-width:none;}
 .shelf-row::-webkit-scrollbar{display:none;}
 
-/* ── CONVERSATION CARDS (shelf 1) ── */
-.conv-card{
-  flex-shrink:0;width:210px;
-  border-radius:var(--r-lg);padding:1.2rem 1.1rem;
-  cursor:pointer;transition:all .22s;
-  position:relative;overflow:hidden;
-  animation:cardIn .4s ease both;
-}
+/* CONVERSATION CARDS */
+.conv-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.2rem 1.1rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
 .conv-card:hover{transform:translateY(-3px);}
-.conv-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.12),transparent 40%);pointer-events:none;}
+.conv-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.12),transparent 40%);pointer-events:none;}
 .conv-card-label{font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.5rem;opacity:.8;}
 .conv-card-q{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--cream);line-height:1.5;flex:1;}
 .conv-card-hint{font-size:.68rem;color:rgba(242,232,216,.5);margin-top:.55rem;line-height:1.4;}
 .conv-card-tap{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.35);margin-top:.6rem;}
-
-/* Color variants */
 .card-family{background:linear-gradient(145deg,#3a1800,#7a3810);border:1px solid rgba(201,125,58,.2);}
 .card-family .conv-card-label{color:var(--amber2);}
 .card-couples{background:linear-gradient(145deg,#3a0818,#7a1030);border:1px solid rgba(192,80,56,.2);}
@@ -224,717 +62,175 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
 .card-dinner{background:linear-gradient(145deg,#0a2818,#1a5030);border:1px solid rgba(42,138,114,.2);}
 .card-dinner .conv-card-label{color:var(--teal2);}
 .card-friends{background:linear-gradient(145deg,#1a2840,#2a4070);border:1px solid rgba(58,106,170,.2);}
+.card-friends .conv-card-label{color:var(--navy2);}
 .card-travel{background:linear-gradient(145deg,#0a2828,#1a5048);border:1px solid rgba(42,138,114,.22);}
 .card-travel .conv-card-label{color:var(--teal2);}
+.card-legacy{background:linear-gradient(145deg,#201800,#402800);border:1px solid rgba(184,134,11,.2);}
+.card-legacy .conv-card-label{color:#c9a830;}
+.card-getreal{background:linear-gradient(145deg,#200808,#3c1010);border:1px solid rgba(160,50,50,.2);}
+.card-getreal .conv-card-label{color:#c85050;}
 .card-kids{background:linear-gradient(145deg,#1a1040,#3a1860);border:1px solid rgba(107,60,162,.22);}
 .card-kids .conv-card-label{color:var(--purple2);}
-.card-friends .conv-card-label{color:var(--navy2);}
+.card-locked{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.2rem 1.1rem;cursor:pointer;background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.45rem;}
 
-/* ── WIT & WONDER CARDS (shelf 2) ── */
-.ww-card{
-  flex-shrink:0;width:162px;
-  border-radius:var(--r-lg);
-  background:var(--card);border:1px solid rgba(255,255,255,.08);
-  cursor:pointer;transition:all .22s;overflow:hidden;
-  animation:cardIn .4s ease both;
-}
+/* WIT & WONDER CARDS */
+.ww-card{flex-shrink:0;width:162px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .22s;overflow:hidden;}
 .ww-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
 .ww-card-top{padding:.9rem .9rem .55rem;}
 .ww-type{font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:.42rem;}
 .ww-q{font-family:'Cormorant Garamond',serif;font-size:.96rem;font-style:italic;color:var(--cream);line-height:1.45;}
-.ww-reveal{
-  background:rgba(201,125,58,.1);border-top:1px solid rgba(201,125,58,.15);
-  padding:.55rem .9rem .7rem;font-size:.75rem;color:var(--cream-dim);line-height:1.45;
-  display:none;
-}
+.ww-reveal{background:rgba(201,125,58,.1);border-top:1px solid rgba(201,125,58,.15);padding:.55rem .9rem .7rem;font-size:.75rem;color:var(--cream-dim);line-height:1.45;display:none;}
 .ww-reveal.open{display:block;}
 .ww-tap{padding:.5rem .9rem .7rem;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.3);}
-.ww-card.flipped .ww-tap{display:none;}
 
-/* ── DISCOVER YOU (shelf 3) ── */
-.quiz-card{
-  flex-shrink:0;width:220px;
-  border-radius:var(--r-lg);padding:1.15rem 1.1rem;
-  cursor:pointer;transition:all .22s;
-  position:relative;overflow:hidden;
-  animation:cardIn .4s ease both;
-}
+/* QUIZ CARDS */
+.quiz-card{flex-shrink:0;width:220px;border-radius:var(--r-lg);padding:1.15rem 1.1rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
 .quiz-card:hover{transform:translateY(-3px);}
-.quiz-card::after{content:'';position:absolute;top:-30%;left:-30%;right:-30%;bottom:-30%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.07),transparent 60%);transform:translateX(-80%) rotate(8deg);transition:transform .55s ease;pointer-events:none;}
-.quiz-card:hover::after{transform:translateX(80%) rotate(8deg);}
 .quiz-label{font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.5rem;opacity:.8;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--cream);margin-bottom:.35rem;}
 .quiz-sub{font-size:.7rem;color:rgba(242,232,216,.52);line-height:1.5;margin-bottom:.75rem;}
 .quiz-start{display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.28rem .7rem;border-radius:999px;border:1px solid currentColor;transition:all .18s;}
-
+.quiz-locked{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.28rem .7rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.25);}
 .quiz-vibe{background:linear-gradient(145deg,#1a0a30,#3d1a60);border:1px solid rgba(107,60,162,.22);}
 .quiz-vibe .quiz-label,.quiz-vibe .quiz-start{color:var(--purple2);}
 .quiz-table{background:linear-gradient(145deg,#0a2010,#1a4820);border:1px solid rgba(42,138,114,.22);}
 .quiz-table .quiz-label,.quiz-table .quiz-start{color:var(--teal2);}
 .quiz-energy{background:linear-gradient(145deg,#2a1000,#5a2800);border:1px solid rgba(201,125,58,.22);}
-.quiz-energy .quiz-label,.quiz-energy .quiz-start{color:var(--amber2);}
+.quiz-energy .quiz-label,.quiz-energy .quiz-start{color:var(--amber);}
+.quiz-locked-card{background:linear-gradient(145deg,#100e0a,#201a10);border:1.5px dashed rgba(255,255,255,.1);}
+.quiz-locked-card .quiz-label{color:rgba(255,255,255,.2);}
 
-/* ── SHARED MOMENTS (shelf 4) ── */
-.moments-shelf{margin-top:1.6rem;animation:fadeUp .5s .32s ease both;}
-.moment-card{
-  margin:0 .9rem .65rem;
-  background:var(--card);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r-md);
-  padding:.85rem 1rem;
-  display:flex;align-items:center;gap:.75rem;
-  cursor:pointer;transition:all .2s;
-}
-.moment-card:hover{border-color:var(--gold-line);}
-.moment-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;}
-.moment-text{flex:1;}
-.moment-who{font-size:.78rem;font-weight:600;color:var(--cream);margin-bottom:.1rem;}
-.moment-what{font-size:.72rem;color:var(--cream-dim);line-height:1.45;}
-.moment-time{font-size:.58rem;color:rgba(242,232,216,.3);flex-shrink:0;}
-.moment-tag{font-size:.5rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber2);margin-bottom:.12rem;display:block;}
+/* HERO CARD */
+.hero-card{margin:.85rem .9rem 0;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(145deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%);z-index:0;}
+.hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28) 0%,transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22) 0%,transparent 50%);animation:glow 4s ease-in-out infinite;}
+.hero-particle{position:absolute;border-radius:50%;pointer-events:none;z-index:1;}
+.hero-inner{position:relative;z-index:2;padding:1.6rem 1.5rem 1.4rem;}
+.hero-label{font-size:.54rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.85);margin-bottom:.65rem;display:flex;align-items:center;gap:.35rem;}
+.hero-label::before{content:'✦';font-size:.42rem;}
+.hero-question{font-family:'Cormorant Garamond',serif;font-size:clamp(1.35rem,4.5vw,1.7rem);font-style:italic;font-weight:400;color:var(--cream);line-height:1.45;margin-bottom:1.2rem;}
+.hero-flip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:.8rem 1rem;margin-bottom:1rem;display:none;}
+.hero-flip.open{display:block;}
+.hero-flip-label{font-size:.52rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber2);margin-bottom:.5rem;}
+.hero-flip-item{font-size:.82rem;color:rgba(242,232,216,.78);line-height:1.6;padding:.28rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.hero-flip-item:last-child{border-bottom:none;}
+.hero-flip-item strong{color:var(--cream);font-weight:600;}
+.hero-icon-bar{display:flex;align-items:center;justify-content:space-around;width:100%;padding:.5rem 0 .2rem;border-top:1px solid rgba(255,255,255,.1);margin-top:.6rem;}
+.hib-btn{display:flex;flex-direction:column;align-items:center;gap:.28rem;background:none;border:none;cursor:pointer;padding:.4rem .5rem;transition:opacity .18s;}
+.hib-btn:hover{opacity:.75;}
+.hib-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);transition:all .2s;}
+.hib-flip{font-size:1.25rem;color:var(--amber2);}
+.hib-answer{font-size:.88rem;color:rgba(255,255,255,.85);}
+.hib-share{font-size:1.1rem;color:rgba(255,255,255,.85);}
+.hib-play{font-size:1rem;color:rgba(255,255,255,.85);}
+.hib-label{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.45);}
 
-.moments-cta{margin:.25rem .9rem .4rem;text-align:center;}
-.moments-cta-btn{background:none;border:1px solid rgba(201,125,58,.22);border-radius:999px;padding:.45rem 1.1rem;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;color:rgba(201,125,58,.6);cursor:pointer;letter-spacing:.04em;transition:all .22s;}
-.moments-cta-btn:hover{border-color:rgba(201,125,58,.45);color:var(--amber);}
+/* CIRCLES SECTION */
+.circles-section{position:relative;background:linear-gradient(180deg,#08101e 0%,#0a0e1c 40%,#090c18 100%);margin-top:2.2rem;overflow:hidden;padding:2rem 0 1.6rem;}
+.circles-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:400;color:var(--cream);}
 
-.section-divider{font-size:.54rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,232,216,.18);text-align:center;padding:1.4rem 0 .8rem;display:flex;align-items:center;gap:.6rem;padding:1.4rem .9rem .8rem;}
-.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:rgba(242,232,216,.07);}
+/* WRITE YOUR EXPERIENCE */
+.write-exp{margin:1.6rem .9rem .5rem;}
+.write-exp-inner{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);padding:1.2rem 1.1rem;cursor:pointer;transition:border-color .2s;}
+.write-exp-inner:hover{border-color:rgba(201,125,58,.2);}
+.write-exp-prompt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(242,232,216,.32);line-height:1.65;}
+.write-exp-footer{margin-top:.85rem;display:flex;align-items:center;justify-content:space-between;}
+.write-exp-cta{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);}
+.write-exp-note{font-size:.6rem;color:rgba(242,232,216,.18);font-style:italic;}
 
-.bottom-space{height:1.5rem;}
-
-/* ── BOTTOM NAV ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;
-  background:rgba(6,12,9,.96);
-  border-top:1px solid rgba(201,125,58,.12);
-  backdrop-filter:blur(16px);
-  display:flex;align-items:center;justify-content:space-around;
-  padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));
-  z-index:100;
-}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,12,9,.96);border-top:1px solid rgba(201,125,58,.12);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.2rem;cursor:pointer;opacity:.42;transition:opacity .2s;min-width:44px;padding:0 .25rem;}
 .nav-item.active{opacity:1;}
 .nav-icon{font-size:1.05rem;line-height:1;}
 .nav-label{font-size:.46rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.7);}
 .nav-item.active .nav-label{color:var(--amber2);}
-.nav-compose{
-  width:40px;height:40px;border-radius:50%;
-  background:linear-gradient(135deg,var(--amber),var(--amber2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:.9rem;color:#fff;cursor:pointer;
-  box-shadow:0 4px 14px rgba(201,125,58,.4);
-  margin-top:-10px;border:2.5px solid var(--ink);
-  transition:transform .2s;
-}
+.nav-compose{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(201,125,58,.4);margin-top:-10px;border:2.5px solid var(--ink);transition:transform .2s;}
 .nav-compose:hover{transform:scale(1.08);}
 
-/* ── CARD FULLSCREEN — fills entire phone ── */
+/* CARD OVERLAY */
 @keyframes cardReveal{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-@keyframes cardFlipFwd{0%{transform:perspective(1000px) rotateY(0)}100%{transform:perspective(1000px) rotateY(180deg)}}
-@keyframes cardFlipBack{0%{transform:perspective(1000px) rotateY(180deg)}100%{transform:perspective(1000px) rotateY(360deg)}}
+.card-overlay{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto;}
+.card-overlay.open{display:block;animation:cardReveal .25s ease both;}
+.card-screen{display:none;flex-direction:column;min-height:100vh;padding:1.4rem 1.3rem 2rem;position:relative;}
+.card-close{position:absolute;top:1.1rem;left:1.1rem;background:none;border:none;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;z-index:10;}
+.card-badge{font-family:'Pacifico',cursive;font-size:.85rem;color:var(--amber);opacity:.55;margin-top:2.8rem;margin-bottom:.4rem;}
+.card-label{font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.7rem;}
+.card-question{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,5vw,1.9rem);font-style:italic;color:var(--cream);line-height:1.45;flex:1;margin-bottom:1.2rem;}
+.card-hint-text{font-size:.85rem;color:rgba(242,232,216,.55);line-height:1.6;margin-bottom:1rem;font-style:italic;}
+.cf-flip-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.55rem 1.2rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.6);cursor:pointer;margin-bottom:1rem;transition:all .2s;width:100%;}
+.card-back{display:none;position:fixed;inset:0;z-index:210;padding:1.4rem 1.3rem 2rem;overflow-y:auto;}
+.card-back.open{display:block;}
+.card-back-close{background:none;border:none;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-bottom:1.8rem;display:block;}
+.depth-section{margin-bottom:1rem;background:rgba(255,255,255,.06);border-radius:var(--r-md);padding:.9rem 1rem;}
+.depth-label{font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.4rem;}
+.depth-label.connect{color:var(--amber);}
+.depth-label.insight{color:var(--purple2);}
+.depth-label.legacy{color:#c9a830;}
+.depth-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(242,232,216,.7);line-height:1.6;}
+.card-action-bar{display:flex;gap:.65rem;margin-top:1rem;}
+.card-action-btn{flex:1;padding:.65rem;border-radius:var(--r-md);border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.6);cursor:pointer;text-align:center;}
+.card-answer-btn{background:rgba(201,125,58,.15);border-color:rgba(201,125,58,.3);color:var(--amber);}
 
-.card-overlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;z-index:500;
-  display:none;
-}
-.card-overlay.open{display:block;}
+/* WIT & WONDER FULLSCREEN */
+.ww-screen{display:none;position:fixed;inset:0;z-index:200;flex-direction:column;padding:1.4rem 1.3rem 2rem;overflow-y:auto;}
+.ww-screen-type{font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);margin-top:2.8rem;margin-bottom:.6rem;}
+.ww-screen-q{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,4.5vw,1.7rem);font-style:italic;color:var(--cream);line-height:1.45;flex:1;margin-bottom:1.6rem;}
+.ww-screen-reveal{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(242,232,216,.7);line-height:1.6;margin-bottom:1rem;display:none;}
+.ww-screen-reveal.open{display:block;}
+.ww-reveal-btn{background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:999px;padding:.55rem 1.4rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:var(--amber);cursor:pointer;}
 
-/* The card itself — fills full screen */
-.card-screen{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  display:none;flex-direction:column;
-  animation:cardReveal .28s cubic-bezier(.25,.46,.45,.94) both;
-}
-
-/* Close button — always top left */
-.card-close{
-  position:absolute;top:env(safe-area-inset-top,0);left:0;
-  padding:1.1rem 1.1rem .5rem;
-  z-index:10;
-  background:none;border:none;
-  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:rgba(255,255,255,.45);cursor:pointer;
-  display:flex;align-items:center;gap:.3rem;transition:color .18s;
-}
-.card-close:hover{color:rgba(255,255,255,.8);}
-
-/* Card number / edition badge */
-.card-screen-badge{
-  position:absolute;top:env(safe-area-inset-top,0);right:0;
-  padding:1.1rem 1.1rem .5rem;
-  font-size:.5rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(255,255,255,.28);z-index:10;
-}
-
-/* Front face */
-.card-face{
-  flex:1;display:flex;flex-direction:column;
-  justify-content:center;
-  padding:5rem 2rem 2rem;
-  position:relative;
-}
-.card-face-label{
-  font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-  margin-bottom:1.1rem;
-}
-.card-face-q{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(2rem,6.5vw,2.8rem);
-  font-style:italic;font-weight:400;
-  color:#fff;line-height:1.4;
-  margin-bottom:1.6rem;
-}
-.card-face-hint{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.25rem;font-style:italic;
-  color:rgba(255,255,255,.55);line-height:1.65;
-}
-
-/* Bottom action bar */
-.card-bar{
-  padding:.85rem 1.1rem calc(.85rem + env(safe-area-inset-bottom,0));
-  display:flex;flex-direction:column;gap:.5rem;
-  border-top:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.25);
-  backdrop-filter:blur(12px);
-}
-.card-bar-flip{
-  width:100%;padding:.9rem;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:var(--r-md);
-  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;
-  color:#fff;cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.02em;
-}
-.card-bar-flip:hover{background:rgba(255,255,255,.18);}
-.card-bar-row{display:flex;gap:.5rem;}
-.card-bar-btn{
-  flex:1;padding:.8rem .5rem;
-  border-radius:var(--r-md);
-  font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;
-  cursor:pointer;border:none;transition:all .2s;text-align:center;letter-spacing:.01em;
-}
-.cbb-save{background:rgba(255,255,255,.08);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.1);}
-.cbb-share{background:rgba(255,255,255,.08);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.1);}
-.cbb-save:hover,.cbb-share:hover{background:rgba(255,255,255,.15);color:#fff;}
-
-/* Back face — deeper prompts */
-.card-back-screen{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  display:none;flex-direction:column;
-  animation:cardReveal .25s ease both;
-}
-.card-back-screen.open{display:flex;}
-.card-back-inner{
-  flex:1;padding:5.5rem 2rem 1.5rem;
-  overflow-y:auto;
-}
-.card-back-inner::-webkit-scrollbar{display:none;}
-.card-back-label{
-  font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(255,255,255,.45);margin-bottom:1.2rem;
-}
-.deeper-row{
-  padding:.95rem 0;border-bottom:1px solid rgba(255,255,255,.08);
-}
-.deeper-row:last-child{border-bottom:none;}
-.deeper-type{
-  font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
-  margin-bottom:.42rem;
-}
-.deeper-text{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.45rem;font-style:italic;color:rgba(255,255,255,.88);line-height:1.5;
-}
-
-/* WIT & WONDER full screen */
-.ww-screen{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  display:none;
-  flex-direction:column;justify-content:center;align-items:center;
-  padding:3rem 2rem;text-align:center;
-  animation:cardReveal .28s ease both;
-}
-.ww-screen.open{display:flex;}
-.ww-screen-type{font-size:.54rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:1.2rem;}
-.ww-screen-q{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,6vw,2.6rem);font-style:italic;color:#fff;line-height:1.4;margin-bottom:2rem;}
-.ww-screen-reveal{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.6rem,5.5vw,2.4rem);
-  font-style:italic;color:rgba(255,255,255,.75);
-  line-height:1.5;display:none;
-  background:rgba(255,255,255,.06);border-radius:var(--r-lg);
-  padding:1.2rem 1.5rem;border:1px solid rgba(255,255,255,.1);
-  width:100%;margin-bottom:1.5rem;animation:cardReveal .3s ease both;
-}
-
-.ww-reveal-btn{
-  padding:.85rem 2rem;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-  border-radius:999px;
-  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;color:#fff;
-  cursor:pointer;transition:all .2s;
-}
-.ww-reveal-btn:hover{background:rgba(255,255,255,.18);}
-
-/* ── ACCOUNT MODAL ── */
-.account-modal{
-  position:fixed;top:0;left:0;right:0;bottom:0;z-index:600;
-  background:rgba(0,0,0,.92);backdrop-filter:blur(16px);
-  display:none;align-items:flex-end;
-}
-.account-modal.open{display:flex;}
-.account-sheet{
-  width:100%;max-width:430px;margin:0 auto;
-  background:var(--card);
-  border-radius:24px 24px 0 0;
-  border-top:2px solid var(--amber);
-  padding:1.5rem 1.4rem 2.5rem;
-  animation:slideUp .35s cubic-bezier(.34,1.1,.64,1) both;
-}
-.sheet-handle{width:32px;height:3px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto .9rem;}
-.sheet-kicker{font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);margin-bottom:.35rem;}
-.sheet-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--cream);margin-bottom:.4rem;}
-.sheet-sub{font-size:.82rem;color:var(--cream-dim);line-height:1.6;margin-bottom:1.35rem;}
-.sheet-input{width:100%;padding:.82rem .95rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--cream);outline:none;margin-bottom:.55rem;transition:border-color .18s;}
-.sheet-input:focus{border-color:rgba(201,125,58,.45);}
-.sheet-input::placeholder{color:rgba(242,232,216,.25);}
-.sheet-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:.55rem;letter-spacing:.02em;transition:all .2s;}
-.sheet-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,125,58,.4);}
-.sheet-cancel{width:100%;padding:.7rem;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.4);cursor:pointer;transition:color .18s;}
-.sheet-cancel:hover{color:rgba(242,232,216,.7);}
-.sheet-note{font-size:.62rem;color:rgba(242,232,216,.22);text-align:center;margin-top:.4rem;line-height:1.6;}
-
-/* ── TOAST ── */
-.toast{
-  position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--card);border:1px solid rgba(201,125,58,.25);
-  border-radius:999px;padding:.48rem 1.1rem;
-  font-size:.72rem;font-weight:600;color:var(--cream);
-  z-index:9999;white-space:nowrap;
-  opacity:0;transition:all .25s;pointer-events:none;
-}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ── RESPONSE SCREEN ── */
-.response-screen{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  display:none;flex-direction:column;
-  animation:cardReveal .28s ease both;
-}
+/* RESPONSE SCREEN */
+.response-screen{display:none;position:fixed;inset:0;z-index:200;background:var(--ink2);flex-direction:column;padding:1.4rem 1.3rem 2rem;}
 .response-screen.open{display:flex;}
-.response-inner{
-  flex:1;padding:4.5rem 1.6rem 1rem;
-  display:flex;flex-direction:column;
-}
-.response-q-echo{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;font-style:italic;
-  color:rgba(255,255,255,.38);line-height:1.5;
-  margin-bottom:1.2rem;
-  padding-bottom:1rem;
-  border-bottom:1px solid rgba(255,255,255,.1);
-}
-.response-prompt{
-  font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(255,255,255,.4);margin-bottom:.65rem;
-}
-.response-textarea{
-  flex:1;
-  background:rgba(255,255,255,.07);
-  border:1.5px solid rgba(255,255,255,.12);
-  border-radius:var(--r-lg);
-  padding:1rem 1.1rem;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.25rem;font-style:italic;
-  color:#fff;line-height:1.6;
-  resize:none;outline:none;
-  transition:border-color .2s;
-  min-height:160px;
-}
-.response-textarea::placeholder{
-  color:rgba(255,255,255,.2);
-  font-style:italic;
-}
-.response-textarea:focus{border-color:rgba(255,255,255,.28);}
-.response-bar{
-  padding:.85rem 1.1rem calc(.85rem + env(safe-area-inset-bottom,0));
-  border-top:1px solid rgba(255,255,255,.08);
-  background:rgba(0,0,0,.25);backdrop-filter:blur(12px);
-}
-.response-bar-label{
-  font-size:.54rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(255,255,255,.28);text-align:center;margin-bottom:.6rem;
-}
-.response-bar-row{display:flex;gap:.5rem;}
-.response-keep{
-  flex:1;padding:.85rem;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:var(--r-md);
-  font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;
-  color:rgba(255,255,255,.8);cursor:pointer;transition:all .2s;text-align:center;
-}
-.response-keep:hover{background:rgba(255,255,255,.16);}
-.response-share{
-  flex:1;padding:.85rem;
-  background:linear-gradient(135deg,var(--amber),var(--amber2));
-  border:none;border-radius:var(--r-md);
-  font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;
-  color:#fff;cursor:pointer;transition:all .2s;text-align:center;
-}
-.response-share:hover{transform:translateY(-1px);}
+.response-q-echo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(242,232,216,.45);line-height:1.5;margin-top:2.2rem;margin-bottom:1rem;padding:.8rem 1rem;background:rgba(255,255,255,.04);border-radius:var(--r-md);border-left:2px solid var(--amber);}
+.response-prompt{font-size:.55rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.4);margin-bottom:.5rem;}
+.response-textarea{width:100%;min-height:120px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:.9rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--cream);outline:none;resize:none;line-height:1.6;}
+.response-textarea:focus{border-color:rgba(201,125,58,.3);}
+.response-bar{margin-top:auto;padding-top:1rem;}
+.response-bar-label{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.35);margin-bottom:.6rem;}
+.response-bar-row{display:flex;gap:.65rem;}
+.response-keep,.response-share{flex:1;padding:.75rem;border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:rgba(242,232,216,.65);}
+.response-share{background:rgba(201,125,58,.15);border-color:rgba(201,125,58,.3);color:var(--amber);}
 
-/* ══ SOCIAL AREA AMBIENT LIGHTING ══ */
-@keyframes gentleFloat{0%,100%{transform:translateY(0) scale(1);opacity:.55}50%{transform:translateY(-8px) scale(1.04);opacity:.8}}
-@keyframes softPulse{0%,100%{opacity:.35}50%{opacity:.65}}
-@keyframes lightLeak{0%,100%{opacity:.03}50%{opacity:.08}}
+/* ACCOUNT MODAL */
+.account-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:300;align-items:flex-end;justify-content:center;}
+.account-modal.open{display:flex;}
+.account-sheet{background:var(--surface);border-radius:var(--r-xl) var(--r-xl) 0 0;width:100%;max-width:430px;padding:1.4rem 1.4rem 2.5rem;animation:slideUp .3s ease both;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:999px;margin:0 auto 1.2rem;}
+.sheet-kicker{font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);margin-bottom:.35rem;}
+.sheet-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--cream);margin-bottom:.35rem;}
+.sheet-sub{font-size:.82rem;color:rgba(242,232,216,.5);line-height:1.6;margin-bottom:1rem;}
+.sheet-input{width:100%;padding:.82rem .95rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--cream);outline:none;margin-bottom:.55rem;}
+.sheet-input:focus{border-color:rgba(201,125,58,.4);}
+.sheet-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:.55rem;}
+.sheet-cancel{width:100%;background:none;border:none;color:rgba(242,232,216,.35);font-family:'Nunito',sans-serif;font-size:.78rem;cursor:pointer;padding:.4rem;}
+.sheet-note{text-align:center;font-size:.62rem;color:rgba(242,232,216,.22);margin-top:.5rem;}
 
-/* Bokeh circles */
-.bokeh{position:absolute;border-radius:50%;filter:blur(32px);pointer-events:none;z-index:0;}
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(20,30,25,.96);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.55rem 1.2rem;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:600;color:var(--cream);z-index:400;white-space:nowrap;animation:toastIn .25s ease both;pointer-events:none;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-/* Fairy dot */
-.fairy-dot{position:absolute;border-radius:50%;pointer-events:none;z-index:0;animation:gentleFloat var(--dur,10s) var(--del,0s) ease-in-out infinite;}
-
-/* Vertical light leak */
-.light-leak{position:absolute;pointer-events:none;z-index:0;filter:blur(6px);}
-
-/* Atmospheric fade transition from content to social */
-.social-fade-in{height:60px;background:linear-gradient(180deg,transparent,rgba(30,16,22,.6));pointer-events:none;margin-top:-8px;position:relative;z-index:2;}
-
-
-/* ── LOCKED CONTENT ── */
-.locked-card{position:relative;cursor:pointer;opacity:.72;}
-.locked-card::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(6,10,8,.38);border-radius:inherit;pointer-events:none;z-index:1;}
-.lock-badge{position:absolute;top:9px;right:9px;z-index:2;background:rgba(201,125,58,.12);border:1px solid rgba(201,125,58,.32);border-radius:999px;padding:3px 9px;font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.82);}
-.locked-card:active{opacity:.55;}
-
-/* ── UPGRADE SHEET ── */
-.upgrade-sheet{position:fixed;top:0;left:0;right:0;bottom:0;z-index:700;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);display:none;align-items:flex-end;}
-.upgrade-sheet.open{display:flex;}
-.upgrade-inner{width:100%;max-width:430px;margin:0 auto;background:linear-gradient(160deg,#0d2438,#121040);border-radius:24px 24px 0 0;border-top:1px solid rgba(201,125,58,.28);padding:1.5rem 1.4rem 2.5rem;animation:slideUp .35s cubic-bezier(.34,1.1,.64,1) both;}
-.upgrade-handle{width:32px;height:3px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto 1rem;}
-.upgrade-kicker{font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.65);margin-bottom:.4rem;}
-.upgrade-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--cream);margin-bottom:.4rem;}
-.upgrade-sub{font-size:.84rem;color:var(--cream-dim);line-height:1.65;margin-bottom:1.4rem;}
-.upgrade-tiers{display:flex;gap:.5rem;margin-bottom:1.2rem;}
-.upgrade-tier{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.85rem .7rem;text-align:center;cursor:pointer;transition:all .2s;}
-.upgrade-tier.featured{border-color:rgba(201,125,58,.4);background:rgba(201,125,58,.08);}
-.upgrade-tier-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--cream);margin-bottom:.2rem;}
-.upgrade-tier-price{font-size:.7rem;font-weight:700;color:rgba(201,125,58,.75);letter-spacing:.04em;}
-.upgrade-tier-desc{font-size:.62rem;color:rgba(242,232,216,.4);margin-top:.25rem;line-height:1.4;}
-.upgrade-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:.5rem;letter-spacing:.02em;}
-.upgrade-cancel{width:100%;padding:.65rem;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(242,232,216,.35);cursor:pointer;}
-
-
-/* ── RATING SYSTEM ── */
-.rating-row{display:flex;align-items:center;justify-content:center;gap:1rem;padding:.55rem 0 .2rem;border-top:1px solid rgba(255,255,255,.07);margin-top:.4rem;}
-.rating-btn{display:flex;align-items:center;gap:.28rem;background:none;border:1px solid rgba(255,255,255,.12);cursor:pointer;padding:.3rem .75rem;border-radius:999px;transition:all .2s;font-family:'DM Sans',sans-serif;font-size:.6rem;font-weight:600;color:rgba(255,255,255,.32);letter-spacing:.06em;text-transform:uppercase;}
-.rating-btn:hover{border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.55);}
-.rating-btn.rated-up{color:rgba(160,210,160,.8);border-color:rgba(160,210,160,.35);background:rgba(160,210,160,.07);}
-.rating-btn.rated-down{color:rgba(210,160,160,.7);border-color:rgba(210,160,160,.28);background:rgba(210,160,160,.06);}
-.rating-icon{font-size:.7rem;opacity:.7;}
-
-/* Follow-up after thumbs down */
-.rating-followup{max-height:0;overflow:hidden;transition:max-height .3s ease,opacity .3s ease;opacity:0;}
-.rating-followup.open{max-height:200px;opacity:1;}
-.followup-inner{padding:.7rem .5rem .2rem;border-top:1px solid rgba(255,255,255,.07);margin-top:.3rem;}
-.followup-q{font-size:.62rem;font-weight:600;color:rgba(255,255,255,.38);text-align:center;margin-bottom:.55rem;letter-spacing:.04em;}
-.followup-opts{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;}
-.followup-opt{padding:.3rem .65rem;border-radius:999px;border:1px solid rgba(255,255,255,.15);font-size:.6rem;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;background:none;}
-.followup-opt:hover{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7);}
-.followup-opt.picked{border-color:rgba(255,255,255,.35);color:rgba(255,255,255,.75);background:rgba(255,255,255,.07);}
-
-/* Shelf card rating — tiny, after interaction */
-.shelf-rating{display:flex;align-items:center;gap:.4rem;padding:.3rem .85rem .5rem;opacity:0;transition:opacity .3s;}
-.shelf-rating.show{opacity:1;}
-.shelf-rating-btn{background:none;border:none;cursor:pointer;font-size:.75rem;padding:.1rem .2rem;border-radius:4px;transition:all .18s;color:rgba(255,255,255,.3);}
-.shelf-rating-btn:hover{color:rgba(255,255,255,.65);}
-.shelf-rating-btn.up{color:rgba(100,220,100,.8);}
-.shelf-rating-btn.dn{color:rgba(220,100,100,.7);}
-.shelf-rating-lbl{font-size:.5rem;color:rgba(255,255,255,.22);font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
-
-@media (min-width: 768px) {
-  body { font-size: 115%; }
-  .app { max-width: min(600px, 92vw) !important; }
-}
-@media (min-width: 1100px) {
-  body { font-size: 125%; }
-  .app { max-width: min(720px, 88vw) !important; }
-}
-
-.card-dots{position:absolute;top:.6rem;right:.6rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;background:rgba(255,255,255,.08);font-size:.7rem;color:rgba(242,232,216,.4);transition:all .15s;z-index:5;}
-.card-dots:hover{background:rgba(255,255,255,.14);color:rgba(242,232,216,.7);}
-
-
-
-
-
-
-.card-back-face{
-  position:absolute;inset:0;
-  transform:rotateY(180deg);
-  background:var(--ink2);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:1.8rem 1.4rem;
-  text-align:center;
-}
-.card-deck-brand{font-family:'Pacifico',cursive;font-size:1.05rem;color:var(--amber);text-shadow:0 0 20px rgba(201,125,58,.3);margin-bottom:.5rem;}
-.card-deck-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.85rem;color:rgba(242,232,216,.4);letter-spacing:.08em;margin-bottom:1.2rem;}
-.card-deck-tap{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.4);}
-.card-deck-pattern{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(45deg,rgba(201,125,58,.5) 0px,rgba(201,125,58,.5) 1px,transparent 1px,transparent 12px),repeating-linear-gradient(-45deg,rgba(201,125,58,.5) 0px,rgba(201,125,58,.5) 1px,transparent 1px,transparent 12px);pointer-events:none;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.card-back-face[data-deck="Family"],
-.card-back-face[data-deck="family"] {
-  background: linear-gradient(145deg, #1a1008, #2a1c08);
-  border: 1px solid rgba(201,125,58,.25);
-}
-.card-back-face[data-deck="Get Real"],
-.card-back-face[data-deck="get_real"] {
-  background: linear-gradient(145deg, #0e0808, #1c0f0f);
-  border: 1px solid rgba(160,50,50,.3);
-}
-.card-back-face[data-deck="get_real"] .card-deck-brand { color: #c85050; text-shadow: 0 0 20px rgba(200,80,80,.3); }
-.card-back-face[data-deck="get_real"] .card-deck-tap { color: rgba(200,80,80,.4); }
-.card-back-face[data-deck="Wit and Wonder"],
-.card-back-face[data-deck="wit_wonder"] {
-  background: linear-gradient(145deg, #080e1a, #0c1428);
-  border: 1px solid rgba(80,120,200,.25);
-}
-.card-back-face[data-deck="wit_wonder"] .card-deck-brand { color: #6090d8; text-shadow: 0 0 20px rgba(80,120,200,.3); }
-.card-back-face[data-deck="wit_wonder"] .card-deck-tap { color: rgba(80,120,200,.4); }
-.card-back-face[data-deck="Legacy"],
-.card-back-face[data-deck="legacy"] {
-  background: linear-gradient(145deg, #0f0e06, #1a1808);
-  border: 1px solid rgba(184,134,11,.25);
-}
-.card-back-face[data-deck="legacy"] .card-deck-brand { color: #c9a830; text-shadow: 0 0 20px rgba(184,134,11,.3); }
-.card-back-face[data-deck="legacy"] .card-deck-tap { color: rgba(184,134,11,.4); }
-.card-back-face[data-deck="Dream Out Loud"],
-.card-back-face[data-deck="dream_out_loud"] {
-  background: linear-gradient(145deg, #080a18, #0e1020);
-  border: 1px solid rgba(120,80,200,.25);
-}
-.card-back-face[data-deck="dream_out_loud"] .card-deck-brand { color: #9060d0; text-shadow: 0 0 20px rgba(120,80,200,.3); }
-.card-back-face[data-deck="dream_out_loud"] .card-deck-tap { color: rgba(120,80,200,.4); }
-.card-back-face[data-deck="Seasonal"],
-.card-back-face[data-deck="seasonal"] {
-  background: linear-gradient(145deg, #081208, #0e1e10);
-  border: 1px solid rgba(80,160,80,.25);
-}
-.card-back-face[data-deck="seasonal"] .card-deck-brand { color: #60b060; text-shadow: 0 0 20px rgba(80,160,80,.3); }
-.card-back-face[data-deck="seasonal"] .card-deck-tap { color: rgba(80,160,80,.4); }
-
-/* ══════════════════════════════════════════
-   CC CARD FLIP SYSTEM v2
-   Every card face-down first.
-   Depth layers inside the card, never outside.
-   Back mirrors front in color.
-══════════════════════════════════════════ */
-
-/* SCENE WRAPPER */
-.cc-card-scene{flex-shrink:0;width:210px;min-height:230px;perspective:1000px;cursor:pointer;animation:cardIn .4s ease both;}
-.cc-card-inner{position:relative;width:100%;min-height:230px;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
-.cc-card-inner.flipped{transform:rotateY(180deg);}
-.cc-card-back,.cc-card-front{position:absolute;inset:0;border-radius:var(--r-lg);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
-
-/* BACK FACE */
-.cc-card-back{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.5rem 1rem;position:relative;}
-.cc-card-back::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(255,255,255,.12),transparent 45%);pointer-events:none;}
-.cc-card-back::after{content:'';position:absolute;inset:0;opacity:.055;background-image:repeating-linear-gradient(45deg,currentColor 0,currentColor 1px,transparent 1px,transparent 14px),repeating-linear-gradient(-45deg,currentColor 0,currentColor 1px,transparent 1px,transparent 14px);pointer-events:none;}
-.cc-back-brand{font-family:'Pacifico',cursive;font-size:.98rem;margin-bottom:.28rem;position:relative;z-index:1;text-shadow:0 0 20px rgba(0,0,0,.4);}
-.cc-back-deck{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.72rem;font-weight:300;letter-spacing:.07em;opacity:.42;margin-bottom:1.1rem;position:relative;z-index:1;}
-.cc-back-tap{font-family:'Nunito',sans-serif;font-size:.46rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;opacity:.32;position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
-
-/* FRONT FACE */
-.cc-card-front{transform:rotateY(180deg);display:flex;flex-direction:column;}
-.cc-card-front::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.12),transparent 40%);pointer-events:none;border-radius:var(--r-lg);}
-.cc-front-top{padding:1.1rem 1rem .7rem;flex-shrink:0;position:relative;z-index:1;}
-.cc-front-label{font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.45rem;opacity:.8;}
-.cc-front-q{font-family:'Cormorant Garamond',serif;font-size:.97rem;font-style:italic;color:var(--cream);line-height:1.5;}
-.cc-front-hint{font-size:.65rem;color:rgba(242,232,216,.48);margin-top:.4rem;line-height:1.4;}
-.cc-flip-hint{font-size:.44rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.12);text-align:right;padding:.2rem .9rem .5rem;position:relative;z-index:1;}
-
-/* DEPTH LAYERS — inside card front, fade in after flip */
-.cc-depth-layers{flex-shrink:0;position:relative;z-index:1;}
-.cc-depth-divider{height:1px;background:rgba(255,255,255,.07);margin:0 1rem;opacity:0;transition:opacity .4s ease;}
-.cc-depth-divider.vis{opacity:1;}
-.cc-depth-layer{opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease;pointer-events:none;}
-.cc-depth-layer.vis{opacity:1;transform:translateY(0);pointer-events:all;}
-.cc-depth-header{display:flex;align-items:center;justify-content:space-between;padding:.48rem 1rem .2rem;}
-.cc-depth-name{font-family:'Nunito',sans-serif;font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;}
-.cc-depth-toggle{background:none;border:none;font-size:.44rem;font-family:'Nunito',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:rgba(242,232,216,.18);padding:0;transition:color .15s;}
-.cc-depth-toggle:hover{color:rgba(242,232,216,.45);}
-.cc-depth-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.83rem;line-height:1.62;padding:0 1rem .7rem;overflow:hidden;max-height:200px;transition:max-height .35s ease,opacity .3s ease,padding .3s ease;}
-.cc-depth-text.collapsed{max-height:0;opacity:0;padding-bottom:0;}
-.connect .cc-depth-name{color:var(--amber);}
-.connect .cc-depth-text{color:rgba(242,232,216,.58);}
-.insight .cc-depth-name{color:var(--purple2);}
-.insight .cc-depth-text{color:rgba(200,175,240,.62);}
-.legacy-layer .cc-depth-name{color:#c9a830;}
-.legacy-layer .cc-depth-text{color:rgba(200,225,175,.62);}
-
-/* DECK THEMES — back + front share same palette */
-.dk-family .cc-card-back{background:linear-gradient(145deg,#1e0c02,#4a2206);border:1px solid rgba(201,125,58,.3);}
-.dk-family .cc-back-brand,.dk-family .cc-back-tap{color:var(--amber);}
-.dk-family .cc-card-back::after{color:var(--amber);}
-.dk-family .cc-card-front{background:linear-gradient(145deg,#3a1800,#7a3810);border:1px solid rgba(201,125,58,.2);}
-.dk-family .cc-front-label{color:var(--amber2);}
-
-.dk-couples .cc-card-back{background:linear-gradient(145deg,#1a0410,#4a0c20);border:1px solid rgba(192,80,120,.28);}
-.dk-couples .cc-back-brand,.dk-couples .cc-back-tap{color:#e06090;}
-.dk-couples .cc-card-back::after{color:#c05070;}
-.dk-couples .cc-card-front{background:linear-gradient(145deg,#3a0818,#7a1030);border:1px solid rgba(192,80,56,.2);}
-.dk-couples .cc-front-label{color:var(--coral2);}
-
-.dk-faith .cc-card-back{background:linear-gradient(145deg,#0e0820,#2a1050);border:1px solid rgba(107,60,162,.3);}
-.dk-faith .cc-back-brand,.dk-faith .cc-back-tap{color:var(--purple2);}
-.dk-faith .cc-card-back::after{color:var(--purple);}
-.dk-faith .cc-card-front{background:linear-gradient(145deg,#1a1040,#381868);border:1px solid rgba(107,60,162,.2);}
-.dk-faith .cc-front-label{color:var(--purple2);}
-
-.dk-dinner .cc-card-back{background:linear-gradient(145deg,#041408,#0e3018);border:1px solid rgba(42,138,114,.28);}
-.dk-dinner .cc-back-brand,.dk-dinner .cc-back-tap{color:var(--teal2);}
-.dk-dinner .cc-card-back::after{color:var(--teal);}
-.dk-dinner .cc-card-front{background:linear-gradient(145deg,#0a2818,#1a5030);border:1px solid rgba(42,138,114,.2);}
-.dk-dinner .cc-front-label{color:var(--teal2);}
-
-.dk-friends .cc-card-back{background:linear-gradient(145deg,#060e1a,#102040);border:1px solid rgba(58,106,170,.28);}
-.dk-friends .cc-back-brand,.dk-friends .cc-back-tap{color:var(--navy2);}
-.dk-friends .cc-card-back::after{color:var(--navy);}
-.dk-friends .cc-card-front{background:linear-gradient(145deg,#1a2840,#2a4070);border:1px solid rgba(58,106,170,.2);}
-.dk-friends .cc-front-label{color:var(--navy2);}
-
-.dk-legacy .cc-card-back{background:linear-gradient(145deg,#100e02,#302808);border:1px solid rgba(184,134,11,.28);}
-.dk-legacy .cc-back-brand,.dk-legacy .cc-back-tap{color:#c9a830;}
-.dk-legacy .cc-card-back::after{color:#c9a830;}
-.dk-legacy .cc-card-front{background:linear-gradient(145deg,#1a1600,#3a3000);border:1px solid rgba(184,134,11,.2);}
-.dk-legacy .cc-front-label{color:#c9a830;}
-
-.dk-getreal .cc-card-back{background:linear-gradient(145deg,#0e0808,#200e0e);border:1px solid rgba(160,50,50,.28);}
-.dk-getreal .cc-back-brand,.dk-getreal .cc-back-tap{color:#c85050;}
-.dk-getreal .cc-card-back::after{color:#c85050;}
-.dk-getreal .cc-card-front{background:linear-gradient(145deg,#1c0c0c,#3c1414);border:1px solid rgba(160,50,50,.2);}
-.dk-getreal .cc-front-label{color:#c85050;}
-
-/* WIT & WONDER — its own universe */
-.ww-card-scene{flex-shrink:0;width:168px;min-height:195px;perspective:900px;cursor:pointer;animation:cardIn .4s ease both;}
-.ww-card-inner{position:relative;width:100%;min-height:195px;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;}
-.ww-card-inner.flipped{transform:rotateY(180deg);}
-.ww-card-back,.ww-card-front-face{position:absolute;inset:0;border-radius:var(--r-lg);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
-.ww-card-back{background:linear-gradient(145deg,#04080e,#0a1420);border:1px solid rgba(80,140,220,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.2rem .8rem;position:relative;}
-.ww-card-back::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 35% 28%,rgba(80,140,220,.15),transparent 55%);pointer-events:none;}
-.ww-card-back::after{content:'';position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle,rgba(100,160,255,.8) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;}
-.ww-back-brand{font-family:'Pacifico',cursive;font-size:.88rem;color:#6090d8;text-shadow:0 0 20px rgba(80,120,200,.4);margin-bottom:.28rem;position:relative;z-index:1;}
-.ww-back-deck{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.68rem;color:rgba(160,200,255,.38);letter-spacing:.07em;margin-bottom:1rem;position:relative;z-index:1;}
-.ww-back-tap{font-family:'Nunito',sans-serif;font-size:.44rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(80,120,200,.38);position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
-.ww-card-front-face{transform:rotateY(180deg);background:linear-gradient(145deg,#0a1220,#0e1c30);border:1px solid rgba(80,120,200,.15);display:flex;flex-direction:column;}
-.ww-card-front-face::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(80,140,220,.1),transparent 45%);pointer-events:none;border-radius:var(--r-lg);}
-.ww-front-top{padding:.88rem .85rem .55rem;flex-shrink:0;position:relative;z-index:1;}
-.ww-front-type{font-size:.46rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#6090d8;margin-bottom:.38rem;}
-.ww-front-q{font-family:'Cormorant Garamond',serif;font-size:.93rem;font-style:italic;color:var(--cream);line-height:1.44;}
-.ww-reveal-wrap{flex:1;padding:0 .85rem .6rem;position:relative;z-index:1;display:flex;flex-direction:column;justify-content:flex-end;}
-.ww-reveal-tap{font-size:.52rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(96,144,216,.45);cursor:pointer;padding:.4rem 0;}
-.ww-reveal-content{display:none;padding:.5rem 0 .3rem;font-size:.75rem;color:rgba(180,210,255,.62);line-height:1.45;border-top:1px solid rgba(80,120,200,.12);}
-.ww-reveal-content.open{display:block;}
-.ww-bridge{font-size:.65rem;color:rgba(180,210,255,.45);font-style:italic;margin-top:.4rem;line-height:1.4;}
-.ww-flip-hint{font-size:.42rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.1);text-align:right;padding:.2rem .85rem .45rem;position:relative;z-index:1;}
-
-/* ── HERO CARD FLIP ── */
-.hero-card-scene{margin:.85rem .9rem 0;perspective:1200px;cursor:pointer;animation:fadeUp .5s ease both;}
-.hero-card-inner{position:relative;width:100%;min-height:240px;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;border-radius:var(--r-xl);}
-.hero-card-inner.flipped{transform:rotateY(180deg);}
-.hero-back-face,.hero-front-face{position:absolute;inset:0;border-radius:var(--r-xl);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
-
-/* HERO BACK — special treatment */
-.hero-back-face{
-  background:linear-gradient(145deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:2.2rem 1.5rem;position:relative;
-}
-.hero-back-face::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28) 0%,transparent 55%),
-             radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22) 0%,transparent 50%);
-  animation:glow 4s ease-in-out infinite;pointer-events:none;}
-.hero-back-face::after{content:'';position:absolute;inset:0;opacity:.04;
-  background-image:repeating-linear-gradient(45deg,rgba(201,125,58,.6) 0,rgba(201,125,58,.6) 1px,transparent 1px,transparent 18px),
-                   repeating-linear-gradient(-45deg,rgba(201,125,58,.6) 0,rgba(201,125,58,.6) 1px,transparent 1px,transparent 18px);
-  pointer-events:none;}
-.hero-back-brand{font-family:'Pacifico',cursive;font-size:1.4rem;color:var(--amber);
-  text-shadow:0 0 30px rgba(201,125,58,.4);margin-bottom:.4rem;position:relative;z-index:1;}
-.hero-back-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;
-  color:rgba(242,232,216,.38);letter-spacing:.06em;margin-bottom:1.6rem;position:relative;z-index:1;}
-.hero-back-tap{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;
-  letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.38);
-  position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
-
-/* HERO FRONT — same as before but as back face of flip */
-.hero-front-face{transform:rotateY(180deg);}
-
-/* ── RETENTION BANNER ── */
-.retention-banner{
-  margin:.75rem .9rem;padding:.85rem 1rem;
-  background:rgba(201,125,58,.08);
-  border:1.5px solid rgba(201,125,58,.2);
-  border-radius:var(--r-md);
-  display:none;
-  animation:fadeUp .5s ease both;
-}
-.retention-banner.show{display:block;}
-.retention-banner-title{
-  font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
-  margin-bottom:.3rem;
-}
-.retention-banner-text{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:.85rem;color:rgba(242,232,216,.6);line-height:1.55;
-  margin-bottom:.6rem;
-}
-.retention-banner-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
-.retention-btn-save{
-  font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:.35rem .8rem;border-radius:999px;cursor:pointer;
-  background:rgba(201,125,58,.2);border:1px solid rgba(201,125,58,.35);
-  color:var(--amber);transition:all .2s;
-}
-.retention-btn-upgrade{
-  font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:.35rem .8rem;border-radius:999px;cursor:pointer;
-  background:linear-gradient(135deg,var(--amber),var(--amber2));
-  border:none;color:#fff;transition:all .2s;
-}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.4)}}
+@keyframes cardIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
 </style>
-  <script src="/cc-auth.js"></script>
-  <script src="/cc-cards.js"></script>
-  <script src="/cc-seasonal.js"></script>
-  <script src="/atmosphere.js" defer></script>
+<script src="/cc-auth.js"></script>
+<script src="/cc-cards.js"></script>
+<script src="/cc-seasonal.js"></script>
+<script src="/atmosphere.js" defer></script>
 </head>
 <body>
-
 <div class="app">
 
   <!-- TOP BAR -->
   <div class="topbar">
     <div class="topbar-brand">
       <div class="topbar-name">Gather</div>
-      <div class="topbar-date" id="topDate">Friday · May 8</div>
+      <div class="topbar-date" id="topDate">Monday · May 11</div>
     </div>
     <div class="topbar-right">
       <div class="topbar-btn" onclick="toast('Notifications coming soon')">🔔</div>
@@ -945,7 +241,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
   <!-- SCROLLABLE CONTENT -->
   <div class="scroll">
 
-    <!-- ── GATHER ORIENTATION ── -->
+    <!-- ORIENTATION -->
     <div style="padding:1.6rem 1.2rem .4rem;text-align:center;animation:fadeUp .6s ease both;">
       <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.4);line-height:1.8;letter-spacing:.02em;">
         Your daily space to reflect, connect, and play.<br>
@@ -953,19 +249,8 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
       </div>
     </div>
 
-    <!-- ── DATA RETENTION BANNER (free users approaching 12-month limit) ── -->
-    <div class="retention-banner" id="retentionBanner">
-      <div class="retention-banner-title">⏳ Your feed history expires soon</div>
-      <div class="retention-banner-text">Free accounts keep 12 months of posts. Yours expire in <span id="retentionDays">30</span> days — save what matters or upgrade to keep everything.</div>
-      <div class="retention-banner-actions">
-        <button class="retention-btn-save" onclick="exportFeedData()">Export my posts</button>
-        <button class="retention-btn-upgrade" onclick="triggerAccount('upgrade to save feed history')">Keep everything →</button>
-      </div>
-    </div>
-
-
-    <!-- ── HERO: TONIGHT'S EXPERIENCE ── -->
-    <div class="hero-card" onclick="openHeroCard()">
+    <!-- HERO CARD -->
+    <div class="hero-card" onclick="openCard('tonight')">
       <div class="hero-bg"></div>
       <div class="hero-particle" style="width:5px;height:5px;background:rgba(201,125,58,.5);top:18%;left:22%;animation:pulse 3s .2s ease-in-out infinite;box-shadow:0 0 8px 2px rgba(201,125,58,.3);"></div>
       <div class="hero-particle" style="width:3px;height:3px;background:rgba(107,60,162,.6);top:28%;right:18%;animation:pulse 3.8s .8s ease-in-out infinite;box-shadow:0 0 6px 2px rgba(107,60,162,.3);"></div>
@@ -973,9 +258,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
       <div class="hero-particle" style="width:3px;height:3px;background:rgba(201,125,58,.4);bottom:28%;right:24%;animation:pulse 4s 0s ease-in-out infinite;box-shadow:0 0 5px 2px rgba(201,125,58,.25);"></div>
       <div class="hero-inner">
         <div class="hero-label">This Week's Experience</div>
-        <div class="hero-question" id="heroQuestion">
-          "What's something people misunderstand about you at first?"
-        </div>
+        <div class="hero-question" id="heroQuestion">"What's something people misunderstand about you at first?"</div>
         <div class="hero-flip" id="heroFlip">
           <div class="hero-flip-label">Go deeper</div>
           <div class="hero-flip-item"><strong>Push:</strong> Has that misunderstanding ever worked in your favor?</div>
@@ -1011,236 +294,144 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
       </div>
     </div>
 
-    <!-- ── SHELF 1: TONIGHT'S CARDS ── -->
-    <div class="shelf">
+    <!-- TONIGHT'S CARDS -->
+    <div class="shelf" style="animation:fadeUp .5s .08s ease both;">
       <div class="shelf-header">
         <div class="shelf-title">Tonight's Cards</div>
-        <div class="shelf-link" id="tonightCount">2 today</div>
+        <div class="shelf-link" id="tonightCount">loading...</div>
       </div>
       <div class="shelf-row" id="tonightShelf">
-
-        <div class="conv-card card-family" onclick="openCard('family')">
+        <div class="conv-card card-family" data-ckey="default_0" onclick="openCard('family')">
           <div class="conv-card-label">Family</div>
           <div class="conv-card-q">"What would you tell your 20-year-old self — knowing what you know now?"</div>
           <div class="conv-card-hint">Take your time with this one.</div>
           <div class="conv-card-tap">Tap to open</div>
         </div>
-
-        <div class="conv-card card-couples" onclick="openCard('couples')">
+        <div class="conv-card card-couples" data-ckey="default_1" onclick="openCard('couples')">
           <div class="conv-card-label">Couples</div>
           <div class="conv-card-q">"When do you feel closest to me — not in the big moments, in the ordinary ones?"</div>
           <div class="conv-card-hint">This answer matters.</div>
           <div class="conv-card-tap">Tap to open</div>
         </div>
-
-              </div>
+      </div>
     </div>
 
-    <!-- ── SHELF 2: WIT & WONDER ── -->
-    <div class="shelf">
+    <!-- WIT & WONDER -->
+    <div class="shelf" style="animation:fadeUp .5s .16s ease both;">
       <div class="shelf-header">
         <div class="shelf-title">Wit &amp; Wonder</div>
         <div class="shelf-link" id="wwCount">loading...</div>
       </div>
       <div class="shelf-row" id="wwShelf">
-
         <div class="ww-card" id="ww1" onclick="openWW('ww1')">
           <div class="ww-card-top">
             <div class="ww-type">Riddle</div>
             <div class="ww-q">I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?</div>
           </div>
-          <div class="ww-reveal" id="ww1-r">An echo.</div>
+          <div class="ww-reveal" id="ww1r">An echo.</div>
           <div class="ww-tap">Tap for answer</div>
         </div>
-
         <div class="ww-card" id="ww2" onclick="openWW('ww2')">
           <div class="ww-card-top">
             <div class="ww-type">Joke</div>
             <div class="ww-q">Why don't scientists trust atoms?</div>
           </div>
-          <div class="ww-reveal" id="ww2-r">Because they make up everything.</div>
+          <div class="ww-reveal" id="ww2r">Because they make up everything.</div>
           <div class="ww-tap">Tap for punchline</div>
         </div>
-
         <div class="ww-card" id="ww3" onclick="openWW('ww3')">
           <div class="ww-card-top">
             <div class="ww-type">Riddle</div>
             <div class="ww-q">The more you take, the more you leave behind. What am I?</div>
           </div>
-          <div class="ww-reveal" id="ww3-r">Footsteps.</div>
+          <div class="ww-reveal" id="ww3r">Footsteps.</div>
           <div class="ww-tap">Tap for answer</div>
         </div>
-
-                  <div class="ww-reveal" id="ww5-r">Roosters don't lay eggs.</div>
+        <div class="ww-card" id="ww4" onclick="openWW('ww4')">
+          <div class="ww-card-top">
+            <div class="ww-type">Joke</div>
+            <div class="ww-q">I told my wife she should embrace her mistakes.</div>
+          </div>
+          <div class="ww-reveal" id="ww4r">She gave me a hug.</div>
+          <div class="ww-tap">Tap for punchline</div>
+        </div>
+        <div class="ww-card" id="ww5" onclick="openWW('ww5')">
+          <div class="ww-card-top">
+            <div class="ww-type">Brain Teaser</div>
+            <div class="ww-q">A rooster lays an egg on top of a barn roof. Which way does it roll?</div>
+          </div>
+          <div class="ww-reveal" id="ww5r">Roosters don't lay eggs.</div>
           <div class="ww-tap">Tap for answer</div>
         </div>
-
       </div>
     </div>
 
-    <!-- ── SHELF 3: DISCOVER YOU ── -->
-    <div class="shelf">
+    <!-- DISCOVER YOU -->
+    <div class="shelf" style="animation:fadeUp .5s .24s ease both;">
       <div class="shelf-header">
         <div class="shelf-title">Discover You</div>
-        <div class="shelf-link" id="quizCount">loading...</div>
+        <div class="shelf-link" id="quizCount">3 quizzes</div>
       </div>
       <div class="shelf-row" id="quizShelf">
-
-        <div class="quiz-card quiz-vibe" onclick="toast('Quiz opens here — launching soon')">
+        <div class="quiz-card quiz-vibe" onclick="toast('Quiz launches here — coming soon')">
           <div class="quiz-label">Light Identity</div>
           <div class="quiz-title">What's Your Vibe Tonight?</div>
           <div class="quiz-sub">Four questions. One honest answer.</div>
           <span class="quiz-start">Start →</span>
         </div>
-
-            </div>
-
-    <!-- ══ SOCIAL SECTION ══ -->
-    <div style="height:2.2rem;"></div>
-    <div style="position:relative;background:linear-gradient(180deg,#08101e 0%,#0a0e1c 40%,#090c18 100%);margin-top:0;overflow:hidden;">
-
-      <!-- Ambient glow — amber top, purple mid, dark below -->
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;
-        background:
-          radial-gradient(ellipse at 50% 0%,rgba(201,125,58,.1) 0%,transparent 38%),
-          radial-gradient(ellipse at 15% 28%,rgba(60,100,200,.09) 0%,transparent 40%),
-          radial-gradient(ellipse at 85% 48%,rgba(107,60,162,.09) 0%,transparent 42%),
-          radial-gradient(ellipse at 40% 70%,rgba(40,60,130,.07) 0%,transparent 44%),
-          linear-gradient(180deg,
-            rgba(255,215,150,.08) 0%,
-            rgba(60,100,200,.09) 18%,
-            rgba(107,60,162,.1) 38%,
-            rgba(30,20,80,.12) 62%,
-            rgba(0,0,0,.25) 100%);
-      "></div>
-
-      <!-- Bokeh atmosphere — layered depth, concentrated in upper social area -->
-      <div style="position:absolute;width:300px;height:240px;top:-5%;left:-15%;background:rgba(201,125,58,.07);filter:blur(68px);border-radius:50%;pointer-events:none;z-index:0;"></div>
-      <div style="position:absolute;width:250px;height:250px;top:5%;right:-12%;background:rgba(107,60,162,.07);filter:blur(72px);border-radius:50%;pointer-events:none;z-index:0;"></div>
-      <div style="position:absolute;width:220px;height:180px;top:28%;left:5%;background:rgba(60,100,200,.07);filter:blur(62px);border-radius:50%;pointer-events:none;z-index:0;"></div>
-      <div style="position:absolute;width:180px;height:180px;top:35%;right:8%;background:rgba(107,60,162,.06);filter:blur(58px);border-radius:50%;pointer-events:none;z-index:0;"></div>
-      <div style="position:absolute;width:160px;height:120px;top:55%;left:25%;background:rgba(201,125,58,.05);filter:blur(55px);border-radius:50%;pointer-events:none;z-index:0;"></div>
-
-      <!-- ═══ CLUSTERED FAIRY LIGHTS — organic, varied, concentrated near circles ═══ -->
-
-      <!-- CLUSTER A — upper left pocket, denser and slightly closer-feeling -->
-      <div style="position:absolute;top:6%;left:8%;width:4px;height:4px;border-radius:50%;background:rgba(255,238,190,.62);box-shadow:0 0 8px 3px rgba(220,165,80,.38),0 0 20px 7px rgba(201,125,58,.14);pointer-events:none;z-index:2;animation:gentleFloat 8s -1s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:9%;left:15%;width:2px;height:2px;border-radius:50%;background:rgba(255,228,172,.45);box-shadow:0 0 6px 3px rgba(210,150,70,.22),0 0 16px 6px rgba(201,125,58,.09);pointer-events:none;z-index:2;animation:softPulse 11s -4s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:4%;left:22%;width:3px;height:3px;border-radius:50%;background:rgba(255,232,180,.52);box-shadow:0 0 10px 4px rgba(218,158,72,.3),0 0 28px 10px rgba(201,125,58,.1);pointer-events:none;z-index:2;animation:gentleFloat 13s -7s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:11%;left:11%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(255,220,165,.35);box-shadow:0 0 5px 2px rgba(205,148,65,.16);pointer-events:none;z-index:2;animation:softPulse 9s -2s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:7%;left:30%;width:2px;height:2px;border-radius:50%;background:rgba(255,225,170,.38);box-shadow:0 0 7px 3px rgba(212,155,68,.18),0 0 18px 7px rgba(201,125,58,.07);pointer-events:none;z-index:2;animation:gentleFloat 16s -5s ease-in-out infinite;"></div>
-
-      <!-- CLUSTER B — upper right pocket, slightly softer/farther away -->
-      <div style="position:absolute;top:5%;left:62%;width:3px;height:3px;border-radius:50%;background:rgba(255,230,175,.48);box-shadow:0 0 9px 4px rgba(215,158,70,.26),0 0 24px 9px rgba(201,125,58,.1);pointer-events:none;z-index:2;animation:gentleFloat 10s -3s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:9%;left:72%;width:2px;height:2px;border-radius:50%;background:rgba(255,222,168,.38);box-shadow:0 0 8px 4px rgba(208,148,62,.18),0 0 22px 8px rgba(201,125,58,.07);pointer-events:none;z-index:2;animation:softPulse 14s -6s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:3%;left:80%;width:4px;height:4px;border-radius:50%;background:rgba(255,235,182,.55);box-shadow:0 0 10px 4px rgba(220,162,75,.32),0 0 26px 10px rgba(201,125,58,.11);pointer-events:none;z-index:2;animation:gentleFloat 11s -9s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:13%;left:68%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(255,218,162,.3);box-shadow:0 0 5px 2px rgba(200,145,60,.14);pointer-events:none;z-index:2;animation:softPulse 7s -1s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:7%;left:88%;width:2px;height:2px;border-radius:50%;background:rgba(255,225,170,.36);box-shadow:0 0 6px 3px rgba(210,152,65,.16);pointer-events:none;z-index:2;animation:gentleFloat 18s -4s ease-in-out infinite;"></div>
-
-      <!-- CLUSTER C — mid section, near circles row, softest/most atmospheric -->
-      <div style="position:absolute;top:30%;left:5%;width:2px;height:2px;border-radius:50%;background:rgba(255,220,165,.3);box-shadow:0 0 8px 4px rgba(201,125,58,.12),0 0 20px 8px rgba(201,125,58,.05);pointer-events:none;z-index:2;animation:softPulse 12s -3s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:34%;left:48%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(255,215,160,.26);box-shadow:0 0 6px 3px rgba(200,140,58,.1);pointer-events:none;z-index:2;animation:gentleFloat 20s -8s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:28%;right:10%;width:2px;height:2px;border-radius:50%;background:rgba(255,222,168,.28);box-shadow:0 0 7px 3px rgba(205,148,62,.11);pointer-events:none;z-index:2;animation:softPulse 15s -6s ease-in-out infinite;"></div>
-
-      <!-- A few outlier drifters — scattered outward, very dim -->
-      <div style="position:absolute;top:20%;left:42%;width:1px;height:1px;border-radius:50%;background:rgba(255,228,175,.22);box-shadow:0 0 5px 2px rgba(201,125,58,.08);pointer-events:none;z-index:1;animation:gentleFloat 22s -11s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:16%;right:35%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(255,218,160,.2);box-shadow:0 0 6px 2px rgba(195,135,55,.08);pointer-events:none;z-index:1;animation:softPulse 17s -14s ease-in-out infinite;"></div>
-
-      <!-- Stars — tiny, in the deeper indigo zone -->
-      <div style="position:absolute;top:18%;left:8%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(215,210,240,.45);pointer-events:none;z-index:1;animation:softPulse 5s -1s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:24%;left:55%;width:1px;height:1px;border-radius:50%;background:rgba(210,205,238,.38);pointer-events:none;z-index:1;animation:softPulse 7s -3s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:20%;right:16%;width:2px;height:2px;border-radius:50%;background:rgba(218,214,242,.42);pointer-events:none;z-index:1;animation:softPulse 6s -5s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:32%;left:28%;width:1px;height:1px;border-radius:50%;background:rgba(208,204,235,.35);pointer-events:none;z-index:1;animation:softPulse 9s -2s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:42%;right:32%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(212,208,238,.38);pointer-events:none;z-index:1;animation:softPulse 4.5s -4s ease-in-out infinite;"></div>
-
-      <!-- Tiny ambient particles — cream, blue, purple, teal — layered & barely-there -->
-      <!-- Cream/golden motes near circles -->
-      <div style="position:absolute;top:36%;left:12%;width:1px;height:1px;border-radius:50%;background:rgba(255,235,190,.45);box-shadow:0 0 5px 2px rgba(255,210,140,.18);pointer-events:none;z-index:1;animation:softPulse 6s -1s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:44%;left:38%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(255,228,175,.38);box-shadow:0 0 6px 2px rgba(201,125,58,.15);pointer-events:none;z-index:1;animation:softPulse 8s -3s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:40%;right:20%;width:1px;height:1px;border-radius:50%;background:rgba(255,232,180,.4);box-shadow:0 0 5px 2px rgba(201,125,58,.14);pointer-events:none;z-index:1;animation:softPulse 5s -2s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:50%;left:62%;width:1px;height:1px;border-radius:50%;background:rgba(255,225,168,.32);box-shadow:0 0 4px 1px rgba(201,125,58,.12);pointer-events:none;z-index:1;animation:softPulse 9s -5s ease-in-out infinite;"></div>
-      <!-- Soft blue motes -->
-      <div style="position:absolute;top:38%;left:26%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(160,185,240,.38);box-shadow:0 0 6px 2px rgba(80,120,200,.18);pointer-events:none;z-index:1;animation:gentleFloat 12s -4s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:48%;right:38%;width:1px;height:1px;border-radius:50%;background:rgba(150,178,235,.32);box-shadow:0 0 4px 2px rgba(70,110,195,.14);pointer-events:none;z-index:1;animation:softPulse 10s -6s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:56%;left:18%;width:2px;height:2px;border-radius:50%;background:rgba(155,182,238,.35);box-shadow:0 0 6px 3px rgba(75,115,200,.14);pointer-events:none;z-index:1;animation:gentleFloat 14s -2s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:62%;right:12%;width:1px;height:1px;border-radius:50%;background:rgba(148,174,232,.28);box-shadow:0 0 4px 1px rgba(68,108,192,.12);pointer-events:none;z-index:1;animation:softPulse 7s -8s ease-in-out infinite;"></div>
-      <!-- Purple motes deeper in section -->
-      <div style="position:absolute;top:52%;left:44%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(185,148,230,.32);box-shadow:0 0 5px 2px rgba(107,60,162,.16);pointer-events:none;z-index:1;animation:softPulse 11s -3s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:68%;left:30%;width:1px;height:1px;border-radius:50%;background:rgba(178,140,225,.28);box-shadow:0 0 4px 1px rgba(100,55,155,.12);pointer-events:none;z-index:1;animation:gentleFloat 16s -7s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:74%;right:28%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(180,142,228,.3);box-shadow:0 0 5px 2px rgba(103,58,160,.13);pointer-events:none;z-index:1;animation:softPulse 13s -1s ease-in-out infinite;"></div>
-      <!-- Faint teal motes -->
-      <div style="position:absolute;top:58%;right:44%;width:1px;height:1px;border-radius:50%;background:rgba(140,210,195,.28);box-shadow:0 0 4px 2px rgba(42,138,114,.12);pointer-events:none;z-index:1;animation:softPulse 15s -9s ease-in-out infinite;"></div>
-      <div style="position:absolute;top:72%;left:55%;width:1.5px;height:1.5px;border-radius:50%;background:rgba(135,205,188,.25);box-shadow:0 0 5px 2px rgba(40,132,110,.1);pointer-events:none;z-index:1;animation:gentleFloat 18s -4s ease-in-out infinite;"></div>
-
-      <!-- ══ MY CIRCLES ══ -->
-      <div style="position:relative;z-index:2;padding:2rem 0 1.6rem;">
-        <div style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;background:radial-gradient(ellipse at 50% 60%,rgba(107,60,162,.18) 0%,transparent 52%);"></div>
-        <div style="position:relative;z-index:1;padding:0 1.1rem;margin-bottom:1rem;display:flex;align-items:baseline;justify-content:space-between;">
-          <div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:400;color:var(--cream);">My Circles</div>
-          </div>
-          <div style="font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:.75;" onclick="window.location.href='circles.html'">See All</div>
+        <div class="quiz-card quiz-table" onclick="toast('Quiz launches here — coming soon')">
+          <div class="quiz-label">Dinner Style</div>
+          <div class="quiz-title">How Do You Hold a Table?</div>
+          <div class="quiz-sub">The way you eat says a lot.</div>
+          <span class="quiz-start">Start →</span>
         </div>
-
-        <!-- Dynamic circles row — populated by loadCircles() -->
-        <div id="circlesRow" style="display:flex;gap:.75rem;overflow-x:auto;scrollbar-width:none;padding:0 1.1rem .4rem;">
-          <!-- Filled by JS -->
+        <div class="quiz-card quiz-energy" onclick="toast('Quiz launches here — coming soon')">
+          <div class="quiz-label">Energy Type</div>
+          <div class="quiz-title">What Kind of Energy Do You Bring?</div>
+          <div class="quiz-sub">Six types. Find yours.</div>
+          <span class="quiz-start">Start →</span>
         </div>
-
-        <!-- Empty state — shown when user has no circles -->
-        <div id="circlesEmptyState" style="display:none;padding:1.5rem 1.1rem;text-align:center;">
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.4);margin-bottom:1rem;">Your circles will live here.</div>
-          <button onclick="window.location.href='circles.html'" style="padding:.65rem 1.4rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
+        <div class="quiz-card quiz-locked-card" onclick="triggerAccount('unlock more quizzes')">
+          <div class="quiz-label">Connect</div>
+          <div class="quiz-title" style="color:rgba(242,232,216,.3);">More quizzes in Connect</div>
+          <div class="quiz-sub" style="color:rgba(242,232,216,.2);">Deeper identity, values & relationship styles.</div>
+          <span class="quiz-locked">🔒 Unlock →</span>
         </div>
-      </div>
-
-
-  <!-- RESPONSE SCREEN -->
-  <div class="response-screen" id="responseScreen">
-    <button class="card-close" onclick="closeResponse()">← Back</button>
-    <div class="response-inner">
-      <div class="response-q-echo" id="responseEcho"></div>
-      <div class="response-prompt">Your answer</div>
-      <textarea class="response-textarea" id="responseText" placeholder="What comes to mind..."></textarea>
-    </div>
-    <div class="response-bar">
-      <div class="response-bar-label">What do you want to do with this?</div>
-      <div class="response-bar-row">
-        <button class="response-keep" onclick="keepAnswer()">Keep privately</button>
-        <button class="response-share" onclick="shareAnswer()">Share with circle</button>
       </div>
     </div>
 
-    <!-- ── WRITE YOUR EXPERIENCE ── -->
-    <div class="shelf" style="margin-top:1.8rem;margin-bottom:.5rem;">
-      <div class="shelf-header">
+    <!-- MY CIRCLES -->
+    <div class="circles-section">
+      <div style="position:relative;z-index:2;padding:0 1.1rem;margin-bottom:1rem;display:flex;align-items:baseline;justify-content:space-between;">
+        <div class="circles-title">My Circles</div>
+        <div style="font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:.75;" onclick="window.location.href='circles.html'">See All</div>
+      </div>
+      <div id="circlesRow" style="display:flex;gap:.75rem;overflow-x:auto;scrollbar-width:none;padding:0 1.1rem .4rem;"></div>
+      <div id="circlesEmptyState" style="display:none;padding:1.5rem 1.1rem;text-align:center;">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.4);margin-bottom:1rem;">Your circles will live here.</div>
+        <button onclick="window.location.href='circles.html'" style="padding:.65rem 1.4rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
+      </div>
+    </div>
+
+    <!-- WRITE YOUR EXPERIENCE -->
+    <div class="write-exp">
+      <div class="shelf-header" style="padding:0;margin-bottom:.7rem;">
         <div class="shelf-title">Write Your Experience</div>
       </div>
-      <div style="padding:0 .9rem 1rem;">
-        <div style="background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);padding:1.2rem 1.1rem;cursor:pointer;transition:border-color .2s;" onclick="triggerAccount('write your experience')">
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(242,232,216,.32);line-height:1.65;">
-            What came up for you tonight? A moment, a memory, something that surprised you.
-          </div>
-          <div style="margin-top:.85rem;display:flex;align-items:center;justify-content:space-between;">
-            <div style="font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">Start writing →</div>
-            <div style="font-size:.6rem;color:rgba(242,232,216,.18);font-style:italic;">Saved to your leaf</div>
-          </div>
+      <div class="write-exp-inner" onclick="triggerAccount('write your experience')">
+        <div class="write-exp-prompt">What came up for you tonight? A moment, a memory, something that surprised you.</div>
+        <div class="write-exp-footer">
+          <div class="write-exp-cta">Start writing →</div>
+          <div class="write-exp-note">Saved to your leaf</div>
         </div>
       </div>
     </div>
 
-  </div>
+    <div style="height:1.5rem;"></div>
 
-  <!-- WIT & WONDER FULLSCREEN -->
-  <div class="ww-screen" id="wwScreen" style="display:none;">
-    <button class="card-close" onclick="closeCard()">← Back</button>
-    <div class="ww-screen-type" id="wwType">Riddle</div>
-    <div class="ww-screen-q" id="wwQ">I speak without a mouth and hear without ears.</div>
-    <div class="ww-screen-reveal" id="wwReveal">An echo.</div>
-    <button class="ww-reveal-btn" id="wwRevealBtn" onclick="revealWW()">Tap to reveal ↓</button>
-  </div>
+  </div><!-- /scroll -->
 
-  <!-- ── BOTTOM NAV ── -->
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="window.location.href='gather.html'">
       <div class="nav-icon">🏠</div>
@@ -1261,506 +452,301 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background-
     </div>
   </div>
 
-</div>
-
-<!-- ── ACCOUNT CREATION ── -->
-<div class="account-modal" id="accountModal">
-  <div class="account-sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-kicker" id="sheetKicker">Create your profile</div>
-    <div class="sheet-title" id="sheetTitle">Keep this moment.</div>
-    <div class="sheet-sub" id="sheetSub">Create your free Gather profile to save answers, share with people you love, and come back to what matters.</div>
-    <input class="sheet-input" type="text" placeholder="Your first name" id="sheetName"/>
-    <input class="sheet-input" type="email" placeholder="Email address" id="sheetEmail"/>
-    <div style="font-size:.62rem;color:rgba(242,232,216,.32);line-height:1.7;margin-bottom:.7rem;text-align:center;">
-  By continuing you agree to our <span style="color:rgba(201,125,58,.6);cursor:pointer;" onclick="showLegal('terms')">Terms of Service</span> and <span style="color:rgba(201,125,58,.6);cursor:pointer;" onclick="showLegal('privacy')">Privacy Policy</span>.<br/>
-  Curated Connections™ is for entertainment purposes only.
-</div>
-<button class="sheet-btn" onclick="createAccount()">Create Free Profile →</button>
-    <button class="sheet-cancel" onclick="closeAccount()">Not now — keep browsing</button>
-    <div class="sheet-note">Free forever · No card required · Cancel anytime</div>
-  </div>
-</div>
-
-
-<!-- LEGAL MODAL -->
-<div id="legalModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:900;background:rgba(0,0,0,.96);overflow-y:auto;">
-  <div style="max-width:430px;margin:0 auto;padding:1.5rem 1.4rem 4rem;">
-    <button onclick="document.getElementById('legalModal').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-bottom:1.5rem;display:flex;align-items:center;gap:.3rem;">← Back</button>
-    <div id="legalContent" style="font-family:'DM Sans',sans-serif;color:rgba(242,232,216,.8);font-size:.88rem;line-height:1.75;"></div>
-  </div>
-</div>
-
-<!-- UPGRADE SHEET -->
-<div class="upgrade-sheet" id="upgradeSheet" onclick="if(event.target===this)closeUpgrade()">
-  <div class="upgrade-inner">
-    <div class="upgrade-handle"></div>
-    <div class="upgrade-kicker">Premium Experience</div>
-    <div class="upgrade-title" id="upgradeTitle">Connect</div>
-    <div class="upgrade-sub" id="upgradeSub">Unlock every card, quiz, and game — plus seasonal collections and full access.</div>
-    <div class="upgrade-tiers">
-      <div class="upgrade-tier featured" onclick="window.location='https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00'">
-        <div class="upgrade-tier-name">Connect</div>
-        <div class="upgrade-tier-price">$4.99/mo</div>
-        <div class="upgrade-tier-desc">All cards, games & editions</div>
-      </div>
-      <div class="upgrade-tier" onclick="window.location='https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01'">
-        <div class="upgrade-tier-name">Insight</div>
-        <div class="upgrade-tier-price">$9.99/mo</div>
-        <div class="upgrade-tier-desc">Play Live + session recaps</div>
-      </div>
-      <div class="upgrade-tier" onclick="window.location='https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02'">
-        <div class="upgrade-tier-name">Legacy</div>
-        <div class="upgrade-tier-price">$19.99/mo</div>
-        <div class="upgrade-tier-desc">Legacy archive + voice + family</div>
+  <!-- CARD FULLSCREEN OVERLAY -->
+  <div class="card-overlay" id="cardOverlay">
+    <div class="card-screen" id="cardScreen">
+      <button class="card-close" onclick="closeCard()">← Back</button>
+      <div class="card-badge" id="cfBadge">Curated Connections</div>
+      <div class="card-label" id="cfLabel">Family Edition</div>
+      <div class="card-question" id="cfQuestion">"What would you tell your 20-year-old self?"</div>
+      <div class="card-hint-text" id="cfHint"></div>
+      <button class="cf-flip-btn" id="cfFlipBtn" onclick="flipCard()">Flip for deeper prompts ↓</button>
+      <div class="card-action-bar">
+        <div class="card-action-btn card-answer-btn" onclick="openResponse(currentCardId)">Answer this →</div>
+        <div class="card-action-btn" onclick="triggerAccount('share this card')">Share ↗</div>
       </div>
     </div>
-    <button class="upgrade-btn" onclick="window.location='https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00'">Unlock Connect — $4.99/mo →</button>
-    <button class="upgrade-cancel" onclick="closeUpgrade()">Not now — keep browsing</button>
+    <div class="card-back" id="cardBack">
+      <button class="card-back-close" onclick="unflipCard()">↑ Back to question</button>
+      <div id="d1" style="display:none;">
+        <div class="depth-section">
+          <div class="depth-label connect">Connect</div>
+          <div class="depth-text" id="d1t"></div>
+        </div>
+      </div>
+      <div id="d2" style="display:none;">
+        <div class="depth-section">
+          <div class="depth-label insight">Insight</div>
+          <div class="depth-text" id="d2t"></div>
+        </div>
+      </div>
+      <div id="d3" style="display:none;">
+        <div class="depth-section">
+          <div class="depth-label legacy">Legacy</div>
+          <div class="depth-text" id="d3t"></div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- TOAST -->
-<div class="toast" id="toastEl"></div>
+  <!-- WIT & WONDER FULLSCREEN -->
+  <div class="ww-screen" id="wwScreen">
+    <button class="card-close" onclick="closeCard()">← Back</button>
+    <div class="ww-screen-type" id="wwType">Riddle</div>
+    <div class="ww-screen-q" id="wwQ"></div>
+    <div class="ww-screen-reveal" id="wwReveal"></div>
+    <button class="ww-reveal-btn" id="wwRevealBtn" onclick="revealWW()">Tap to reveal ↓</button>
+  </div>
+
+  <!-- RESPONSE SCREEN -->
+  <div class="response-screen" id="responseScreen">
+    <button class="card-close" onclick="closeResponse()">← Back</button>
+    <div class="response-q-echo" id="responseEcho"></div>
+    <div class="response-prompt">Your answer</div>
+    <textarea class="response-textarea" id="responseText" placeholder="What comes to mind..."></textarea>
+    <div class="response-bar">
+      <div class="response-bar-label">What do you want to do with this?</div>
+      <div class="response-bar-row">
+        <button class="response-keep" onclick="keepAnswer()">Keep privately</button>
+        <button class="response-share" onclick="shareAnswer()">Share with circle</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT MODAL -->
+  <div class="account-modal" id="accountModal">
+    <div class="account-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-kicker" id="sheetKicker">Create your profile</div>
+      <div class="sheet-title" id="sheetTitle">Keep this moment.</div>
+      <div class="sheet-sub" id="sheetSub">Create your free Gather profile to save answers, share with people you love, and come back to what matters.</div>
+      <input class="sheet-input" type="text" placeholder="Your first name" id="sheetName"/>
+      <input class="sheet-input" type="email" placeholder="Email address" id="sheetEmail"/>
+      <div style="font-size:.62rem;color:rgba(242,232,216,.32);line-height:1.7;margin-bottom:.7rem;text-align:center;">
+        By continuing you agree to our <span style="color:rgba(201,125,58,.6);cursor:pointer;" onclick="showLegal('terms')">Terms of Service</span> and <span style="color:rgba(201,125,58,.6);cursor:pointer;" onclick="showLegal('privacy')">Privacy Policy</span>.<br/>
+        Curated Connections™ is for entertainment purposes only.
+      </div>
+      <button class="sheet-btn" onclick="createAccount()">Create Free Profile →</button>
+      <button class="sheet-cancel" onclick="closeAccount()">Not now — keep browsing</button>
+      <div class="sheet-note">Free forever · No card required · Cancel anytime</div>
+    </div>
+  </div>
+
+  <!-- LEGAL MODAL -->
+  <div id="legalModal" style="display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.96);overflow-y:auto;">
+    <div style="max-width:430px;margin:0 auto;padding:1.5rem 1.4rem 4rem;">
+      <button onclick="document.getElementById('legalModal').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.4);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-bottom:1.5rem;display:flex;align-items:center;gap:.3rem;">← Back</button>
+      <div id="legalContent" style="font-family:'DM Sans',sans-serif;color:rgba(242,232,216,.8);font-size:.88rem;line-height:1.75;"></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script src="/airtable.js"></script>
+<script src="/app.js"></script>
 
 <script>
-// Set today's date
-(function(){
-  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var d=new Date();
-  document.getElementById('topDate').textContent=days[d.getDay()]+' · '+months[d.getMonth()]+' '+d.getDate();
-})();
-
-// Toast
-function toast(msg){
-  var el=document.getElementById('toastEl');
-  el.textContent=msg;
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t=setTimeout(function(){el.classList.remove('show');},2600);
-}
-
-// Hero flip
-function toggleFlip(){
-  var f=document.getElementById('heroFlip');
-  f.classList.toggle('open');
-}
-
-
-
-
-
-function scrollToFeed(){
-  document.querySelector('.moments-shelf').scrollIntoView({behavior:'smooth'});
-  // highlight the section briefly
-  var ms = document.querySelector('.moments-shelf');
-  ms.style.transition='background .3s';
-  ms.style.background='rgba(201,125,58,.06)';
-  setTimeout(function(){ ms.style.background=''; }, 1200);
-}
-
-function showLegal(type){
-  var content = '';
-  if(type === 'privacy'){
-    content = '<h2 style="font-family:Pacifico,cursive;color:#c97d3a;font-size:1.3rem;margin-bottom:.3rem;">Curated Connections™</h2>' +
-      '<div style="font-size:.72rem;letter-spacing:.12em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:1.5rem;">Privacy Policy · Curated Connections™ · May 8, 2026</div>' +
-      '<p>Curated Connections™ is an entertainment platform. We keep this simple.</p><br/>' +
-      '<strong style="color:#fff;">What we collect</strong>' +
-      '<p>When you create a free profile: your name and email. That’s it. If you subscribe, payment is processed by Stripe — we never see your card number. Users who browse without an account are anonymous.</p><br/>' +
-      '<strong style="color:#fff;">What we do with it</strong>' +
-      '<p>We use your name and email to manage your account and send subscription information. We do not use it for advertising. We do not sell it.</p><br/>' +
-      '<strong style="color:#fff;">Your content</strong>' +
-      '<p>Anything you write in the app — answers, journal entries, reflections — belongs to you. It stays private unless you choose to share it. We do not read it, sell it, or share it with anyone.</p><br/>' +
-      '<strong style="color:#fff;">If the company is ever sold</strong>' +
-      '<p>In the event of a merger or acquisition, account information may transfer as part of that transaction. Your content remains protected. You will be notified of any material change.</p><br/>' +
-      '<strong style="color:#fff;">Age requirement</strong>' +
-      '<p>You must be 13 or older to create an account.</p><br/>' +
-      '<strong style="color:#fff;">Delete your account</strong>' +
-      '<p>Email hello@respondiq.com and we will remove everything within 30 days.</p><br/>' +
-      '<strong style="color:#fff;">Questions</strong>' +
-      '<p>hello@respondiq.com</p>';
-  } else {
-    content = '<h2 style="font-family:Pacifico,cursive;color:#c97d3a;font-size:1.3rem;margin-bottom:.3rem;">Curated Connections™</h2>' +
-      '<div style="font-size:.72rem;letter-spacing:.12em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:1.5rem;">Terms of Service · Curated Connections™ · May 8, 2026</div>' +
-      '<div style="background:rgba(201,125,58,.08);border:1px solid rgba(201,125,58,.2);border-radius:10px;padding:1rem;margin-bottom:1.5rem;">' +
-      '<p style="color:rgba(255,255,255,.7);">Curated Connections™ is for entertainment and personal connection only. It is not a therapy service, counseling service, or medical application. Nothing here is professional advice of any kind.</p></div>' +
-      '<strong style="color:#fff;">Who can use this</strong>' +
-      '<p>You must be 13 or older. By using the service you confirm this.</p><br/>' +
-      '<strong style="color:#fff;">Subscriptions</strong>' +
-      '<p>Paid plans are billed monthly. Cancel any time — access continues through the end of your paid period. No refunds for partial periods. Payments processed by Stripe, Inc.</p><br/>' +
-      '<strong style="color:#fff;">Your content</strong>' +
-      '<p>You own what you write. We store it to show it back to you. We do not use your personal content for advertising or share it outside the app.</p><br/>' +
-      '<strong style="color:#fff;">Our content</strong>' +
-      '<p>The app, card content, and design are owned by Curated Connections™. Curated Connections™ is a registered trademark (USPTO 230727).</p><br/>' +
-      '<strong style="color:#fff;">Accounts</strong>' +
-      '<p>You are responsible for your account. We reserve the right to suspend accounts that misuse the service.</p><br/>' +
-      '<strong style="color:#fff;">Changes</strong>' +
-      '<p>We may update these terms. We will notify you in the app before changes take effect.</p><br/>' +
-      '<strong style="color:#fff;">Questions</strong>' +
-      '<p>hello@respondiq.com</p>';
-  }
-  document.getElementById('legalContent').innerHTML = content;
-  document.getElementById('legalModal').style.display = 'block';
-  document.getElementById('legalModal').scrollTop = 0;
-}
-// ── RESPONSE SCREEN ──
-var _responseCardId = 'tonight';
-
-function openResponse(cardId){
-  _responseCardId = cardId || 'tonight';
-  var c = CARDS[_responseCardId] || CARDS.tonight;
-  document.getElementById('responseEcho').textContent = c.q;
-  document.getElementById('responseText').value = '';
-  document.getElementById('responseScreen').style.background = c.bg;
-  // Show overlay if not already open
-  document.getElementById('cardOverlay').classList.add('open');
-  document.getElementById('cardScreen').style.display = 'none';
-  document.getElementById('wwScreen').style.display = 'none';
-  document.getElementById('responseScreen').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(function(){ document.getElementById('responseText').focus(); }, 350);
-}
-
-function openResponseFromCard(){
-  // Called from inside an open card
-  var c = CARDS[_responseCardId] || CARDS.tonight;
-  document.getElementById('responseEcho').textContent = c.q;
-  document.getElementById('responseText').value = '';
-  document.getElementById('responseScreen').style.background = c.bg;
-  document.getElementById('cardScreen').style.display = 'none';
-  document.getElementById('responseScreen').classList.add('open');
-  setTimeout(function(){ document.getElementById('responseText').focus(); }, 300);
-}
-
-function closeResponse(){
-  document.getElementById('responseScreen').classList.remove('open');
-  // Go back to card if it was open, otherwise close overlay
-  if(_responseCardId){
-    document.getElementById('cardScreen').style.display = 'flex';
-  } else {
-    closeCard();
-  }
-}
-
-function keepAnswer(){
-  var txt = document.getElementById('responseText').value.trim();
-  if(!txt){ document.getElementById('responseText').focus(); return; }
-  document.getElementById('responseScreen').classList.remove('open');
-  closeCard();
-  triggerAccount('keep this answer privately');
-}
-
-function shareAnswer(){
-  var txt = document.getElementById('responseText').value.trim();
-  if(!txt){ document.getElementById('responseText').focus(); return; }
-  document.getElementById('responseScreen').classList.remove('open');
-  closeCard();
-  triggerAccount('share this answer with your circle');
-}
-
-// ── CARD DATA ──
-var CARDS={
-  tonight:{label:"Tonight\'s Experience",badge:'Family Edition',q:'"What\'s something people misunderstand about you at first?"',hint:'Think of a time someone misread you. Was it funny, frustrating, or secretly revealing?',push:'Has that misunderstanding ever worked in your favor?',story:'When did you realize people see you differently than you see yourself?',social:'Who here do you think you\'ve misread before?',bg:'linear-gradient(175deg,#0d1e3a 0%,#1e1248 35%,#1a2840 65%,#0a1a10 100%)',labelColor:'var(--amber2)'},
-  family:{hasFlip:true,label:'Family Edition',badge:'Conversations',q:'"What would you tell your 20-year-old self — knowing what you know now?"',hint:'Take your time with this one.',push:'What do you wish someone had told you back then?',story:'What\'s one thing that changed everything?',social:'Who in this room needed to hear something at 20 that they figured out too late?',bg:'linear-gradient(175deg,#3a1400 0%,#7a3810 35%,#5a2808 65%,#2a1000 100%)',labelColor:'var(--amber2)'},
-  couples:{label:'Couples Edition',badge:'Conversations',q:'"When do you feel closest to me — not in the big moments, in the ordinary ones?"',hint:'This answer matters.',push:'What does that ordinary moment say about us?',story:'Can you describe the last time it happened?',social:'What do you think I would say in response?',bg:'linear-gradient(175deg,#3a0818 0%,#7a1838 35%,#5a1028 65%,#2a0610 100%)',labelColor:'var(--coral2)'},
-  faith:{label:'Faith Edition',badge:'Conversations',q:'"When did your faith feel most real — most alive — to you?"',hint:'The moment, not the doctrine.',push:'What made that moment feel different from the others?',story:'Has that feeling ever come back?',social:'Do you think anyone here has had a similar moment?',bg:'linear-gradient(175deg,#1a0840 0%,#3a1268 35%,#2a1058 65%,#120630 100%)',labelColor:'var(--purple2)'},
-  dinner:{hasFlip:true,label:'Dinner Table',badge:'Conversations',q:'"What\'s a belief you hold that most people push back on?"',hint:'Say it anyway.',push:'Why do you think people resist it?',story:'When did you first land on this belief?',social:'Who here do you think secretly agrees with you?',bg:'linear-gradient(175deg,#082818 0%,#0e4228 35%,#0a3020 65%,#061810 100%)',labelColor:'var(--teal2)'},
-  travel:{hasFlip:false,label:'Travel',badge:'Conversations',q:'"If you could go anywhere with the people in this room, where would it be and why?"',hint:'Dream a little.',push:'What would you do on the first day?',story:'Have you ever been somewhere that changed you?',social:'Who here do you think needs a trip the most right now?',bg:'linear-gradient(175deg,#082818 0%,#0e4228 35%,#0a3020 65%,#061810 100%)',labelColor:'var(--teal2)'},
-  kids:{hasFlip:false,label:'Everyone',badge:'Conversations',q:'"What\'s something you\'re really proud of that you haven\'t told anyone yet?"',hint:'Big or small — it counts.',push:'What made it feel worth being proud of?',story:'Who would you most want to tell?',social:'Does anyone here already know?',bg:'linear-gradient(175deg,#1a0840 0%,#3a1268 35%,#2a1058 65%,#120630 100%)',labelColor:'var(--purple2)'},
-  friends:{hasFlip:true,label:'Friendship Edition',badge:'Conversations',q:'"What\'s something about this friendship you\'ve never actually said out loud?"',hint:'Say it now.',push:'What stopped you from saying it before?',story:'When did you first feel it?',social:'Is it something you think they already know?',bg:'linear-gradient(175deg,#0a1830 0%,#1a3568 35%,#162a55 65%,#081520 100%)',labelColor:'var(--navy2)'}
+// ── HARDCODED CARD DATA (fallback + overlay content) ──
+var CARDS = {
+  tonight: {label:'This Week\'s Experience',badge:'Curated Connections',q:'"What\'s something people misunderstand about you at first?"',hint:'Think about a first impression that didn\'t capture who you really are.',push:'Has that misunderstanding ever worked in your favor?',story:'When did you realize people saw you differently than you see yourself?',social:'Who at this table do you feel like you\'ve misread before?',bg:'linear-gradient(175deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%)',labelColor:'var(--amber2)'},
+  family: {label:'Family Edition',badge:'Curated Connections',q:'"What would you tell your 20-year-old self — knowing what you know now?"',hint:'Take your time with this one.',push:'What would you change, and what would you keep exactly the same?',story:'Has the answer changed as you\'ve gotten older?',social:'Who in this family would most benefit from hearing that advice?',bg:'linear-gradient(175deg,#3a1400 0%,#7a3810 35%,#5a2808 65%,#2a1000 100%)',labelColor:'var(--amber2)'},
+  couples: {label:'Couples Edition',badge:'Curated Connections',q:'"When do you feel closest to me — not in the big moments, in the ordinary ones?"',hint:'This answer matters.',push:'What is it about those small moments that makes them feel significant?',story:'Can you name a specific moment that surprised you?',social:'',bg:'linear-gradient(175deg,#3a0818 0%,#7a1030 35%,#5a0820 65%,#2a0410 100%)',labelColor:'var(--coral2)'}
 };
 
+var WW_DATA = {
+  ww1:{type:'Riddle',q:'I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?',a:'An echo.',bg:'linear-gradient(175deg,#0a1a2a,#0a2a3e,#081822)'},
+  ww2:{type:'Joke',q:"Why don't scientists trust atoms?",a:'Because they make up everything.',bg:'linear-gradient(175deg,#1a0830,#351258,#1a0838)'},
+  ww3:{type:'Riddle',q:'The more you take, the more you leave behind. What am I?',a:'Footsteps.',bg:'linear-gradient(175deg,#0a2010,#0e4020,#082810)'},
+  ww4:{type:'Joke',q:'I told my wife she should embrace her mistakes.',a:'She gave me a hug.',bg:'linear-gradient(175deg,#2a1000,#4a2008,#2a1400)'},
+  ww5:{type:'Brain Teaser',q:'A rooster lays an egg on top of a barn roof. Which way does it roll?',a:"Roosters don't lay eggs.",bg:'linear-gradient(175deg,#1a1840,#2a2868,#181638)'}
+};
 
-function openHeroCard() {
-  var user = CC.getUser ? CC.getUser() : null;
-  var tier = user ? (user.tier || 'free') : 'free';
-  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
-  var level = tierOrder[tier] || 0;
+// ── LIVE DATA FROM AIRTABLE ──
+var LIVE_CARDS = {};
+var currentCardId = 'tonight';
+var currentWWId = null;
 
-  if (level === 0) {
-    // Gather/free — show upgrade prompt
-    triggerAccount('unlock the full hero card experience');
-    return;
-  }
-
-  // Connect+ — open card with appropriate layers
-  var heroQ = document.getElementById('heroQuestion');
-  var q = heroQ ? heroQ.textContent : '"What's something people misunderstand about you at first?"';
-  var hint = level >= 1 ? 'Think of a time someone misread you. Was it funny, frustrating, or secretly revealing?' : '';
-  var push = level >= 1 ? 'Has that misunderstanding ever worked in your favor?' : '';
-  var story = level >= 2 ? 'When did you realize people see you differently than you see yourself?' : '';
-  var social = level >= 3 ? 'Who in this room do you think you've misread before?' : '';
-
-  document.getElementById('cfLabel').textContent = 'This Week's Experience';
-  document.getElementById('cfLabel').style.color = 'var(--amber2)';
-  document.getElementById('cfBadge').textContent = 'Curated Connections';
-  document.getElementById('cfQuestion').textContent = q;
-  document.getElementById('cfHint').textContent = hint;
-  document.getElementById('d1t').textContent = push;
-  document.getElementById('d2t').textContent = story;
-  document.getElementById('d3t').textContent = social;
-  document.getElementById('cardScreen').style.background = 'linear-gradient(175deg,#0d2840 0%,#1a1640 50%,#0d2a1a 100%)';
+// ── CARD OPEN / CLOSE ──
+function openCard(id) {
+  var c = LIVE_CARDS[id] || CARDS[id] || CARDS.tonight;
+  currentCardId = id;
+  document.getElementById('cfLabel').textContent = c.label;
+  document.getElementById('cfLabel').style.color = c.labelColor || 'var(--amber2)';
+  document.getElementById('cfBadge').textContent = c.badge || 'Curated Connections';
+  document.getElementById('cfQuestion').textContent = c.q;
+  document.getElementById('cfHint').textContent = c.hint || '';
+  document.getElementById('d1t').textContent = c.push || '';
+  document.getElementById('d2t').textContent = c.story || '';
+  document.getElementById('d3t').textContent = c.social || '';
+  if (document.getElementById('d1')) document.getElementById('d1').style.display = (c.push) ? 'block' : 'none';
+  if (document.getElementById('d2')) document.getElementById('d2').style.display = (c.story) ? 'block' : 'none';
+  if (document.getElementById('d3')) document.getElementById('d3').style.display = (c.social) ? 'block' : 'none';
+  document.getElementById('cardScreen').style.background = c.bg || 'linear-gradient(175deg,#0d2840,#1a1640,#0d2a1a)';
+  document.getElementById('cardBack').style.background = (c.bg || 'linear-gradient(175deg,#0d2840,#1a1640,#0d2a1a)').replace('175deg','185deg');
   document.getElementById('cardBack').classList.remove('open');
-  document.getElementById('cfFlipBtn').textContent = level >= 2 ? 'Flip for deeper prompts ↓' : '';
-  if (document.getElementById('cfFlipBtn')) document.getElementById('cfFlipBtn').style.display = level >= 2 ? 'block' : 'none';
-  document.getElementById('wwScreen').classList.remove('open');
+  document.getElementById('cfFlipBtn').textContent = 'Flip for deeper prompts \u2193';
+  document.getElementById('wwScreen').style.display = 'none';
   document.getElementById('cardScreen').style.display = 'flex';
   document.getElementById('cardBack').style.display = 'none';
   document.getElementById('cardOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function openCard(id){
-  
-  var c=CARDS[id]||CARDS.tonight;
-  document.getElementById('cfLabel').textContent=c.label;
-  document.getElementById('cfLabel').style.color=c.labelColor;
-  document.getElementById('cfBadge').textContent=c.badge||'Curated Connections';
-  document.getElementById('cfQuestion').textContent=c.q;
-  document.getElementById('cfHint').textContent=c.hint;
-  document.getElementById('d1t').textContent=c.push;
-  document.getElementById('d2t').textContent=c.story;
-  document.getElementById('d3t').textContent=c.social;
-  document.getElementById('cardScreen').style.background=c.bg;
-  document.getElementById('cardBack').style.background=c.bg.replace('175deg','185deg').replace('100%','95%');
-  document.getElementById('cardBack').classList.remove('open');
-  document.getElementById('cfFlipBtn').textContent='Flip for deeper prompts ↓';
-  document.getElementById('wwScreen').classList.remove('open');
-  document.getElementById('cardScreen').style.display='flex';
-  document.getElementById('cardBack').style.display='none';
-  document.getElementById('cardOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function resetRatings(){
-  ['cardThumbUp','cardThumbDown'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el)el.classList.remove('rated-up','rated-down');
-  });
-  var fu=document.getElementById('cardFollowup');
-  if(fu)fu.classList.remove('open');
-  var wwr=document.getElementById('wwRating');
-  if(wwr)wwr.style.display='none';
-}
-function closeCard(){
+function closeCard() {
   document.getElementById('cardOverlay').classList.remove('open');
-  document.getElementById('cardBack').style.display='none';
-  document.getElementById('wwScreen').style.display='none';
-  document.getElementById('cardScreen').style.display='none';
-  document.body.style.overflow='';
-}
-function flipCard(){
-  document.getElementById('cardBack').classList.add('open');
-  document.getElementById('cfFlipBtn').textContent='Back to question ↑';
-}
-function unflipCard(){
-  document.getElementById('cardBack').classList.remove('open');
-  document.getElementById('cfFlipBtn').textContent='Flip for deeper prompts ↓';
-}
-// Wit & Wonder fullscreen
-var WW_DATA={
-  ww1:{type:'Riddle',q:'I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?',a:'An echo.',bg:'linear-gradient(175deg,#0a1a2a,#0a2a3e,#081822)'},
-  ww2:{type:'Joke',q:"Why don\'t scientists trust atoms?",a:'Because they make up everything.',bg:'linear-gradient(175deg,#1a0830,#351258,#1a0838)'},
-  ww3:{type:'Riddle',q:'The more you take, the more you leave behind. What am I?',a:'Footsteps.',bg:'linear-gradient(175deg,#0a2010,#0e4020,#082810)'},
-  ww4:{type:'Joke',q:'I told my wife she should embrace her mistakes.',a:'She gave me a hug.',bg:'linear-gradient(175deg,#2a1000,#4a2008,#2a1400)'},
-  ww5:{type:'Brain Teaser',q:'A rooster lays an egg on top of a barn roof. Which way does it roll?',a:"Roosters don\'t lay eggs.",bg:'linear-gradient(175deg,#1a1840,#2a2868,#181638)'}
-};
-function openWW(id){
-  
-  var w=WW_DATA[id]; if(!w) return;
-  document.getElementById('wwType').textContent=w.type;
-  document.getElementById('wwQ').textContent=w.q;
-  document.getElementById('wwReveal').textContent=w.a;
-  document.getElementById('wwReveal').classList.remove('open');
-  document.getElementById('wwRevealBtn').textContent='Tap to reveal ↓';
-  document.getElementById('wwRevealBtn').style.display='block';
-  document.getElementById('wwScreen').style.background=w.bg;
-  document.getElementById('cardScreen').style.display='none';
-  document.getElementById('wwScreen').style.display='flex';
-  document.getElementById('cardOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function revealWW(){
-  document.getElementById('wwReveal').style.display='block';
-  document.getElementById('wwRevealBtn').style.display='none';
+  document.getElementById('cardScreen').style.display = 'none';
+  document.getElementById('cardBack').style.display = 'none';
+  document.getElementById('wwScreen').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
-// Account trigger
-var pendingAction='';
-function triggerAccount(action, e){
-  
-  pendingAction=action||'this moment';
-  var titles={
-    'share this card':'Save & share this card.',
-    'share this answer':'Share your answer.',
-    'save your answer':'Save your answer.',
-    'create your circle':'Create your circle.',
-    'play together':'Play together.',
-    'your reflections':'See your reflections.',
-    'your profile':'Your profile.',
-    'react to this moment':'React to this moment.',
-    'see this result':'See this result.',
-    'join this game':'Join this session.',
-    'save this moment':'Keep this moment.',
-  };
-  document.getElementById('sheetTitle').textContent=titles[action]||'Keep this moment.';
+function flipCard() {
+  document.getElementById('cardBack').style.display = 'block';
+  document.getElementById('cardBack').classList.add('open');
+  document.getElementById('cfFlipBtn').textContent = 'Back to question \u2191';
+}
+
+function unflipCard() {
+  document.getElementById('cardBack').classList.remove('open');
+  document.getElementById('cardBack').style.display = 'none';
+}
+
+// ── WIT & WONDER ──
+function openWW(id) {
+  var w = WW_DATA[id];
+  if (!w) return;
+  currentWWId = id;
+  document.getElementById('wwType').textContent = w.type;
+  document.getElementById('wwQ').textContent = w.q;
+  document.getElementById('wwReveal').textContent = w.a;
+  document.getElementById('wwReveal').classList.remove('open');
+  document.getElementById('wwRevealBtn').textContent = 'Tap to reveal \u2193';
+  document.getElementById('wwRevealBtn').style.display = 'block';
+  document.getElementById('wwScreen').style.background = w.bg;
+  document.getElementById('wwScreen').style.display = 'flex';
+  document.getElementById('cardScreen').style.display = 'none';
+  document.getElementById('cardBack').style.display = 'none';
+  document.getElementById('cardOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function revealWW() {
+  document.getElementById('wwReveal').classList.add('open');
+  document.getElementById('wwRevealBtn').style.display = 'none';
+}
+
+// ── HERO FLIP ──
+function toggleFlip() {
+  var f = document.getElementById('heroFlip');
+  f.classList.toggle('open');
+}
+
+// ── RESPONSE ──
+function openResponse(cardId) {
+  var c = LIVE_CARDS[cardId] || CARDS[cardId] || CARDS.tonight;
+  document.getElementById('responseEcho').textContent = c.q || '';
+  document.getElementById('responseText').value = '';
+  document.getElementById('responseScreen').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeResponse() {
+  document.getElementById('responseScreen').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function keepAnswer() {
+  var txt = document.getElementById('responseText').value.trim();
+  if (!txt) { toast('Write something first'); return; }
+  triggerAccount('save your answer to your journal');
+}
+
+function shareAnswer() {
+  var txt = document.getElementById('responseText').value.trim();
+  if (!txt) { toast('Write something first'); return; }
+  triggerAccount('share your answer with your circle');
+}
+
+// ── ACCOUNT MODAL ──
+var CC = window.CC || {};
+function triggerAccount(context) {
+  var user = CC.getUser ? CC.getUser() : null;
+  if (user) { toast('Profile coming soon'); return; }
+  document.getElementById('sheetKicker').textContent = context || 'Create your profile';
   document.getElementById('accountModal').classList.add('open');
 }
 
-function closeAccount(){
+function closeAccount() {
   document.getElementById('accountModal').classList.remove('open');
 }
-document.getElementById('accountModal').addEventListener('click',function(e){
-  if(e.target===this) closeAccount();
-});
 
-function createAccount(){
-  var name=document.getElementById('sheetName').value.trim();
-  var email=document.getElementById('sheetEmail').value.trim();
-  if(!name){document.getElementById('sheetName').focus();return;}
-  if(!email||!email.includes('@')){document.getElementById('sheetEmail').focus();return;}
+function createAccount() {
+  var name = document.getElementById('sheetName').value.trim();
+  var email = document.getElementById('sheetEmail').value.trim();
+  if (!name || !email) { toast('Please fill in both fields'); return; }
+  toast('Welcome, ' + name + '. Your profile is ready \u2726');
   closeAccount();
-  toast('Welcome, '+name+'. Your profile is ready ✦');
 }
 
-function showUpgrade(title, sub){
-  document.getElementById('upgradeTitle').textContent = title;
-  document.getElementById('upgradeSub').textContent = sub;
-  document.getElementById('upgradeSheet').classList.add('open');
-}
-function closeUpgrade(){
-  document.getElementById('upgradeSheet').classList.remove('open');
-}
+// ── LEGAL ──
+var LEGAL = {
+  terms: '<h2 style="font-family:Cormorant Garamond,serif;font-size:1.4rem;margin-bottom:1rem;">Terms of Service</h2><p>Curated Connections is provided for entertainment and personal reflection. By using this service you agree to use it respectfully and not to reproduce or redistribute our content without permission.</p>',
+  privacy: '<h2 style="font-family:Cormorant Garamond,serif;font-size:1.4rem;margin-bottom:1rem;">Privacy Policy</h2><p>We collect only what you provide. Your answers stay yours. We do not sell your data. Email is used only for account features and reminders you opt into.</p>'
+};
 
-
-// ── RATING SYSTEM ──
-function rateCard(val){
-  var up=document.getElementById('cardThumbUp');
-  var dn=document.getElementById('cardThumbDown');
-  var fu=document.getElementById('cardFollowup');
-  up.classList.remove('rated-up','rated-down');
-  dn.classList.remove('rated-up','rated-down');
-  if(val===1){
-    up.classList.add('rated-up');
-    fu.classList.remove('open');
-    toast('Noted ❖ More like this coming');
-  } else {
-    dn.classList.add('rated-down');
-    fu.classList.add('open');
-  }
+function showLegal(type) {
+  document.getElementById('legalContent').innerHTML = LEGAL[type] || '';
+  document.getElementById('legalModal').style.display = 'block';
 }
 
-function rateWW(val){
-  var up=document.getElementById('wwThumbUp');
-  var dn=document.getElementById('wwThumbDown');
-  var fu=document.getElementById('wwFollowup');
-  up.classList.remove('rated-up','rated-down');
-  dn.classList.remove('rated-up','rated-down');
-  if(val===1){
-    up.classList.add('rated-up');
-    fu.classList.remove('open');
-    toast('Noted ❖ More like this');
-  } else {
-    dn.classList.add('rated-down');
-    fu.classList.add('open');
-  }
+// ── TOAST ──
+function toast(msg) {
+  var el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 2800);
 }
 
-function rateShelf(id,val,btn){
-  var row=document.getElementById(id);
-  if(!row) return;
-  var btns=row.querySelectorAll('.shelf-rating-btn');
-  btns.forEach(function(b){b.classList.remove('up','dn');});
-  btn.classList.add(val===1?'up':'dn');
-  if(val===-1) toast('Got it — we’ll tune this');
-  else toast('❖ Noted');
-}
-
-function pickFollowup(el){
-  var opts=el.parentNode.querySelectorAll('.followup-opt');
-  opts.forEach(function(o){o.classList.remove('picked');});
-  el.classList.add('picked');
-  setTimeout(function(){
-    document.querySelectorAll('.rating-followup').forEach(function(f){f.classList.remove('open');});
-    toast('Thanks — that helps us improve');
-  }, 800);
-}
-
-// Show WW rating after reveal
-var _origRevWW = revWW;
-function revWW(){
-  _origRevWW();
-  var wr = document.getElementById('wwRating');
-  if(wr){ setTimeout(function(){wr.style.display='flex';},400); }
-}
-
-// Show shelf ratings after cards are opened
-function showShelfRating(id){
-  var r=document.getElementById(id);
-  if(r) setTimeout(function(){r.classList.add('show');},300);
-}
-
+// ── DATE ──
+var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var now = new Date();
+var dateEl = document.getElementById('topDate');
+if (dateEl) dateEl.textContent = days[now.getDay()] + ' \u00B7 ' + months[now.getMonth()] + ' ' + now.getDate();
 </script>
 
-
-
-
-
 <script>
-// ══ AIRTABLE VIA PROXY ══
+// ── AIRTABLE INTEGRATION ──
+function shuffle(arr) { return arr.slice().sort(function() { return Math.random() - 0.5; }); }
+
 async function airtableFetch(table, formula, max) {
   try {
-    const res = await fetch('/api/airtable', {
+    var res = await fetch('/api/airtable', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({action:'list', table, filterFormula:formula, maxRecords:max||20})
+      body: JSON.stringify({action:'list', table:table, filterFormula:formula, maxRecords:max||20})
     });
     if (!res.ok) return null;
-    const data = await res.json();
+    var data = await res.json();
     return data.records || null;
   } catch(e) { return null; }
 }
 
-function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+// ── TONIGHT'S CARDS ──
+var editionClass = {'Family':'card-family','Couples':'card-couples','Faith':'card-faith','Dinner Table':'card-dinner','Friends':'card-friends','Teen':'card-kids','Team':'card-friends','Road Trip':'card-travel','Legacy':'card-legacy','Get Real':'card-getreal','Grandparents':'card-family','Kids':'card-family'};
+var editionBg = {'Family':'linear-gradient(175deg,#3a1400,#7a3810,#5a2808,#2a1000)','Couples':'linear-gradient(175deg,#3a0818,#7a1030,#5a0820,#2a0410)','Faith':'linear-gradient(175deg,#1a1040,#381868,#281050,#100828)','Dinner Table':'linear-gradient(175deg,#0a2818,#1a5030,#0e3820,#061808)','Friends':'linear-gradient(175deg,#1a2840,#2a4070,#1e3060,#0e1830)','Legacy':'linear-gradient(175deg,#201800,#402800,#301c00,#180e00)','Get Real':'linear-gradient(175deg,#200808,#3c1010,#280c0c,#140606)'};
 
 async function loadTonightCards() {
-  const shelf = document.getElementById('tonightShelf');
+  var shelf = document.getElementById('tonightShelf');
   if (!shelf) return;
-  const recs = await airtableFetch('Conversation Cards', '{Active}=TRUE', 30);
+  var recs = await airtableFetch('Conversation Cards', '{Active}=TRUE', 30);
   if (!recs || !recs.length) return;
-  renderTonightCards(shelf, recs);
-}
-
-// Store live card data from Airtable
-var LIVE_CARDS = {};
-
-function renderTonightCards(shelf, recs) {
   var user = CC.getUser ? CC.getUser() : null;
   var tier = user ? (user.tier || 'free') : 'free';
-  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
-  var tierLevel = tierOrder[tier] || 0;
   var tierMax = {free:2,connect:5,insight:8,legacy:99};
   var max = tierMax[tier] || 2;
   var picked = shuffle(recs).slice(0, max);
-
-  var editionClass = {
-    'Family':'card-family','Couples':'card-couples','Faith':'card-faith',
-    'Dinner Table':'card-dinner','Friends':'card-friends','Teen':'card-kids',
-    'Team':'card-friends','Road Trip':'card-travel','Legacy':'card-legacy',
-    'Get Real':'card-getreal','Grandparents':'card-family','Kids':'card-family'
-  };
-  var editionBg = {
-    'Family':'linear-gradient(175deg,#3a1400,#7a3810,#5a2808,#2a1000)',
-    'Couples':'linear-gradient(175deg,#3a0818,#7a1030,#5a0820,#2a0410)',
-    'Faith':'linear-gradient(175deg,#1a1040,#381868,#281050,#100828)',
-    'Dinner Table':'linear-gradient(175deg,#0a2818,#1a5030,#0e3820,#061808)',
-    'Friends':'linear-gradient(175deg,#1a2840,#2a4070,#1e3060,#0e1830)',
-    'Legacy':'linear-gradient(175deg,#201800,#402800,#301c00,#180e00)',
-    'Get Real':'linear-gradient(175deg,#200808,#3c1010,#280c0c,#140606)'
-  };
-
-  // Store card data keyed by index — no quote issues
-  window.LIVE_CARDS = window.LIVE_CARDS || {};
 
   var html = '';
   picked.forEach(function(rec, idx) {
@@ -1768,382 +754,100 @@ function renderTonightCards(shelf, recs) {
     var edition = (f.Edition && f.Edition.name) ? f.Edition.name : (f.Edition || 'Family');
     var cls = editionClass[edition] || 'card-family';
     var bg = editionBg[edition] || editionBg['Family'];
-    var key = 'c' + idx;
-
-    window.LIVE_CARDS[key] = {
-      label: edition + ' Edition',
-      q: '"' + (f.Prompt || '') + '"',
-      hint: f.Hint || '',
-      insight: f['Insight Layer'] || '',
-      legacy: f['Legacy Layer'] || '',
-      bg: bg
-    };
-
-    // Use data attribute to avoid ALL quote nesting in onclick
-    html += '<div class="conv-card ' + cls + '" data-ckey="' + key + '" onclick="openLiveCard(this.dataset.ckey)">'
-         + '<div class="conv-card-label">' + edition + '</div>'
-         + '<div class="conv-card-q">"' + (f.Prompt || '') + '"</div>'
-         + (f.Hint ? '<div class="conv-card-hint">' + f.Hint + '</div>' : '')
-         + '<div class="conv-card-tap">Tap to open</div>'
-         + '</div>';
+    var key = 'at_' + idx;
+    var lbl = edition + ' Edition';
+    var labelColor = cls === 'card-couples' ? 'var(--coral2)' : cls === 'card-faith' ? 'var(--purple2)' : cls === 'card-dinner' ? 'var(--teal2)' : cls === 'card-friends' ? 'var(--navy2)' : cls === 'card-legacy' ? '#c9a830' : cls === 'card-getreal' ? '#c85050' : 'var(--amber2)';
+    LIVE_CARDS[key] = {label:lbl, badge:'Curated Connections', q:'"' + (f.Prompt || '') + '"', hint:f.Hint || '', push:f['Insight Layer'] || '', story:f['Legacy Layer'] || '', social:'', bg:bg, labelColor:labelColor};
+    html += '<div class="conv-card ' + cls + '" data-ckey="' + key + '" onclick="openCard(this.dataset.ckey)">';
+    html += '<div class="conv-card-label">' + edition + '</div>';
+    html += '<div class="conv-card-q">&ldquo;' + (f.Prompt || '') + '&rdquo;</div>';
+    if (f.Hint) html += '<div class="conv-card-hint">' + f.Hint + '</div>';
+    html += '<div class="conv-card-tap">Tap to open</div></div>';
   });
 
-  // Locked upgrade card — clean HTML, no quote nesting
-  if (tierLevel < 3) {
-    var nextTier = ['Connect','Insight','Legacy'][tierLevel] || 'Connect';
-    var nextPrice = ['$4.99/mo','$9.99/mo','$19.99/mo'][tierLevel] || '$4.99/mo';
-    html += '<div class="conv-card card-locked" data-tier="' + nextTier + '" onclick="triggerAccount(this.dataset.tier)"'
-          + ' style="background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.12);'
-          + 'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.45rem;">'
-          + '<div style="font-size:1.2rem;opacity:.25;">🔒</div>'
-          + '<div style="font-size:.52rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">' + nextTier + '</div>'
-          + '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:.78rem;color:rgba(242,232,216,.28);line-height:1.4;">More cards &amp;<br>deeper questions</div>'
-          + '<div style="font-size:.58rem;font-weight:700;color:rgba(201,125,58,.35);margin-top:.1rem;">' + nextPrice + ' &#8594;</div>'
-          + '</div>';
+  // Locked upgrade card
+  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
+  var level = tierOrder[tier] || 0;
+  if (level < 3) {
+    var nextTier = level === 0 ? 'Connect' : level === 1 ? 'Insight' : 'Legacy';
+    var nextPrice = level === 0 ? '$4.99/mo' : level === 1 ? '$9.99/mo' : '$19.99/mo';
+    html += '<div class="card-locked" onclick="triggerAccount(\'upgrade\')">';
+    html += '<div style="font-size:1.2rem;opacity:.25;">&#x1F512;</div>';
+    html += '<div style="font-size:.52rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">' + nextTier + '</div>';
+    html += '<div style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:.78rem;color:rgba(242,232,216,.28);line-height:1.4;">More cards &amp;<br>deeper questions</div>';
+    html += '<div style="font-size:.58rem;font-weight:700;color:rgba(201,125,58,.35);">' + nextPrice + ' &rarr;</div></div>';
   }
 
   shelf.innerHTML = html;
-
-  // Spread 2 cards evenly
-  if (picked.length === 2) {
-    shelf.style.cssText = 'display:flex;gap:.65rem;padding:0 .9rem .25rem;overflow-x:auto;scrollbar-width:none;';
-    shelf.querySelectorAll('.conv-card').forEach(function(c) { c.style.flex = '1'; });
-  }
-
   var tc = document.getElementById('tonightCount');
   if (tc) tc.textContent = picked.length + ' today';
 }
 
-function openLiveCard(key) {
-  var c = window.LIVE_CARDS && window.LIVE_CARDS[key];
-  if (!c) return;
-  var user = CC.getUser ? CC.getUser() : null;
-  var tier = user ? (user.tier || 'free') : 'free';
-  var level = {free:0,connect:1,insight:2,legacy:3}[tier] || 0;
-
-  document.getElementById('cfLabel').textContent = c.label;
-  document.getElementById('cfLabel').style.color = 'var(--amber2)';
-  document.getElementById('cfBadge').textContent = 'Curated Connections';
-  document.getElementById('cfQuestion').textContent = c.q;
-  document.getElementById('cfHint').textContent = level >= 1 ? c.hint : '';
-  document.getElementById('d1t').textContent = level >= 1 ? c.hint : '';
-  document.getElementById('d2t').textContent = level >= 2 ? c.insight : '';
-  document.getElementById('d3t').textContent = level >= 3 ? c.legacy : '';
-  document.getElementById('cardScreen').style.background = c.bg;
-  document.getElementById('cardBack').classList.remove('open');
-  document.getElementById('cfFlipBtn').textContent = 'Flip for deeper prompts ↓';
-  document.getElementById('wwScreen').classList.remove('open');
-  document.getElementById('cardScreen').style.display = 'flex';
-  document.getElementById('cardBack').style.display = 'none';
-  document.getElementById('cardOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-
-function openLiveCard(cardKey) {
-  var c = LIVE_CARDS[cardKey];
-  if (!c) return;
-  var user = CC.getUser ? CC.getUser() : null;
-  var tier = user ? (user.tier || 'free') : 'free';
-  var tierOrder = {free:0,connect:1,insight:2,legacy:3};
-  var level = tierOrder[tier] || 0;
-
-  document.getElementById('cfLabel').textContent = c.label;
-  document.getElementById('cfLabel').style.color = c.labelColor || 'var(--amber2)';
-  document.getElementById('cfBadge').textContent = c.badge || 'Curated Connections';
-  document.getElementById('cfQuestion').textContent = c.q;
-  document.getElementById('cfHint').textContent = level >= 1 ? c.hint : '';
-
-  // Depth layers by tier
-  document.getElementById('d1t').textContent = level >= 1 ? (c.hint || '') : '';
-  document.getElementById('d2t').textContent = level >= 2 ? (c.insight || '') : '';
-  document.getElementById('d3t').textContent = level >= 3 ? (c.legacy || '') : '';
-
-  document.getElementById('cardScreen').style.background = c.bg;
-  document.getElementById('cardBack').style.background = c.bg.replace('175deg','185deg');
-  document.getElementById('cardBack').classList.remove('open');
-  document.getElementById('cfFlipBtn').textContent = 'Flip for deeper prompts ↓';
-  document.getElementById('wwScreen').classList.remove('open');
-  document.getElementById('cardScreen').style.display = 'flex';
-  document.getElementById('cardBack').style.display = 'none';
-  document.getElementById('cardOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-
-
-
-
-
-var LIVE_WW = {};
-
+// ── WIT & WONDER FROM AIRTABLE ──
 async function loadWitWonder() {
-  const recs = await airtableFetch('Wit and Wonder', '{Active}=TRUE', 40);
+  var recs = await airtableFetch('Wit and Wonder', '{Active}=TRUE', 40);
   if (!recs || !recs.length) return;
-
-  const riddles = shuffle(recs.filter(r => r.fields?.Type?.name === 'Riddle'));
-  const jokes   = shuffle(recs.filter(r => r.fields?.Type?.name === 'Joke'));
-  const brains  = shuffle(recs.filter(r => r.fields?.Type?.name === 'Brain Teaser'));
-  const facts   = shuffle(recs.filter(r => !['Riddle','Joke','Brain Teaser'].includes(r.fields?.Type?.name)));
-  const picks   = [riddles[0], jokes[0], brains[0], riddles[1], facts[0]].filter(Boolean).slice(0, 5);
-
-  const wwBgs = [
-    'linear-gradient(175deg,#0a1a2a,#0a2a3e,#081822)',
-    'linear-gradient(175deg,#1a0830,#351258,#1a0838)',
-    'linear-gradient(175deg,#0a2010,#0e4020,#082810)',
-    'linear-gradient(175deg,#2a1000,#4a2008,#2a1400)',
-    'linear-gradient(175deg,#1a1840,#2a2868,#181638)'
-  ];
-
-  const cards = document.querySelectorAll('.ww-card');
-  picks.forEach((rec, i) => {
-    if (!cards[i]) return;
-    const f = rec.fields;
-    const type = f.Type?.name || 'Curiosity';
-    const wwKey = 'ww_live_' + i;
-
-    // Store live data
-    LIVE_WW[wwKey] = {
-      type: type,
-      q: f.Prompt || '',
-      a: f.Answer || '',
-      bridge: f['Conversation Bridge'] || '',
-      bg: wwBgs[i] || wwBgs[0]
-    };
-
-    // Update card display
-    const typeEl = cards[i].querySelector('.ww-type');
-    const qEl    = cards[i].querySelector('.ww-q');
-    const tapEl  = cards[i].querySelector('.ww-tap');
-    if (typeEl) typeEl.textContent = type;
-    if (qEl)    qEl.textContent    = f.Prompt || '';
-    if (tapEl)  tapEl.textContent  = (type === 'Joke') ? 'Tap for punchline' : 'Tap for answer';
-
-    // Update onclick to use live key
-    cards[i].setAttribute('data-wwkey', wwKey);
-    cards[i].setAttribute('onclick', 'openLiveWW(this.dataset.wwkey)');
-  });
-
-  // Add locked upgrade card if needed
-  const user = CC.getUser ? CC.getUser() : null;
-  const tier = user ? (user.tier || 'free') : 'free';
-  const tierLevel = {free:0,connect:1,insight:2,legacy:3}[tier] || 0;
-  const wwShelf = document.getElementById('wwShelf');
-  if (wwShelf && tierLevel < 2) {
-    const lockedCard = document.createElement('div');
-    lockedCard.className = 'ww-card';
-    lockedCard.style.cssText = 'background:rgba(255,255,255,.03);border:1.5px dashed rgba(255,255,255,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.5rem;padding:1rem;cursor:pointer;';
-    lockedCard.onclick = function() { triggerAccount('upgrade for more Wit & Wonder'); };
-    lockedCard.innerHTML = '<div style="font-size:1.2rem;opacity:.3;">🔒</div>'
-      + '<div style="font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.4);">More in Connect</div>'
-      + '<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.75rem;color:rgba(242,232,216,.25);line-height:1.4;">Brain teasers,<br>human behavior & more</div>';
-    wwShelf.appendChild(lockedCard);
-  }
-
-  const wwCount = document.getElementById('wwCount');
-  if (wwCount) {
-    const j = jokes.length; const r = riddles.length;
-    wwCount.textContent = (j ? j + ' joke' + (j>1?'s':'') : '') + (j&&r?' · ':'') + (r ? r + ' riddle' + (r>1?'s':'') : '');
-  }
-}
-
-function openLiveWW(keyOrEl) { var wwKey = (typeof keyOrEl === 'string') ? keyOrEl : keyOrEl.dataset.wwkey;
-  var w = LIVE_WW[wwKey];
-  if (!w) return;
-  document.getElementById('wwType').textContent = w.type;
-  document.getElementById('wwQ').textContent = w.q;
-  var revealEl = document.getElementById('wwReveal');
-  if (revealEl) {
-    if (w.bridge) {
-      revealEl.innerHTML = '<div style="font-size:.5rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Conversation Bridge</div>' + w.bridge;
-    } else {
-      revealEl.textContent = w.a;
+  var riddles = shuffle(recs.filter(function(r) { return r.fields && r.fields.Type && r.fields.Type.name === 'Riddle'; }));
+  var jokes   = shuffle(recs.filter(function(r) { return r.fields && r.fields.Type && r.fields.Type.name === 'Joke'; }));
+  var brains  = shuffle(recs.filter(function(r) { return r.fields && r.fields.Type && r.fields.Type.name === 'Brain Teaser'; }));
+  var facts   = shuffle(recs.filter(function(r) { return r.fields && r.fields.Type && !['Riddle','Joke','Brain Teaser'].includes(r.fields.Type.name); }));
+  var picks = [riddles[0], jokes[0], brains[0], riddles[1], facts[0]].filter(Boolean).slice(0, 5);
+  var wwBgs = ['linear-gradient(175deg,#0a1a2a,#0a2a3e,#081822)','linear-gradient(175deg,#1a0830,#351258,#1a0838)','linear-gradient(175deg,#0a2010,#0e4020,#082810)','linear-gradient(175deg,#2a1000,#4a2008,#2a1400)','linear-gradient(175deg,#1a1840,#2a2868,#181638)'];
+  var ids = ['ww1','ww2','ww3','ww4','ww5'];
+  picks.forEach(function(rec, i) {
+    var f = rec.fields;
+    var type = (f.Type && f.Type.name) ? f.Type.name : 'Curiosity';
+    var wwId = ids[i];
+    WW_DATA[wwId] = {type:type, q:f.Prompt || '', a:f.Answer || f['Conversation Bridge'] || '', bg:wwBgs[i] || wwBgs[0]};
+    var card = document.getElementById(wwId);
+    if (card) {
+      var typeEl = card.querySelector('.ww-type');
+      var qEl = card.querySelector('.ww-q');
+      var tapEl = card.querySelector('.ww-tap');
+      if (typeEl) typeEl.textContent = type;
+      if (qEl) qEl.textContent = f.Prompt || '';
+      if (tapEl) tapEl.textContent = (type === 'Joke') ? 'Tap for punchline' : 'Tap for answer';
     }
-    revealEl.classList.remove('open');
+  });
+  var wwCount = document.getElementById('wwCount');
+  if (wwCount) {
+    wwCount.textContent = (jokes.length || 0) + ' jokes \u00B7 ' + (riddles.length || 0) + ' riddles';
   }
-  var revBtn = document.getElementById('wwRevealBtn');
-  if (revBtn) { revBtn.textContent = 'Tap to reveal ↓'; revBtn.style.display = 'block'; }
-  document.getElementById('wwScreen').style.background = w.bg;
-  document.getElementById('cardScreen').style.display = 'none';
-  document.getElementById('wwScreen').style.display = 'flex';
-  document.getElementById('cardOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
 }
 
-
-
-
-async function loadGatherQuiz() {
-  const recs = await airtableFetch('Gather Quizzes', "{Active}=TRUE", 10);
-  if (!recs || !recs.length) return;
-  const quiz = recs[new Date().getDay() % recs.length];
-  const f = quiz.fields;
-  const card = document.querySelector('.quiz-card');
-  if (!card) return;
-  const t = card.querySelector('.quiz-title');
-  const s = card.querySelector('.quiz-sub');
-  if (t && f.Title) t.textContent = f.Title;
-  if (s && f.Subtitle) s.textContent = f.Subtitle;
-}
-
-
+// ── CIRCLES ──
 async function loadCircles() {
-  const user = CC.getUser ? CC.getUser() : null;
-  const row = document.getElementById('circlesRow');
-  const empty = document.getElementById('circlesEmptyState');
+  var row = document.getElementById('circlesRow');
+  var empty = document.getElementById('circlesEmptyState');
   if (!row) return;
-
-  if (!user) {
-    // Not logged in — show empty state
-    row.style.display = 'none';
-    if (empty) empty.style.display = 'block';
-    return;
-  }
-
-  // Always show the + New Circle button
-  const newBtn = `<div onclick="window.location.href='circles.html'" style="flex-shrink:0;width:86px;border-radius:18px;padding:15px 10px 13px;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.14);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
-    <div style="width:40px;height:40px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:rgba(255,255,255,.38);">＋</div>
-    <div style="font-size:.8rem;font-weight:600;color:rgba(242,232,216,.32);text-align:center;">New</div>
-  </div>`;
-
-  // Try to load real circles from Airtable
-  const circles = await airtableFetch('Circles', `{Owner User ID}="${user.uid}"`, 10);
-
-  if (!circles || !circles.length) {
-    // No circles yet
-    row.style.display = 'none';
-    if (empty) empty.style.display = 'block';
-    return;
-  }
-
-  // Has circles — render them
-  if (empty) empty.style.display = 'none';
-  row.style.display = 'flex';
-
-  const circleIcons = ['🏡','✨','❤️','🌿','⚡','🎯','🌙','🔥'];
-  let html = circles.map((rec, i) => {
-    const f = rec.fields;
-    const name = f['Circle Name'] || f.Name || 'Circle';
-    const icon = circleIcons[i % circleIcons.length];
-    return `<div onclick="window.location.href='circles.html?circle=${rec.id}'" style="flex-shrink:0;width:86px;border-radius:18px;padding:15px 10px 13px;background:linear-gradient(155deg,#0d2438,#121040);border:1px solid rgba(107,60,162,.18);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;">
-      <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">${icon}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--cream);text-align:center;">${name}</div>
-    </div>`;
-  }).join('') + newBtn;
-
-  row.innerHTML = html;
+  row.innerHTML = '';
+  // New circle button always shown
+  var addBtn = '<div onclick="window.location.href=\'circles.html\'" style="flex-shrink:0;width:86px;border-radius:18px;padding:15px 10px 13px;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.14);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">';
+  addBtn += '<div style="width:32px;height:32px;border-radius:50%;background:rgba(201,125,58,.12);border:1.5px dashed rgba(201,125,58,.3);display:flex;align-items:center;justify-content:center;font-size:1rem;color:rgba(201,125,58,.6);">+</div>';
+  addBtn += '<div style="font-family:Nunito,sans-serif;font-size:.48rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.45);text-align:center;">New Circle</div></div>';
+  try {
+    var user = CC.getUser ? CC.getUser() : null;
+    if (!user) { row.innerHTML = addBtn; if (empty) empty.style.display = 'block'; return; }
+    var recs = await airtableFetch('Circles', '', 10);
+    if (!recs || !recs.length) { row.innerHTML = addBtn; if (empty) empty.style.display = 'block'; return; }
+    if (empty) empty.style.display = 'none';
+    var circlesHtml = recs.slice(0,5).map(function(rec) {
+      var f = rec.fields;
+      return '<div onclick="window.location.href=\'circles.html\'" style="flex-shrink:0;width:86px;border-radius:18px;padding:15px 10px 13px;background:linear-gradient(155deg,#0d2438,#121040);border:1px solid rgba(107,60,162,.18);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;">'
+        + '<div style="width:36px;height:36px;border-radius:50%;background:rgba(107,60,162,.25);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">' + (f.icon || '✦') + '</div>'
+        + '<div style="font-family:Nunito,sans-serif;font-size:.52rem;font-weight:700;text-align:center;color:rgba(242,232,216,.7);line-height:1.3;">' + (f.name || 'Circle') + '</div></div>';
+    }).join('');
+    row.innerHTML = circlesHtml + addBtn;
+  } catch(e) { row.innerHTML = addBtn; if (empty) empty.style.display = 'block'; }
 }
 
-
-function checkRetentionBanner() {
-  const user = CC.getUser ? CC.getUser() : null;
-  if (!user) return;
-  const tier = user.tier || 'free';
-  if (tier !== 'free') return; // Only show for free users
-
-  const createdAt = user.createdAt || user.created_at;
-  if (!createdAt) return;
-
-  const created = new Date(createdAt);
-  const now = new Date();
-  const ageMs = now - created;
-  const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
-  const daysUntilExpiry = 365 - ageDays;
-
-  // Show banner if within 60 days of expiry
-  if (daysUntilExpiry <= 60 && daysUntilExpiry > 0) {
-    const banner = document.getElementById('retentionBanner');
-    const daysEl = document.getElementById('retentionDays');
-    if (banner) banner.classList.add('show');
-    if (daysEl) daysEl.textContent = daysUntilExpiry;
-  }
-}
-
-function exportFeedData() {
-  toast('Preparing your data export...');
-  // In Phase 3 this will generate a real download
-  // For now, acknowledge and log
-  setTimeout(() => {
-    toast('Export feature coming soon — we'll email it to you');
-  }, 1500);
-}
-
-// Set feed_expires_at when user signs up (called from onboarding)
-function setFeedExpiry(uid) {
-  const expiresAt = new Date();
-  expiresAt.setFullYear(expiresAt.getFullYear() + 1);
-  return expiresAt.toISOString().split('T')[0]; // YYYY-MM-DD
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', function() {
   loadTonightCards();
   loadWitWonder();
-  loadGatherQuiz();
   loadCircles();
-  checkRetentionBanner();
 });
 </script>
 
-<script>
-// ── TIER GATING ──
-document.addEventListener('DOMContentLoaded', function() {
-  const user = CC.getUser();
-  const tier = CC.getTier();
-
-  // Update nav avatar if logged in
-  if (user) {
-    const av = document.querySelector('.nav-av, .tb-av');
-    if (av) av.textContent = (user.name || user.email || 'U')[0].toUpperCase();
-  }
-
-  // Lock Discover You quizzes for free users
-  if (!CC.hasFeature('discover_you')) {
-    document.querySelectorAll('.quiz-card').forEach(card => {
-      card.style.opacity = '0.5';
-      card.style.cursor = 'pointer';
-      const overlay = document.createElement('div');
-      overlay.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:rgba(6,12,9,.6);';
-      overlay.innerHTML = '<div style="font-family:Nunito,sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#c97d3a;text-transform:uppercase;">Connect →</div>';
-      card.style.position = 'relative';
-      card.appendChild(overlay);
-      overlay.onclick = () => window.location.href = 'onboarding.html?tier=connect';
-    });
-  }
-
-  // Show upgrade nudge for free users at bottom of page
-  // upgrade nudge removed — lives in locked card slots instead
-});
-</script>
-
-<script>
-// ── CARD FLIP + DEPTH LAYERS ──
-
-
-
-
-function updateShelfCounts(tonightCards, wwCards, quizCards) {
-  const tier = CC.getTier ? CC.getTier() : 'free';
-  const tierMax = {free: 2, connect: 5, insight: 8, legacy: 99};
-  const max = tierMax[tier] || 2;
-
-  const tc = document.getElementById('tonightCount');
-  const ww = document.getElementById('wwCount');
-  const qc = document.getElementById('quizCount');
-
-  if (tc) tc.textContent = Math.min(tonightCards, max) + ' today';
-  if (ww && wwCards) {
-    const jokes = wwCards.filter(c => c.fields?.Type === 'Joke').length;
-    const riddles = wwCards.filter(c => c.fields?.Type === 'Riddle').length;
-    ww.textContent = jokes + ' jokes · ' + riddles + ' riddles';
-  }
-  if (qc && quizCards) qc.textContent = Math.min(quizCards, 3) + ' free tonight';
-}
-
-// Initialize flips after Airtable loads
-const _origDOMReady = document.addEventListener;
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(initCardFlips, 800); // After Airtable loads
-});
-</script>
 </body>
 </html>
