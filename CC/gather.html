@@ -751,15 +751,17 @@ async function loadWitWonder() {
   var countEl = document.getElementById('wwCount');
   if (!shelf) return;
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', filterFormula:'{Active}=1', maxRecords:60})});
+    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', maxRecords:100})});
     if (!res.ok) { countEl.textContent = 'error'; return; }
     var data = await res.json();
     if (!data.records || !data.records.length) { countEl.textContent = 'none'; return; }
     var recs = data.records;
-    var riddles  = shuffle(recs.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Riddle'; }));
-    var jokes    = shuffle(recs.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Joke'; }));
-    var brains   = shuffle(recs.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Brain Teaser'; }));
-    // Exactly one of each type, in order: Riddle, Joke, Brain Teaser
+    // Filter active records in JS (formula may vary by table)
+    var active = recs.filter(function(r){ return r.fields.Active !== false; });
+    var riddles = shuffle(active.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Riddle'; }));
+    var jokes   = shuffle(active.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Joke'; }));
+    var brains  = shuffle(active.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Brain Teaser'; }));
+    // One of each type — skip missing types gracefully
     var picks = [riddles[0], jokes[0], brains[0]].filter(Boolean);
     if (!picks.length) { countEl.textContent = 'none'; return; }
     var html = '';
