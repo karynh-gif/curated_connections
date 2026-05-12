@@ -1333,11 +1333,11 @@ async function openQuiz(recordId) {
   var cached = QUIZ_CACHE[recordId];
 
   // If data not cached or empty, fetch fresh
-  if (!cached || !cached.qj) {
+  if (!cached || !cached.qj || cached.qj === '') {
     try {
       var res = await fetch('/api/airtable', {method:'POST',
         headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({action:'getRecord', table:'Gather Quizzes', recordId: recordId})});
+        body: JSON.stringify({action:'get', table:'Gather Quizzes', recordId: recordId})});
       var data = await res.json();
       if (data.fields) {
         cached = {
@@ -1350,7 +1350,7 @@ async function openQuiz(recordId) {
     } catch(e) { showToast('Quiz unavailable right now'); return; }
   }
 
-  if (!cached || !cached.qj) { showToast('Quiz content still loading\u2026'); return; }
+  if (!cached || !cached.qj || cached.qj === '') { showToast('Quiz content still loading\u2026'); return; }
 
   var questions, results;
   try {
