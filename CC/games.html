@@ -345,7 +345,7 @@ body::before{content:"";position:fixed;inset:0;
           <div class="ghc-meta-item">🎡 6 decks</div>
         </div>
         <div class="ghc-actions">
-          <button class="play-btn rbd-play" onclick="window.location.href='bad-day-to-worst.html'">Play Now →</button>
+          <button class="play-btn rbd-play" onclick="launchGame('bad-day-to-worst.html','connect')">Play Now →</button>
           <div class="how-btn" onclick="openHow('rbd')">How to play</div>
         </div>
       </div>
@@ -368,7 +368,7 @@ body::before{content:"";position:fixed;inset:0;
           <div class="ghc-meta-item">🃏 Plot Twists</div>
         </div>
         <div class="ghc-actions">
-          <button class="play-btn tt-play" onclick="window.location.href='curated-connections-play.html'">Play Now →</button>
+          <button class="play-btn tt-play" onclick="launchGame('curated-connections-play.html','connect')">Play Now →</button>
           <div class="how-btn" onclick="openHow('tt')">How to play</div>
         </div>
       </div>
@@ -419,7 +419,7 @@ body::before{content:"";position:fixed;inset:0;
       </div>
 
       <!-- Join with code — ACTIVE -->
-      <div style="margin:.6rem .9rem 0;background:rgba(255,140,32,.07);border:1.5px solid rgba(255,140,32,.22);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.65rem;cursor:pointer;" onclick="window.location.href='curated-connections-play.html'">
+      <div style="margin:.6rem .9rem 0;background:rgba(255,140,32,.07);border:1.5px solid rgba(255,140,32,.22);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.65rem;cursor:pointer;" onclick="launchGame('curated-connections-play.html','connect')">
         <div style="font-size:1.4rem;flex-shrink:0;">🔗</div>
         <div style="flex:1;">
           <div style="font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--amber);margin-bottom:.1rem;">Join with Code</div>
@@ -542,7 +542,7 @@ function openHow(game){
           <div><div class="wo-name">${w.name}</div><div class="wo-desc">${w.desc}</div></div>
         </div>`).join('')}
     </div>
-    <button class="hs-play-btn" style="background:${h.btnColor}" onclick="closeHow();window.location.href=(game==='rbd'?'bad-day-to-worst.html':'curated-connections-play.html')">${h.btnText}</button>
+    <button class="hs-play-btn" style="background:${h.btnColor}" onclick="closeHow();launchGame(game==='rbd'?'bad-day-to-worst.html':'curated-connections-play.html','connect')">${h.btnText}</button>
   `;
   document.getElementById('overlay').classList.add('open');
   document.getElementById('howSheet').classList.add('open');
@@ -709,6 +709,65 @@ function t(m){
 
 
 <script>
+// ── GAME TIER GATING ─────────────────────────────────────────────
+function launchGame(url, requiredTier) {
+  var tierRank = { free: 0, connect: 1, insight: 2, legacy: 3 };
+  var user = typeof CC !== 'undefined' && CC.getUser ? CC.getUser() : null;
+  var userTier = user ? (user.tier || 'free') : 'free';
+  var userRank = tierRank[userTier] || 0;
+  var requiredRank = tierRank[requiredTier] || 1;
+
+  if (userRank >= requiredRank) {
+    window.location.href = url;
+    return;
+  }
+
+  // Show upgrade prompt
+  showGameUpgradeModal(requiredTier);
+}
+
+function showGameUpgradeModal(tier) {
+  var existing = document.getElementById('gameUpgradeModal');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.id = 'gameUpgradeModal';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;';
+
+  var sheet = document.createElement('div');
+  sheet.style.cssText = 'width:100%;max-width:430px;background:#0d1a14;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem calc(1.6rem + env(safe-area-inset-bottom));border-top:1px solid rgba(201,125,58,.2);';
+
+  var handle = document.createElement('div');
+  handle.style.cssText = 'width:36px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto .9rem;';
+
+  var kicker = document.createElement('div');
+  kicker.style.cssText = 'font-family:Nunito,sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.3rem;';
+  kicker.textContent = 'Connect · ' + (tier === 'connect' ? '$4.99/mo' : '$9.99/mo');
+
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:1.55rem;color:#f5ede2;margin-bottom:.4rem;font-family:Cormorant Garamond,serif;font-weight:300;';
+  title.textContent = 'Unlock Game Night.';
+
+  var sub = document.createElement('div');
+  sub.style.cssText = 'font-size:.82rem;color:rgba(242,232,216,.45);line-height:1.65;margin-bottom:1.1rem;';
+  sub.textContent = 'Really Bad Day, That Tracks, and the full game library are included with Connect and above. Your deck, your circles, your journal — all unlocked too.';
+
+  var btn = document.createElement('button');
+  btn.style.cssText = 'width:100%;padding:.85rem;background:#c97d3a;border:none;border-radius:999px;font-family:Nunito,sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.06em;color:#fff;cursor:pointer;margin-bottom:.5rem;';
+  btn.textContent = 'Upgrade to Connect — $4.99/mo →';
+  btn.onclick = function() { window.open('https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00','_blank'); };
+
+  var cancel = document.createElement('button');
+  cancel.style.cssText = 'width:100%;padding:.5rem;background:none;border:none;font-size:.85rem;color:rgba(242,232,216,.3);cursor:pointer;font-style:italic;';
+  cancel.textContent = 'Maybe later';
+  cancel.onclick = function() { overlay.remove(); };
+
+  [handle, kicker, title, sub, btn, cancel].forEach(function(el) { sheet.appendChild(el); });
+  overlay.appendChild(sheet);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
 // ── YOUR DECK ENGINE ─────────────────────────────────────────────
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyB6wEldIMuAlcnEE9EGnZJ8hufWFFwmDbQ",
