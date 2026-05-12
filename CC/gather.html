@@ -210,6 +210,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .qz-animate{animation:qzSlideIn .25s ease both;}
 </style>
 <script src="/cc-auth.js"></script>
+<script src="/cc-firebase.js"></script>
 <script src="/cc-cards.js"></script>
 <script src="/atmosphere.js" defer></script>
   <!-- Firebase SDK -->
@@ -1396,18 +1397,25 @@ function shareToCircle() {
 }
 
 function postToCircle(circle, prompt, text) {
-  // Save post to localStorage
-  var posts = [];
-  try { posts = JSON.parse(localStorage.getItem('cc_feed_' + circle.id) || '[]'); } catch(e) {}
   var user = CC.getUser ? CC.getUser() : null;
-  posts.unshift({
+  var post = {
     id: Date.now(),
     user: user ? user.name : 'You',
-    prompt: prompt,
-    text: text,
+    prompt: typeof prompt === 'string' ? decodeURIComponent(prompt) : (prompt || ''),
+    text: typeof text === 'string' ? decodeURIComponent(text) : (text || ''),
     date: new Date().toISOString()
-  });
-  localStorage.setItem('cc_feed_' + circle.id, JSON.stringify(posts));
+  };
+
+  // Save via CCFB (Firestore + localStorage)
+  if (typeof CCFB !== 'undefined') {
+    CCFB.saveCirclePost(circle.id, post);
+  } else {
+    var posts = [];
+    try { posts = JSON.parse(localStorage.getItem('cc_feed_' + circle.id) || '[]'); } catch(e) {}
+    posts.unshift(post);
+    localStorage.setItem('cc_feed_' + circle.id, JSON.stringify(posts));
+  }
+
   showToast('Shared to ' + circle.name + ' ✦');
   if (document.getElementById('responseText')) document.getElementById('responseText').value = '';
   closeResponse();

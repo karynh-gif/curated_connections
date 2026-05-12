@@ -220,6 +220,10 @@ body::before{content:"";position:fixed;inset:0;
   <script src="/cc-seasonal.js"></script>
   <link rel="stylesheet" href="/atmosphere.css"/>
   <script src="/atmosphere.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="/cc-firebase.js"></script>
 </head>
 <body>
 <div class="app">
@@ -490,7 +494,7 @@ function submitAcct() {
   setTimeout(openCreate, 600);
 }
 
-function submitCreate() {
+async function submitCreate() {
   var name = document.getElementById('circleName').value.trim();
   if (!name) { showCircleToast('Give your circle a name'); return; }
 
@@ -503,23 +507,29 @@ function submitCreate() {
     created_at: new Date().toISOString()
   };
 
-  // Save circle to localStorage
-  var circles = [];
-  try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
-  circles.push(circle);
-  localStorage.setItem('cc_circles', JSON.stringify(circles));
+  // Save to Firestore + localStorage
+  if (typeof CCFB !== 'undefined') {
+    await CCFB.saveCircle(circle);
+  } else {
+    var circles = [];
+    try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
+    circles.push(circle);
+    localStorage.setItem('cc_circles', JSON.stringify(circles));
+  }
 
   document.getElementById('createOverlay').style.display = 'none';
   document.getElementById('circleName').value = '';
   showCircleToast(name + ' created ✦');
-
-  // Show it in the UI
   renderLocalCircles();
 }
 
-function renderLocalCircles() {
+async function renderLocalCircles() {
   var circles = [];
-  try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
+  if (typeof CCFB !== 'undefined') {
+    circles = await CCFB.loadCircles();
+  } else {
+    try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
+  }
   if (!circles.length) return;
 
   var emptyState = document.getElementById('circlesEmptyState');

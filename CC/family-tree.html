@@ -154,6 +154,10 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .toast{display:none;position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.88);border-radius:999px;padding:.4rem .9rem;font-size:.78rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
 .toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
 </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="/cc-firebase.js"></script>
 </head>
 <body>
 <div class="app">
@@ -429,11 +433,23 @@ var REL_LABELS = {
   child1:'Child', child2:'Child', child3:'Child'
 };
 
-function saveTree() {
+function saveTree(changedNodeId) {
   try { localStorage.setItem(TREE_KEY, JSON.stringify(TREE)); } catch(e) {}
+  // Sync the changed node to Firestore
+  if (typeof CCFB !== 'undefined' && changedNodeId && TREE[changedNodeId]) {
+    CCFB.saveTreeNode(TREE_KEY, changedNodeId, TREE[changedNodeId]);
+  }
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', async function() {
+  // Try to load tree from Firestore first (falls back to localStorage)
+  if (typeof CCFB !== 'undefined') {
+    var cloudTree = await CCFB.loadTree(TREE_KEY);
+    if (cloudTree && Object.keys(cloudTree).length > 0) {
+      TREE = cloudTree;
+    }
+  }
+
   initSubject();
   renderAllNodes();
   showStatusBar();
@@ -457,7 +473,7 @@ function initSubject() {
     // Save to tree
     if (!TREE.subject) TREE.subject = {};
     TREE.subject.name = name;
-    saveTree();
+    saveTree('subject');
   }
 }
 
@@ -552,7 +568,7 @@ function submitAddPerson() {
   var color = colors[Object.keys(TREE).length % colors.length];
   
   TREE[currentNodeId] = {name: name, years: years, color: color, rel: REL_LABELS[currentNodeId] || ''};
-  saveTree();
+  saveTree(currentNodeId);
   updateNodeDisplay(currentNodeId, TREE[currentNodeId]);
   document.getElementById('addPersonModal').style.display = 'none';
   treeToast(name + ' added ✦');
