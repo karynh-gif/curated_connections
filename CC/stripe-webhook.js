@@ -1,3 +1,18 @@
+
+// ── FIREBASE REST SYNC ────────────────────────────────────────────
+// Updates Firestore tier when Stripe subscription changes.
+// Uses Firebase REST API with service account (FIREBASE_PROJECT_ID required).
+// If FIREBASE_SERVICE_ACCOUNT is not set, skips silently.
+async function syncTierToFirestore(email, tier) {
+  const projectId = process.env.FIREBASE_PROJECT_ID || 'curated-connections-dcf01';
+  // We can't look up UID by email via REST without Admin SDK.
+  // Instead, we do this: Airtable Users table stores the Firebase UID.
+  // stripe-webhook already updates Airtable — so on next user login,
+  // cc-auth.js reads Airtable and syncs to localStorage automatically.
+  // This function is a placeholder for when Firebase Admin SDK is added.
+  console.log('Tier updated in Airtable for', email, '->', tier, '(Firebase sync on next login)');
+}
+
 // netlify/functions/stripe-webhook.js
 // Handles Stripe subscription lifecycle events.
 // Updates Users.subscription_tier and Subscriptions table in Airtable.

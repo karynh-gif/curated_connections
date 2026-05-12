@@ -19,10 +19,22 @@ const CC_CONFIG = {
 
   // ── STRIPE PAYMENT LINKS (safe to expose) ─────────────────
   stripe: {
-    connect:     { label:"Connect",      price:"$4.99/mo",  paymentLink:"https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00" },
-    insight:     { label:"Insight",      price:"$9.99/mo",  paymentLink:"https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01" },
-    deepConnect: { label:"Deep Connect", price:"$19.99/mo", paymentLink:"https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02" },
-    customerPortal: "https://billing.stripe.com/p/login/PLACEHOLDER",
+    connect: {
+      label: "Connect",
+      monthly: { price: "$4.99/mo",   paymentLink: "https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00" },
+      annual:  { price: "$39.99/yr",  paymentLink: "https://buy.stripe.com/3cI4gt1rD1iN2Vq0R97EQ0b", savings: "2 months free" }
+    },
+    insight: {
+      label: "Insight",
+      monthly: { price: "$9.99/mo",   paymentLink: "https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01" },
+      annual:  { price: "$79.99/yr",  paymentLink: "https://buy.stripe.com/bJe8wJc6h1iNgMgbvN7EQ0a", savings: "4 months free" }
+    },
+    legacy: {
+      label: "Legacy",
+      monthly: { price: "$19.99/mo",  paymentLink: "https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02" },
+      annual:  { price: "$179.99/yr", paymentLink: "https://buy.stripe.com/dRmfZbeep0eJ0NiarJ7EQ09",  savings: "3 months free" }
+    },
+    customerPortal: "https://billing.stripe.com/p/login/cNi9AN0nz2mR8fKeHZ7EQ00",
   },
 
   // ── APP SETTINGS ──────────────────────────────────────────

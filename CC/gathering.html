@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Start a Game — Curated Connections™</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+
+    .gather-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .gather-card {
+      background:   var(--bg-card);
+      border:       1px solid var(--gold-line);
+      border-radius: var(--radius-lg);
+      padding:      48px 44px;
+      width:        100%;
+      max-width:    520px;
+      box-shadow:   var(--shadow-card);
+    }
+
+    .gather-card h2 {
+      font-size:   2rem;
+      margin-bottom: 6px;
+    }
+
+    .gather-card .sub {
+      color:       var(--cream-dim);
+      font-size:   0.92rem;
+      margin-bottom: 32px;
+    }
+
+    /* Step indicators */
+    .steps-nav {
+      display:    flex;
+      gap:        8px;
+      margin-bottom: 36px;
+    }
+    .step-dot {
+      height:       3px;
+      flex:         1;
+      border-radius: 999px;
+      background:   rgba(244,237,224,0.12);
+      transition:   background 0.3s ease;
+    }
+    .step-dot.active    { background: var(--amber); }
+    .step-dot.complete  { background: var(--sage); }
+
+    /* Game select tiles */
+    .game-options { display: flex; flex-direction: column; gap: 12px; margin: 8px 0 24px; }
+
+    .game-option {
+      display:       flex;
+      align-items:   center;
+      gap:           16px;
+      padding:       16px 20px;
+      background:    var(--bg-surface);
+      border:        1px solid rgba(244,237,224,0.1);
+      border-radius: var(--radius-md);
+      cursor:        pointer;
+      transition:    all var(--transition);
+    }
+    .game-option:hover        { border-color: var(--gold-line); }
+    .game-option.selected     { border-color: var(--amber); background: var(--amber-glow); }
+    .game-option.locked       { opacity: 0.45; cursor: not-allowed; }
+
+    .game-option__icon   { font-size: 1.8rem; line-height: 1; }
+    .game-option__info   { flex: 1; }
+    .game-option__name   { font-family: var(--font-display); font-size: 1.15rem; color: var(--cream); }
+    .game-option__meta   { font-size: 0.78rem; color: var(--cream-dim); margin-top: 2px; }
+    .game-option__lock   { font-size: 0.75rem; color: var(--amber); white-space: nowrap; }
+
+    /* Mode select */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 8px 0 24px;
+    }
+    .mode-tile {
+      padding:       24px 20px;
+      background:    var(--bg-surface);
+      border:        1px solid rgba(244,237,224,0.1);
+      border-radius: var(--radius-md);
+      cursor:        pointer;
+      text-align:    center;
+      transition:    all var(--transition);
+      display:       flex;
+      flex-direction: column;
+      gap:           8px;
+      align-items:   center;
+    }
+    .mode-tile:hover    { border-color: var(--gold-line); }
+    .mode-tile.selected { border-color: var(--amber); background: var(--amber-glow); }
+    .mode-tile__icon { font-size: 2rem; }
+    .mode-tile__label { font-family: var(--font-display); font-size: 1.05rem; }
+    .mode-tile__desc  { font-size: 0.78rem; color: var(--cream-dim); }
+
+    /* Waiting room */
+    .waiting-room {
+      text-align: center;
+    }
+    .waiting-room .room-label {
+      font-size:   0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color:       var(--cream-dim);
+      margin-bottom: 8px;
+    }
+    .copy-hint {
+      font-size:   0.8rem;
+      color:       var(--cream-dim);
+      margin-top:  6px;
+      cursor:      pointer;
+    }
+    .copy-hint:hover { color: var(--amber-light); }
+
+    .player-count {
+      font-size: 0.85rem;
+      color:     var(--cream-dim);
+      margin: 20px 0 12px;
+    }
+
+    .pulse-dot {
+      display:       inline-block;
+      width:         8px;
+      height:        8px;
+      border-radius: 50%;
+      background:    var(--sage);
+      margin-right:  6px;
+      animation:     pulse 1.5s ease-in-out infinite;
+    }
+
+    @media (max-width: 560px) {
+      .gather-card { padding: 32px 24px; }
+      .mode-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <a href="index.html" class="nav__logo">Curated <span>Connections</span></a>
+  <div class="nav__actions">
+    <a href="index.html" class="btn btn--ghost btn--sm">← Back</a>
+  </div>
+</nav>
+
+<main class="gather-layout">
+  <div class="gather-card" id="gather-card">
+
+    <!-- Step dots -->
+    <div class="steps-nav">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+      <div class="step-dot" id="dot-4"></div>
+    </div>
+
+    <!-- ── STEP 1: Choose game ── -->
+    <div id="step-1">
+      <span class="section-label">Step 1 of 4</span>
+      <h2>Choose a game.</h2>
+      <p class="sub">Pick what you're in the mood for.</p>
+
+      <div class="game-options" id="game-options-list">
+        <!-- injected by JS -->
+      </div>
+
+      <button class="btn btn--primary btn--full" id="step1-next" disabled>Continue</button>
+    </div>
+
+    <!-- ── STEP 2: Create or Join ── -->
+    <div id="step-2" class="hidden">
+      <span class="section-label">Step 2 of 4</span>
+      <h2>How are you playing?</h2>
+      <p class="sub">Start something new or join a friend's room.</p>
+
+      <div class="mode-grid">
+        <div class="mode-tile" id="mode-create" onclick="selectMode('create')">
+          <div class="mode-tile__icon">✦</div>
+          <div class="mode-tile__label">Start a Room</div>
+          <div class="mode-tile__desc">Generate a room code and invite others</div>
+        </div>
+        <div class="mode-tile" id="mode-join" onclick="selectMode('join')">
+          <div class="mode-tile__icon">⌘</div>
+          <div class="mode-tile__label">Join a Room</div>
+          <div class="mode-tile__desc">Enter a code from another player</div>
+        </div>
+      </div>
+
+      <!-- Join code input — shown when "join" selected -->
+      <div id="join-code-field" class="field hidden" style="margin-bottom:24px;">
+        <label>Room Code</label>
+        <input type="text" id="join-code-input" class="input" maxlength="6" placeholder="e.g. XK39A2" style="letter-spacing:0.2em; font-size:1.2rem; text-transform:uppercase;"/>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <button class="btn btn--ghost" onclick="goToStep(1)">Back</button>
+        <button class="btn btn--primary" id="step2-next" style="flex:1;" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: Your name ── -->
+    <div id="step-3" class="hidden">
+      <span class="section-label">Step 3 of 4</span>
+      <h2>What's your name?</h2>
+      <p class="sub">This is how other players will see you.</p>
+
+      <div class="field" style="margin-bottom:28px;">
+        <label for="player-name-input">Display Name</label>
+        <input type="text" id="player-name-input" class="input" maxlength="30" placeholder="Your first name or nickname"/>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <button class="btn btn--ghost" onclick="goToStep(2)">Back</button>
+        <button class="btn btn--primary" id="step3-next" style="flex:1;" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 4: Waiting Room ── -->
+    <div id="step-4" class="hidden">
+      <span class="section-label">Step 4 of 4</span>
+      <div class="waiting-room">
+        <h2 style="margin-bottom:24px;">Room ready.</h2>
+
+        <!-- shown when hosting -->
+        <div id="host-view">
+          <div class="room-label">Your Room Code</div>
+          <div class="room-code" id="display-room-code">——</div>
+          <div class="copy-hint" onclick="copyRoomCode()">📋 Tap to copy</div>
+        </div>
+
+        <!-- shown when joining -->
+        <div id="join-view" class="hidden">
+          <p style="margin-bottom:8px;">You've joined the room.</p>
+          <div class="room-code" id="joined-room-code" style="font-size:1.8rem;">——</div>
+        </div>
+
+        <div class="player-count"><span class="pulse-dot"></span><span id="player-count-text">Waiting for players…</span></div>
+        <div class="player-list" id="player-list" style="justify-content:center; margin-bottom:28px;"></div>
+
+        <button class="btn btn--primary btn--full btn--lg" id="start-game-btn">
+          Start Playing →
+        </button>
+        <button class="btn btn--ghost btn--full" style="margin-top:8px;" onclick="goToStep(1)">Change Setup</button>
+      </div>
+    </div>
+
+  </div><!-- /gather-card -->
+</main>
+
+<!-- ── UPGRADE OVERLAY ── -->
+<div id="upgrade-overlay" class="overlay hidden">
+  <div class="modal" style="text-align:center;">
+    <div style="font-size:2.5rem; margin-bottom:16px;">✦</div>
+    <h2 style="margin-bottom:8px;">Upgrade to play</h2>
+    <p style="margin-bottom:4px;">This game requires the <strong id="upgrade-tier-name"></strong> plan.</p>
+    <p class="small dim" style="margin-bottom:28px;" id="upgrade-tier-price"></p>
+    <a href="#" id="upgrade-cta-btn" class="btn btn--primary btn--full btn--lg" target="_blank" rel="noopener" style="margin-bottom:12px;">Upgrade Now</a>
+    <button class="btn btn--ghost btn--full" onclick="document.getElementById('upgrade-overlay').classList.add('hidden')">Not now</button>
+  </div>
+</div>
+
+<!-- ── SCRIPTS ── -->
+<script src="config.js"></script>
+<script src="airtable.js"></script>
+<script src="app.js"></script>
+<script>
+  // ── STATE ──
+  let selectedGame = null;
+  let selectedMode = null;
+  let currentStep  = 1;
+
+  // Pre-select game from URL param
+  const params = new URLSearchParams(location.search);
+  if (params.get("game")) selectedGame = params.get("game");
+
+  // ── GAME LIST ──
+  const GAMES = [
+    {
+      slug:         "one-bad-day",
+      name:         "One Bad Day",
+      icon:         "🌧️",
+      meta:         "2–6 players · 30–60 min",
+      tierRequired: "connect",
+    },
+    {
+      slug:         "oh-thats-me",
+      name:         "Oh That's Me",
+      icon:         "🪞",
+      meta:         "2–6 players · 20–45 min",
+      tierRequired: "insight",
+    },
+  ];
+
+  function renderGameOptions() {
+    const container = document.getElementById("game-options-list");
+    const tier = getTier();
+    const tierOrder = ["free", "connect", "insight", "deepConnect"];
+    const userTierIdx = tierOrder.indexOf(tier);
+
+    container.innerHTML = GAMES.map(g => {
+      const reqIdx  = tierOrder.indexOf(g.tierRequired);
+      const locked  = reqIdx > userTierIdx;
+      const tierLabel = {
+        connect:     "Connect plan ($4.99/mo)",
+        insight:     "Insight plan ($9.99/mo)",
+        deepConnect: "Deep Connect ($19.99/mo)",
+      }[g.tierRequired] || "";
+
+      return `
+        <div class="game-option ${locked ? "locked" : ""} ${selectedGame === g.slug ? "selected" : ""}"
+             onclick="${locked ? `showUpgradePrompt('game')` : `selectGame('${g.slug}')`}"
+             data-slug="${g.slug}">
+          <div class="game-option__icon">${g.icon}</div>
+          <div class="game-option__info">
+            <div class="game-option__name">${g.name}</div>
+            <div class="game-option__meta">${g.meta}</div>
+          </div>
+          ${locked ? `<div class="game-option__lock">Requires ${tierLabel}</div>` : ""}
+        </div>`;
+    }).join("");
+  }
+
+  function selectGame(slug) {
+    selectedGame = slug;
+    document.querySelectorAll(".game-option").forEach(el => {
+      el.classList.toggle("selected", el.dataset.slug === slug);
+    });
+    document.getElementById("step1-next").disabled = false;
+  }
+
+  // ── MODE SELECT ──
+  function selectMode(mode) {
+    selectedMode = mode;
+    document.getElementById("mode-create").classList.toggle("selected", mode === "create");
+    document.getElementById("mode-join").classList.toggle("selected", mode === "join");
+    document.getElementById("join-code-field").classList.toggle("hidden", mode !== "join");
+    document.getElementById("step2-next").disabled = false;
+    document.getElementById("step2-next").textContent = mode === "create" ? "Create Room" : "Join Room";
+  }
+
+  // ── STEP NAVIGATION ──
+  function goToStep(n) {
+    [1,2,3,4].forEach(i => {
+      document.getElementById(`step-${i}`).classList.toggle("hidden", i !== n);
+      const dot = document.getElementById(`dot-${i}`);
+      dot.classList.remove("active", "complete");
+      if (i < n)  dot.classList.add("complete");
+      if (i === n) dot.classList.add("active");
+    });
+    currentStep = n;
+  }
+
+  // Name input enables next
+  document.getElementById("player-name-input").addEventListener("input", e => {
+    document.getElementById("step3-next").disabled = e.target.value.trim().length < 1;
+  });
+
+  // ── STEP BUTTONS ──
+  document.getElementById("step1-next").addEventListener("click", () => goToStep(2));
+
+  document.getElementById("step2-next").addEventListener("click", async () => {
+    const btn = document.getElementById("step2-next");
+    if (selectedMode === "join") {
+      const code = document.getElementById("join-code-input").value.trim().toUpperCase();
+      if (code.length !== 6) { showToast("Please enter the 6-character room code.", "error"); return; }
+    }
+    goToStep(3);
+  });
+
+  document.getElementById("step3-next").addEventListener("click", async () => {
+    const name = document.getElementById("player-name-input").value.trim();
+    const btn  = document.getElementById("step3-next");
+    btn.disabled = true;
+    btn.textContent = "Setting up…";
+
+    try {
+      if (selectedMode === "create") {
+        const session = await startNewSession(selectedGame, name);
+        const code    = session.fields?.room_code || "——";
+        document.getElementById("display-room-code").textContent = code;
+        document.getElementById("host-view").classList.remove("hidden");
+        document.getElementById("join-view").classList.add("hidden");
+        renderPlayers([{ name }]);
+        document.getElementById("player-count-text").textContent = `1 player — share the code to invite more`;
+      } else {
+        const code    = document.getElementById("join-code-input").value.trim().toUpperCase();
+        const session = await joinSession(code, name);
+        document.getElementById("joined-room-code").textContent = session.fields?.room_code || code;
+        document.getElementById("host-view").classList.add("hidden");
+        document.getElementById("join-view").classList.remove("hidden");
+        const players = JSON.parse(session.fields?.players || "[]");
+        players.push({ name });
+        renderPlayers(players);
+        document.getElementById("player-count-text").textContent = `${players.length} player${players.length !== 1 ? "s" : ""} in room`;
+      }
+      goToStep(4);
+    } catch (err) {
+      showToast(err.message || "Something went wrong.", "error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Continue";
+    }
+  });
+
+  function renderPlayers(players) {
+    const list = document.getElementById("player-list");
+    list.innerHTML = players.map(p => `
+      <div class="player-chip">
+        <div class="player-chip__avatar">${(p.name||"?")[0].toUpperCase()}</div>
+        ${p.name}
+      </div>`).join("");
+  }
+
+  function copyRoomCode() {
+    const code = document.getElementById("display-room-code").textContent;
+    navigator.clipboard.writeText(code).then(() => showToast("Room code copied!", "success"));
+  }
+
+  // Start game
+  document.getElementById("start-game-btn").addEventListener("click", () => {
+    if (!selectedGame) { showToast("No game selected.", "error"); return; }
+    location.href = `play.html?game=${selectedGame}`;
+  });
+
+  // ── TOAST ──
+  function showToast(msg, type = "info") {
+    const t = document.createElement("div");
+    t.className = `toast toast--${type}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  // ── INIT ──
+  renderGameOptions();
+  if (selectedGame) {
+    // auto-select and advance
+    setTimeout(() => {
+      const el = document.querySelector(`[data-slug="${selectedGame}"]`);
+      if (el && !el.classList.contains("locked")) {
+        el.click();
+      }
+    }, 100);
+  }
+</script>
+</body>
+</html>
