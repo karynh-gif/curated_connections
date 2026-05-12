@@ -261,34 +261,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div class="shelf-count" id="wwCount">loading...</div>
       </div>
       <div class="shelf-row" id="wwShelf">
-        <div class="ww-card" id="ww1" onclick="openWW('ww1')">
-          <div class="ww-card-top">
-            <div class="ww-type">Riddle</div>
-            <div class="ww-q">I speak without a mouth and hear without ears. I have no body, but I come alive with wind.</div>
-          </div>
-          <div class="ww-tap">Tap for answer</div>
-        </div>
-        <div class="ww-card" id="ww2" onclick="openWW('ww2')">
-          <div class="ww-card-top">
-            <div class="ww-type">Joke</div>
-            <div class="ww-q">Why don't scientists trust atoms?</div>
-          </div>
-          <div class="ww-tap">Tap for punchline</div>
-        </div>
-        <div class="ww-card" id="ww3" onclick="openWW('ww3')">
-          <div class="ww-card-top">
-            <div class="ww-type">Riddle</div>
-            <div class="ww-q">The more you take, the more you leave behind.</div>
-          </div>
-          <div class="ww-tap">Tap for answer</div>
-        </div>
-        <div class="ww-card" id="ww4" onclick="openWW('ww4')">
-          <div class="ww-card-top">
-            <div class="ww-type">Joke</div>
-            <div class="ww-q">I told my wife she should embrace her mistakes.</div>
-          </div>
-          <div class="ww-tap">Tap for punchline</div>
-        </div>
+        <!-- Populated by loadWitWonder() -->
       </div>
     </div>
 
@@ -559,6 +532,15 @@ function renderTonightCards(shelf, recs) {
   var max = [2,5,8,99][level] || 2;
   var picked = shuffle(recs).slice(0, max);
 
+  // Deduplicate — one card per edition
+  var seenEditions = {};
+  var deduped = [];
+  picked.forEach(function(rec) {
+    var ed = (rec.fields.Edition && rec.fields.Edition.name) ? rec.fields.Edition.name : (rec.fields.Edition || 'Family');
+    if (!seenEditions[ed]) { seenEditions[ed] = true; deduped.push(rec); }
+  });
+  picked = deduped.slice(0, max);
+
   var html = '';
   picked.forEach(function(rec, i) {
     var f = rec.fields;
@@ -647,7 +629,7 @@ async function loadTonightCards() {
   if (!shelf) return;
   shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Loading cards...</div>';
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula:'{Active}=1', maxRecords:30})});
+    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula:'AND({Active}=1,{Gather Pool}=1)', maxRecords:50})});
     if (!res.ok) {
       shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Error ' + res.status + ' — tap to retry</div>';
       shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
@@ -719,6 +701,13 @@ function closeCardOverlay() {
 }
 
 // ── WIT & WONDER ──
+
+// ── WIT & WONDER TYPE STYLES ──
+var WW_TYPES = {
+  'Riddle':      {backBg:'linear-gradient(145deg,#041420,#0a2840)', frontBg:'linear-gradient(145deg,#0a2030,#104858)', border:'rgba(42,138,114,0.3)', accent:'#3aad90', tapLabel:'Tap for answer'},
+  'Joke':        {backBg:'linear-gradient(145deg,#1a0c02,#3a1800)', frontBg:'linear-gradient(145deg,#2a1400,#5a3010)', border:'rgba(201,125,58,0.3)',  accent:'#e89448', tapLabel:'Tap for punchline'},
+  'Brain Teaser':{backBg:'linear-gradient(145deg,#0e0820,#2a1050)', frontBg:'linear-gradient(145deg,#1a1040,#3a1870)', border:'rgba(107,60,162,0.3)', accent:'#9b6dd4', tapLabel:'Tap to reveal'},
+};
 var WW_DATA = {
   ww1:{type:'Riddle', q:'I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?', a:'An echo.', bg:'linear-gradient(175deg,#0a1a2a,#0a2a3e)'},
   ww2:{type:'Joke', q:"Why don't scientists trust atoms?", a:'Because they make up everything.', bg:'linear-gradient(175deg,#1a0830,#351258)'},
@@ -751,31 +740,64 @@ function closeWW() {
 
 // Load WW from Airtable
 async function loadWitWonder() {
+  var shelf = document.getElementById('wwShelf');
+  var countEl = document.getElementById('wwCount');
+  if (!shelf) return;
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', filterFormula:'{Active}=TRUE', maxRecords:40})});
-    if (!res.ok) return;
+    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', filterFormula:'AND({Active}=1,{Gather Pool}=1)', maxRecords:60})});
+    if (!res.ok) { countEl.textContent = 'error'; return; }
     var data = await res.json();
-    if (!data.records || !data.records.length) return;
+    if (!data.records || !data.records.length) { countEl.textContent = 'none'; return; }
     var recs = data.records;
-    var riddles = shuffle(recs.filter(function(r) { return r.fields.Type && r.fields.Type.name === 'Riddle'; }));
-    var jokes = shuffle(recs.filter(function(r) { return r.fields.Type && r.fields.Type.name === 'Joke'; }));
-    var brains = shuffle(recs.filter(function(r) { return r.fields.Type && r.fields.Type.name === 'Brain Teaser'; }));
-    var picks = [riddles[0], jokes[0], brains[0], riddles[1]].filter(Boolean).slice(0,4);
-    var ids = ['ww1','ww2','ww3','ww4'];
+    var riddles  = shuffle(recs.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Riddle'; }));
+    var jokes    = shuffle(recs.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Joke'; }));
+    var brains   = shuffle(recs.filter(function(r){ return r.fields.Type && r.fields.Type.name === 'Brain Teaser'; }));
+    // Exactly one of each type, in order: Riddle, Joke, Brain Teaser
+    var picks = [riddles[0], jokes[0], brains[0]].filter(Boolean);
+    if (!picks.length) { countEl.textContent = 'none'; return; }
+    var html = '';
     picks.forEach(function(rec, i) {
       var f = rec.fields;
-      var type = f.Type ? f.Type.name : 'Curiosity';
-      WW_DATA[ids[i]] = {type:type, q:f.Prompt||'', a:f.Answer||f['Conversation Bridge']||'', bg:['linear-gradient(175deg,#0a1a2a,#0a2a3e)','linear-gradient(175deg,#1a0830,#351258)','linear-gradient(175deg,#0a2010,#0e4020)','linear-gradient(175deg,#2a1000,#4a2008)'][i]};
-      var card = document.getElementById(ids[i]);
-      if (card) {
-        var typeEl = card.querySelector('.ww-type'); if (typeEl) typeEl.textContent = type;
-        var qEl = card.querySelector('.ww-q'); if (qEl) qEl.textContent = f.Prompt||'';
-        var tapEl = card.querySelector('.ww-tap'); if (tapEl) tapEl.textContent = (type==='Joke') ? 'Tap for punchline' : 'Tap for answer';
-      }
+      var type = (f.Type && f.Type.name) ? f.Type.name : 'Riddle';
+      var dk = WW_TYPES[type] || WW_TYPES['Riddle'];
+      var key = 'ww_' + i;
+      WW_DATA[key] = {type:type, q:f.Prompt||'', a:f.Answer||f['Conversation Bridge']||''};
+      html += '<div class="fc-scene"><div class="fc-inner" id="fc_' + key + '" data-state="back" data-key="' + key + '" style="background:' + dk.backBg + ';border:1px solid ' + dk.border + ';" onclick="wwTap(this)">';
+      // BACK
+      html += '<div class="fc-back"><div class="fc-back-shine"></div>';
+      html += '<div class="fc-back-hatch" style="background-image:repeating-linear-gradient(45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px),repeating-linear-gradient(-45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px);"></div>';
+      html += '<div class="fc-brand" style="color:' + dk.accent + ';text-shadow:0 0 20px ' + dk.accent + '55;">Curated Connections</div>';
+      html += '<div class="fc-deck">' + type + '</div>';
+      html += '<div class="fc-tap" style="color:' + dk.accent + '66;">✦ tap to reveal ✦</div></div>';
+      // FRONT
+      html += '<div class="fc-front" style="background:' + dk.frontBg + ';"><div class="fc-front-shine"></div>';
+      html += '<div class="fc-label" style="color:' + dk.accent + ';">' + type + '</div>';
+      html += '<div class="fc-q">' + (f.Prompt ? '&ldquo;' + f.Prompt + '&rdquo;' : '') + '</div>';
+      html += '<div class="fc-actions"><div class="fc-open" style="color:' + dk.accent + ';">' + dk.tapLabel + ' &rarr;</div>';
+      html += '<div class="fc-flip-back" onclick="event.stopPropagation();fcFlipBack(this.closest(\'.fc-inner\'))">&#x21A9; flip back</div></div>';
+      html += '</div></div></div>';
     });
-    var j = jokes.length; var r = riddles.length;
-    document.getElementById('wwCount').textContent = (j?j+' joke'+(j>1?'s':''):'') + (j&&r?' · ':'') + (r?r+' riddle'+(r>1?'s':''):'');
-  } catch(e) {}
+    shelf.innerHTML = html;
+    countEl.textContent = picks.length + ' today';
+  } catch(e) { if (countEl) countEl.textContent = 'error'; }
+}
+
+function wwTap(inner) {
+  if (!inner) return;
+  if (inner.dataset.state === 'back') {
+    // Tap 1: flip to front
+    inner.style.transform = 'scaleX(0)';
+    setTimeout(function() {
+      inner.querySelector('.fc-back').style.display = 'none';
+      inner.querySelector('.fc-front').style.display = 'block';
+      inner.style.background = WW_TYPES[WW_DATA[inner.dataset.key].type].frontBg;
+      inner.style.transform = 'scaleX(1)';
+      inner.dataset.state = 'front';
+    }, 150);
+  } else {
+    // Tap 2: open W&W overlay
+    openWW(inner.dataset.key);
+  }
 }
 
 // ── RESPONSE ──
