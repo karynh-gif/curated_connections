@@ -217,6 +217,28 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @keyframes glow{0%,100%{opacity:1}50%{opacity:.6}}
 @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.4)}}
 @keyframes cardIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+/* ── TIMED THREAD REVEALS ── */
+.card-thread{
+  opacity:0;transform:translateY(10px);
+  transition:opacity .9s ease, transform .9s ease;
+  background:rgba(255,255,255,.06);border-radius:14px;
+  padding:12px 15px;margin-bottom:10px;
+}
+.card-thread.vis{opacity:1;transform:translateY(0);}
+.card-thread-label{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;}
+.card-thread-label.connect{color:var(--amber);}
+.card-thread-label.insight{color:var(--purple2);}
+.card-thread-label.legacy{color:#c9a830;}
+.card-thread-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(242,232,216,.68);line-height:1.62;}
+.threads-arriving{text-align:center;padding:18px 0;display:none;}
+.threads-arriving.show{display:block;}
+.threads-arriving-label{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.22);margin-bottom:8px;}
+.threads-dots{display:flex;justify-content:center;gap:5px;}
+.threads-dot{width:5px;height:5px;border-radius:50%;background:rgba(242,232,216,.18);animation:dotPulse 1.2s ease-in-out infinite;}
+.threads-dot:nth-child(2){animation-delay:.2s;}
+.threads-dot:nth-child(3){animation-delay:.4s;}
+@keyframes dotPulse{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.65;transform:scale(1.35)}}
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-cards.js"></script>
@@ -461,6 +483,34 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="card-question" id="cfQuestion">"What would you tell your 20-year-old self?"</div>
       <div class="card-hint-text" id="cfHint"></div>
       <button class="cf-flip-btn" id="cfFlipBtn" onclick="flipCard()">Flip for deeper prompts ↓</button>
+      <!-- Upgrade nudge — free users only -->
+      <div id="cfUpgradeNudge" style="display:none;margin-top:1.1rem;padding:.85rem 1rem;background:rgba(201,125,58,.06);border:1px solid rgba(201,125,58,.14);border-radius:14px;cursor:pointer;text-align:center;" onclick="triggerAccount('unlock')">
+        <div style="font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.25rem;">&#x1F512; Deeper Threads</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:rgba(242,232,216,.32);line-height:1.5;margin-bottom:.3rem;">Connect unlocks threads that pull this conversation deeper.</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;color:rgba(201,125,58,.45);">Unlock Connect &rarr;</div>
+      </div>
+      <!-- Waiting indicator — shows before first thread arrives -->
+      <div class="threads-arriving" id="threadsArriving">
+        <div class="threads-arriving-label">threads arriving&hellip;</div>
+        <div class="threads-dots">
+          <div class="threads-dot"></div>
+          <div class="threads-dot"></div>
+          <div class="threads-dot"></div>
+        </div>
+      </div>
+      <!-- Timed depth threads — fade in automatically -->
+      <div id="threadConnect" class="card-thread" style="display:none;border-left:3px solid var(--amber);">
+        <div class="card-thread-label connect">Connect Thread</div>
+        <div class="card-thread-text" id="threadConnectText"></div>
+      </div>
+      <div id="threadInsight" class="card-thread" style="display:none;border-left:3px solid var(--purple2);">
+        <div class="card-thread-label insight">Insight Thread</div>
+        <div class="card-thread-text" id="threadInsightText"></div>
+      </div>
+      <div id="threadLegacy" class="card-thread" style="display:none;border-left:3px solid #c9a830;">
+        <div class="card-thread-label legacy">Legacy Thread</div>
+        <div class="card-thread-text" id="threadLegacyText"></div>
+      </div>
       <div class="card-action-bar">
         <div class="card-action-btn card-answer-btn" onclick="openResponse(currentCardId)">Answer this →</div>
         <div class="card-action-btn" onclick="triggerAccount('share this card')">Share ↗</div>
@@ -568,31 +618,82 @@ var currentWWId = null;
 
 // ── CARD OPEN / CLOSE ──
 function openCard(id) {
+  // Clear any running thread timers
+  if (window._threadTimers) window._threadTimers.forEach(clearTimeout);
+  window._threadTimers = [];
+
   var c = LIVE_CARDS[id] || CARDS[id] || CARDS.tonight;
   currentCardId = id;
+  var user = CC.getUser ? CC.getUser() : null;
+  var tier = user ? (user.tier || 'free') : 'free';
+  var level = {free:0, connect:1, insight:2, legacy:3}[tier] || 0;
+
+  // Populate card content
   document.getElementById('cfLabel').textContent = c.label;
   document.getElementById('cfLabel').style.color = c.labelColor || 'var(--amber2)';
   document.getElementById('cfBadge').textContent = c.badge || 'Curated Connections';
   document.getElementById('cfQuestion').textContent = c.q;
-  document.getElementById('cfHint').textContent = c.hint || '';
-  document.getElementById('d1t').textContent = c.push || '';
-  document.getElementById('d2t').textContent = c.story || '';
-  document.getElementById('d3t').textContent = c.social || '';
-  if (document.getElementById('d1')) document.getElementById('d1').style.display = (c.push) ? 'block' : 'none';
-  if (document.getElementById('d2')) document.getElementById('d2').style.display = (c.story) ? 'block' : 'none';
-  if (document.getElementById('d3')) document.getElementById('d3').style.display = (c.social) ? 'block' : 'none';
+  document.getElementById('cfHint').textContent = '';
+
+  // Hide flip button for free tier
+  var flipBtn = document.getElementById('cfFlipBtn');
+  if (flipBtn) flipBtn.style.display = level >= 1 ? 'block' : 'none';
+
+  // Reset all threads to hidden
+  ['threadConnect','threadInsight','threadLegacy'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.classList.remove('vis'); el.style.display = 'none'; }
+  });
+
+  // Set thread text content
+  if (document.getElementById('threadConnectText')) document.getElementById('threadConnectText').textContent = c.push || c.hint || '';
+  if (document.getElementById('threadInsightText')) document.getElementById('threadInsightText').textContent = c.story || '';
+  if (document.getElementById('threadLegacyText')) document.getElementById('threadLegacyText').textContent = c.social || '';
+
+  // Upgrade nudge for free users
+  var nudge = document.getElementById('cfUpgradeNudge');
+  if (nudge) nudge.style.display = level === 0 ? 'block' : 'none';
+
+  // Show waiting dots for paid tiers
+  var arriving = document.getElementById('threadsArriving');
+  if (arriving) arriving.classList.toggle('show', level >= 1);
+
+  // Open overlay
   document.getElementById('cardScreen').style.background = c.bg || 'linear-gradient(175deg,#0d2840,#1a1640,#0d2a1a)';
   document.getElementById('cardBack').style.background = (c.bg || 'linear-gradient(175deg,#0d2840,#1a1640,#0d2a1a)').replace('175deg','185deg');
   document.getElementById('cardBack').classList.remove('open');
-  document.getElementById('cfFlipBtn').textContent = 'Flip for deeper prompts \u2193';
   document.getElementById('wwScreen').style.display = 'none';
   document.getElementById('cardScreen').style.display = 'flex';
   document.getElementById('cardBack').style.display = 'none';
   document.getElementById('cardOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Schedule thread reveals
+  if (level >= 1 && (c.push || c.hint)) {
+    window._threadTimers.push(setTimeout(function() {
+      var el = document.getElementById('threadConnect');
+      if (el) { el.style.display = 'block'; setTimeout(function() { el.classList.add('vis'); }, 30); }
+      if (arriving) arriving.classList.remove('show');
+    }, 4000));
+  }
+  if (level >= 2 && c.story) {
+    window._threadTimers.push(setTimeout(function() {
+      var el = document.getElementById('threadInsight');
+      if (el) { el.style.display = 'block'; setTimeout(function() { el.classList.add('vis'); }, 30); }
+    }, 8000));
+  }
+  if (level >= 3 && c.social) {
+    window._threadTimers.push(setTimeout(function() {
+      var el = document.getElementById('threadLegacy');
+      if (el) { el.style.display = 'block'; setTimeout(function() { el.classList.add('vis'); }, 30); }
+    }, 13000));
+  }
 }
 
+
 function closeCard() {
+  if (window._threadTimers) window._threadTimers.forEach(clearTimeout);
+  window._threadTimers = [];
   document.getElementById('cardOverlay').classList.remove('open');
   document.getElementById('cardScreen').style.display = 'none';
   document.getElementById('cardBack').style.display = 'none';
