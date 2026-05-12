@@ -209,28 +209,31 @@ body{background:var(--parchment);font-family:'DM Sans',sans-serif;color:var(--in
   </div>
 
   <!-- BOTTOM NAV -->
-  <nav class="lf-bnav">
-    <div class="lf-bn" onclick="window.location.href='gather.html'">
-      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="lf-bn-l">Gather</div>
+  <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(253,246,236,.96);border-top:1px solid rgba(40,22,0,.1);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;">
+    <div onclick="window.location.href='gather.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Home</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="lf-bn" onclick="window.location.href='family-tree.html'">
-      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="12" y1="7" x2="12" y2="13"/><path d="M8 13h8"/><line x1="8" y1="13" x2="8" y2="19"/><line x1="16" y1="13" x2="16" y2="19"/><circle cx="12" cy="5" r="2"/></svg></div>
-      <div class="lf-bn-l">Tree</div>
+    <div onclick="window.location.href='circles.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Circles</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="lf-bn active">
-      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-      <div class="lf-bn-l">Leaf</div>
+    <div onclick="window.location.href='games.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Games</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="lf-bn" onclick="openContribute()">
-      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-      <div class="lf-bn-l">Add</div>
+    <div onclick="window.location.href='journal.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Journal</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="bn" onclick="window.location.href='games.html'" style="position:relative;">
-      <div class="bn-i">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <div class="bn-l">Games</div>
+    <div onclick="typeof openAccount!=='undefined'&&openAccount('your profile')" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:1;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#c97d3a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#c97d3a;">Me</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:1;"></div>
     </div>
   </nav>
 </div>

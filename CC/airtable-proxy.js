@@ -31,6 +31,8 @@ const ALLOWED_TABLES = new Set([
   "Game Plays",
   "User Decks",
   "Special Decks",
+  "Leaf Payments",
+  "Living Legacy Leaves",
 ]);
 
 const ALLOWED_ACTIONS = new Set(["list", "get", "create", "update", "delete"]);

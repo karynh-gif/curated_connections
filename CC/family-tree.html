@@ -375,28 +375,31 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
   </div>
 
   <!-- BOTTOM NAV -->
-  <nav class="bnav">
-    <div class="bn" onclick="goToArchive()">
-      <div class="bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-      <div class="bn-l">Archive</div>
+  <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(253,246,236,.96);border-top:1px solid rgba(40,22,0,.1);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;">
+    <div onclick="window.location.href='gather.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Home</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="bn active">
-      <div class="bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="13"/><path d="M8 13h8"/><line x1="8" y1="13" x2="8" y2="19"/><line x1="16" y1="13" x2="16" y2="19"/></svg></div>
-      <div class="bn-l">Tree</div>
+    <div onclick="window.location.href='circles.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Circles</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="bn" onclick="goToMemories()">
-      <div class="bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-      <div class="bn-l">Memories</div>
+    <div onclick="window.location.href='games.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:1;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#c97d3a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#c97d3a;">Games</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:1;"></div>
     </div>
-    <div class="bn" onclick="goToKeepers()">
-      <div class="bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-      <div class="bn-l">Keepers</div>
+    <div onclick="window.location.href='journal.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Journal</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
-    <div class="bn" onclick="window.location.href='games.html'" style="position:relative;">
-      <div class="bn-i">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <div class="bn-l">Games</div>
+    <div onclick="typeof openAccount!=='undefined'&&openAccount('your profile')" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
+      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(40,22,0,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(40,22,0,.3);">Me</div>
+      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
     </div>
   </nav>
 </div>
