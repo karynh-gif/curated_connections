@@ -180,8 +180,8 @@ body::after{content:"";position:fixed;inset:0;
       <div class="tree-hero" style="animation:fadeUp .5s ease both;">
         <span class="tree-emoji">🌳</span>
         <div class="th-brand">Curated Connections · Living Legacy</div>
-        <div class="th-title">Add your piece of<br><strong id="personName">Ruth's story</strong></div>
-        <div class="th-sub">Maren has invited you to add your memories, stories, and moments to Ruth's Living Legacy archive.</div>
+        <div class="th-title">Add your piece of<br><strong id="personName">their story</strong></div>
+        <div class="th-sub"><span id="inviterNameContrib">Someone</span> has invited you to add your memories, stories, and moments to their Living Legacy archive.</div>
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:rgba(40,22,0,.38);margin-top:.5rem;">Every answer is a moment waiting to be captured.</div>
       </div>
 
@@ -191,8 +191,8 @@ body::after{content:"";position:fixed;inset:0;
       <div class="about-section">
         <div class="about-card" style="animation:fadeUp .5s .08s ease both;">
           <div class="ac-eyebrow">About this leaf</div>
-          <div class="ac-name">Ruth Calloway</div>
-          <div class="ac-keeper">Kept by Maren Calloway · Family archive</div>
+          <div class="ac-name"><span class="legacy-person-name">this person</span></div>
+          <div class="ac-keeper">Kept by <span id="keeperName">the family</span> · Family archive</div>
           <div class="ac-desc">"Mom was the person who remembered everything — birthdays, recipes, the way things sounded before we moved. This archive is for all of us who knew her."</div>
         </div>
       </div>
@@ -237,7 +237,7 @@ body::after{content:"";position:fixed;inset:0;
   <circle cx="12" cy="16" r="1" fill="rgba(40,22,0,.4)" stroke="none"/>
 </svg></div>
             <div class="st-name" style="color:var(--amber);">Preserve their voice</div>
-            <div class="st-desc">Upload a recording, voicemail, or video clip of Ruth</div>
+            <div class="st-desc">Upload a recording, voicemail, or video clip of theirs</div>
           </div>
         </div>
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(138,96,16,.6);margin-top:.65rem;padding:.65rem .8rem;background:rgba(255,248,230,.5);border-radius:var(--r-md);border-left:2px solid rgba(138,96,16,.25);line-height:1.6;">
@@ -248,7 +248,7 @@ body::after{content:"";position:fixed;inset:0;
 
       <!-- How did you know them -->
       <div style="padding:0 1.3rem .8rem;animation:fadeUp .5s .18s ease both;">
-        <div class="st-lbl">How did you know Ruth?</div>
+        <div class="st-lbl">How did you know this person?</div>
         <div style="display:flex;flex-wrap:wrap;gap:.38rem;" id="relationshipChips">
           <div class="rel-chip" onclick="selRelationship(this,'Family member')">Family member</div>
           <div class="rel-chip" onclick="selRelationship(this,'Close friend')">Close friend</div>
@@ -259,7 +259,7 @@ body::after{content:"";position:fixed;inset:0;
           <div class="rel-chip" onclick="selRelationship(this,'Former student')">Former student</div>
           <div class="rel-chip" onclick="selRelationship(this,'I knew them in another way')">Another way</div>
         </div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.45);margin-top:.55rem;line-height:1.6;">Your relationship to Ruth gives her story more dimension. People knew her differently — all of it matters.</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.45);margin-top:.55rem;line-height:1.6;">Your relationship to this person gives her story more dimension. People knew her differently — all of it matters.</div>
       </div>
 
       <div class="begin-section" style="animation:fadeUp .5s .2s ease both;">
@@ -273,7 +273,7 @@ body::after{content:"";position:fixed;inset:0;
   <div class="screen" id="contributeScreen">
     <div class="contribute-header">
       <button class="ch-back" onclick="goBack()">← Back</button>
-      <div class="ch-title">Share a memory of Ruth</div>
+      <div class="ch-title">Share a memory</div>
       <div class="ch-step" id="stepLabel">Step 1 of 2</div>
     </div>
 
@@ -297,7 +297,7 @@ body::after{content:"";position:fixed;inset:0;
 
       <!-- Prompt -->
       <div style="animation:fadeUp .3s .06s ease both;">
-        <div class="contrib-prompt" id="chapterPrompt">"What's your earliest memory of Ruth?"</div>
+        <div class="contrib-prompt" id="chapterPrompt">"What's your earliest memory of them?"</div>
         <div class="prompt-hint">There's no wrong answer. Write as much or as little as feels right. This is for the people who loved her.</div>
       </div>
 
@@ -358,7 +358,7 @@ body::after{content:"";position:fixed;inset:0;
         <div class="media-area" id="area-theirvoice">
           <div style="background:rgba(255,248,230,.6);border:1.5px solid rgba(138,96,16,.2);border-radius:var(--r-lg);padding:1.3rem 1.1rem;text-align:center;">
             <span style="font-size:2rem;display:block;margin-bottom:.4rem;">🕊️</span>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--espresso);margin-bottom:.3rem;font-weight:500;">Preserve Ruth's voice</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--espresso);margin-bottom:.3rem;font-weight:500;">Preserve their voice</div>
             <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bark-soft);line-height:1.6;margin-bottom:.9rem;">A voicemail, home movie, answering machine recording — anything that captured her voice, her laugh, her words.</div>
             <div style="display:flex;flex-direction:column;gap:.38rem;">
               <div onclick="t('Opening your files...')" style="padding:.65rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.28);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--amber);cursor:pointer;">Upload audio or video file</div>
@@ -372,7 +372,7 @@ body::after{content:"";position:fixed;inset:0;
       <!-- Your name -->
       <div style="margin-top:.4rem;animation:fadeUp .3s .14s ease both;">
         <div class="chapter-lbl" style="margin-top:.4rem;">Your name</div>
-        <input type="text" id="contributorName" placeholder="How should Ruth's family know you?" style="width:100%;background:rgba(255,250,240,.7);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--espresso);padding:.78rem .9rem;outline:none;margin-bottom:.3rem;"/>
+        <input type="text" id="contributorName" placeholder="How should their family know you?" style="width:100%;background:rgba(255,250,240,.7);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--espresso);padding:.78rem .9rem;outline:none;margin-bottom:.3rem;"/>
         <div style="font-size:.75rem;color:var(--bark-soft);font-family:'Cormorant Garamond',serif;font-style:italic;">Your name helps the family know whose memory this is.</div>
       </div>
     </div>
@@ -388,12 +388,12 @@ body::after{content:"";position:fixed;inset:0;
     <div class="thankyou-body">
       <span class="ty-leaf">🍃</span>
       <div class="ty-title">It's been added.</div>
-      <div class="ty-sub">"Your memory of Ruth now lives in her archive. The people who loved her will carry this forward."</div>
+      <div class="ty-sub">"Your memory now lives in her archive. The people who loved them will carry this forward."</div>
       <div class="gold-rule-center"></div>
 
       <div class="ty-summary">
         <div class="ty-summary-lbl">What you shared</div>
-        <div class="ty-summary-chapter" id="tySummaryChapter">Childhood · Ruth Calloway</div>
+        <div class="ty-summary-chapter" id="tySummaryChapter">Childhood · <span class="legacy-person-name">this person</span></div>
         <div class="ty-summary-preview" id="tySummaryPreview">Your contribution has been received and is now part of her Living Legacy archive.</div>
         <div class="ty-media-chips" id="tyMediaChips"></div>
       </div>
@@ -411,17 +411,47 @@ body::after{content:"";position:fixed;inset:0;
 <div style="display:none;position:fixed;bottom:3rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.9);border-radius:999px;padding:.4rem .9rem;font-size:.75rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;" id="toastEl"></div>
 
 <script>
+// ── DYNAMIC LOADING FROM URL PARAMS ──────────────────────────────
+// URL format: contribute.html?person=NAME&keeper=KEEPER_NAME&token=TOKEN
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var personParam = params.get('person');
+  var keeperParam = params.get('keeper');
+
+  function setDynamic(selector, text) {
+    document.querySelectorAll(selector).forEach(function(el) { el.textContent = text; });
+  }
+
+  window.addEventListener('DOMContentLoaded', function() {
+    if (personParam) {
+      var name = decodeURIComponent(personParam);
+      setDynamic('.legacy-person-name', name + "'s story");
+      // Update the strong title
+      var titleEl = document.getElementById('personName');
+      if (titleEl) titleEl.textContent = name + "'s story";
+      // Update the inviterNameContrib
+      var invEl = document.getElementById('inviterNameContrib');
+      if (invEl && !invEl.textContent.trim()) invEl.textContent = keeperParam ? decodeURIComponent(keeperParam) : 'someone';
+    }
+    if (keeperParam) {
+      var keepEl = document.getElementById('keeperName');
+      if (keepEl) keepEl.textContent = decodeURIComponent(keeperParam);
+    }
+  });
+})();
+// ─────────────────────────────────────────────────────────────────
+
 const PROMPTS = {
-  'Childhood': '"What\'s your earliest memory of Ruth?"',
-  'Family': '"What did Ruth\'s home feel like when you walked in?"',
-  'Love Story': '"What do you remember about Ruth and the people she loved?"',
-  'Faith': '"How did Ruth\'s faith show up in her everyday life?"',
-  'Traditions': '"What\'s a tradition Ruth kept that you still think about?"',
+  'Childhood': '"What\'s your earliest memory of them?"',
+  'Family': '"What was their home like — what do you remember about it?"',
+  'Love Story': '"What do you remember about <span class="person-q"></span> and the people she loved?"',
+  'Faith': '"How did their faith show up in everyday life?"',
+  'Traditions': '"What\'s a tradition they kept that you still think about?"',
   'Recipes': '"Is there a recipe or something she made that you\'d want to preserve?"',
-  'Hard Seasons': '"What was Ruth like when things were hard? How did she carry it?"',
-  'Lessons': '"What did Ruth teach you — in words or just by how she lived?"',
-  'Things Never Said': '"Is there something you wish you\'d said to Ruth? This is the place."',
-  'General': '"What\'s one thing about Ruth you never want to forget?"'
+  'Hard Seasons': '"What were they like when things were hard? How did she carry it?"',
+  'Lessons': '"What did they teach you — in words or just by how she lived?"',
+  'Things Never Said': '"Is there something you wish you\'d said to them? This is the place."',
+  'General': '"What\'s one thing about them you never want to forget?"'
 };
 
 let selectedChapter = 'Childhood';
@@ -432,7 +462,7 @@ function selChapter(el, chapter) {
   document.querySelectorAll('.chapter-chip').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
   selectedChapter = chapter;
-  document.getElementById('chapterPrompt').textContent = PROMPTS[chapter] || '"What do you remember about Ruth?"';
+  document.getElementById('chapterPrompt').textContent = PROMPTS[chapter] || '"What do you remember about <span class="person-q"></span>?"';
 }
 
 function toggleMedia(el, type) {
@@ -492,7 +522,7 @@ function submitContribution() {
   if(!story && selectedMedia.length <= 1) { t('Please share something — a story, photo, or recording'); return; }
 
   // Build summary
-  document.getElementById('tySummaryChapter').textContent = selectedChapter + ' · Ruth Calloway';
+  document.getElementById('tySummaryChapter').textContent = selectedChapter + ' · <span class="legacy-person-name">this person</span>';
   document.getElementById('tySummaryPreview').textContent = story ?
     (story.length > 100 ? story.substring(0, 100) + '...' : story) :
     'Your contribution has been received and is now part of her Living Legacy archive.';

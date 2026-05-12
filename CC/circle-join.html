@@ -142,17 +142,17 @@ body::before{content:"";position:fixed;inset:0;
     <div class="invite-scroll">
 
       <div class="invite-hero">
-        <div class="ih-from">Maren Calloway invited you to join</div>
+        <div class="ih-from"><span id="inviterName">Someone</span> invited you to join</div>
         <div class="ih-circle-icon" style="background:rgba(255,140,32,.1);border:1px solid rgba(255,140,32,.2);"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="rgba(255,140,32,.7)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
   <path d="M6 16L18 6l12 10"/>
   <path d="M9 14v14h6v-7h6v7h6V14"/>
   <line x1="18" y1="6" x2="18" y2="3"/>
 </svg></div>
-        <div class="ih-circle-name">The Calloway Family</div>
+        <div class="ih-circle-name"><span class="circle-name-dyn">your circle</span></div>
         <div class="ih-vibe">"The people who know the whole story."</div>
         <div class="ih-invited-by">
           <div class="ihib-av" style="background:#a85548;">K</div>
-          <div>Invited by <span class="ihib-name">Maren Calloway</span></div>
+          <div>Invited by <span id="inviterNameSmall" class="ihib-name">Loading…</span></div>
         </div>
       </div>
 
@@ -168,7 +168,7 @@ body::before{content:"";position:fixed;inset:0;
           <div class="mc-av" style="background:#6b4d82;animation-delay:.34s;">T</div>
           <div class="mc-count" style="animation:memberFloat .4s .42s ease both;opacity:0;">+1</div>
         </div>
-        <div class="member-names">Maren, Michael, Jordan, Taylor and Lily are already sharing here.</div>
+        <div class="member-names"><span id="memberNames">Loading circle…</span></div>
       </div>
 
       <!-- Activity preview — blurred to tease -->
@@ -177,7 +177,7 @@ body::before{content:"";position:fixed;inset:0;
         <div class="ap-item">
           <div class="ap-av" style="background:#3d7a6b;">J</div>
           <div class="ap-content">
-            <div class="ap-who">Jordan</div>
+            <div class="ap-who" id="apWho1"></div>
             <div class="ap-text">"The distance between my sister and me isn't really about the argument anymore..."</div>
             <div class="ap-when">2 hours ago</div>
           </div>
@@ -185,7 +185,7 @@ body::before{content:"";position:fixed;inset:0;
         <div class="ap-item ap-blur">
           <div class="ap-av" style="background:#a85548;">K</div>
           <div class="ap-content">
-            <div class="ap-who">Maren</div>
+            <div class="ap-who" id="apWho2"></div>
             <div class="ap-text">"The slow mornings before everyone wakes up. That hour is mine..."</div>
             <div class="ap-when">Yesterday</div>
           </div>
@@ -236,7 +236,7 @@ body::before{content:"";position:fixed;inset:0;
 
       <!-- CTA -->
       <div class="cta-section">
-        <button class="join-btn" onclick="goJoin()">Join The Calloway Family →</button>
+        <button class="join-btn" onclick="goJoin()">Join <span class="circle-name-dyn">your circle</span> →</button>
         <button class="already-member" onclick="t('Sign in to your existing account')">I already have an account</button>
         <div class="no-account-note">Free to join. Takes 30 seconds.<br>No credit card required.</div>
       </div>
@@ -248,7 +248,7 @@ body::before{content:"";position:fixed;inset:0;
   <div class="screen" id="joinScreen">
     <div class="join-header">
       <button class="jh-back" onclick="goBack()">← Back</button>
-      <div class="jh-title">Join The Calloway Family</div>
+      <div class="jh-title">Join <span class="circle-name-dyn">your circle</span></div>
       <div class="jh-circle-mini" style="background:rgba(255,140,32,.08);border:1px solid rgba(255,140,32,.18);"><svg width="16" height="16" viewBox="0 0 36 36" fill="none" stroke="rgba(255,140,32,.65)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M6 16L18 6l12 10"/>
   <path d="M9 14v14h6v-7h6v7h6V14"/>
@@ -298,7 +298,7 @@ body::before{content:"";position:fixed;inset:0;
     <div class="welcome-body">
       <span class="wb-icon" style="display:flex;align-items:center;justify-content:center;"><svg width="52" height="52" viewBox="0 0 36 36" fill="none" stroke="rgba(255,140,32,.75)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16L18 6l12 10"/><path d="M9 14v14h6v-7h6v7h6V14"/></svg></span>
       <div class="wb-title">You're in.</div>
-      <div class="wb-sub" id="welcomeSub">Welcome to The Calloway Family, Maren. The people here are glad you're in.</div>
+      <div class="wb-sub" id="welcomeSub">Welcome to <span class='circle-name-dyn'>your circle</span>. The people here are glad you're in.</div>
       <div class="wb-members">
         <div class="member-cluster">
           <div class="mc-av" style="background:#a85548;width:38px;height:38px;font-size:.85rem;">K</div>
@@ -319,6 +319,82 @@ body::before{content:"";position:fixed;inset:0;
 <div class="toast" id="toastEl"></div>
 
 <script>
+// ── DYNAMIC CIRCLE DATA ────────────────────────────────────────
+// Load circle info from URL token param
+// URL format: circle-join.html?token=INVITE_TOKEN
+// Falls back to query params: circle-join.html?circle=NAME&from=INVITER
+var circleName = 'this circle';
+
+async function loadInviteData() {
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('token');
+  var circleParam = params.get('circle');
+  var fromParam = params.get('from');
+  var membersParam = params.get('members'); // comma-separated member names
+
+  if (token) {
+    // Validate token via Netlify function
+    try {
+      var res = await fetch('/.netlify/functions/circle-invite', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: 'validate', token: token })
+      });
+      var data = await res.json();
+      if (data.circleName) {
+        circleName = data.circleName;
+        setCircleUI(data.circleName, data.inviterName || '', data.members || []);
+        return;
+      }
+    } catch(e) {}
+  }
+
+  // Fallback to URL params
+  if (circleParam) {
+    circleName = decodeURIComponent(circleParam);
+    var inviter = fromParam ? decodeURIComponent(fromParam) : '';
+    var members = membersParam ? membersParam.split(',').map(function(m){ return decodeURIComponent(m.trim()); }) : [];
+    setCircleUI(circleName, inviter, members);
+  }
+}
+
+function setCircleUI(name, inviter, members) {
+  circleName = name;
+  // Update all circle name spans
+  document.querySelectorAll('.circle-name-dyn').forEach(function(el) {
+    el.textContent = name;
+  });
+  // Update inviter name
+  if (inviter) {
+    var inviterEl = document.getElementById('inviterName');
+    var inviterSmall = document.getElementById('inviterNameSmall');
+    if (inviterEl) inviterEl.textContent = inviter;
+    if (inviterSmall) inviterSmall.textContent = inviter;
+  }
+  // Update member names
+  if (members.length) {
+    var memberEl = document.getElementById('memberNames');
+    if (memberEl) {
+      if (members.length === 1) {
+        memberEl.textContent = members[0] + ' is already sharing here.';
+      } else if (members.length === 2) {
+        memberEl.textContent = members[0] + ' and ' + members[1] + ' are already sharing here.';
+      } else {
+        var last = members[members.length - 1];
+        var rest = members.slice(0, -1);
+        memberEl.textContent = rest.join(', ') + ' and ' + last + ' are already sharing here.';
+      }
+      var ap1 = document.getElementById('apWho1');
+      var ap2 = document.getElementById('apWho2');
+      if (ap1 && members[0]) ap1.textContent = members[0].split(' ')[0];
+      if (ap2 && members[1]) ap2.textContent = members[1].split(' ')[0];
+    }
+  }
+}
+
+window.addEventListener('DOMContentLoaded', function() { loadInviteData(); });
+// ──────────────────────────────────────────────────────────────
+
 function goJoin(){ showScreen('joinScreen'); }
 function goBack(){ showScreen('landingScreen'); }
 
@@ -347,7 +423,7 @@ function confirmJoin(){
   // Update welcome screen with their name
   const first = name.split(' ')[0];
   document.getElementById('welcomeSub').textContent =
-    `Welcome to The Calloway Family, ${first}. The people here are glad you're in.`;
+    `Welcome to ${circleName}, ${first}. The people here are glad you're in.`;
   document.getElementById('newMemberAv').textContent = first[0].toUpperCase();
 
   showScreen('welcomeScreen');

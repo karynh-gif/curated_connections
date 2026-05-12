@@ -162,7 +162,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
   <div class="header">
     <button class="h-back" onclick="t('Returning to Living Legacy...')">← Legacy</button>
     <div class="h-title">
-      <div class="h-name">Ruth Calloway</div>
+      <div class="h-name" id="treeSubjectHeader">Family Archive</div>
       <div class="h-sub">Family Tree · Living Legacy</div>
     </div>
     <div class="h-fs" onclick="t('Connecting to FamilySearch...')">
@@ -302,7 +302,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="node" onclick="openDetail('spouse',false)">
         <div class="node-card has-leaf">
           <div class="node-initial" style="background:#3d7a6b;">W</div>
-          <div class="node-name">William Calloway</div>
+          <div class="node-name">Spouse</div>
           <div class="node-years">1948 – 2019</div>
           <div class="node-media">
             <div class="nm" style="background:var(--teal);"></div>
@@ -316,7 +316,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="node" onclick="openDetail('subject',true)">
         <div class="node-card subject">
           <div class="node-initial" style="background:var(--amber);">R</div>
-          <div class="node-name">Ruth Calloway</div>
+          <div class="node-name" id="subjectNodeName">Family Member</div>
           <div class="node-years">1920 · 105 yrs</div>
           <div class="node-media">
             <div class="nm" style="background:var(--amber);"></div>
@@ -338,7 +338,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="node" onclick="openDetail('child1',true)">
         <div class="node-card has-leaf">
           <div class="node-initial" style="background:#6b4d82;">M</div>
-          <div class="node-name">Maren Calloway</div>
+          <div class="node-name">Keeper</div>
           <div class="node-years">b. 1952</div>
           <div class="node-media">
             <div class="nm" style="background:var(--amber);"></div>
@@ -352,7 +352,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
       <div class="node" onclick="openDetail('child2',false)">
         <div class="node-card has-leaf">
           <div class="node-initial" style="background:#b07838;">J</div>
-          <div class="node-name">James Calloway</div>
+          <div class="node-name">Family Member</div>
           <div class="node-years">b. 1955</div>
           <div class="node-media">
             <div class="nm" style="background:var(--teal);"></div>
@@ -415,15 +415,48 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 <div class="toast" id="toastEl"></div>
 
 <script>
-const PEOPLE = {
-  subject: {name:'Ruth Calloway',years:'1920 · 105 years old',rel:'The leaf — this archive is for her',hasLeaf:true,media:['Written stories','Voice recordings','Photos','Video clips'],color:'#c97d3a'},
-  spouse: {name:'William Calloway',years:'1948 – 2019',rel:'Husband',hasLeaf:true,media:['Photos','Voice recording'],color:'#3d7a6b'},
-  child1: {name:'Maren Calloway',years:'b. 1952',rel:'Daughter · Keeper of this archive',hasLeaf:true,media:['Written stories','Photos','Voice','Video'],color:'#6b4d82'},
-  child2: {name:'James Calloway',years:'b. 1955',rel:'Son',hasLeaf:true,media:['Photos'],color:'#b07838'},
-  mom: {name:'Margaret Burke Calloway',years:'1930 – 2008',rel:'Ruth\'s mother',hasLeaf:true,media:['Written stories','Photos'],color:'#b07838'},
-  gp2: {name:'Edna Burke',years:'1908 – 1979',rel:'Ruth\'s grandmother',hasLeaf:true,media:['Written stories','Voice recording','Photos'],color:'#a85548'},
-  ggp3: {name:'Harold Burke',years:'1878 – 1951',rel:'Ruth\'s great-grandfather',hasLeaf:true,media:['Written stories','Photos'],color:'#6b4d82'},
+// ── DYNAMIC FAMILY DATA ─────────────────────────────────────────
+// Loads from URL params or Airtable Living Legacy records for current user
+// URL: family-tree.html?subject=NAME&keeper=KEEPER
+var params = new URLSearchParams(window.location.search);
+var subjectName = params.get('subject') ? decodeURIComponent(params.get('subject')) : null;
+var keeperName  = params.get('keeper')  ? decodeURIComponent(params.get('keeper'))  : null;
+
+// Default empty tree — will be populated from Airtable in V2
+var PEOPLE = {
+  subject: {name: subjectName || 'Your Family Member', years: '', rel: 'The leaf — this archive is for them', hasLeaf: true, media: ['Written stories', 'Voice recordings', 'Photos', 'Video clips'], color: '#c97d3a'},
 };
+if (keeperName) {
+  PEOPLE.child1 = {name: keeperName, years: '', rel: 'Keeper of this archive', hasLeaf: true, media: ['Written stories', 'Photos'], color: '#6b4d82'};
+}
+
+// Update the visible name in the header
+window.addEventListener('DOMContentLoaded', function() {
+  if (subjectName) {
+    document.querySelectorAll('.h-name').forEach(function(el) { el.textContent = subjectName; });
+    document.querySelectorAll('.node-name').forEach(function(el) {
+      if (el.textContent.includes('Ruth') || el.textContent.includes('Calloway')) {
+        el.textContent = subjectName;
+      }
+    });
+  }
+  // Load from CC auth if available
+  if (typeof CC !== 'undefined' && CC.getUser) {
+    var user = CC.getUser();
+    if (user && user.name && !subjectName) {
+      // Show empty tree state
+      showEmptyTreeState(user.name);
+    }
+  }
+});
+
+function showEmptyTreeState(userName) {
+  var header = document.querySelector('.h-name');
+  if (header && header.textContent.includes('Ruth')) {
+    header.textContent = 'Your Family Tree';
+  }
+}
+// ─────────────────────────────────────────────────────────────────
 
 const EMPTY = {
   ggp1:{name:'Unknown',rel:'Great-grandfather · No leaf yet'},
@@ -431,7 +464,8 @@ const EMPTY = {
   ggp4:{name:'Unknown',rel:'Great-grandmother · No leaf yet'},
   gp1:{name:'Unknown',rel:'Grandfather · No leaf yet'},
   dad:{name:'Unknown',rel:'Father · No leaf yet'},
-  child3:{name:'Not added',rel:'Add another child to Ruth\'s tree'},
+  spouse:{name:'Add spouse',rel:'Not yet added to this tree'},
+  child3:{name:'Not added yet',rel:'Add another family member'},
 };
 
 function openDetail(id, hasLeaf) {

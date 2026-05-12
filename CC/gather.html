@@ -176,6 +176,38 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .toast-wrap{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:400;pointer-events:none;}
 .toast{background:rgba(20,30,25,.96);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.5rem 1.1rem;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:600;color:var(--cream);white-space:nowrap;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── QUIZ OVERLAY ─────────────────────────────────────────── */
+.quiz-overlay{position:fixed;inset:0;z-index:200;background:var(--ink);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+.quiz-overlay.open{transform:translateY(0);}
+.qz-topbar{display:flex;align-items:center;gap:.8rem;padding:.9rem 1rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;}
+.qz-back{background:none;border:none;color:rgba(242,232,216,.4);font-size:1.1rem;cursor:pointer;padding:.2rem;line-height:1;flex-shrink:0;}
+.qz-progress-track{flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;}
+.qz-progress-fill{height:100%;background:var(--amber);border-radius:99px;transition:width .3s ease;}
+.qz-progress-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;color:rgba(242,232,216,.28);flex-shrink:0;}
+.qz-scroll{flex:1;overflow-y:auto;padding:1.6rem 1rem 2rem;}
+.qz-scroll::-webkit-scrollbar{display:none;}
+.qz-quiz-title{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:1rem;}
+.qz-question{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:var(--cream);line-height:1.35;margin-bottom:1.8rem;}
+.qz-answers{display:flex;flex-direction:column;gap:.65rem;}
+.qz-ans{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:1rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:rgba(242,232,216,.75);text-align:left;cursor:pointer;transition:border-color .15s,background .15s,color .15s;line-height:1.45;}
+.qz-ans:hover{border-color:rgba(201,125,58,.3);color:var(--cream);}
+.qz-ans.selected{border-color:var(--amber);background:rgba(201,125,58,.12);color:var(--cream);}
+.qz-ans:disabled{cursor:default;}
+/* Result screen */
+.qz-result-tag{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:.6rem;}
+.qz-result-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;color:var(--cream);line-height:1.1;margin-bottom:1rem;}
+.qz-result-body{font-size:.9rem;color:rgba(242,232,216,.7);line-height:1.7;margin-bottom:.8rem;}
+.qz-result-note{font-size:.82rem;color:rgba(242,232,216,.4);line-height:1.6;font-style:italic;padding:.8rem 0;border-top:1px solid rgba(255,255,255,.06);margin-bottom:.8rem;}
+.qz-disclaimer{font-size:.7rem;color:rgba(242,232,216,.2);line-height:1.5;margin-bottom:1.4rem;}
+.qz-journal-block{background:linear-gradient(135deg,rgba(201,125,58,.08),rgba(201,125,58,.03));border:1px solid rgba(201,125,58,.18);border-radius:var(--r-xl);padding:1.2rem;margin-bottom:1.4rem;}
+.qz-journal-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);opacity:.7;margin-bottom:.5rem;}
+.qz-journal-prompt{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(242,232,216,.65);line-height:1.65;margin-bottom:.9rem;}
+.qz-journal-btn{width:100%;padding:.7rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;transition:background .15s;}
+.qz-journal-btn:active{background:rgba(201,125,58,.25);}
+.qz-done-btn{width:100%;padding:.7rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.4);cursor:pointer;margin-top:.5rem;}
+@keyframes qzSlideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.qz-animate{animation:qzSlideIn .25s ease both;}
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-cards.js"></script>
@@ -408,6 +440,37 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <div class="toast-wrap" id="toastWrap" style="display:none;">
     <div class="toast" id="toastMsg"></div>
   </div>
+
+<!-- ── QUIZ OVERLAY ───────────────────────────── -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="qz-topbar">
+    <button class="qz-back" onclick="closeQuiz()">&#8592;</button>
+    <div class="qz-progress-track"><div class="qz-progress-fill" id="qzFill" style="width:0%"></div></div>
+    <div class="qz-progress-label" id="qzLabel">1 of 5</div>
+  </div>
+  <div class="qz-scroll" id="qzScroll">
+    <!-- Question screen -->
+    <div id="qzQScreen">
+      <div class="qz-quiz-title" id="qzTitle"></div>
+      <div class="qz-question qz-animate" id="qzQText"></div>
+      <div class="qz-answers" id="qzAnswers"></div>
+    </div>
+    <!-- Result screen -->
+    <div id="qzRScreen" style="display:none;">
+      <div class="qz-result-tag">Your Result</div>
+      <div class="qz-result-title qz-animate" id="qzRTitle"></div>
+      <div class="qz-result-body" id="qzRBody"></div>
+      <div class="qz-result-note" id="qzRNote"></div>
+      <div class="qz-disclaimer">For personal reflection &amp; entertainment only &mdash; not a clinical assessment or professional advice.</div>
+      <div class="qz-journal-block" id="qzJBlock" style="display:none;">
+        <div class="qz-journal-label">Journal this ✦</div>
+        <div class="qz-journal-prompt" id="qzJPrompt"></div>
+        <button class="qz-journal-btn" onclick="goToJournal()">Open Journal &rarr;</button>
+      </div>
+      <button class="qz-done-btn" onclick="closeQuiz()">Done</button>
+    </div>
+  </div>
+</div>
 
 </div><!-- /app -->
 
@@ -863,6 +926,149 @@ function createAcct() {
   closeAccount();
 }
 
+// ── QUIZ ENGINE ──────────────────────────────────────────────
+var QUIZ_CACHE = {};
+var qzState = {questions:[], results:{}, answers:[], current:0, title:''};
+
+async function openQuiz(recordId) {
+  var cached = QUIZ_CACHE[recordId];
+
+  // If data not cached or empty, fetch fresh
+  if (!cached || !cached.qj) {
+    try {
+      var res = await fetch('/api/airtable', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({action:'getRecord', table:'Gather Quizzes', recordId: recordId})});
+      var data = await res.json();
+      if (data.fields) {
+        cached = {
+          qj: data.fields['Questions JSON'] || '',
+          rj: data.fields['Results JSON'] || '',
+          title: data.fields.Title || ''
+        };
+        QUIZ_CACHE[recordId] = cached;
+      }
+    } catch(e) { showToast('Quiz unavailable right now'); return; }
+  }
+
+  if (!cached || !cached.qj) { showToast('Quiz content still loading\u2026'); return; }
+
+  var questions, results;
+  try {
+    questions = JSON.parse(cached.qj);
+    results = JSON.parse(cached.rj);
+  } catch(e) { showToast('Quiz unavailable right now'); return; }
+
+  qzState = {questions: questions, results: results, answers: [], current: 0, title: cached.title || ''};
+
+  // Reset UI
+  document.getElementById('qzQScreen').style.display = 'block';
+  document.getElementById('qzRScreen').style.display = 'none';
+  document.getElementById('quizOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderQzQuestion();
+}
+
+function closeQuiz() {
+  document.getElementById('quizOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderQzQuestion() {
+  var q = qzState.questions[qzState.current];
+  if (!q) return;
+
+  var total = qzState.questions.length;
+  var pos = qzState.current + 1;
+
+  document.getElementById('qzFill').style.width = Math.round(pos / total * 100) + '%';
+  document.getElementById('qzLabel').textContent = pos + ' of ' + total;
+  document.getElementById('qzTitle').textContent = qzState.title;
+
+  var qEl = document.getElementById('qzQText');
+  qEl.textContent = q.q;
+  qEl.classList.remove('qz-animate');
+  void qEl.offsetWidth;
+  qEl.classList.add('qz-animate');
+
+  var html = '';
+  (q.a || []).forEach(function(ans) {
+    html += '<button class="qz-ans" data-v="' + ans.v + '" onclick="selectQzAnswer(this,\'' + ans.v + '\')">' + ans.t.replace(/'/g,"&#39;") + '</button>';
+  });
+  document.getElementById('qzAnswers').innerHTML = html;
+  document.getElementById('qzScroll').scrollTop = 0;
+}
+
+function selectQzAnswer(btn, v) {
+  // Disable all buttons and highlight selection
+  document.querySelectorAll('.qz-ans').forEach(function(b) {
+    b.disabled = true;
+    if (b.dataset.v === v) b.classList.add('selected');
+  });
+
+  qzState.answers.push(v);
+
+  setTimeout(function() {
+    qzState.current++;
+    if (qzState.current < qzState.questions.length) {
+      renderQzQuestion();
+    } else {
+      showQzResult();
+    }
+  }, 380);
+}
+
+function showQzResult() {
+  // Tally answers
+  var tally = {};
+  qzState.answers.forEach(function(v) { tally[v] = (tally[v] || 0) + 1; });
+
+  // Find winner (highest count; ties go to first in A/B/C/D order)
+  var winner = 'A';
+  ['A','B','C','D'].forEach(function(k) {
+    if ((tally[k] || 0) > (tally[winner] || 0)) winner = k;
+  });
+
+  var resultsObj = qzState.results.results || qzState.results;
+  var result = resultsObj[winner] || {};
+  var journalObj = qzState.results.journal || {};
+  var journalPrompt = journalObj[winner] || '';
+
+  document.getElementById('qzRTitle').textContent = result.title || 'Your result';
+  document.getElementById('qzRBody').textContent = result.body || '';
+  document.getElementById('qzRNote').textContent = result.note || '';
+
+  // Journal block
+  if (journalPrompt) {
+    document.getElementById('qzJPrompt').textContent = journalPrompt;
+    document.getElementById('qzJBlock').style.display = 'block';
+    // Save prompt for journal page
+    try {
+      localStorage.setItem('cc_quiz_journal_prompt', JSON.stringify({
+        prompt: journalPrompt,
+        resultTitle: result.title,
+        quizTitle: qzState.title
+      }));
+    } catch(e) {}
+  } else {
+    document.getElementById('qzJBlock').style.display = 'none';
+  }
+
+  // Progress bar to 100%
+  document.getElementById('qzFill').style.width = '100%';
+  document.getElementById('qzLabel').textContent = 'Done';
+
+  document.getElementById('qzQScreen').style.display = 'none';
+  document.getElementById('qzRScreen').style.display = 'block';
+  document.getElementById('qzScroll').scrollTop = 0;
+}
+
+function goToJournal() {
+  closeQuiz();
+  window.location.href = 'journal.html';
+}
+// ─────────────────────────────────────────────────────────────
+
 // ── TOAST ──
 var toastTimer;
 function showToast(msg) {
@@ -947,7 +1153,8 @@ async function loadQuizSection(){
     var html='';
     picks.forEach(function(rec,i){
       var f=rec.fields,st=QS[i%QS.length];
-      html+='<div class="quiz-card" style="background:'+st.bg+';border:1px solid '+st.border+';" onclick="showToast(\'Quiz launching soon \u2014 check back shortly\')">';
+      QUIZ_CACHE[rec.id]={qj:f['Questions JSON']||'',rj:f['Results JSON']||'',title:f.Title||''};
+      html+='<div class="quiz-card" style="background:'+st.bg+';border:1px solid '+st.border+';" onclick="openQuiz(\'' + rec.id + '\')">';
       html+='<div class="quiz-label" style="color:'+st.accent+';">'+st.label+'</div>';
       html+='<div class="quiz-title">'+(f.Title||'')+'</div>';
       html+='<div class="quiz-sub">'+(f.Subtitle||'')+'</div>';
