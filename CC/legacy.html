@@ -6,6 +6,7 @@
 <title>Living Legacy — Curated Connections</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+html{font-size:18px;-webkit-text-size-adjust:100%;}
 :root{
   --ivory:#f8f2e8;
   --parchment:#f2e8d5;
@@ -50,10 +51,10 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .tb-gather{font-family:'Pacifico',cursive;font-size:1.12rem;color:var(--gold);}
 .tb-sep{font-family:'Pacifico',cursive;font-size:.9rem;color:var(--gold-ghost);}
 .tb-tier{font-family:'Pacifico',cursive;font-size:1.12rem;color:rgba(80,50,8,.74);}
-.tb-date{font-size:.44rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(184,134,11,.36);margin-top:.05rem;}
+.tb-date{font-size:.75rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(184,134,11,.36);margin-top:.05rem;}
 .tb-right{display:flex;align-items:center;gap:.4rem;}
-.tb-btn{width:28px;height:28px;border-radius:50%;background:rgba(184,134,11,.08);border:1px solid rgba(184,134,11,.16);display:flex;align-items:center;justify-content:center;font-size:.68rem;cursor:pointer;}
-.tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#d4a840,#9a7020);display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;color:#fff;cursor:pointer;border:1px solid rgba(184,134,11,.2);}
+.tb-btn{width:28px;height:28px;border-radius:50%;background:rgba(184,134,11,.08);border:1px solid rgba(184,134,11,.16);display:flex;align-items:center;justify-content:center;font-size:.78rem;cursor:pointer;}
+.tb-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#d4a840,#9a7020);display:flex;align-items:center;justify-content:center;font-size:.70rem;font-weight:700;color:#fff;cursor:pointer;border:1px solid rgba(184,134,11,.2);}
 
 /* SCROLL */
 .scroll{flex:1;overflow-y:auto;position:relative;z-index:1;}
@@ -61,7 +62,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 
 /* HERO GREETING */
 .greeting{padding:2.4rem 1.4rem 1.6rem;text-align:center;animation:fadeUp .6s ease both;}
-.greeting-label{font-size:.52rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.5);margin-bottom:.65rem;}
+.greeting-label{font-size:.70rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.5);margin-bottom:.65rem;}
 .greeting-title{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:300;color:var(--bark);line-height:1.35;margin-bottom:.6rem;}
 .greeting-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:var(--bark-soft);line-height:1.7;}
 
@@ -72,17 +73,17 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .invitation{margin:0 1.2rem 1.8rem;background:linear-gradient(145deg,rgba(248,236,200,.7),rgba(235,220,180,.6));border:1px solid rgba(184,134,11,.2);border-radius:var(--r-xl);padding:1.5rem 1.4rem;cursor:pointer;position:relative;overflow:hidden;animation:fadeUp .6s .1s ease both;transition:all .25s;}
 .invitation:hover{border-color:rgba(184,134,11,.35);}
 .invitation::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(220,185,90,.2),transparent 60%);pointer-events:none;}
-.inv-label{font-size:.5rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.6);margin-bottom:.5rem;position:relative;z-index:1;}
+.inv-label{font-size:.70rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.6);margin-bottom:.5rem;position:relative;z-index:1;}
 .inv-prompt{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--bark);line-height:1.6;margin-bottom:.9rem;position:relative;z-index:1;}
-.inv-person{font-size:.65rem;color:var(--bark-soft);margin-bottom:1rem;position:relative;z-index:1;display:flex;align-items:center;gap:.35rem;}
-.inv-person-av{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,rgba(232,210,140,.9),rgba(210,185,110,.85));border:1px solid rgba(184,134,11,.3);display:flex;align-items:center;justify-content:center;font-size:.62rem;}
+.inv-person{font-size:.75rem;color:var(--bark-soft);margin-bottom:1rem;position:relative;z-index:1;display:flex;align-items:center;gap:.35rem;}
+.inv-person-av{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,rgba(232,210,140,.9),rgba(210,185,110,.85));border:1px solid rgba(184,134,11,.3);display:flex;align-items:center;justify-content:center;font-size:.75rem;}
 .inv-action{position:relative;z-index:1;display:flex;gap:.5rem;}
 .inv-btn{flex:1;padding:.65rem;border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.9rem;text-align:center;cursor:pointer;transition:all .2s;}
 .inv-btn-write{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;font-style:italic;}
 .inv-btn-voice{background:rgba(255,255,255,.5);border:1px solid rgba(184,134,11,.22);color:var(--bark-mid);}
 
 /* SECTION LABEL */
-.section-lbl{font-size:.52rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.45);padding:0 1.4rem;margin-bottom:1rem;animation:fadeUp .6s .2s ease both;}
+.section-lbl{font-size:.70rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.45);padding:0 1.4rem;margin-bottom:1rem;animation:fadeUp .6s .2s ease both;}
 
 /* FOUR PATHS */
 .paths{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;padding:0 1.2rem;margin-bottom:2rem;animation:fadeUp .6s .25s ease both;}
@@ -98,20 +99,20 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .path::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,235,150,.25),transparent 65%);pointer-events:none;}
 .path-icon{font-size:1.5rem;line-height:1;position:relative;z-index:1;}
 .path-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--bark);line-height:1.25;position:relative;z-index:1;}
-.path-desc{font-size:.65rem;color:var(--bark-soft);line-height:1.5;position:relative;z-index:1;}
-.path-arrow{font-size:.62rem;color:var(--gold-soft);position:relative;z-index:1;margin-top:.2rem;}
+.path-desc{font-size:.75rem;color:var(--bark-soft);line-height:1.5;position:relative;z-index:1;}
+.path-arrow{font-size:.75rem;color:var(--gold-soft);position:relative;z-index:1;margin-top:.2rem;}
 
 /* RECENT MEMORY */
 .recent{margin:0 1.2rem 1.6rem;animation:fadeUp .6s .35s ease both;}
-.recent-lbl{font-size:.52rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.45);margin-bottom:.75rem;}
+.recent-lbl{font-size:.70rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.45);margin-bottom:.75rem;}
 .memory-card{background:rgba(248,242,232,.7);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-lg);padding:1.1rem 1.15rem;cursor:pointer;transition:border-color .2s;}
 .memory-card:hover{border-color:rgba(184,134,11,.28);}
 .memory-who{display:flex;align-items:center;gap:.45rem;margin-bottom:.65rem;}
 .memory-av{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,rgba(232,210,140,.9),rgba(210,185,110,.85));border:1px solid rgba(184,134,11,.25);display:flex;align-items:center;justify-content:center;font-size:.72rem;}
 .memory-name{font-size:.78rem;font-weight:500;color:var(--bark-mid);}
-.memory-time{font-size:.55rem;color:var(--bark-ghost);margin-left:auto;}
+.memory-time{font-size:.72rem;color:var(--bark-ghost);margin-left:auto;}
 .memory-text{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-style:italic;color:var(--bark);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.memory-chapter{font-size:.5rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,134,11,.48);margin-bottom:.35rem;}
+.memory-chapter{font-size:.70rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,134,11,.48);margin-bottom:.35rem;}
 
 /* AMBIENT PARTICLES */
 .particle{position:absolute;border-radius:50%;pointer-events:none;animation:drift var(--d,10s) var(--dl,0s) ease-in-out infinite;z-index:0;}
@@ -133,7 +134,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .leaf-full .leaf-ring::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(circle,rgba(184,134,11,.1),transparent 70%);animation:breathe 5s ease-in-out infinite;}
 .leaf-anc .leaf-ring{background:radial-gradient(135deg,rgba(232,218,182,.88),rgba(208,188,138,.82));border:1.5px solid rgba(155,118,18,.32);box-shadow:0 0 10px 2px rgba(155,118,18,.1),0 2px 8px rgba(42,24,0,.12);filter:sepia(.18);}
 .leaf-empty .leaf-ring{background:rgba(248,242,232,.5);border:1px dashed rgba(184,134,11,.18);}
-.leaf-name{font-family:'Cormorant Garamond',serif;font-size:.62rem;font-weight:400;color:var(--bark-mid);text-align:center;line-height:1.2;}
+.leaf-name{font-family:'Cormorant Garamond',serif;font-size:.75rem;font-weight:400;color:var(--bark-mid);text-align:center;line-height:1.2;}
 .leaf-full .leaf-name{color:var(--bark);font-weight:500;}
 .leaf-anc .leaf-name{color:var(--bark-soft);}
 .story-dot{position:absolute;bottom:1px;right:1px;width:6px;height:6px;border-radius:50%;background:var(--gold);border:1.5px solid var(--ivory);box-shadow:0 0 5px rgba(184,134,11,.4);}
@@ -146,17 +147,17 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .story-scroll{flex:1;overflow-y:auto;padding:2.8rem 1.6rem 5rem;}
 .story-scroll::-webkit-scrollbar{display:none;}
 .person-hero-name{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:var(--bark);line-height:1.2;margin-bottom:.3rem;}
-.person-hero-years{font-size:.6rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,134,11,.52);margin-bottom:1.8rem;}
+.person-hero-years{font-size:.75rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,134,11,.52);margin-bottom:1.8rem;}
 .person-gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.38),transparent);margin-bottom:1.8rem;}
 .story-block{margin-bottom:2.2rem;}
-.story-chapter-lbl{font-size:.48rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.48);margin-bottom:.7rem;}
+.story-chapter-lbl{font-size:.78rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.48);margin-bottom:.7rem;}
 .story-text{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-style:italic;color:var(--bark);line-height:1.8;}
 .voice-block{background:rgba(192,80,56,.06);border:1px solid rgba(192,80,56,.16);border-radius:var(--r-md);padding:.85rem 1rem;margin-bottom:2rem;cursor:pointer;display:flex;align-items:center;gap:.65rem;}
 .voice-block-icon{font-size:1.1rem;}
 .voice-block-text{font-family:'Cormorant Garamond',serif;font-size:.9rem;font-style:italic;color:var(--bark-mid);}
-.voice-block-dur{font-size:.55rem;color:var(--bark-ghost);margin-left:auto;}
+.voice-block-dur{font-size:.72rem;color:var(--bark-ghost);margin-left:auto;}
 .prompt-block{background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1.4rem;cursor:pointer;}
-.prompt-block-lbl{font-size:.48rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.52);margin-bottom:.35rem;}
+.prompt-block-lbl{font-size:.78rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.52);margin-bottom:.35rem;}
 .prompt-block-text{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--bark-mid);line-height:1.6;}
 .add-memory-btn{width:100%;padding:.88rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;cursor:pointer;margin-bottom:.5rem;letter-spacing:.02em;}
 .story-cancel{width:100%;padding:.6rem;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--bark-soft);cursor:pointer;}
@@ -171,7 +172,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .leaf-gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,rgba(184,134,11,.38),transparent);margin-bottom:1.8rem;}
 .prompt-card{background:linear-gradient(145deg,rgba(248,236,200,.7),rgba(235,220,180,.6));border:1px solid rgba(184,134,11,.2);border-radius:var(--r-xl);padding:1.5rem 1.4rem;margin-bottom:1rem;cursor:pointer;position:relative;overflow:hidden;}
 .prompt-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(220,185,90,.18),transparent 60%);pointer-events:none;}
-.prompt-chapter{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.58);margin-bottom:.55rem;position:relative;z-index:1;}
+.prompt-chapter{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.58);margin-bottom:.55rem;position:relative;z-index:1;}
 .prompt-q{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--bark);line-height:1.65;margin-bottom:1rem;position:relative;z-index:1;}
 .prompt-actions{display:flex;gap:.48rem;position:relative;z-index:1;}
 .pa-write{flex:1;padding:.62rem;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:.88rem;font-style:italic;cursor:pointer;text-align:center;}
@@ -182,7 +183,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .bn{display:flex;flex-direction:column;align-items:center;gap:.18rem;cursor:pointer;opacity:.32;transition:opacity .2s;min-width:44px;}
 .bn.active{opacity:1;}
 .bn-i{font-size:.95rem;line-height:1;}
-.bn-l{font-size:.42rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--bark-mid);}
+.bn-l{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--bark-mid);}
 .bn.active .bn-l{color:var(--gold);}
 .bn-ctr{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:.82rem;color:#fff;cursor:pointer;box-shadow:0 3px 12px rgba(184,134,11,.35);margin-top:-8px;border:2px solid var(--ivory);}
 
@@ -191,7 +192,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .overlay.open{display:block;}
 
 /* TOAST */
-.toast{display:none;position:fixed;bottom:5.2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bark);border-radius:999px;padding:.42rem .95rem;font-size:.66rem;font-weight:500;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .24s;pointer-events:none;}
+.toast{display:none;position:fixed;bottom:5.2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bark);border-radius:999px;padding:.42rem .95rem;font-size:.75rem;font-weight:500;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .24s;pointer-events:none;}
 .toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
 
 /* ── NEW LEAF / IMPORT SCREENS ── */
@@ -202,14 +203,14 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .import-leaf-icon{font-size:2.2rem;display:block;margin-bottom:.5rem;}
 .import-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;font-style:italic;color:var(--bark);line-height:1.2;margin-bottom:.35rem;}
 .import-sub{font-size:.8rem;color:var(--bark-mid);line-height:1.6;font-style:italic;}
-.import-section-lbl{font-size:.55rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.5);margin:.8rem 0 .5rem;}
-.leaf-field-label{font-size:.58rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.3rem;display:block;}
+.import-section-lbl{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,134,11,.5);margin:.8rem 0 .5rem;}
+.leaf-field-label{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.3rem;display:block;}
 .leaf-field{width:100%;padding:.8rem 1rem;border:1.5px solid rgba(184,134,11,.25);border-radius:var(--r-md);background:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--bark);margin-bottom:.6rem;outline:none;transition:border-color .2s;}
 .leaf-field:focus{border-color:rgba(184,134,11,.55);}
-.leaf-field-hint{font-size:.7rem;color:var(--bark-soft);font-style:italic;margin-top:-.4rem;margin-bottom:.7rem;line-height:1.5;}
+.leaf-field-hint{font-size:.80rem;color:var(--bark-soft);font-style:italic;margin-top:-.4rem;margin-bottom:.7rem;line-height:1.5;}
 .import-divider{display:flex;align-items:center;gap:.7rem;margin:1rem 0;}
 .import-divider-line{flex:1;height:1px;background:var(--bark-ghost);}
-.import-divider-text{font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);}
+.import-divider-text{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);}
 .import-option{background:rgba(184,134,11,.06);border:1.5px solid rgba(184,134,11,.18);border-radius:var(--r-lg);padding:1.1rem 1rem;margin-bottom:.65rem;cursor:pointer;transition:all .2s;}
 .import-option:hover,.import-option:active{background:rgba(184,134,11,.1);border-color:rgba(184,134,11,.4);}
 .import-option-icon{font-size:1.2rem;margin-bottom:.3rem;display:block;}
@@ -227,13 +228,13 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .gedcom-drop:hover{border-color:rgba(184,134,11,.55);background:rgba(184,134,11,.04);}
 .gedcom-drop-icon{font-size:1.6rem;display:block;margin-bottom:.4rem;}
 .gedcom-drop-text{font-size:.8rem;color:var(--bark-mid);font-style:italic;}
-.gedcom-drop-sub{font-size:.68rem;color:var(--bark-soft);margin-top:.2rem;}
+.gedcom-drop-sub{font-size:.78rem;color:var(--bark-soft);margin-top:.2rem;}
 .gedcom-results{margin:.6rem 0;}
 .gedcom-person{padding:.65rem .8rem;border-bottom:1px solid var(--bark-ghost);display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;}
 .gedcom-person:hover{background:rgba(184,134,11,.05);}
 .gedcom-person-name{font-size:.88rem;font-weight:500;color:var(--bark);}
-.gedcom-person-detail{font-size:.7rem;color:var(--bark-mid);font-style:italic;}
-.gedcom-person-check{width:18px;height:18px;border:1.5px solid rgba(184,134,11,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.55rem;color:var(--gold);transition:all .15s;}
+.gedcom-person-detail{font-size:.80rem;color:var(--bark-mid);font-style:italic;}
+.gedcom-person-check{width:18px;height:18px;border:1.5px solid rgba(184,134,11,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--gold);transition:all .15s;}
 .gedcom-person.selected .gedcom-person-check{background:var(--gold);border-color:var(--gold);color:#fff;}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(184,134,11,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:.4rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -254,14 +255,14 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .seal-what{background:rgba(42,24,0,.04);border-radius:var(--r-md);padding:1rem;margin:1rem 0;font-size:.8rem;color:var(--bark-mid);line-height:1.7;font-style:italic;}
 .seal-what strong{color:var(--bark);font-style:normal;}
 .storage-bar-wrap{margin:1rem 0;}
-.storage-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.4rem;display:flex;justify-content:space-between;}
+.storage-label{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.4rem;display:flex;justify-content:space-between;}
 .storage-bar{height:6px;background:rgba(42,24,0,.1);border-radius:999px;overflow:hidden;}
 .storage-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:999px;transition:width .4s ease;}
 .storage-fill.warning{background:linear-gradient(90deg,#c05038,#e07060);}
 
 /* ── VOICE RECORDING ── */
 .voice-recorder{background:rgba(184,134,11,.06);border:1.5px solid rgba(184,134,11,.2);border-radius:var(--r-lg);padding:1.1rem 1rem;margin:1rem 0;}
-.voice-rec-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.5);margin-bottom:.6rem;}
+.voice-rec-label{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(184,134,11,.5);margin-bottom:.6rem;}
 .voice-rec-btn{width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto .6rem;transition:all .2s;}
 .voice-rec-btn.idle{background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 4px 16px rgba(184,134,11,.3);}
 .voice-rec-btn.recording{background:#c05038;box-shadow:0 0 0 8px rgba(192,80,56,.2);animation:recPulse 1s ease-in-out infinite;}
@@ -312,7 +313,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 
     <!-- TODAY'S INVITATION -->
     <div class="invitation" onclick="openLeafScreen()">
-      <div class="inv-label" style="font-size:.46rem;">Today's Prompt · Your Leaf</div>
+      <div class="inv-label" style="font-size:.78rem;">Today's Prompt · Your Leaf</div>
       <div class="inv-prompt">"What is a belief you hold that your family helped shape — and have you ever told them?"</div>
       <div class="inv-person">
         <div class="inv-person-av">🌿</div>
@@ -420,7 +421,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     <div class="leaf leaf-full" style="left:50%;top:72%;transform:translateX(-50%);" onclick="openPerson('self')">
       <div class="you-tag">You</div>
       <div class="leaf-ring" style="width:50px;height:50px;font-size:1.2rem;animation:shimmer 5s ease-in-out infinite;">🌿<div class="story-dot"></div><div class="voice-dot"></div></div>
-      <div class="leaf-name" style="font-size:.68rem;color:var(--bark);">Maren</div>
+      <div class="leaf-name" style="font-size:.78rem;color:var(--bark);">Maren</div>
     </div>
     <!-- MOM -->
     <div class="leaf leaf-full" style="left:22%;top:55%;" onclick="openPerson('mom')">
@@ -435,57 +436,57 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     <!-- GRANDMA P -->
     <div class="leaf leaf-anc" style="left:7%;top:38%;" onclick="openPerson('grandmaP')">
       <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👵<div class="story-dot"></div><div class="voice-dot"></div></div>
-      <div class="leaf-name" style="font-size:.58rem;">Grandma<br>Rose</div>
+      <div class="leaf-name" style="font-size:.72rem;">Grandma<br>Rose</div>
     </div>
     <!-- GRANDPA P -->
     <div class="leaf leaf-anc" style="left:32%;top:38%;" onclick="openPerson('grandpaP')">
       <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👴<div class="story-dot"></div></div>
-      <div class="leaf-name" style="font-size:.58rem;">Grandpa<br>Harold</div>
+      <div class="leaf-name" style="font-size:.72rem;">Grandpa<br>Harold</div>
     </div>
     <!-- GRANDMA M -->
     <div class="leaf leaf-anc" style="left:51%;top:38%;" onclick="openPerson('grandmaM')">
       <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👵<div class="story-dot"></div><div class="voice-dot"></div></div>
-      <div class="leaf-name" style="font-size:.58rem;">Grandma<br>Helen</div>
+      <div class="leaf-name" style="font-size:.72rem;">Grandma<br>Helen</div>
     </div>
     <!-- GRANDPA M -->
     <div class="leaf leaf-anc" style="left:72%;top:38%;" onclick="openPerson('grandpaM')">
       <div class="leaf-ring" style="width:34px;height:34px;font-size:.85rem;">👴</div>
-      <div class="leaf-name" style="font-size:.58rem;color:var(--bark-ghost);">Grandpa<br>Earl</div>
+      <div class="leaf-name" style="font-size:.72rem;color:var(--bark-ghost);">Grandpa<br>Earl</div>
     </div>
     <!-- GREAT GRANDPARENTS — very faint -->
     <div class="leaf leaf-anc" style="left:1%;top:22%;opacity:.42;" onclick="openPerson('ggp1')">
-      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👵</div>
-      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Edna</div>
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.75rem;">👵</div>
+      <div class="leaf-name" style="font-size:.70rem;color:var(--bark-ghost);">Edna</div>
     </div>
     <div class="leaf leaf-anc" style="left:13%;top:22%;opacity:.42;" onclick="openPerson('ggp2')">
-      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👴</div>
-      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Walter</div>
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.75rem;">👴</div>
+      <div class="leaf-name" style="font-size:.70rem;color:var(--bark-ghost);">Walter</div>
     </div>
     <div class="leaf leaf-anc" style="left:28%;top:22%;opacity:.42;" onclick="openPerson('ggp3')">
-      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👵</div>
-      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Mae</div>
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.75rem;">👵</div>
+      <div class="leaf-name" style="font-size:.70rem;color:var(--bark-ghost);">Mae</div>
     </div>
     <div class="leaf leaf-anc" style="left:49%;top:22%;opacity:.42;" onclick="openPerson('ggp4')">
-      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👵</div>
-      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Clara</div>
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.75rem;">👵</div>
+      <div class="leaf-name" style="font-size:.70rem;color:var(--bark-ghost);">Clara</div>
     </div>
     <div class="leaf leaf-anc" style="left:82%;top:22%;opacity:.42;" onclick="openPerson('ggp5')">
-      <div class="leaf-ring" style="width:24px;height:24px;font-size:.65rem;">👴</div>
-      <div class="leaf-name" style="font-size:.5rem;color:var(--bark-ghost);">Frank</div>
+      <div class="leaf-ring" style="width:24px;height:24px;font-size:.75rem;">👴</div>
+      <div class="leaf-name" style="font-size:.70rem;color:var(--bark-ghost);">Frank</div>
     </div>
     <!-- CHILDREN -->
     <div class="leaf leaf-full" style="left:27%;top:84%;" onclick="openPerson('child1')">
       <div class="leaf-ring" style="width:30px;height:30px;font-size:.76rem;">👧<div class="story-dot"></div></div>
-      <div class="leaf-name" style="font-size:.55rem;">Emma</div>
+      <div class="leaf-name" style="font-size:.72rem;">Emma</div>
     </div>
     <div class="leaf leaf-full" style="left:55%;top:84%;" onclick="openPerson('child2')">
       <div class="leaf-ring" style="width:30px;height:30px;font-size:.76rem;">👦</div>
-      <div class="leaf-name" style="font-size:.55rem;">Liam</div>
+      <div class="leaf-name" style="font-size:.72rem;">Liam</div>
     </div>
     <!-- ADD -->
     <div class="leaf leaf-empty" style="left:42%;top:65%;" onclick="t('Add a family member')">
-      <div class="leaf-ring" style="width:28px;height:28px;font-size:.68rem;color:rgba(184,134,11,.32);">＋</div>
-      <div class="leaf-name" style="font-size:.5rem;">Add</div>
+      <div class="leaf-ring" style="width:28px;height:28px;font-size:.78rem;color:rgba(184,134,11,.32);">＋</div>
+      <div class="leaf-name" style="font-size:.70rem;">Add</div>
     </div>
   </div>
 </div>
@@ -1137,7 +1138,7 @@ function openPerson(id){
 
 function closeStory(){document.getElementById('storyScreen').classList.remove('open');}
 </script>
-<div style="text-align:center;padding:.8rem 1.5rem;font-size:.7rem;color:rgba(255,255,255,.3);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.80rem;color:rgba(255,255,255,.3);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

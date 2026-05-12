@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/atmosphere.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,600&family=Nunito:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
+html{font-size:18px;-webkit-text-size-adjust:100%;}
 :root{
   --ink:#060c09;--card:#162019;
   --amber:#c97d3a;--amber2:#e89448;--gold-line:rgba(201,125,58,.28);
@@ -21,7 +22,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem .7rem;position:sticky;top:0;z-index:50;background:rgba(6,12,9,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05);}
 .topbar-name{font-family:'Pacifico',cursive;font-size:1.2rem;color:var(--amber);}
-.topbar-date{font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.28);}
+.topbar-date{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.28);}
 .topbar-right{display:flex;align-items:center;gap:.5rem;}
 .topbar-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.82rem;cursor:pointer;}
 .topbar-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;cursor:pointer;}
@@ -32,7 +33,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .shelf{margin-top:1.5rem;}
 .shelf-header{display:flex;align-items:baseline;justify-content:space-between;padding:0 .9rem;margin-bottom:.65rem;}
 .shelf-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);}
-.shelf-count{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;}
+.shelf-count{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;}
 .shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;}
 .shelf-row::-webkit-scrollbar{display:none;}
 /* FLIP CARD SYSTEM */
@@ -72,25 +73,25 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 /* HERO FRONT */
 .hero-front{position:absolute;inset:0;display:none;z-index:2;}
 .hero-inner{position:relative;z-index:1;padding:1.4rem 1.4rem 1.2rem;}
-.hero-eyebrow{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.85);margin-bottom:.6rem;display:flex;align-items:center;gap:.3rem;}
-.hero-eyebrow::before{content:'✦';font-size:.38rem;}
+.hero-eyebrow{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.85);margin-bottom:.6rem;display:flex;align-items:center;gap:.3rem;}
+.hero-eyebrow::before{content:'✦';font-size:.75rem;}
 .hero-question{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-style:italic;color:var(--cream);line-height:1.42;margin-bottom:1.1rem;}
 .hero-icon-bar{display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem;}
 .hib-btn{display:flex;flex-direction:column;align-items:center;gap:.25rem;background:none;border:none;cursor:pointer;padding:.3rem .4rem;}
 .hib-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:rgba(255,255,255,.85);}
-.hib-label{font-family:'Nunito',sans-serif;font-size:.46rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.hib-label{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);}
 /* WW CARDS */
 .ww-card{flex-shrink:0;width:158px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;overflow:hidden;}
 .ww-card-top{padding:.85rem .85rem .5rem;}
-.ww-type{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:.38rem;}
+.ww-type{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:.38rem;}
 .ww-q{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-style:italic;color:var(--cream);line-height:1.42;}
-.ww-tap{padding:.45rem .85rem .6rem;font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
+.ww-tap{padding:.45rem .85rem .6rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
 /* QUIZ CARDS */
 .quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;}
-.quiz-label{font-family:'Nunito',sans-serif;font-size:.48rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.45rem;opacity:.8;}
+.quiz-label{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.45rem;opacity:.8;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--cream);margin-bottom:.32rem;}
-.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.68rem;color:rgba(242,232,216,.5);line-height:1.5;margin-bottom:.7rem;}
-.quiz-start{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;}
+.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.5);line-height:1.5;margin-bottom:.7rem;}
+.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;}
 /* CIRCLES */
 .circles-section{position:relative;background:linear-gradient(180deg,#08101e,#0a0e1c);margin-top:2rem;overflow:hidden;padding:1.8rem 0 1.4rem;}
 /* WRITE EXP */
@@ -101,14 +102,14 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:.2rem;cursor:pointer;opacity:.38;min-width:44px;}
 .nav-item.active{opacity:1;}
 .nav-icon{font-size:1rem;line-height:1;}
-.nav-label{font-family:'Nunito',sans-serif;font-size:.44rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.7);}
+.nav-label{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.7);}
 .nav-item.active .nav-label{color:var(--amber2);}
 .nav-compose{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(201,125,58,.4);margin-top:-9px;border:2.5px solid var(--ink);}
 /* CARD OVERLAY */
 .card-overlay{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto;}
 .card-overlay.open{display:block;}
 .card-screen{min-height:100vh;padding:1.3rem 1.3rem 2.5rem;display:flex;flex-direction:column;}
-.card-close{background:none;border:none;color:rgba(255,255,255,.45);font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;align-self:flex-start;margin-bottom:.5rem;padding:0;}
+.card-close{background:none;border:none;color:rgba(255,255,255,.45);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;align-self:flex-start;margin-bottom:.5rem;padding:0;}
 .card-brand-small{font-family:'Pacifico',cursive;font-size:12px;color:var(--amber);opacity:.45;margin-top:1.6rem;margin-bottom:4px;}
 .card-edition{font-family:'Nunito',sans-serif;font-size:8px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:11px;}
 .card-big-q{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--cream);line-height:1.42;flex:1;margin-bottom:1.1rem;}
@@ -146,12 +147,12 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ww-q-big{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-style:italic;color:var(--cream);line-height:1.42;flex:1;margin-bottom:1.4rem;}
 .ww-reveal-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(242,232,216,.7);line-height:1.6;margin-bottom:.9rem;display:none;}
 .ww-reveal-text.show{display:block;}
-.ww-reveal-btn{background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:999px;padding:.5rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;color:var(--amber);cursor:pointer;}
+.ww-reveal-btn{background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:999px;padding:.5rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.80rem;font-weight:700;color:var(--amber);cursor:pointer;}
 /* RESPONSE SCREEN */
 .response-screen{display:none;position:fixed;inset:0;z-index:200;background:var(--ink);flex-direction:column;padding:1.3rem;}
 .response-screen.open{display:flex;}
 .response-echo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(242,232,216,.45);margin-top:2rem;margin-bottom:.9rem;padding:.7rem .9rem;background:rgba(255,255,255,.04);border-radius:12px;border-left:2px solid var(--amber);}
-.response-label{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.38);margin-bottom:.45rem;}
+.response-label{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.38);margin-bottom:.45rem;}
 .response-textarea{width:100%;min-height:110px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.85rem .95rem;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--cream);outline:none;resize:none;line-height:1.6;}
 .response-bar{margin-top:auto;padding-top:.9rem;display:flex;gap:.6rem;}
 .resp-btn{flex:1;padding:.7rem;border-radius:11px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;}
@@ -164,13 +165,13 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .acct-sheet{animation:slideUp .3s ease both;}
 .sheet-handle{width:34px;height:4px;background:rgba(255,255,255,.14);border-radius:999px;margin:0 auto 1.1rem;}
-.sheet-kicker{font-family:'Nunito',sans-serif;font-size:.5rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);margin-bottom:.3rem;}
+.sheet-kicker{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);margin-bottom:.3rem;}
 .sheet-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--cream);margin-bottom:.3rem;}
 .sheet-sub{font-size:.8rem;color:rgba(242,232,216,.48);line-height:1.6;margin-bottom:.9rem;}
 .sheet-input{width:100%;padding:.78rem .9rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--cream);outline:none;margin-bottom:.5rem;}
 .sheet-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:800;cursor:pointer;margin-bottom:.5rem;}
 .sheet-cancel{width:100%;background:none;border:none;color:rgba(242,232,216,.32);font-family:'Nunito',sans-serif;font-size:.75rem;cursor:pointer;padding:.35rem;}
-.sheet-note{text-align:center;font-size:.6rem;color:rgba(242,232,216,.2);margin-top:.45rem;}
+.sheet-note{text-align:center;font-size:.75rem;color:rgba(242,232,216,.2);margin-top:.45rem;}
 /* TOAST */
 .toast-wrap{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:400;pointer-events:none;}
 .toast{background:rgba(20,30,25,.96);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.5rem 1.1rem;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:600;color:var(--cream);white-space:nowrap;}
@@ -297,12 +298,12 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div class="circles-section">
       <div style="position:relative;z-index:2;padding:0 1rem;margin-bottom:.9rem;display:flex;align-items:baseline;justify-content:space-between;">
         <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--cream);">My Circles</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:.75;" onclick="window.location.href='circles.html'">See All</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:.75;" onclick="window.location.href='circles.html'">See All</div>
       </div>
       <div id="circlesRow" style="display:flex;gap:.7rem;overflow-x:auto;scrollbar-width:none;padding:0 1rem .35rem;"></div>
       <div id="circlesEmpty" style="display:none;padding:1.2rem 1rem;text-align:center;">
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.38);margin-bottom:.9rem;">Your circles will live here.</div>
-        <button onclick="window.location.href='circles.html'" style="padding:.6rem 1.3rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
+        <button onclick="window.location.href='circles.html'" style="padding:.6rem 1.3rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.80rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
       </div>
     </div>
 
@@ -314,8 +315,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="write-exp-inner" onclick="openAccount('write your experience')">
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(242,232,216,.3);line-height:1.65;">What came up for you tonight? A moment, a memory, something that surprised you.</div>
         <div style="margin-top:.8rem;display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.42);">Start writing →</div>
-          <div style="font-size:.58rem;color:rgba(242,232,216,.16);font-style:italic;">Saved to your leaf</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.42);">Start writing →</div>
+          <div style="font-size:.72rem;color:rgba(242,232,216,.16);font-style:italic;">Saved to your leaf</div>
         </div>
       </div>
     </div>
@@ -413,7 +414,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="sheet-sub" id="acctSub">Create your free Gather profile to save answers, share with people you love, and come back to what matters.</div>
       <input class="sheet-input" type="text" placeholder="Your first name" id="acctName"/>
       <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail"/>
-      <div style="font-size:.6rem;color:rgba(242,232,216,.28);line-height:1.7;margin-bottom:.65rem;text-align:center;">By continuing you agree to our <span style="color:rgba(201,125,58,.55);cursor:pointer;">Terms of Service</span> and <span style="color:rgba(201,125,58,.55);cursor:pointer;">Privacy Policy</span>.<br/>Curated Connections™ is for entertainment purposes only.</div>
+      <div style="font-size:.75rem;color:rgba(242,232,216,.28);line-height:1.7;margin-bottom:.65rem;text-align:center;">By continuing you agree to our <span style="color:rgba(201,125,58,.55);cursor:pointer;">Terms of Service</span> and <span style="color:rgba(201,125,58,.55);cursor:pointer;">Privacy Policy</span>.<br/>Curated Connections™ is for entertainment purposes only.</div>
       <button class="sheet-btn" onclick="createAcct()">Create Free Profile →</button>
       <button class="sheet-cancel" onclick="closeAccount()">Not now — keep browsing</button>
       <div class="sheet-note">Free forever · No card required · Cancel anytime</div>
@@ -858,7 +859,7 @@ async function loadCircles() {
   if (!row) return;
   var addBtn = '<div onclick="window.location.href=\'circles.html\'" style="flex-shrink:0;width:84px;border-radius:17px;padding:14px 10px 12px;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.12);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;">'
     + '<div style="width:30px;height:30px;border-radius:50%;background:rgba(201,125,58,.1);border:1.5px dashed rgba(201,125,58,.28);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:rgba(201,125,58,.55);">+</div>'
-    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.46rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.42);text-align:center;">New Circle</div></div>';
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.42);text-align:center;">New Circle</div></div>';
   row.innerHTML = addBtn;
   if (empty) empty.style.display = 'block';
 }

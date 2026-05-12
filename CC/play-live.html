@@ -6,6 +6,7 @@
 <title>Play Live — Curated Connections</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+html{font-size:18px;-webkit-text-size-adjust:100%;}
 :root{--ink:#060c09;--surface:#111d14;--card:#162019;--amber:#c97d3a;--amber2:#e89448;--cream:#f2e8d8;--teal:#2a8a72;--teal2:#3aad90;--r-lg:22px;--r-md:16px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
@@ -27,30 +28,30 @@ html,body{height:100%;background:var(--ink);color:var(--cream);font-family:'DM S
 .btn-secondary{background:rgba(255,255,255,.05);color:rgba(242,232,216,.7);border:1.5px solid rgba(255,255,255,.1);}
 .input-field{width:100%;padding:.85rem 1rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--cream);outline:none;margin-bottom:.75rem;text-align:center;letter-spacing:.12em;text-transform:uppercase;}
 .input-field::placeholder{text-transform:none;letter-spacing:0;color:rgba(242,232,216,.25);}
-.input-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.4rem;display:block;}
+.input-label{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.4rem;display:block;}
 
 /* WAITING ROOM */
 .room-code-display{font-family:'Nunito',sans-serif;font-size:2.8rem;font-weight:900;letter-spacing:.2em;color:var(--amber);text-align:center;margin:1.5rem 0;text-shadow:0 0 30px rgba(201,125,58,.3);}
-.room-code-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,232,216,.3);text-align:center;margin-bottom:.5rem;}
+.room-code-label{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,232,216,.3);text-align:center;margin-bottom:.5rem;}
 .players-list{margin:1.5rem 0;}
 .player-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .9rem;background:rgba(255,255,255,.04);border-radius:var(--r-md);margin-bottom:.4rem;}
-.player-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;flex-shrink:0;}
+.player-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.80rem;font-weight:700;color:#fff;flex-shrink:0;}
 .player-name{font-size:.9rem;font-weight:500;}
-.player-host{font-family:'Nunito',sans-serif;font-size:.5rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-left:auto;}
+.player-host{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-left:auto;}
 .waiting-pulse{text-align:center;font-size:.75rem;font-style:italic;color:rgba(242,232,216,.3);animation:pulse 2s ease-in-out infinite;margin:1rem 0;}
 @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
 
 /* GAME PLAY */
-.round-badge{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);text-align:center;margin:1rem 0 .5rem;}
+.round-badge{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);text-align:center;margin:1rem 0 .5rem;}
 .game-card{background:linear-gradient(145deg,#3a1800,#7a3810);border:1px solid rgba(201,125,58,.2);border-radius:var(--r-lg);padding:1.8rem 1.4rem;margin-bottom:1.2rem;position:relative;overflow:hidden;}
 .game-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.12),transparent 40%);pointer-events:none;}
-.game-card-edition{font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:.5rem;}
+.game-card-edition{font-size:.70rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:.5rem;}
 .game-card-q{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--cream);line-height:1.5;position:relative;z-index:1;}
 .game-card-hint{font-size:.75rem;color:rgba(242,232,216,.45);margin-top:.6rem;line-height:1.5;position:relative;z-index:1;}
 .answer-box{width:100%;min-height:100px;padding:.9rem 1rem;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--cream);resize:none;outline:none;margin-bottom:.75rem;}
 .answer-box:focus{border-color:rgba(201,125,58,.4);}
 .players-scores{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0;}
-.score-pill{padding:.3rem .8rem;background:rgba(255,255,255,.05);border-radius:999px;font-size:.7rem;display:flex;align-items:center;gap:.4rem;}
+.score-pill{padding:.3rem .8rem;background:rgba(255,255,255,.05);border-radius:999px;font-size:.80rem;display:flex;align-items:center;gap:.4rem;}
 .score-name{color:rgba(242,232,216,.6);}
 .score-num{font-weight:700;color:var(--amber2);}
 

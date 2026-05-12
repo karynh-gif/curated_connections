@@ -6,6 +6,7 @@
 <title>Share a Memory — Curated Connections</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+html{font-size:18px;-webkit-text-size-adjust:100%;}
 :root{
   --ivory:#f4e8d4;
   --parchment:#ece0c8;
@@ -53,7 +54,7 @@ body::after{content:"";position:fixed;inset:0;
 /* Tree hero */
 .tree-hero{padding:1.8rem 1.3rem 1.2rem;text-align:center;position:relative;}
 .tree-emoji{font-size:3.5rem;display:block;margin-bottom:.6rem;animation:leafSway 4s ease-in-out infinite;transform-origin:bottom center;}
-.th-brand{font-size:.46rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.35rem;}
+.th-brand{font-size:.78rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.35rem;}
 .th-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--espresso);line-height:1.3;margin-bottom:.4rem;}
 .th-title strong{font-weight:600;color:var(--amber);}
 .th-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;color:var(--bark-mid);line-height:1.68;max-width:280px;margin:0 auto;}
@@ -64,14 +65,14 @@ body::after{content:"";position:fixed;inset:0;
 /* About section */
 .about-section{padding:0 1.3rem 1.2rem;}
 .about-card{background:rgba(255,252,244,.75);border:1px solid rgba(40,22,0,.12);border-radius:var(--r-xl);padding:1.4rem 1.3rem;margin-bottom:.5rem;box-shadow:0 3px 16px rgba(40,22,0,.08);}
-.ac-eyebrow{font-size:.52rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-mute);margin-bottom:.38rem;}
+.ac-eyebrow{font-size:.70rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-mute);margin-bottom:.38rem;}
 .ac-name{font-family:'Cormorant Garamond',serif;font-size:1.75rem;color:#1e1000;font-weight:500;margin-bottom:.25rem;}
 .ac-keeper{font-size:.8rem;color:rgba(40,22,0,.6);}
 .ac-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:rgba(40,22,0,.72);line-height:1.75;margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(40,22,0,.1);}
 
 /* What you can share */
 .share-types{padding:0 1.3rem .8rem;}
-.st-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.65rem;}
+.st-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.65rem;}
 .st-grid{display:grid;grid-template-columns:1fr 1fr;gap:.42rem;}
 .st-tile{background:rgba(255,252,244,.5);border:1px solid var(--bark-ghost);border-radius:var(--r-lg);padding:.8rem .75rem;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(40,22,0,.04);}
 .st-tile:hover{border-color:rgba(138,96,16,.22);transform:translateY(-1px);}
@@ -84,19 +85,19 @@ body::after{content:"";position:fixed;inset:0;
 .begin-section{padding:.8rem 1.3rem 0;}
 .begin-btn{width:100%;padding:.95rem;background:linear-gradient(135deg,var(--amber),#e89448);color:#fff;border:none;border-radius:var(--r-xl);font-family:'Nunito',sans-serif;font-size:1rem;font-weight:900;cursor:pointer;letter-spacing:.04em;box-shadow:0 6px 20px rgba(201,125,58,.3);transition:all .2s;}
 .begin-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,125,58,.4);}
-.no-account{font-size:.62rem;color:var(--bark-soft);text-align:center;margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;}
+.no-account{font-size:.75rem;color:var(--bark-soft);text-align:center;margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;}
 
 /* ══ CONTRIBUTE SCREEN ══ */
 .contribute-header{padding:.75rem 1rem .65rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--bark-ghost);flex-shrink:0;background:rgba(248,242,232,.95);}
 .ch-back{background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--bark-mid);cursor:pointer;}
 .ch-title{flex:1;text-align:center;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--espresso);font-weight:500;}
-.ch-step{font-size:.6rem;font-weight:700;color:var(--bark-soft);font-family:'Nunito',sans-serif;}
+.ch-step{font-size:.75rem;font-weight:700;color:var(--bark-soft);font-family:'Nunito',sans-serif;}
 
 .contribute-scroll{flex:1;overflow-y:auto;padding:.9rem 1.1rem 3rem;}
 .contribute-scroll::-webkit-scrollbar{display:none;}
 
 /* Chapter selector */
-.chapter-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.55rem;}
+.chapter-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.55rem;}
 .chapter-scroll{display:flex;gap:.38rem;overflow-x:auto;padding-bottom:.3rem;margin-bottom:1.1rem;}
 .chapter-scroll::-webkit-scrollbar{display:none;}
 .chapter-chip{flex-shrink:0;padding:.42rem .82rem;background:rgba(255,252,244,.6);border:1px solid var(--bark-ghost);border-radius:999px;font-size:.75rem;font-weight:700;color:var(--bark-mid);cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:all .18s;}
@@ -107,7 +108,7 @@ body::after{content:"";position:fixed;inset:0;
 .prompt-hint{font-size:.8rem;color:var(--bark-soft);line-height:1.62;margin-bottom:1.1rem;font-family:'Cormorant Garamond',serif;font-style:italic;}
 
 /* Media type selector */
-.media-lbl{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.55rem;}
+.media-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.55rem;}
 .media-types{display:flex;gap:.38rem;flex-wrap:wrap;margin-bottom:1rem;}
 .media-type{display:flex;align-items:center;gap:.3rem;padding:.44rem .78rem;background:rgba(255,252,244,.6);border:1.5px solid var(--bark-ghost);border-radius:999px;font-size:.76rem;font-weight:700;color:var(--bark-mid);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .18s;}
 .media-type.sel{background:rgba(62,128,112,.08);border-color:rgba(62,128,112,.35);color:rgba(62,128,112,.85);}
@@ -132,7 +133,7 @@ body::after{content:"";position:fixed;inset:0;
 .photo-preview.show{display:grid;}
 .photo-thumb{border-radius:var(--r-md);aspect-ratio:1;background:var(--parchment);overflow:hidden;position:relative;}
 .photo-thumb img{width:100%;height:100%;object-fit:cover;}
-.photo-rm{position:absolute;top:4px;right:4px;background:rgba(40,22,0,.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.photo-rm{position:absolute;top:4px;right:4px;background:rgba(40,22,0,.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
 /* Voice zone */
 .voice-zone{background:rgba(255,250,240,.5);border:1.5px solid var(--bark-ghost);border-radius:var(--r-lg);padding:1.2rem 1rem;text-align:center;}
@@ -156,11 +157,11 @@ body::after{content:"";position:fixed;inset:0;
 .ty-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.12rem;color:var(--bark-mid);line-height:1.72;max-width:290px;margin:0 auto 1.4rem;}
 .gold-rule-center{width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:.6rem auto 1.2rem;}
 .ty-summary{background:rgba(255,252,244,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-xl);padding:1rem 1.1rem;margin-bottom:1.3rem;text-align:left;width:100%;max-width:320px;box-shadow:0 2px 10px rgba(40,22,0,.05);}
-.ty-summary-lbl{font-size:.46rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-mute);margin-bottom:.35rem;}
+.ty-summary-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-mute);margin-bottom:.35rem;}
 .ty-summary-chapter{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--amber);margin-bottom:.25rem;}
 .ty-summary-preview{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark-mid);line-height:1.65;font-style:italic;}
 .ty-media-chips{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.65rem;}
-.ty-chip{font-size:.68rem;font-weight:700;font-family:'Nunito',sans-serif;padding:.2rem .52rem;background:rgba(62,128,112,.08);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:rgba(62,128,112,.7);}
+.ty-chip{font-size:.78rem;font-weight:700;font-family:'Nunito',sans-serif;padding:.2rem .52rem;background:rgba(62,128,112,.08);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:rgba(62,128,112,.7);}
 
 .ty-add-more{width:100%;max-width:320px;padding:.8rem;background:rgba(201,125,58,.08);border:1px solid rgba(201,125,58,.22);border-radius:var(--r-lg);font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:var(--amber);cursor:pointer;margin-bottom:.5rem;}
 .ty-done{width:100%;max-width:320px;padding:.8rem;background:none;border:1px solid var(--bark-ghost);border-radius:var(--r-lg);font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--bark-soft);cursor:pointer;}
@@ -343,13 +344,13 @@ body::after{content:"";position:fixed;inset:0;
               <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="rgba(40,22,0,.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
               <div>
                 <div style="font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--espresso);">Documents & Records</div>
-                <div style="font-size:.68rem;color:var(--bark-soft);">Book pages, letters, certificates, clippings</div>
+                <div style="font-size:.78rem;color:var(--bark-soft);">Book pages, letters, certificates, clippings</div>
               </div>
             </div>
             <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--bark-mid);line-height:1.65;margin-bottom:.9rem;">Photograph any page or document. The app will read it, extract the family information, and retell the story in its own words — no copyright issues.</div>
             <div onclick="t('Opening camera...')" style="padding:.72rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.28);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--amber);cursor:pointer;text-align:center;margin-bottom:.42rem;">📷 Photograph a page</div>
             <div onclick="t('Opening files...')" style="padding:.72rem;background:rgba(255,252,240,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:var(--bark-mid);cursor:pointer;text-align:center;">Upload a scan or PDF</div>
-            <div style="font-size:.65rem;color:var(--bark-soft);margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center;">Facts can't be copyrighted. Names, dates, stories — all preserved. The words will be ours.</div>
+            <div style="font-size:.75rem;color:var(--bark-soft);margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center;">Facts can't be copyrighted. Names, dates, stories — all preserved. The words will be ours.</div>
           </div>
         </div>
 
@@ -363,7 +364,7 @@ body::after{content:"";position:fixed;inset:0;
               <div onclick="t('Opening your files...')" style="padding:.65rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.28);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--amber);cursor:pointer;">Upload audio or video file</div>
               <div onclick="t('Opening your camera roll...')" style="padding:.65rem;background:rgba(255,252,244,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;color:var(--bark-mid);cursor:pointer;">Choose from camera roll</div>
             </div>
-            <div style="font-size:.6rem;color:var(--bark-soft);margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;">Accepted: video, audio, voicemail files. Any length.</div>
+            <div style="font-size:.75rem;color:var(--bark-soft);margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;">Accepted: video, audio, voicemail files. Any length.</div>
           </div>
         </div>
       </div>
@@ -372,7 +373,7 @@ body::after{content:"";position:fixed;inset:0;
       <div style="margin-top:.4rem;animation:fadeUp .3s .14s ease both;">
         <div class="chapter-lbl" style="margin-top:.4rem;">Your name</div>
         <input type="text" id="contributorName" placeholder="How should Ruth's family know you?" style="width:100%;background:rgba(255,250,240,.7);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--espresso);padding:.78rem .9rem;outline:none;margin-bottom:.3rem;"/>
-        <div style="font-size:.6rem;color:var(--bark-soft);font-family:'Cormorant Garamond',serif;font-style:italic;">Your name helps the family know whose memory this is.</div>
+        <div style="font-size:.75rem;color:var(--bark-soft);font-family:'Cormorant Garamond',serif;font-style:italic;">Your name helps the family know whose memory this is.</div>
       </div>
     </div>
 
@@ -407,7 +408,7 @@ body::after{content:"";position:fixed;inset:0;
 
 </div>
 
-<div style="display:none;position:fixed;bottom:3rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.9);border-radius:999px;padding:.4rem .9rem;font-size:.66rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;" id="toastEl"></div>
+<div style="display:none;position:fixed;bottom:3rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.9);border-radius:999px;padding:.4rem .9rem;font-size:.75rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;" id="toastEl"></div>
 
 <script>
 const PROMPTS = {

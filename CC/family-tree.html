@@ -6,6 +6,7 @@
 <title>Family Tree — Living Legacy</title>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+html{font-size:18px;-webkit-text-size-adjust:100%;}
 :root{
   --ivory:#f4e8d4;--parchment:#ece0c8;
   --espresso:#281600;--bark:rgba(40,22,0,.75);
@@ -32,8 +33,8 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .h-back{background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--bark-mid);cursor:pointer;padding:0;}
 .h-title{flex:1;text-align:center;}
 .h-name{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--espresso);font-weight:500;}
-.h-sub{font-size:.52rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);margin-top:.05rem;}
-.h-fs{background:rgba(62,128,112,.1);border:1px solid rgba(62,128,112,.25);border-radius:999px;padding:.28rem .65rem;font-size:.6rem;font-weight:700;color:var(--teal);cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.h-sub{font-size:.70rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);margin-top:.05rem;}
+.h-fs{background:rgba(62,128,112,.1);border:1px solid rgba(62,128,112,.25);border-radius:999px;padding:.28rem .65rem;font-size:.75rem;font-weight:700;color:var(--teal);cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
 
 /* TREE AREA */
 .tree-area{flex:1;overflow:auto;padding:1.5rem 1rem 5rem;position:relative;}
@@ -101,17 +102,17 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .node-name{font-family:'Cormorant Garamond',serif;font-size:.72rem;color:var(--espresso);line-height:1.3;font-weight:500;}
 .node-card.subject .node-name{font-size:.8rem;font-weight:600;}
 .node-card.empty .node-name{color:var(--bark-soft);}
-.node-years{font-size:.52rem;color:var(--bark-soft);margin-top:.1rem;font-family:'DM Sans',sans-serif;}
+.node-years{font-size:.70rem;color:var(--bark-soft);margin-top:.1rem;font-family:'DM Sans',sans-serif;}
 
 /* Media indicators */
 .node-media{display:flex;justify-content:center;gap:2px;margin-top:.22rem;}
 .nm{width:5px;height:5px;border-radius:50%;}
 
 /* Relationship label below node */
-.node-rel{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bark-soft);font-family:'Nunito',sans-serif;}
+.node-rel{font-size:.70rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bark-soft);font-family:'Nunito',sans-serif;}
 
 /* Start leaf CTA on empty nodes */
-.node-start{font-size:.52rem;color:var(--amber);font-family:'Nunito',sans-serif;font-weight:700;margin-top:.18rem;}
+.node-start{font-size:.70rem;color:var(--amber);font-family:'Nunito',sans-serif;font-weight:700;margin-top:.18rem;}
 
 /* SPOUSE ROW — horizontal with heart */
 .spouse-row{display:flex;align-items:center;justify-content:center;gap:.35rem;margin-bottom:0;}
@@ -119,7 +120,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
 /* LEGEND */
 .legend{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);display:flex;gap:.65rem;background:rgba(244,232,212,.92);border:1px solid var(--bark-ghost);border-radius:999px;padding:.38rem .85rem;backdrop-filter:blur(10px);z-index:50;}
-.leg-item{display:flex;align-items:center;gap:.25rem;font-size:.58rem;color:var(--bark-mid);font-family:'Nunito',sans-serif;font-weight:700;}
+.leg-item{display:flex;align-items:center;gap:.25rem;font-size:.72rem;color:var(--bark-mid);font-family:'Nunito',sans-serif;font-weight:700;}
 .leg-dot{width:8px;height:8px;border-radius:50%;}
 
 /* BOTTOM NAV */
@@ -128,7 +129,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .bn.active{opacity:1;}
 .bn-i{width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
 .bn-i svg{width:20px;height:20px;stroke:var(--espresso);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;}
-.bn-l{font-size:.44rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bark-mid);}
+.bn-l{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--bark-mid);}
 .bn.active .bn-l{color:var(--amber);}
 .bn.active .bn-i svg{stroke:var(--amber);}
 
@@ -139,7 +140,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .detail-sheet::-webkit-scrollbar{display:none;}
 .detail-sheet.open{transform:translateX(-50%) translateY(0);}
 .ds-handle{width:28px;height:2.5px;background:rgba(40,22,0,.14);border-radius:2px;margin:0 auto .9rem;}
-.ds-eye{font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.3rem;}
+.ds-eye{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.3rem;}
 .ds-name{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--espresso);font-weight:400;margin-bottom:.15rem;}
 .ds-years{font-size:.72rem;color:var(--bark-soft);margin-bottom:.8rem;}
 .ds-actions{display:flex;flex-direction:column;gap:.42rem;margin-top:1rem;}
@@ -147,10 +148,10 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .ds-primary{background:linear-gradient(135deg,var(--amber),#e89448);color:#fff;border:none;box-shadow:0 4px 14px rgba(201,125,58,.3);}
 .ds-secondary{background:none;border:1px solid var(--bark-ghost);color:var(--bark-mid);}
 .ds-media-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.65rem;}
-.ds-chip{font-size:.62rem;font-weight:700;font-family:'Nunito',sans-serif;padding:.22rem .55rem;background:var(--teal-ghost);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:var(--teal);}
+.ds-chip{font-size:.75rem;font-weight:700;font-family:'Nunito',sans-serif;padding:.22rem .55rem;background:var(--teal-ghost);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:var(--teal);}
 
 /* Toast */
-.toast{display:none;position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.88);border-radius:999px;padding:.4rem .9rem;font-size:.68rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
+.toast{display:none;position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.88);border-radius:999px;padding:.4rem .9rem;font-size:.78rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
 .toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
@@ -487,6 +488,6 @@ function t(m){
   clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2600);
 }
 </script>
-<div style="text-align:center;padding:.8rem 1.5rem;font-size:.65rem;color:rgba(40,22,0,.35);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.75rem;color:rgba(40,22,0,.35);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
 </body>
 </html>
