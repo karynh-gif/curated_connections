@@ -29,6 +29,8 @@ const ALLOWED_TABLES = new Set([
   "Tiers",
   "Game Sessions",
   "Game Plays",
+  "User Decks",
+  "Special Decks",
 ]);
 
 const ALLOWED_ACTIONS = new Set(["list", "get", "create", "update", "delete"]);

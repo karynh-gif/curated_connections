@@ -141,13 +141,29 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .card-action-primary{background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);color:var(--amber);}
 .card-action-sec{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(242,232,216,.6);}
 /* WW OVERLAY */
-.ww-overlay{display:none;position:fixed;inset:0;z-index:200;flex-direction:column;padding:1.3rem 1.3rem 2.5rem;overflow-y:auto;}
+/* ── WIT & WONDER overlay — whimsical, collectible, progressive reveal ── */
+.ww-overlay{display:none;position:fixed;inset:0;z-index:200;flex-direction:column;padding:1.4rem 1.3rem 2.8rem;overflow-y:auto;}
 .ww-overlay.open{display:flex;}
-.ww-type-big{font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--amber2);margin-top:2rem;margin-bottom:.5rem;}
-.ww-q-big{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-style:italic;color:var(--cream);line-height:1.42;flex:1;margin-bottom:1.4rem;}
-.ww-reveal-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(242,232,216,.7);line-height:1.6;margin-bottom:.9rem;display:none;}
-.ww-reveal-text.show{display:block;}
-.ww-reveal-btn{background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:999px;padding:.5rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.80rem;font-weight:700;color:var(--amber);cursor:pointer;}
+/* Vignette to make it feel like holding a physical card */
+.ww-overlay::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 40%,rgba(0,0,0,.55) 100%);pointer-events:none;z-index:0;}
+.ww-overlay > *{position:relative;z-index:1;}
+/* Category badge — icon-forward, prominent */
+.ww-category-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .85rem .35rem .6rem;border-radius:999px;margin-top:2rem;margin-bottom:1.4rem;border:1px solid;backdrop-filter:blur(8px);}
+.ww-category-icon{font-size:1.1rem;line-height:1;}
+.ww-category-label{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;}
+/* Question text — generous, cinematic */
+.ww-q-big{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-style:italic;color:#f5ede2;line-height:1.48;flex:1;margin-bottom:1.6rem;text-shadow:0 1px 12px rgba(0,0,0,.4);}
+/* Reveal — appears as a separate card below */
+.ww-reveal-block{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:1rem 1.15rem;margin-bottom:1rem;display:none;backdrop-filter:blur(4px);}
+.ww-reveal-block.show{display:block;animation:revealDrop .3s ease both;}
+.ww-reveal-label{font-family:'Nunito',sans-serif;font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:.45rem;}
+.ww-reveal-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:rgba(242,232,216,.88);line-height:1.6;}
+/* Keep old class for backwards compat */
+.ww-reveal-text.show{}
+.ww-reveal-btn{border-radius:999px;padding:.55rem 1.5rem;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
+.ww-reveal-btn::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.04);opacity:0;transition:opacity .15s;}
+.ww-reveal-btn:active::before{opacity:1;}
+@keyframes revealDrop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 /* RESPONSE SCREEN */
 .response-screen{display:none;position:fixed;inset:0;z-index:200;background:var(--ink);flex-direction:column;padding:1.3rem;}
 .response-screen.open{display:flex;}
@@ -178,33 +194,41 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── QUIZ OVERLAY ─────────────────────────────────────────── */
-.quiz-overlay{position:fixed;inset:0;z-index:200;background:var(--ink);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow:hidden;}
+.quiz-overlay{position:fixed;inset:0;z-index:200;background:#05030e;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow:hidden;}
 .quiz-overlay.open{transform:translateY(0);}
-.qz-topbar{display:flex;align-items:center;gap:.8rem;padding:.9rem 1rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;}
-.qz-back{background:none;border:none;color:rgba(242,232,216,.4);font-size:1.1rem;cursor:pointer;padding:.2rem;line-height:1;flex-shrink:0;}
-.qz-progress-track{flex:1;height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;}
-.qz-progress-fill{height:100%;background:var(--amber);border-radius:99px;transition:width .3s ease;}
-.qz-progress-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;color:rgba(242,232,216,.28);flex-shrink:0;}
-.qz-scroll{flex:1;overflow-y:auto;padding:1.6rem 1rem 2rem;}
+/* Atmospheric depth inside the quiz space */
+.quiz-overlay::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(107,60,162,.18) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 50% 110%,rgba(40,15,80,.3) 0%,transparent 55%);pointer-events:none;z-index:0;}
+.quiz-overlay > *{position:relative;z-index:1;}
+/* ── QUIZ — Psychologically cinematic, insight/self-reflection palette ── */
+.qz-topbar{display:flex;align-items:center;gap:.8rem;padding:.9rem 1rem .7rem;border-bottom:1px solid rgba(155,109,212,.12);flex-shrink:0;}
+.qz-back{background:none;border:none;color:rgba(196,168,232,.35);font-size:1.1rem;cursor:pointer;padding:.2rem;line-height:1;flex-shrink:0;transition:color .15s;}
+.qz-back:active{color:rgba(196,168,232,.7);}
+.qz-progress-track{flex:1;height:2px;background:rgba(155,109,212,.15);border-radius:99px;overflow:hidden;}
+.qz-progress-fill{height:100%;background:linear-gradient(90deg,#9b6dd4,#c4a8e8);border-radius:99px;transition:width .35s ease;box-shadow:0 0 8px rgba(155,109,212,.4);}
+.qz-progress-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;color:rgba(196,168,232,.3);flex-shrink:0;}
+.qz-scroll{flex:1;overflow-y:auto;padding:1.8rem 1.1rem 2.2rem;}
 .qz-scroll::-webkit-scrollbar{display:none;}
-.qz-quiz-title{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:1rem;}
-.qz-question{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:var(--cream);line-height:1.35;margin-bottom:1.8rem;}
-.qz-answers{display:flex;flex-direction:column;gap:.65rem;}
-.qz-ans{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);padding:1rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:rgba(242,232,216,.75);text-align:left;cursor:pointer;transition:border-color .15s,background .15s,color .15s;line-height:1.45;}
-.qz-ans:hover{border-color:rgba(201,125,58,.3);color:var(--cream);}
-.qz-ans.selected{border-color:var(--amber);background:rgba(201,125,58,.12);color:var(--cream);}
+.qz-quiz-title{font-family:'Nunito',sans-serif;font-size:.66rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:rgba(196,168,232,.45);margin-bottom:1.1rem;}
+/* Question — ivory, generous leading, cinematic weight */
+.qz-question{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#f5ede2;line-height:1.42;margin-bottom:2rem;letter-spacing:.01em;}
+.qz-answers{display:flex;flex-direction:column;gap:.6rem;}
+/* Answer buttons — restrained lilac/silver borders, not amber */
+.qz-ans{background:rgba(155,109,212,.04);border:1px solid rgba(155,109,212,.18);border-radius:16px;padding:1rem 1.15rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:rgba(240,228,252,.6);text-align:left;cursor:pointer;transition:border-color .18s,background .18s,color .18s,box-shadow .18s;line-height:1.5;}
+.qz-ans:hover{border-color:rgba(196,168,232,.38);color:rgba(240,228,252,.88);background:rgba(155,109,212,.08);}
+.qz-ans.selected{border-color:rgba(196,168,232,.6);background:rgba(155,109,212,.14);color:#f5ede2;box-shadow:0 0 16px rgba(155,109,212,.18);}
 .qz-ans:disabled{cursor:default;}
-/* Result screen */
-.qz-result-tag{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:.6rem;}
-.qz-result-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;color:var(--cream);line-height:1.1;margin-bottom:1rem;}
-.qz-result-body{font-size:.9rem;color:rgba(242,232,216,.7);line-height:1.7;margin-bottom:.8rem;}
-.qz-result-note{font-size:.82rem;color:rgba(242,232,216,.4);line-height:1.6;font-style:italic;padding:.8rem 0;border-top:1px solid rgba(255,255,255,.06);margin-bottom:.8rem;}
-.qz-disclaimer{font-size:.7rem;color:rgba(242,232,216,.2);line-height:1.5;margin-bottom:1.4rem;}
-.qz-journal-block{background:linear-gradient(135deg,rgba(201,125,58,.08),rgba(201,125,58,.03));border:1px solid rgba(201,125,58,.18);border-radius:var(--r-xl);padding:1.2rem;margin-bottom:1.4rem;}
-.qz-journal-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);opacity:.7;margin-bottom:.5rem;}
-.qz-journal-prompt{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(242,232,216,.65);line-height:1.65;margin-bottom:.9rem;}
-.qz-journal-btn{width:100%;padding:.7rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;transition:background .15s;}
-.qz-journal-btn:active{background:rgba(201,125,58,.25);}
+/* Result — transition back to amber warmth (discovery arrived) */
+.qz-result-tag{font-family:'Nunito',sans-serif;font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,168,232,.55);margin-bottom:.5rem;}
+.qz-result-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:#f5ede2;line-height:1.08;margin-bottom:.9rem;letter-spacing:.01em;}
+.qz-result-body{font-size:.9rem;color:rgba(240,228,252,.68);line-height:1.75;margin-bottom:.9rem;}
+.qz-result-note{font-size:.82rem;color:rgba(196,168,232,.4);line-height:1.65;font-style:italic;padding:.85rem 0;border-top:1px solid rgba(155,109,212,.12);margin-bottom:.9rem;}
+.qz-disclaimer{font-size:.68rem;color:rgba(196,168,232,.18);line-height:1.55;margin-bottom:1.5rem;}
+/* Journal block — shift to amber warmth as transition point */
+.qz-journal-block{background:linear-gradient(135deg,rgba(201,125,58,.1),rgba(155,109,212,.06),rgba(201,125,58,.04));border:1px solid rgba(201,125,58,.2);border-radius:var(--r-xl);padding:1.25rem;margin-bottom:1.4rem;}
+.qz-journal-label{font-family:'Nunito',sans-serif;font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.65);margin-bottom:.5rem;}
+.qz-journal-prompt{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;color:rgba(245,237,226,.62);line-height:1.68;margin-bottom:.95rem;}
+.qz-journal-btn{width:100%;padding:.72rem;background:rgba(201,125,58,.12);border:1.5px solid rgba(201,125,58,.28);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;transition:background .15s;}
+.qz-journal-btn:active{background:rgba(201,125,58,.22);}
 .qz-done-btn{width:100%;padding:.7rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.4);cursor:pointer;margin-top:.5rem;}
 @keyframes qzSlideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 .qz-animate{animation:qzSlideIn .25s ease both;}
@@ -217,6 +241,109 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+/* ── DESKTOP / TABLET — Cinematic environmental framing ─────────────
+   The app stays centered at 430px.
+   On larger screens, atmosphere fills the space around it.
+   No stretching. Just immersion.
+*/
+@media (min-width: 500px) {
+  html { height: 100%; }
+
+  body {
+    background: #010306;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* Environmental atmosphere — layers of warm darkness */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    /* Keep the noise texture but let the environment show through */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+    background-size: 180px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .5;
+  }
+
+  /* The cinematic environment — ember warmth, distant darkness, starlight */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      /* Ember warmth bleeding from left edge */
+      radial-gradient(ellipse 40% 80% at -8% 55%, rgba(180,65,15,.09) 0%, transparent 65%),
+      /* Ember warmth from right edge */
+      radial-gradient(ellipse 40% 80% at 108% 45%, rgba(160,55,10,.07) 0%, transparent 65%),
+      /* Subtle firelight warmth pooling at bottom */
+      radial-gradient(ellipse 70% 35% at 50% 105%, rgba(120,40,8,.12) 0%, transparent 55%),
+      /* Deep purple depth at top — sky/night */
+      radial-gradient(ellipse 80% 45% at 50% -15%, rgba(20,8,50,.25) 0%, transparent 60%),
+      /* A faint, distant amber star-point left */
+      radial-gradient(ellipse 8% 12% at 18% 22%, rgba(201,125,58,.04) 0%, transparent 60%),
+      /* A faint, distant amber star-point right */
+      radial-gradient(ellipse 6% 10% at 82% 30%, rgba(201,125,58,.03) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 2;
+    /* Soft atmospheric glow around the app container */
+    box-shadow:
+      /* Near edge — warm definition */
+      0 0 0 1px rgba(201,125,58,.06),
+      /* Mid glow — firelight warmth */
+      0 0 60px rgba(120,45,8,.18),
+      /* Far glow — depth */
+      0 0 140px rgba(0,0,0,.7),
+      /* Extreme depth */
+      0 0 280px rgba(0,0,0,.5);
+  }
+
+  /* Subtle left/right silhouette suggestion — distant treeline, horizon */
+  .app::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 180px;
+    background:
+      /* Left silhouette shape */
+      radial-gradient(ellipse 20% 60% at 8% 100%, rgba(2,4,8,.8) 0%, transparent 70%),
+      /* Right silhouette shape */
+      radial-gradient(ellipse 20% 60% at 92% 100%, rgba(2,4,8,.8) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* On very wide screens, add more environmental breathing room */
+@media (min-width: 800px) {
+  body::after {
+    background:
+      /* Deeper ember warmth further left */
+      radial-gradient(ellipse 30% 70% at -5% 50%, rgba(180,65,15,.1) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 70% at 105% 50%, rgba(160,55,10,.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 30% at 50% 108%, rgba(120,40,8,.14) 0%, transparent 50%),
+      radial-gradient(ellipse 90% 50% at 50% -20%, rgba(20,8,50,.3) 0%, transparent 60%),
+      /* More starlight points */
+      radial-gradient(ellipse 5% 8% at 12% 18%, rgba(201,125,58,.05) 0%, transparent 60%),
+      radial-gradient(ellipse 4% 6% at 88% 25%, rgba(201,125,58,.04) 0%, transparent 55%),
+      radial-gradient(ellipse 3% 5% at 22% 70%, rgba(201,100,30,.03) 0%, transparent 50%),
+      radial-gradient(ellipse 3% 4% at 78% 65%, rgba(180,90,20,.03) 0%, transparent 50%);
+  }
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -435,10 +562,18 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
   <!-- WW OVERLAY -->
   <div class="ww-overlay" id="wwOverlay">
-    <button class="card-close" onclick="closeWW()">← Back</button>
-    <div class="ww-type-big" id="wwTypeBig">Riddle</div>
+    <button class="card-close" onclick="closeWW()" style="align-self:flex-start;">← Back</button>
+    <!-- Category badge — icon + label, styled per type by JS -->
+    <div class="ww-category-badge" id="wwCategoryBadge">
+      <span class="ww-category-icon" id="wwCategoryIcon">?</span>
+      <span class="ww-category-label" id="wwTypeBig">Riddle</span>
+    </div>
     <div class="ww-q-big" id="wwQBig"></div>
-    <div class="ww-reveal-text" id="wwRevealText"></div>
+    <!-- Reveal block — shows as a separate card -->
+    <div class="ww-reveal-block" id="wwRevealBlock">
+      <div class="ww-reveal-label" id="wwRevealLabel">Answer</div>
+      <div class="ww-reveal-text" id="wwRevealText"></div>
+    </div>
     <button class="ww-reveal-btn" id="wwRevealBtn" onclick="revealWW()">Tap to reveal ↓</button>
   </div>
 
@@ -840,20 +975,58 @@ var WW_DATA = {
 };
 
 function openWW(id) {
-  var w = WW_DATA[id]; if (!w) return;
-  document.getElementById('wwTypeBig').textContent = w.type;
+  var w = WW_DATA[id] || WW_TYPES.ww1;
+  if (!w) return;
+
+  var type = w.type || 'Riddle';
+  var dk = WW_TYPES[type] || WW_TYPES['Riddle'];
+
+  // Category badge icons
+  var ICONS = { 'Riddle': '?', 'Joke': '★', 'Brain Teaser': '◈', 'Brain Twist': '◈' };
+  var REVEAL_LABELS = { 'Riddle': 'Answer', 'Joke': 'Punchline', 'Brain Teaser': 'Reveal', 'Brain Twist': 'Reveal' };
+
+  document.getElementById('wwTypeBig').textContent = type;
+  document.getElementById('wwCategoryIcon').textContent = ICONS[type] || '✦';
+
+  // Style the badge per type
+  var badge = document.getElementById('wwCategoryBadge');
+  if (badge) {
+    badge.style.background = 'rgba(0,0,0,.25)';
+    badge.style.borderColor = dk ? dk.border.replace('0.3','0.4') : 'rgba(255,255,255,.15)';
+    var icon = document.getElementById('wwCategoryIcon');
+    var label = document.getElementById('wwTypeBig');
+    if (icon) icon.style.color = dk ? dk.accent : 'var(--amber)';
+    if (label) label.style.color = dk ? dk.accent : 'var(--amber)';
+  }
+
+  // Reveal block label
+  var rl = document.getElementById('wwRevealLabel');
+  if (rl) rl.textContent = REVEAL_LABELS[type] || 'Reveal';
+
   document.getElementById('wwQBig').textContent = w.q;
   document.getElementById('wwRevealText').textContent = w.a;
-  document.getElementById('wwRevealText').classList.remove('show');
+
+  // Reset reveal state
+  var block = document.getElementById('wwRevealBlock');
+  if (block) block.classList.remove('show');
   document.getElementById('wwRevealBtn').style.display = 'block';
   document.getElementById('wwRevealBtn').textContent = 'Tap to reveal ↓';
+  // Style reveal button per type
+  if (dk) {
+    document.getElementById('wwRevealBtn').style.background = 'rgba(0,0,0,.3)';
+    document.getElementById('wwRevealBtn').style.border = '1px solid ' + dk.border;
+    document.getElementById('wwRevealBtn').style.color = dk.accent;
+  }
+
   document.getElementById('wwOverlay').style.background = w.bg;
   document.getElementById('wwOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
+
 function revealWW() {
-  document.getElementById('wwRevealText').classList.add('show');
+  var block = document.getElementById('wwRevealBlock');
+  if (block) block.classList.add('show');
   document.getElementById('wwRevealBtn').style.display = 'none';
 }
 

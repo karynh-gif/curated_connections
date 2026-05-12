@@ -140,7 +140,127 @@ body::before{content:"";position:fixed;inset:0;
 .bn.active{color:var(--amber, #ff8c20);}
 .bn:not(.active):hover{color:rgba(244,236,220,.45);}
 
+
+/* ── YOUR DECK ──────────────────────────────────────────────── */
+.yd-section{padding:.2rem 0 0;}
+.yd-hero{margin:.4rem .9rem .2rem;border-radius:22px;background:linear-gradient(145deg,#0d1a0a,#1a2a10);border:1.5px solid rgba(201,125,58,.22);overflow:hidden;position:relative;cursor:default;}
+.yd-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 10% 30%,rgba(201,125,58,.12),transparent 55%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(58,140,80,.08),transparent 50%);pointer-events:none;}
+.yd-inner{padding:1.1rem 1.1rem .9rem;position:relative;z-index:1;}
+.yd-eyebrow{font-family:"Nunito",sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.65);margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem;}
+.yd-title{font-family:"Cormorant Garamond",serif;font-size:1.55rem;font-weight:300;color:#f5ede2;line-height:1.15;margin-bottom:.2rem;}
+.yd-sub{font-size:.8rem;color:rgba(242,232,216,.4);line-height:1.5;margin-bottom:.95rem;}
+/* Card stack visual */
+.yd-stack{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;}
+.yd-stack-vis{position:relative;width:52px;height:70px;flex-shrink:0;}
+.yd-stack-card{position:absolute;border-radius:8px;background:linear-gradient(145deg,#1a2a10,#2a3a18);border:1px solid rgba(201,125,58,.25);}
+.yd-stack-card:nth-child(1){width:44px;height:62px;top:8px;left:4px;transform:rotate(-4deg);opacity:.35;}
+.yd-stack-card:nth-child(2){width:44px;height:62px;top:4px;left:2px;transform:rotate(-2deg);opacity:.55;}
+.yd-stack-card:nth-child(3){width:44px;height:62px;top:0;left:0;transform:rotate(0);opacity:1;background:linear-gradient(145deg,#1e3012,#2e4820);border-color:rgba(201,125,58,.4);}
+.yd-stack-count{flex:1;}
+.yd-count-num{font-family:"Cormorant Garamond",serif;font-size:2.2rem;font-weight:300;color:#f5ede2;line-height:1;}
+.yd-count-label{font-family:"Nunito",sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.35);letter-spacing:.06em;text-transform:uppercase;margin-top:.1rem;}
+.yd-count-month{font-family:"Nunito",sans-serif;font-size:.68rem;color:rgba(201,125,58,.55);margin-top:.15rem;}
+/* Special decks row */
+.yd-specials{display:flex;gap:.45rem;overflow-x:auto;padding:0 1.1rem .85rem;scrollbar-width:none;margin:0 -.1rem;}
+.yd-specials::-webkit-scrollbar{display:none;}
+.yd-special-badge{flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:.5rem .75rem;display:flex;align-items:center;gap:.45rem;cursor:pointer;transition:border-color .15s,background .15s;}
+.yd-special-badge.earned{border-color:rgba(201,125,58,.35);background:rgba(201,125,58,.08);}
+.yd-special-badge.locked{opacity:.4;}
+.yd-special-icon{font-size:1.1rem;line-height:1;}
+.yd-special-name{font-family:"Nunito",sans-serif;font-size:.72rem;font-weight:800;color:rgba(242,232,216,.75);white-space:nowrap;}
+.yd-special-status{font-family:"Nunito",sans-serif;font-size:.62rem;color:rgba(242,232,216,.3);white-space:nowrap;}
+/* Mode buttons */
+.yd-modes{display:flex;gap:.5rem;padding:0 1.1rem 1.1rem;}
+.yd-mode-btn{flex:1;padding:.72rem .5rem;border-radius:14px;font-family:"Nunito",sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.04em;cursor:pointer;text-align:center;transition:all .18s;border:none;}
+.yd-mode-host{background:rgba(201,125,58,.18);border:1.5px solid rgba(201,125,58,.35);color:#c97d3a;}
+.yd-mode-host:active{background:rgba(201,125,58,.28);}
+.yd-mode-shared{background:rgba(107,60,162,.18);border:1.5px solid rgba(107,60,162,.35);color:#9b6dd4;}
+.yd-mode-shared:active{background:rgba(107,60,162,.28);}
+.yd-mode-icon{display:block;font-size:1.1rem;margin-bottom:.2rem;}
+.yd-empty{padding:1.4rem 1.1rem 1rem;text-align:center;}
+.yd-empty-text{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:.9rem;color:rgba(242,232,216,.3);line-height:1.6;margin-bottom:.7rem;}
+.yd-empty-cta{font-family:"Nunito",sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.45);}
+
+/* ── HOST MODE OVERLAY ──────────────────────────────────────── */
+.yd-play-overlay{position:fixed;inset:0;z-index:250;background:#050b04;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);}
+.yd-play-overlay.open{transform:translateY(0);}
+.yd-play-overlay::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(58,140,80,.1) 0%,transparent 55%),radial-gradient(ellipse 60% 40% at 50% 110%,rgba(40,80,20,.15) 0%,transparent 50%);pointer-events:none;z-index:0;}
+.yd-play-overlay > *{position:relative;z-index:1;}
+.yd-play-topbar{display:flex;align-items:center;gap:.8rem;padding:.9rem 1rem .7rem;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;}
+.yd-play-back{background:none;border:none;color:rgba(242,232,216,.4);font-size:1.1rem;cursor:pointer;padding:.2rem;flex-shrink:0;}
+.yd-play-progress-track{flex:1;height:2px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;}
+.yd-play-progress-fill{height:100%;background:linear-gradient(90deg,#c97d3a,#e8a868);border-radius:99px;transition:width .4s ease;}
+.yd-play-progress-label{font-family:"Nunito",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;color:rgba(242,232,216,.28);flex-shrink:0;}
+/* The card itself */
+.yd-card-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.4rem 1.2rem 1rem;overflow:hidden;}
+.yd-card-scene{width:100%;max-width:340px;perspective:800px;cursor:pointer;}
+.yd-card-inner{position:relative;width:100%;padding-top:140%;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+.yd-card-inner.flipped{transform:rotateY(180deg);}
+.yd-card-face{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.4rem;}
+/* Card back — CC brand */
+.yd-card-back{background:linear-gradient(145deg,#0d1a0a,#1a2e10);border:1.5px solid rgba(201,125,58,.3);box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 1px rgba(201,125,58,.1) inset;}
+.yd-card-back-brand{font-family:"Pacifico",cursive;font-size:22px;color:rgba(201,125,58,.7);text-shadow:0 0 20px rgba(201,125,58,.3);margin-bottom:.5rem;}
+.yd-card-back-edition{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:.8rem;color:rgba(242,232,216,.25);letter-spacing:.08em;}
+.yd-card-back-tap{font-family:"Nunito",sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.3);margin-top:1.4rem;animation:breathe 2.2s ease-in-out infinite;}
+@keyframes breathe{0%,100%{opacity:.3}50%{opacity:.7}}
+/* Card front — the prompt */
+.yd-card-front{background:linear-gradient(145deg,#f2e8d8,#ecddc8);border:1.5px solid rgba(138,96,16,.2);box-shadow:0 8px 32px rgba(0,0,0,.4);transform:rotateY(180deg);}
+.yd-card-front-edition{font-family:"Nunito",sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(40,22,0,.35);margin-bottom:.7rem;}
+.yd-card-front-prompt{font-family:"Cormorant Garamond",serif;font-size:1.2rem;font-style:italic;color:#281600;line-height:1.55;text-align:center;}
+.yd-card-front-hint{font-family:"DM Sans",sans-serif;font-size:.75rem;color:rgba(40,22,0,.4);line-height:1.5;text-align:center;margin-top:.8rem;font-style:italic;}
+/* Card actions */
+.yd-card-actions{padding:.5rem 1rem 1rem;display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;}
+.yd-action-row{display:flex;gap:.45rem;}
+.yd-action-btn{flex:1;padding:.65rem .4rem;border-radius:14px;font-family:"Nunito",sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;text-align:center;transition:all .15s;border:none;}
+.yd-action-next{background:rgba(201,125,58,.18);border:1.5px solid rgba(201,125,58,.35);color:#c97d3a;}
+.yd-action-journal{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(242,232,216,.5);}
+.yd-action-circle{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(242,232,216,.5);}
+.yd-action-done{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(242,232,216,.3);}
+.yd-session-info{text-align:center;font-family:"Nunito",sans-serif;font-size:.68rem;color:rgba(242,232,216,.22);padding:.3rem 0 .5rem;}
+
+/* ── SHARED GAME OVERLAY ────────────────────────────────────── */
+.yd-shared-overlay{position:fixed;inset:0;z-index:250;background:#060310;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);}
+.yd-shared-overlay.open{transform:translateY(0);}
+.yd-shared-overlay::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(107,60,162,.15) 0%,transparent 55%);pointer-events:none;z-index:0;}
+.yd-shared-overlay > *{position:relative;z-index:1;}
+.yd-shared-topbar{display:flex;align-items:center;gap:.8rem;padding:.9rem 1rem .7rem;border-bottom:1px solid rgba(107,60,162,.1);flex-shrink:0;}
+.yd-shared-back{background:none;border:none;color:rgba(196,168,232,.35);font-size:1.1rem;cursor:pointer;padding:.2rem;}
+.yd-shared-title{font-family:"Nunito",sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(196,168,232,.45);}
+.yd-shared-body{flex:1;overflow-y:auto;padding:1.4rem 1.2rem;}
+/* Tabs */
+.yd-tabs{display:flex;gap:.4rem;margin-bottom:1.4rem;}
+.yd-tab{flex:1;padding:.55rem;border-radius:12px;font-family:"Nunito",sans-serif;font-size:.75rem;font-weight:800;text-align:center;cursor:pointer;transition:all .15s;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(242,232,216,.4);}
+.yd-tab.active{background:rgba(107,60,162,.18);border-color:rgba(107,60,162,.4);color:#9b6dd4;}
+/* Create room */
+.yd-room-code-display{text-align:center;margin:1.4rem 0;}
+.yd-room-code{font-family:"Pacifico",cursive;font-size:3.2rem;color:#c97d3a;letter-spacing:.2em;text-shadow:0 0 30px rgba(201,125,58,.4);}
+.yd-room-code-label{font-family:"Nunito",sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-top:.3rem;}
+.yd-room-share-btn{width:100%;padding:.75rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:"Nunito",sans-serif;font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;cursor:pointer;margin-bottom:.7rem;}
+.yd-players-list{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:.8rem;margin-bottom:1rem;}
+.yd-players-label{font-family:"Nunito",sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.6rem;}
+.yd-player-row{display:flex;align-items:center;gap:.6rem;padding:.3rem 0;font-size:.85rem;color:rgba(242,232,216,.65);}
+.yd-player-dot{width:8px;height:8px;border-radius:50%;background:rgba(58,173,144,.7);flex-shrink:0;}
+.yd-start-game-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,#9b6dd4,#c084fc);border:none;border-radius:999px;font-family:"Nunito",sans-serif;font-size:.88rem;font-weight:900;letter-spacing:.06em;color:#fff;cursor:pointer;box-shadow:0 4px 20px rgba(107,60,162,.4);}
+/* Join room */
+.yd-code-input-label{font-family:"Nunito",sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(196,168,232,.45);margin-bottom:.5rem;}
+.yd-code-input{width:100%;background:rgba(107,60,162,.08);border:1.5px solid rgba(107,60,162,.25);border-radius:16px;padding:.85rem;font-family:"Pacifico",cursive;font-size:1.8rem;color:#f5ede2;text-align:center;letter-spacing:.25em;outline:none;margin-bottom:.7rem;}
+.yd-code-input:focus{border-color:rgba(107,60,162,.5);}
+.yd-join-btn{width:100%;padding:.8rem;background:rgba(107,60,162,.18);border:1.5px solid rgba(107,60,162,.35);border-radius:999px;font-family:"Nunito",sans-serif;font-size:.85rem;font-weight:800;color:#9b6dd4;cursor:pointer;}
+
+/* ── LIVE GAME OVERLAY (shared) ─────────────────────────────── */
+.yd-live-overlay{position:fixed;inset:0;z-index:260;background:#050b04;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);}
+.yd-live-overlay.open{transform:translateY(0);}
+.yd-live-topbar{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;}
+.yd-live-code{font-family:"Nunito",sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.12em;color:rgba(201,125,58,.5);}
+.yd-live-players-count{font-family:"Nunito",sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.3);}
+
 </style>
+  <!-- Firebase for Shared Game Mode -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="/cc-auth.js"></script>
+  <script src="/cc-firebase.js"></script>
 </head>
 <body>
 <div class="app">
@@ -161,6 +281,52 @@ body::before{content:"";position:fixed;inset:0;
       <div class="ph-title">What are we<br>playing tonight?</div>
       <div class="ph-sub">Games that reveal something true about the people you're with.</div>
     </div>
+
+
+    <!-- ── YOUR DECK ─────────────────────────────────────── -->
+    <div class="yd-section" id="yourDeckSection">
+      <div class="sec-lbl" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>Your Deck</span>
+        <span id="ydDeckCount" style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;color:rgba(201,125,58,.5);letter-spacing:.08em;">loading…</span>
+      </div>
+      <div class="yd-hero" id="ydHeroCard">
+        <div class="yd-inner">
+          <div class="yd-eyebrow">✦ Earned Collection</div>
+          <div class="yd-title" id="ydHeroTitle">Your Deck</div>
+          <div class="yd-sub" id="ydHeroSub">Cards that are permanently yours — grow every month you're subscribed.</div>
+          <div class="yd-stack">
+            <div class="yd-stack-vis">
+              <div class="yd-stack-card"></div>
+              <div class="yd-stack-card"></div>
+              <div class="yd-stack-card"></div>
+            </div>
+            <div class="yd-stack-count">
+              <div class="yd-count-num" id="ydCardCount">—</div>
+              <div class="yd-count-label">cards earned</div>
+              <div class="yd-count-month" id="ydMonthLabel"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Special decks row -->
+        <div class="yd-specials" id="ydSpecialsRow">
+          <!-- Populated by JS -->
+        </div>
+        <!-- Play mode buttons -->
+        <div class="yd-modes">
+          <button class="yd-mode-btn yd-mode-host" onclick="startHostMode()">
+            <span class="yd-mode-icon">📖</span>
+            Host Mode<br><span style="font-size:.65rem;font-weight:700;opacity:.7;">Read aloud · One device</span>
+          </button>
+          <button class="yd-mode-btn yd-mode-shared" onclick="startSharedMode()">
+            <span class="yd-mode-icon">📱</span>
+            Play Together<br><span style="font-size:.65rem;font-weight:700;opacity:.7;">Room code · Everyone's screen</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EXISTING GAMES ──────────────────────────────────── -->
+    <div class="sec-lbl">Ready to play</div>
 
     <!-- REALLY BAD DAY -->
     <div class="sec-lbl">Ready to play</div>
@@ -391,5 +557,857 @@ function t(m){
 }
 </script>
 <div style="text-align:center;padding:.8rem 1.5rem;font-size:.75rem;color:rgba(255,255,255,.2);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+
+<!-- ── HOST MODE OVERLAY ──────────────────────────────────── -->
+<div class="yd-play-overlay" id="ydPlayOverlay">
+  <div class="yd-play-topbar">
+    <button class="yd-play-back" onclick="closeHostMode()">&#8592;</button>
+    <div class="yd-play-progress-track">
+      <div class="yd-play-progress-fill" id="ydProgressFill" style="width:0%"></div>
+    </div>
+    <div class="yd-play-progress-label" id="ydProgressLabel">1 of —</div>
+  </div>
+  <div class="yd-card-area">
+    <div class="yd-card-scene" onclick="flipCard()">
+      <div class="yd-card-inner" id="ydCardInner">
+        <!-- Card back -->
+        <div class="yd-card-face yd-card-back">
+          <div class="yd-card-back-brand">Curated<br>Connections</div>
+          <div class="yd-card-back-edition" id="ydCardBackEdition">Your Deck</div>
+          <div class="yd-card-back-tap">Tap to reveal →</div>
+        </div>
+        <!-- Card front -->
+        <div class="yd-card-face yd-card-front">
+          <div class="yd-card-front-edition" id="ydCardFrontEdition">Conversation</div>
+          <div class="yd-card-front-prompt" id="ydCardPrompt"></div>
+          <div class="yd-card-front-hint" id="ydCardHint"></div>
+        </div>
+      </div>
+    </div>
+    <div class="yd-session-info" id="ydSessionInfo">Tap the card to reveal</div>
+  </div>
+  <div class="yd-card-actions">
+    <div class="yd-action-row">
+      <button class="yd-action-btn yd-action-next" onclick="nextCard()">Next Card →</button>
+    </div>
+    <div class="yd-action-row">
+      <button class="yd-action-btn yd-action-journal" onclick="saveCurrentCardToJournal()">✦ Save to Journal</button>
+      <button class="yd-action-btn yd-action-circle" onclick="shareCurrentCardToCircle()">Share to Circle</button>
+    </div>
+    <div class="yd-action-row">
+      <button class="yd-action-btn yd-action-done" onclick="closeHostMode()">Done Playing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SHARED GAME SETUP OVERLAY ──────────────────────────── -->
+<div class="yd-shared-overlay" id="ydSharedOverlay">
+  <div class="yd-shared-topbar">
+    <button class="yd-shared-back" onclick="closeSharedMode()">&#8592;</button>
+    <div class="yd-shared-title">Play Together</div>
+  </div>
+  <div class="yd-shared-body">
+    <div class="yd-tabs">
+      <div class="yd-tab active" id="ydTabCreate" onclick="switchSharedTab('create')">Create Room</div>
+      <div class="yd-tab" id="ydTabJoin" onclick="switchSharedTab('join')">Join Room</div>
+    </div>
+
+    <!-- Create room panel -->
+    <div id="ydCreatePanel">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#f5ede2;margin-bottom:.4rem;">Start a room.</div>
+      <div style="font-size:.8rem;color:rgba(242,232,216,.4);line-height:1.6;margin-bottom:1.2rem;">Share the code with everyone. They join on their own screen. You control the cards.</div>
+      <div class="yd-room-code-display">
+        <div class="yd-room-code" id="ydRoomCode">—</div>
+        <div class="yd-room-code-label">Room Code</div>
+      </div>
+      <button class="yd-room-share-btn" onclick="shareRoomCode()" id="ydShareCodeBtn">Copy Code to Share</button>
+      <div class="yd-players-list">
+        <div class="yd-players-label">In the room</div>
+        <div id="ydPlayersList">
+          <div class="yd-player-row">
+            <div class="yd-player-dot"></div>
+            <div id="ydHostName">You (host)</div>
+          </div>
+        </div>
+      </div>
+      <button class="yd-start-game-btn" onclick="startLiveGame()" id="ydStartBtn">Start Game →</button>
+    </div>
+
+    <!-- Join room panel -->
+    <div id="ydJoinPanel" style="display:none;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#f5ede2;margin-bottom:.4rem;">Enter the code.</div>
+      <div style="font-size:.8rem;color:rgba(242,232,216,.4);line-height:1.6;margin-bottom:1.2rem;">Get the 4-letter code from whoever started the room.</div>
+      <div class="yd-code-input-label">Room Code</div>
+      <input class="yd-code-input" id="ydJoinCodeInput" type="text" maxlength="4" placeholder="ABCD"
+        oninput="this.value=this.value.toUpperCase()"/>
+      <button class="yd-join-btn" onclick="joinRoom()">Join Room →</button>
+      <div id="ydJoinError" style="font-size:.78rem;color:#e07060;margin-top:.5rem;min-height:1rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LIVE GAME OVERLAY (both host and guest) ─────────────── -->
+<div class="yd-live-overlay" id="ydLiveOverlay">
+  <div class="yd-live-topbar">
+    <div class="yd-live-code" id="ydLiveCode">Room: ——</div>
+    <div class="yd-live-players-count" id="ydLivePlayersCount">— players</div>
+    <button class="yd-play-back" onclick="leaveLiveGame()">Leave</button>
+  </div>
+  <!-- Same card area as host mode, shared by all -->
+  <div class="yd-card-area">
+    <div class="yd-card-scene" onclick="liveFlipCard()">
+      <div class="yd-card-inner" id="ydLiveCardInner">
+        <div class="yd-card-face yd-card-back">
+          <div class="yd-card-back-brand">Curated<br>Connections</div>
+          <div class="yd-card-back-edition" id="ydLiveCardBackEdition">Your Deck</div>
+          <div class="yd-card-back-tap">Tap to reveal →</div>
+        </div>
+        <div class="yd-card-face yd-card-front">
+          <div class="yd-card-front-edition" id="ydLiveCardFrontEdition">Conversation</div>
+          <div class="yd-card-front-prompt" id="ydLiveCardPrompt">Waiting for host to start…</div>
+          <div class="yd-card-front-hint" id="ydLiveCardHint"></div>
+        </div>
+      </div>
+    </div>
+    <div class="yd-session-info" id="ydLiveSessionInfo">Waiting for host…</div>
+  </div>
+  <!-- Host-only controls -->
+  <div class="yd-card-actions" id="ydLiveHostControls" style="display:none;">
+    <div class="yd-action-row">
+      <button class="yd-action-btn yd-action-next" onclick="liveNextCard()">Next Card →</button>
+    </div>
+    <div class="yd-action-row">
+      <button class="yd-action-btn yd-action-journal" onclick="saveCurrentCardToJournal()">✦ Save to Journal</button>
+      <button class="yd-action-btn yd-action-circle" onclick="shareCurrentCardToCircle()">Share to Circle</button>
+    </div>
+  </div>
+  <!-- Guest controls -->
+  <div class="yd-card-actions" id="ydLiveGuestControls">
+    <div class="yd-action-row">
+      <button class="yd-action-btn yd-action-journal" onclick="saveCurrentCardToJournal()">✦ Save to Journal</button>
+      <button class="yd-action-btn yd-action-circle" onclick="shareCurrentCardToCircle()">Share to Circle</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ── YOUR DECK ENGINE ─────────────────────────────────────────────
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyB6wEldIMuAlcnEE9EGnZJ8hufWFFwmDbQ",
+  authDomain:        "curated-connections-dcf01.firebaseapp.com",
+  databaseURL:       "https://curated-connections-dcf01-default-rtdb.firebaseio.com",
+  projectId:         "curated-connections-dcf01",
+  storageBucket:     "curated-connections-dcf01.firebasestorage.app",
+  messagingSenderId: "472185773381",
+  appId:             "1:472185773381:web:0b53e6dd7b0b54a317722c"
+};
+
+var ydFbApp, ydRtDb, ydFbAuth;
+try {
+  ydFbApp  = firebase.apps.length ? firebase.app() : firebase.initializeApp(FIREBASE_CONFIG);
+  ydRtDb   = firebase.database();
+  ydFbAuth = firebase.auth();
+} catch(e) { console.warn('Firebase init error', e); }
+
+// State
+var YD = {
+  deck:         [],    // Full shuffled deck for this session
+  position:     0,     // Current card index
+  flipped:      false, // Is current card revealed?
+  isHost:       false,
+  roomCode:     null,
+  roomRef:      null,
+  playerId:     null,
+  playerName:   '',
+  specialDecks: [],
+  liveFlipped:  false,
+};
+
+// ── SPECIAL DECKS CONFIG ──
+var SPECIAL_DECKS_CONFIG = [
+  { id: 'sd_holidaytable', name: 'Holiday Table',  icon: '🍂', months: 3,  tier: 'free' },
+  { id: 'sd_roadtrip',     name: 'Road Trip',       icon: '🚗', months: 6,  tier: 'free' },
+  { id: 'sd_latenight',    name: 'Late Night',      icon: '🌙', months: 12, tier: 'free' },
+  { id: 'sd_couples',      name: 'Couples',         icon: '♡',  months: 3,  tier: 'connect' },
+  { id: 'sd_legacy_all',   name: 'Legacy Collection', icon: '✦', months: 0,  tier: 'legacy' },
+];
+
+var TIER_RANK = { free: 0, connect: 1, insight: 2, legacy: 3 };
+
+// ── ON PAGE LOAD ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  loadDeckSection();
+});
+
+async function loadDeckSection() {
+  var user = CC.getUser ? CC.getUser() : null;
+
+  if (!user) {
+    document.getElementById('ydCardCount').textContent = '0';
+    document.getElementById('ydHeroSub').textContent = 'Create an account to start earning cards each month.';
+    document.getElementById('ydMonthLabel').textContent = 'Sign in to see your deck';
+    renderSpecialDecks(0, 'free');
+    return;
+  }
+
+  // Calculate months subscribed
+  var monthsSubscribed = getMonthsSubscribed(user);
+  var tier = user.tier || 'free';
+
+  document.getElementById('ydMonthLabel').textContent = 'Month ' + monthsSubscribed + ' · ' + tier.charAt(0).toUpperCase() + tier.slice(1);
+
+  // Fetch earned card count from User Decks
+  try {
+    var res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'list',
+        table: 'User Decks',
+        filterFormula: '{User ID}="' + user.user_id + '"',
+        maxRecords: 1000
+      })
+    });
+    var data = await res.json();
+    var records = data.records || [];
+    var count = records.length;
+
+    document.getElementById('ydCardCount').textContent = count || '0';
+    document.getElementById('ydDeckCount').textContent = count + ' cards';
+
+    // Update hero title with count
+    if (count > 0) {
+      document.getElementById('ydHeroTitle').textContent = 'Your Deck';
+      document.getElementById('ydHeroSub').textContent = count + ' cards, permanently yours. Grows every month.';
+    } else {
+      document.getElementById('ydHeroSub').textContent = 'Your first cards arrive after your first billing cycle. Keep coming back.';
+    }
+
+    // Store records for play session
+    YD.deckRecords = records;
+
+    // Check if we should trigger a drip (new subscriber or month passed)
+    checkAndTriggerDrip(user, monthsSubscribed, tier);
+
+  } catch(e) {
+    console.warn('Deck load error:', e);
+    document.getElementById('ydCardCount').textContent = '—';
+  }
+
+  renderSpecialDecks(monthsSubscribed, tier);
+}
+
+function getMonthsSubscribed(user) {
+  if (!user || !user.created_at) return 1;
+  var created = new Date(user.created_at);
+  var now = new Date();
+  var months = (now.getFullYear() - created.getFullYear()) * 12 + (now.getMonth() - created.getMonth());
+  return Math.max(1, months);
+}
+
+function renderSpecialDecks(months, tier) {
+  var tierRank = TIER_RANK[tier] || 0;
+  var row = document.getElementById('ydSpecialsRow');
+  if (!row) return;
+
+  var html = '';
+  SPECIAL_DECKS_CONFIG.forEach(function(deck) {
+    var deckTierRank = TIER_RANK[deck.tier] || 0;
+    var earned = tierRank >= deckTierRank && months >= deck.months;
+    var deckOnclick = earned ? 'playSpecialDeck(' + JSON.stringify(deck.id) + ')' : 'showLockedDeckInfo(' + JSON.stringify(deck.id) + ')';
+    html += '<div class="yd-special-badge ' + (earned ? 'earned' : 'locked') + '" onclick="' + deckOnclick + '">';
+    html += '<span class="yd-special-icon">' + deck.icon + '</span>';
+    html += '<div><div class="yd-special-name">' + deck.name + '</div>';
+    html += '<div class="yd-special-status">' + (earned ? '✓ Earned' : deck.months + 'mo · ' + deck.tier) + '</div>';
+    html += '</div></div>';
+  });
+
+  row.innerHTML = html;
+}
+
+async function checkAndTriggerDrip(user, months, tier) {
+  // Check if we already have a drip for this month
+  var dripKey = 'cc_drip_' + user.user_id + '_m' + months;
+  if (localStorage.getItem(dripKey)) return; // Already dripped this month
+
+  // Trigger the drip
+  try {
+    var res = await fetch('/api/deck-earn', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ userId: user.user_id, tier: tier, monthNumber: months, email: user.email })
+    });
+    if (res.ok) {
+      localStorage.setItem(dripKey, '1');
+    }
+  } catch(e) {
+    console.warn('Drip trigger error:', e);
+  }
+}
+
+// ── LOAD DECK FOR PLAY ────────────────────────────────────────────
+async function loadPlayDeck(specialDeckId) {
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) return [];
+
+  var cards = [];
+
+  if (specialDeckId) {
+    // Load special deck cards from User Decks where Special Deck Name matches
+    try {
+      var res = await fetch('/api/airtable', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          action: 'list',
+          table: 'User Decks',
+          filterFormula: 'AND({User ID}="' + user.user_id + '",{Special Deck Name}="' + specialDeckId + '")',
+          maxRecords: 200
+        })
+      });
+      var data = await res.json();
+      cards = await hydrateCardRecords(data.records || []);
+    } catch(e) { console.warn('Special deck load error', e); }
+  } else {
+    // Load full earned deck
+    try {
+      var res = await fetch('/api/airtable', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          action: 'list',
+          table: 'User Decks',
+          filterFormula: '{User ID}="' + user.user_id + '"',
+          maxRecords: 1000
+        })
+      });
+      var data = await res.json();
+      cards = await hydrateCardRecords(data.records || []);
+    } catch(e) { console.warn('Deck load error', e); }
+  }
+
+  // Fallback: if no User Deck records yet, use deck-eligible cards from Conversation Cards
+  if (!cards.length) {
+    cards = await loadFallbackDeck();
+  }
+
+  return seededShuffle(cards, hashStr(user.user_id + new Date().toDateString()));
+}
+
+async function hydrateCardRecords(userDeckRecords) {
+  // Batch fetch the actual card content from source tables
+  // Group by source table for efficient fetching
+  var byTable = {};
+  userDeckRecords.forEach(function(rec) {
+    var table = rec.fields['Source Table'] || 'conversation_cards';
+    var cardId = rec.fields['Card ID'];
+    if (!byTable[table]) byTable[table] = [];
+    byTable[table].push({ cardId: cardId, deckName: rec.fields['Special Deck Name'] || '' });
+  });
+
+  var cards = [];
+  var TABLE_NAMES = {
+    'conversation_cards': 'Conversation Cards',
+    'play_together': 'Play Together Cards',
+  };
+
+  for (var tableKey in byTable) {
+    var tableName = TABLE_NAMES[tableKey] || 'Conversation Cards';
+    var group = byTable[tableKey];
+
+    // Fetch in batches of 20
+    for (var i = 0; i < group.length; i += 20) {
+      var batch = group.slice(i, i + 20);
+      var ids = batch.map(function(b) { return b.cardId; });
+
+      // Use OR formula to fetch multiple record IDs
+      var formula = 'OR(' + ids.map(function(id) { return 'RECORD_ID()="' + id + '"'; }).join(',') + ')';
+      try {
+        var res = await fetch('/api/airtable', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ action: 'list', table: tableName, filterFormula: formula, maxRecords: 20 })
+        });
+        var data = await res.json();
+        (data.records || []).forEach(function(rec) {
+          if (rec.fields.Prompt) {
+            cards.push({
+              id: rec.id,
+              prompt: rec.fields.Prompt,
+              hint: rec.fields.Hint || rec.fields['Follow-up'] || '',
+              edition: rec.fields['Deck Label'] || rec.fields.Edition || 'Your Deck',
+              source: tableKey,
+            });
+          }
+        });
+      } catch(e) { console.warn('Card hydration error', e); }
+    }
+  }
+
+  return cards;
+}
+
+async function loadFallbackDeck() {
+  // For new users — load deck-eligible cards directly
+  var cards = [];
+  var tables = ['Conversation Cards', 'Play Together Cards'];
+  for (var t of tables) {
+    try {
+      var res = await fetch('/api/airtable', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          action: 'list',
+          table: t,
+          filterFormula: 'AND({Deck Eligible}=1,{Active}=1)',
+          maxRecords: 100
+        })
+      });
+      var data = await res.json();
+      (data.records || []).forEach(function(rec) {
+        if (rec.fields.Prompt) {
+          cards.push({
+            id: rec.id,
+            prompt: rec.fields.Prompt,
+            hint: rec.fields.Hint || rec.fields['Follow-up'] || '',
+            edition: rec.fields['Deck Label'] || 'Your Deck',
+            source: t === 'Conversation Cards' ? 'conversation_cards' : 'play_together',
+          });
+        }
+      });
+    } catch(e) {}
+  }
+  return cards;
+}
+
+// ── SEEDED UTILS ──────────────────────────────────────────────────
+function hashStr(s) {
+  var h = 0;
+  for (var i = 0; i < s.length; i++) { h = Math.imul(31, h) + s.charCodeAt(i) | 0; }
+  return Math.abs(h);
+}
+
+function seededShuffle(arr, seed) {
+  function rng() {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+  var copy = arr.slice();
+  for (var i = copy.length - 1; i > 0; i--) {
+    var j = Math.floor(rng() * (i + 1));
+    var tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+  }
+  return copy;
+}
+
+// ── HOST MODE ─────────────────────────────────────────────────────
+async function startHostMode(specialDeckId) {
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) {
+    gamesToast('Sign in to access Your Deck');
+    return;
+  }
+
+  gamesToast('Loading your deck…');
+  var deck = await loadPlayDeck(specialDeckId || null);
+
+  if (!deck.length) {
+    gamesToast('No cards found — check back after your first billing cycle');
+    return;
+  }
+
+  YD.deck = deck;
+  YD.position = 0;
+  YD.isHost = true;
+
+  document.getElementById('ydPlayOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderHostCard();
+}
+
+function closeHostMode() {
+  document.getElementById('ydPlayOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Reset flip state
+  document.getElementById('ydCardInner').classList.remove('flipped');
+  YD.flipped = false;
+}
+
+function renderHostCard() {
+  var card = YD.deck[YD.position];
+  if (!card) return;
+
+  var total = YD.deck.length;
+  var pos = YD.position + 1;
+
+  document.getElementById('ydProgressFill').style.width = Math.round(pos / total * 100) + '%';
+  document.getElementById('ydProgressLabel').textContent = pos + ' of ' + total;
+  document.getElementById('ydCardPrompt').textContent = card.prompt;
+  document.getElementById('ydCardHint').textContent = card.hint || '';
+  document.getElementById('ydCardFrontEdition').textContent = card.edition || 'Your Deck';
+  document.getElementById('ydCardBackEdition').textContent = card.edition || 'Your Deck';
+  document.getElementById('ydSessionInfo').textContent = 'Tap the card to reveal';
+
+  // Reset flip
+  document.getElementById('ydCardInner').classList.remove('flipped');
+  YD.flipped = false;
+}
+
+function flipCard() {
+  if (!YD.flipped) {
+    document.getElementById('ydCardInner').classList.add('flipped');
+    YD.flipped = true;
+    document.getElementById('ydSessionInfo').textContent = 'Read this aloud — or pass the phone';
+  }
+}
+
+function nextCard() {
+  if (YD.position < YD.deck.length - 1) {
+    YD.position++;
+    renderHostCard();
+  } else {
+    gamesToast('End of deck — great session ✦');
+    closeHostMode();
+  }
+}
+
+function playSpecialDeck(deckId) {
+  startHostMode(deckId);
+}
+
+function showLockedDeckInfo(deckId) {
+  var deck = SPECIAL_DECKS_CONFIG.find(function(d) { return d.id === deckId; });
+  if (!deck) return;
+  gamesToast(deck.name + ' unlocks at ' + deck.months + ' months');
+}
+
+// ── SHARED MODE ───────────────────────────────────────────────────
+function startSharedMode() {
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) { gamesToast('Sign in to host a shared game'); return; }
+
+  YD.playerName = user.name || 'Host';
+  YD.playerId = user.user_id || 'host_' + Date.now();
+
+  // Generate a room code and set up
+  var code = genRoomCode();
+  YD.roomCode = code;
+  YD.isHost = true;
+
+  document.getElementById('ydRoomCode').textContent = code;
+  document.getElementById('ydHostName').textContent = YD.playerName + ' (host)';
+  document.getElementById('ydSharedOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Create room in Firebase Realtime DB
+  if (ydRtDb) {
+    YD.roomRef = ydRtDb.ref('rooms/' + code);
+    YD.roomRef.set({
+      host: YD.playerId,
+      hostName: YD.playerName,
+      status: 'waiting',
+      currentCard: null,
+      currentIndex: -1,
+      flipped: false,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
+
+    // Listen for players joining
+    YD.roomRef.child('players').on('value', function(snap) {
+      renderPlayersList(snap.val());
+    });
+  }
+}
+
+function closeSharedMode() {
+  document.getElementById('ydSharedOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (YD.roomRef && YD.isHost) {
+    YD.roomRef.remove(); // Clean up the room
+  }
+  YD.roomRef = null;
+  YD.roomCode = null;
+}
+
+function switchSharedTab(tab) {
+  document.getElementById('ydTabCreate').classList.toggle('active', tab === 'create');
+  document.getElementById('ydTabJoin').classList.toggle('active', tab === 'join');
+  document.getElementById('ydCreatePanel').style.display = tab === 'create' ? 'block' : 'none';
+  document.getElementById('ydJoinPanel').style.display = tab === 'join' ? 'block' : 'none';
+}
+
+function shareRoomCode() {
+  var code = YD.roomCode;
+  var msg = 'Join my Curated Connections game! Room code: ' + code;
+  if (navigator.share) {
+    navigator.share({ title: 'Join my game', text: msg }).catch(function(){});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(msg);
+    gamesToast('Room code copied: ' + code);
+  }
+}
+
+function renderPlayersList(players) {
+  var el = document.getElementById('ydPlayersList');
+  if (!el || !players) return;
+
+  var html = '<div class="yd-player-row"><div class="yd-player-dot"></div><div>' + YD.playerName + ' (host)</div></div>';
+  Object.values(players).forEach(function(p) {
+    html += '<div class="yd-player-row"><div class="yd-player-dot"></div><div>' + (p.name || 'Player') + '</div></div>';
+  });
+  el.innerHTML = html;
+
+  var count = Object.keys(players || {}).length + 1;
+  document.getElementById('ydStartBtn').textContent = 'Start Game with ' + count + ' Players →';
+}
+
+async function startLiveGame() {
+  if (!YD.roomRef) return;
+
+  gamesToast('Loading deck…');
+  var deck = await loadPlayDeck(null);
+  if (!deck.length) { gamesToast('No cards found'); return; }
+
+  YD.deck = deck;
+  YD.position = 0;
+
+  // Store first card in Firebase
+  var card = deck[0];
+  await YD.roomRef.update({
+    status: 'playing',
+    currentCard: { prompt: card.prompt, hint: card.hint || '', edition: card.edition || 'Your Deck' },
+    currentIndex: 0,
+    flipped: false,
+    totalCards: deck.length,
+  });
+
+  // Open the live overlay
+  closeSharedMode();
+  openLiveGame(true, deck[0]);
+}
+
+async function joinRoom() {
+  var code = document.getElementById('ydJoinCodeInput').value.trim().toUpperCase();
+  var errEl = document.getElementById('ydJoinError');
+  errEl.textContent = '';
+
+  if (code.length !== 4) { errEl.textContent = 'Enter a 4-letter code'; return; }
+
+  if (!ydRtDb) { errEl.textContent = 'Connection unavailable — try refreshing'; return; }
+
+  var roomRef = ydRtDb.ref('rooms/' + code);
+  var snap = await roomRef.once('value');
+
+  if (!snap.exists()) { errEl.textContent = 'Room not found — check the code'; return; }
+
+  var room = snap.val();
+  if (room.status !== 'waiting' && room.status !== 'playing') {
+    errEl.textContent = 'This game has already ended';
+    return;
+  }
+
+  // Register as a player
+  var user = CC.getUser ? CC.getUser() : null;
+  var name = user ? user.name : 'Guest_' + Math.floor(Math.random() * 100);
+  YD.playerId = user ? user.user_id : 'guest_' + Date.now();
+  YD.playerName = name;
+  YD.isHost = false;
+  YD.roomCode = code;
+  YD.roomRef = roomRef;
+
+  roomRef.child('players/' + YD.playerId).set({ name: name, joinedAt: firebase.database.ServerValue.TIMESTAMP });
+
+  // Listen for card changes
+  roomRef.on('value', function(snap) {
+    var r = snap.val();
+    if (!r) return;
+    if (r.currentCard) {
+      updateLiveCard(r.currentCard, r.flipped, r.currentIndex, r.totalCards);
+    }
+  });
+
+  closeSharedMode();
+  openLiveGame(false, room.currentCard);
+}
+
+function openLiveGame(isHost, initialCard) {
+  YD.isHost = isHost;
+  YD.liveFlipped = false;
+
+  document.getElementById('ydLiveCode').textContent = 'Room: ' + YD.roomCode;
+  document.getElementById('ydLiveHostControls').style.display = isHost ? 'flex' : 'none';
+  document.getElementById('ydLiveGuestControls').style.display = isHost ? 'none' : 'flex';
+
+  if (initialCard) {
+    document.getElementById('ydLiveCardPrompt').textContent = initialCard.prompt;
+    document.getElementById('ydLiveCardHint').textContent = initialCard.hint || '';
+    document.getElementById('ydLiveCardFrontEdition').textContent = initialCard.edition || 'Your Deck';
+  }
+
+  document.getElementById('ydLiveCardInner').classList.remove('flipped');
+  document.getElementById('ydLiveOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLiveCard(card, flipped, index, total) {
+  if (card) {
+    document.getElementById('ydLiveCardPrompt').textContent = card.prompt;
+    document.getElementById('ydLiveCardHint').textContent = card.hint || '';
+    document.getElementById('ydLiveCardFrontEdition').textContent = card.edition || 'Your Deck';
+  }
+  if (flipped) {
+    document.getElementById('ydLiveCardInner').classList.add('flipped');
+    YD.liveFlipped = true;
+  } else {
+    document.getElementById('ydLiveCardInner').classList.remove('flipped');
+    YD.liveFlipped = false;
+  }
+  if (index !== undefined && total !== undefined) {
+    document.getElementById('ydLiveSessionInfo').textContent = 'Card ' + (index + 1) + ' of ' + total;
+    document.getElementById('ydLivePlayersCount').textContent = 'Card ' + (index + 1) + '/' + total;
+  }
+}
+
+function liveFlipCard() {
+  if (!YD.liveFlipped) {
+    document.getElementById('ydLiveCardInner').classList.add('flipped');
+    YD.liveFlipped = true;
+    // If host, sync flip to Firebase
+    if (YD.isHost && YD.roomRef) {
+      YD.roomRef.update({ flipped: true });
+    }
+  }
+}
+
+function liveNextCard() {
+  if (!YD.isHost || !YD.deck.length) return;
+  YD.position++;
+  if (YD.position >= YD.deck.length) {
+    gamesToast('End of deck ✦');
+    leaveLiveGame();
+    return;
+  }
+  var card = YD.deck[YD.position];
+  YD.roomRef.update({
+    currentCard: { prompt: card.prompt, hint: card.hint || '', edition: card.edition || 'Your Deck' },
+    currentIndex: YD.position,
+    flipped: false,
+    totalCards: YD.deck.length,
+  });
+}
+
+function leaveLiveGame() {
+  if (YD.roomRef) {
+    if (!YD.isHost) {
+      YD.roomRef.child('players/' + YD.playerId).remove();
+    } else {
+      YD.roomRef.update({ status: 'ended' });
+    }
+    YD.roomRef.off();
+  }
+  document.getElementById('ydLiveOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  YD.roomRef = null;
+}
+
+// ── SAVE / SHARE ──────────────────────────────────────────────────
+function getCurrentPlayCard() {
+  var overlays = [
+    { overlay: document.getElementById('ydPlayOverlay'), card: YD.deck[YD.position] },
+    { overlay: document.getElementById('ydLiveOverlay'), card: null },
+  ];
+
+  // Check which overlay is open
+  if (document.getElementById('ydLiveOverlay').classList.contains('open')) {
+    return {
+      prompt: document.getElementById('ydLiveCardPrompt').textContent,
+      hint: document.getElementById('ydLiveCardHint').textContent,
+      edition: document.getElementById('ydLiveCardFrontEdition').textContent,
+    };
+  }
+  return YD.deck[YD.position] || null;
+}
+
+function saveCurrentCardToJournal() {
+  var card = getCurrentPlayCard();
+  if (!card || !card.prompt) { gamesToast('Flip the card first'); return; }
+
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) { gamesToast('Sign in to save to Journal'); return; }
+
+  var entry = { id: Date.now(), date: new Date().toISOString(), prompt: card.prompt, text: '' };
+
+  if (typeof CCFB !== 'undefined') {
+    CCFB.saveJournalEntry(entry);
+  } else {
+    var uid = user.user_id || 'guest';
+    var key = 'cc_journal_' + uid;
+    var entries = [];
+    try { entries = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+    entries.unshift(entry);
+    localStorage.setItem(key, JSON.stringify(entries));
+  }
+
+  try {
+    localStorage.setItem('cc_quiz_journal_prompt', JSON.stringify({ prompt: card.prompt, resultTitle: '', quizTitle: card.edition || 'Your Deck' }));
+  } catch(e) {}
+
+  gamesToast('Saved to Journal ✦');
+}
+
+function shareCurrentCardToCircle() {
+  var card = getCurrentPlayCard();
+  if (!card || !card.prompt) { gamesToast('Flip the card first'); return; }
+
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) { gamesToast('Sign in to share to a Circle'); return; }
+
+  var circles = [];
+  try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
+
+  if (!circles.length) { gamesToast('Create a circle first in Circles'); return; }
+
+  var post = { id: Date.now(), user: user.name, prompt: card.prompt, text: 'From Your Deck — ' + (card.edition || ''), date: new Date().toISOString() };
+
+  if (circles.length === 1) {
+    if (typeof CCFB !== 'undefined') {
+      CCFB.saveCirclePost(circles[0].id, post);
+    } else {
+      var posts = [];
+      try { posts = JSON.parse(localStorage.getItem('cc_feed_' + circles[0].id) || '[]'); } catch(e) {}
+      posts.unshift(post);
+      localStorage.setItem('cc_feed_' + circles[0].id, JSON.stringify(posts));
+    }
+    gamesToast('Shared to ' + circles[0].name + ' ✦');
+  } else {
+    // Show picker — reuse pattern from gather.html
+    gamesToast('Share to circle — check Circles for your feed');
+  }
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function genRoomCode() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  var code = '';
+  for (var i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
+function gamesToast(msg) {
+  t(msg); // Reuse existing toast function
+}
+
+// Update bottom nav links
+document.addEventListener('DOMContentLoaded', function() {
+  var homeBtn = document.querySelector('.bn:first-child');
+  if (homeBtn) homeBtn.onclick = function() { window.location.href = 'gather.html'; };
+  var circlesBtn = document.querySelector('.bn:nth-child(2)');
+  if (circlesBtn) circlesBtn.onclick = function() { window.location.href = 'circles.html'; };
+});
+</script>
+
 </body>
 </html>
