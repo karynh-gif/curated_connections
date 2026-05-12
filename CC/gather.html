@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/atmosphere.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,600&family=Nunito:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-html{font-size:18px;-webkit-text-size-adjust:100%;}
+html{font-size:16px;-webkit-text-size-adjust:100%;}
 :root{
   --ink:#060c09;--card:#162019;
   --amber:#c97d3a;--amber2:#e89448;--gold-line:rgba(201,125,58,.28);
@@ -27,7 +27,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .topbar-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.82rem;cursor:pointer;}
 .topbar-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;cursor:pointer;}
 /* SCROLL */
-.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;}
 .scroll::-webkit-scrollbar{display:none;}
 /* SHELF */
 .shelf{margin-top:1.5rem;}
@@ -75,7 +75,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .hero-inner{position:relative;z-index:1;padding:1.4rem 1.4rem 1.2rem;}
 .hero-eyebrow{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.85);margin-bottom:.6rem;display:flex;align-items:center;gap:.3rem;}
 .hero-eyebrow::before{content:'✦';font-size:.75rem;}
-.hero-question{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-style:italic;color:var(--cream);line-height:1.42;margin-bottom:1.1rem;}
+.hero-question{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:var(--cream);line-height:1.42;margin-bottom:.9rem;}
 .hero-icon-bar{display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem;}
 .hib-btn{display:flex;flex-direction:column;align-items:center;gap:.25rem;background:none;border:none;cursor:pointer;padding:.3rem .4rem;}
 .hib-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:rgba(255,255,255,.85);}
@@ -112,7 +112,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .card-close{background:none;border:none;color:rgba(255,255,255,.45);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;align-self:flex-start;margin-bottom:.5rem;padding:0;}
 .card-brand-small{font-family:'Pacifico',cursive;font-size:12px;color:var(--amber);opacity:.45;margin-top:1.6rem;margin-bottom:4px;}
 .card-edition{font-family:'Nunito',sans-serif;font-size:8px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:11px;}
-.card-big-q{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--cream);line-height:1.42;flex:1;margin-bottom:1.1rem;}
+.card-big-q{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--cream);line-height:1.42;flex:1;margin-bottom:.9rem;}
 /* THREADS */
 .thread-waiting{text-align:center;padding:14px 0;display:none;}
 .thread-waiting.show{display:block;}
@@ -307,6 +307,35 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div id="quizNext" style="padding:0 1rem .35rem;font-family:'Nunito',sans-serif;font-size:.80rem;font-weight:700;color:rgba(242,232,216,.28);font-style:italic;"></div>
       <div style="padding:0 1rem .65rem;font-family:'Nunito',sans-serif;font-size:.72rem;color:rgba(242,232,216,.2);line-height:1.5;">For personal reflection &amp; entertainment only &mdash; not a clinical assessment or professional advice.</div>
       <div class="shelf-row" id="quizShelf"><div style="padding:1.2rem;font-size:.80rem;color:rgba(242,232,216,.3);font-style:italic;">Loading…</div></div>
+    </div>
+
+    <!-- LEGACY FEATURES — only for Legacy tier -->
+    <div id="legacyShelf" style="display:none;margin:.4rem 0;">
+      <div class="shelf-header">
+        <span class="shelf-title">Living Legacy</span>
+        <span class="shelf-count" style="color:rgba(201,125,58,.5);">Free to start</span>
+      </div>
+      <div class="shelf-row">
+        <!-- Family Tree tile -->
+        <div onclick="window.location.href='family-tree.html'" style="flex-shrink:0;width:160px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#1a0a30,#0d1a28);border:1px solid rgba(107,60,162,.28);cursor:pointer;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(107,60,162,.2),transparent 70%);pointer-events:none;"></div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(107,60,162,.8);margin-bottom:.5rem;">Family Tree · Free</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.7rem;">Your family, mapped across time. Import from Ancestry or start fresh.</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(107,60,162,.6);">Start Free →</div>
+        </div>
+        <!-- Living Leaf / Contribute tile -->
+        <div onclick="window.location.href='family-tree.html?start=legacy'" style="flex-shrink:0;width:160px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#0a2010,#1a0a08);border:1px solid rgba(42,138,80,.28);cursor:pointer;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(42,138,80,.2),transparent 70%);pointer-events:none;"></div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(58,173,144,.8);margin-bottom:.5rem;">Living Leaf · Free to Create</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.7rem;">Preserve a life before it's gone. Free to build, paid to keep open.</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(58,173,144,.6);">Start Free →</div>
+        </div>
+        <!-- Contribute tile (for when someone invites you) -->
+        <div onclick="showToast('Share your link with family to invite contributors')" style="flex-shrink:0;width:140px;border-radius:20px;padding:1rem;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.08);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-align:center;">
+          <div style="font-size:1.2rem;opacity:.3;">✦</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.25);line-height:1.4;">Invite someone to contribute</div>
+        </div>
+      </div>
     </div>
 
     <!-- MY CIRCLES -->
@@ -1091,6 +1120,9 @@ document.addEventListener('DOMContentLoaded', function() {
   loadWitWonder();
   loadQuizSection();
   loadCircles();
+  // Living Legacy is free to start — show to everyone
+  var ls = document.getElementById('legacyShelf');
+  if (ls) ls.style.display = 'block';
 });
 
 

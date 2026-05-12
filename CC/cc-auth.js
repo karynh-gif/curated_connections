@@ -12,10 +12,12 @@ CC.TIERS = {
 };
 
 CC.TIER_FEATURES = {
-  free:         ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards'],
-  connect:      ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'all_cards', 'all_editions', 'discover_you', 'circles', 'that_tracks', 'play_together', 'journal'],
-  insight:      ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'all_cards', 'all_editions', 'discover_you', 'circles', 'that_tracks', 'play_together', 'journal', 'pattern_reveal', 'dream_out_loud', 'play_live', 'session_recaps'],
-  legacy: ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'all_cards', 'all_editions', 'discover_you', 'circles', 'that_tracks', 'play_together', 'journal', 'pattern_reveal', 'dream_out_loud', 'play_live', 'session_recaps', 'living_legacy', 'voice_recording', 'family_tree', 'life_in_bloom']
+  // living_legacy_start + family_tree_start = FREE for everyone (start, import, build)
+  // living_legacy_open = LEGACY tier (keep leaf open, active contributions from others)
+  free:         ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'living_legacy_start', 'family_tree_start'],
+  connect:      ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'all_cards', 'all_editions', 'discover_you', 'circles', 'that_tracks', 'play_together', 'journal', 'living_legacy_start', 'family_tree_start'],
+  insight:      ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'all_cards', 'all_editions', 'discover_you', 'circles', 'that_tracks', 'play_together', 'journal', 'pattern_reveal', 'dream_out_loud', 'play_live', 'session_recaps', 'living_legacy_start', 'family_tree_start'],
+  legacy:       ['gather', 'gather_quizzes', 'wit_wonder', 'tonight_cards', 'all_cards', 'all_editions', 'discover_you', 'circles', 'that_tracks', 'play_together', 'journal', 'pattern_reveal', 'dream_out_loud', 'play_live', 'session_recaps', 'living_legacy_start', 'living_legacy_open', 'family_tree_start', 'family_tree_open', 'voice_recording', 'life_in_bloom']
 };
 
 CC.getUser = function() {

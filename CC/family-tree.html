@@ -412,6 +412,13 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
   <div id="detailContent"></div>
 </div>
 
+
+  <!-- Tier-aware status bar -->
+  <div id="legacyStatusBar" style="display:none;margin:.6rem .9rem;padding:.65rem .9rem;border-radius:14px;font-family:'Nunito',sans-serif;font-size:.72rem;background:rgba(42,138,80,.08);border:1px solid rgba(42,138,80,.18);">
+    <span style="color:rgba(58,173,144,.8);font-weight:800;letter-spacing:.08em;text-transform:uppercase;">Leaf Status: </span>
+    <span id="leafStatusText" style="color:rgba(242,232,216,.5);">Building · Free</span>
+    <span id="leafUpgradeLink" style="display:none;margin-left:.6rem;color:#c97d3a;font-weight:700;cursor:pointer;" onclick="window.location.href='index.html#upgrade'">Keep it open →</span>
+  </div>
 <div class="toast" id="toastEl"></div>
 
 <script>
@@ -449,6 +456,25 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+
+  // Show status bar and tier-appropriate message
+  window.addEventListener('DOMContentLoaded', function() {
+    var bar = document.getElementById('legacyStatusBar');
+    if (bar) bar.style.display = 'block';
+    
+    var isOpen = typeof CC !== 'undefined' && CC.hasFeature && CC.hasFeature('living_legacy_open');
+    var statusEl = document.getElementById('leafStatusText');
+    var upgradeEl = document.getElementById('leafUpgradeLink');
+    
+    if (isOpen) {
+      if (statusEl) statusEl.textContent = 'Open · Accepting contributions';
+    } else {
+      if (statusEl) statusEl.textContent = 'Building · Free  ·  Closed to contributions';
+      if (upgradeEl) upgradeEl.style.display = 'inline';
+    }
+  });
+
 
 function showEmptyTreeState(userName) {
   var header = document.querySelector('.h-name');
