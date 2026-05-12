@@ -84,7 +84,7 @@ body::before{content:"";position:fixed;inset:0;
 .how-btn:hover{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6);}
 
 /* Floating deck chips on cards */
-.floating-chips{position:absolute;top:.9rem;right:.9rem;display:flex;flex-direction:column;gap:.25rem;z-index:2;}
+.floating-chips{display:flex;flex-direction:row;flex-wrap:wrap;gap:.28rem;margin:.35rem 0 .6rem;}
 .fc{font-size:.72rem;font-weight:800;color:#fff;border-radius:999px;padding:.18rem .52rem;font-family:'Nunito',sans-serif;animation:float 3s ease-in-out infinite;}
 .fc:nth-child(2){animation-delay:.4s;}
 .fc:nth-child(3){animation-delay:.8s;}
@@ -329,11 +329,6 @@ body::before{content:"";position:fixed;inset:0;
     <div class="sec-lbl">Ready to play</div>
 
     <div class="game-card-hero rbd-card" style="animation-delay:.05s;">
-      <div class="floating-chips">
-        <div class="fc" style="background:rgba(255,80,56,.6);">😱 Really Bad Day</div>
-        <div class="fc" style="background:rgba(0,196,154,.55);">🎯 Survive This</div>
-        <div class="fc" style="background:rgba(255,210,77,.55);color:#333;">✨ Best Day Ever</div>
-      </div>
       <div class="ghc-inner">
         <div class="ghc-title">Really Bad Day™</div>
         <div class="ghc-tagline">"How well can you predict the Judge?"</div>
@@ -344,6 +339,11 @@ body::before{content:"";position:fixed;inset:0;
           <div class="ghc-meta-dot"></div>
           <div class="ghc-meta-item">🎡 6 decks</div>
         </div>
+        <div class="floating-chips">
+          <div class="fc" style="background:rgba(255,80,56,.6);">😱 Really Bad Day</div>
+          <div class="fc" style="background:rgba(0,196,154,.55);">🎯 Survive This</div>
+          <div class="fc" style="background:rgba(255,210,77,.55);color:#333;">✨ Best Day Ever</div>
+        </div>
         <div class="ghc-actions">
           <button class="play-btn rbd-play" onclick="launchGame('bad-day-to-worst.html','connect')">Play Now →</button>
           <div class="how-btn" onclick="openHow('rbd')">How to play</div>
@@ -353,10 +353,6 @@ body::before{content:"";position:fixed;inset:0;
 
     <!-- THAT TRACKS -->
     <div class="game-card-hero tt-card" style="animation-delay:.1s;">
-      <div class="floating-chips">
-        <div class="fc" style="background:rgba(139,92,246,.65);">🎭 That Tracks</div>
-        <div class="fc" style="background:rgba(0,196,154,.45);">🔥 Plot Twists</div>
-      </div>
       <div class="ghc-inner">
         <div class="ghc-title" style="color:var(--purple2);">That Tracks™</div>
         <div class="ghc-tagline">"Play the card that fits the prompt best."</div>
@@ -366,6 +362,10 @@ body::before{content:"";position:fixed;inset:0;
           <div class="ghc-meta-item">⏱ 30–60 min</div>
           <div class="ghc-meta-dot"></div>
           <div class="ghc-meta-item">🃏 Plot Twists</div>
+        </div>
+        <div class="floating-chips">
+          <div class="fc" style="background:rgba(139,92,246,.65);">🎭 That Tracks</div>
+          <div class="fc" style="background:rgba(0,196,154,.45);">🔥 Plot Twists</div>
         </div>
         <div class="ghc-actions">
           <button class="play-btn tt-play" onclick="launchGame('curated-connections-play.html','connect')">Play Now →</button>
