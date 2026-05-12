@@ -232,72 +232,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .qz-done-btn{width:100%;padding:.7rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.4);cursor:pointer;margin-top:.5rem;}
 @keyframes qzSlideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 .qz-animate{animation:qzSlideIn .25s ease both;}
-
-/* ── LEGAL MODALS ── */
-.legal-modal{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:2000;display:flex;flex-direction:column;overflow:hidden;transition:opacity .2s;}
-.legal-modal.cc-hidden{display:none;}
-.legal-modal-header{padding:1rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.legal-modal-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--cream);}
-.legal-modal-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;padding:.3rem;}
-.legal-modal-body{flex:1;overflow-y:auto;padding:1.2rem 1.1rem;}
-.legal-modal-body pre{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.6);line-height:1.75;white-space:pre-wrap;word-wrap:break-word;}
-
-/* ── FOOTER ── */
-.cc-footer{background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05);padding:1.4rem 1rem;text-align:center;margin-top:.5rem;}
-.cc-footer-logo{font-family:'Pacifico',cursive;font-size:1rem;color:var(--amber);margin-bottom:.3rem;opacity:.7;}
-.cc-footer-tag{font-size:.72rem;color:rgba(255,255,255,.18);font-style:italic;margin-bottom:.8rem;}
-.cc-footer-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:.6rem;}
-.cc-footer-links a{font-size:.68rem;color:rgba(255,255,255,.2);text-decoration:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-.cc-footer-links a:active{color:var(--amber);}
-.cc-footer-copy{font-size:.62rem;color:rgba(255,255,255,.1);}
-
-
-.car-overlay{position:fixed;inset:0;background:#0a0505;z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
-.car-overlay.cc-hidden{display:none;}
-.car-eyebrow{font-size:.6rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:rgba(201,125,58,.8);margin-bottom:1rem;font-family:'Nunito',sans-serif;}
-.car-prompt{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,2.1rem);font-weight:400;color:#fff;text-align:center;line-height:1.55;margin-bottom:2rem;max-width:340px;font-style:italic;}
-.car-status{font-size:.78rem;color:rgba(255,255,255,.3);margin-bottom:1.8rem;font-style:italic;font-family:'DM Sans',sans-serif;}
-.car-next-btn{background:linear-gradient(135deg,#c97d3a,#e89448);color:#fff;border:none;border-radius:999px;padding:1rem 2.5rem;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;cursor:pointer;letter-spacing:.04em;}
-.car-exit-btn{background:none;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:.6rem 1.5rem;color:rgba(255,255,255,.3);font-family:'Nunito',sans-serif;font-size:.78rem;cursor:pointer;margin-top:.8rem;}
-.car-counter{font-size:.68rem;color:rgba(255,255,255,.18);margin-top:1.5rem;font-family:'Nunito',sans-serif;}
-.legal-modal{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2000;display:flex;flex-direction:column;overflow:hidden;}
-.legal-modal.cc-hidden{display:none;}
-.legal-modal-header{padding:1rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.legal-modal-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:#f2e8d8;}
-.legal-modal-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;padding:.3rem;}
-.legal-modal-body{flex:1;overflow-y:auto;padding:1.2rem 1.1rem;}
-.legal-modal-body pre{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.6);line-height:1.75;white-space:pre-wrap;word-wrap:break-word;}
-.cc-footer{background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05);padding:1.4rem 1rem;text-align:center;margin-top:.5rem;}
-.cc-footer-logo{font-family:'Pacifico',cursive;font-size:1rem;color:#c97d3a;margin-bottom:.3rem;opacity:.7;}
-.cc-footer-tag{font-size:.72rem;color:rgba(255,255,255,.18);font-style:italic;margin-bottom:.8rem;}
-.cc-footer-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:.6rem;}
-.cc-footer-links a{font-size:.68rem;color:rgba(255,255,255,.2);text-decoration:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-.cc-footer-links a:active{color:#c97d3a;}
-.cc-footer-copy{font-size:.62rem;color:rgba(255,255,255,.1);}
-.promo-wrap{margin-top:.9rem;padding-top:.9rem;border-top:1px solid rgba(255,255,255,.06);}
-.promo-row{display:flex;gap:.4rem;}
-.promo-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.55rem .75rem;font-family:'DM Sans',sans-serif;font-size:.82rem;color:#f2e8d8;outline:none;}
-.promo-input::placeholder{color:rgba(242,232,216,.25);}
-.promo-input:focus{border-color:rgba(201,125,58,.35);}
-.promo-btn{padding:.55rem .9rem;background:rgba(201,125,58,.2);border:1px solid rgba(201,125,58,.3);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:#c97d3a;cursor:pointer;white-space:nowrap;}
-.promo-msg{font-size:.72rem;margin-top:.35rem;display:none;font-family:'DM Sans',sans-serif;}
-.promo-msg.err{color:rgba(220,80,80,.8);}
-.promo-msg.ok{color:rgba(80,200,120,.8);}
-
-
-/* ── ONBOARDING THRESHOLD ── */
-.ob-overlay{position:fixed;inset:0;z-index:3000;background:#010608;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;transition:opacity .5s;}
-.ob-overlay.fade-out{opacity:0;pointer-events:none;}
-.ob-brand{font-family:'Pacifico',cursive;font-size:1.4rem;color:#c97d3a;margin-bottom:.5rem;text-align:center;}
-.ob-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(242,232,216,.45);margin-bottom:2rem;text-align:center;}
-.ob-spaces{display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:320px;margin-bottom:2rem;}
-.ob-space{display:flex;align-items:center;gap:.85rem;padding:.7rem .9rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;}
-.ob-space-icon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ob-space-name{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.04em;color:rgba(242,232,216,.85);}
-.ob-space-desc{font-family:'DM Sans',sans-serif;font-size:.72rem;color:rgba(242,232,216,.35);margin-top:.1rem;}
-.ob-start-btn{width:100%;max-width:320px;padding:.9rem;background:#c97d3a;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;color:#fff;cursor:pointer;letter-spacing:.04em;box-shadow:0 4px 20px rgba(201,125,58,.3);}
-.ob-note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.78rem;color:rgba(242,232,216,.22);margin-top:.8rem;text-align:center;}
-
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-firebase.js"></script>
@@ -409,25 +343,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       radial-gradient(ellipse 3% 4% at 78% 65%, rgba(180,90,20,.03) 0%, transparent 50%);
   }
 }
-
-/* ── LEGAL MODALS ── */
-.legal-modal{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:2000;display:flex;flex-direction:column;overflow:hidden;transition:opacity .2s;}
-.legal-modal.cc-hidden{display:none;}
-.legal-modal-header{padding:1rem 1.1rem;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.legal-modal-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--cream);}
-.legal-modal-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;padding:.3rem;}
-.legal-modal-body{flex:1;overflow-y:auto;padding:1.2rem 1.1rem;}
-.legal-modal-body pre{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.6);line-height:1.75;white-space:pre-wrap;word-wrap:break-word;}
-
-/* ── FOOTER ── */
-.cc-footer{background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.05);padding:1.4rem 1rem;text-align:center;margin-top:.5rem;}
-.cc-footer-logo{font-family:'Pacifico',cursive;font-size:1rem;color:var(--amber);margin-bottom:.3rem;opacity:.7;}
-.cc-footer-tag{font-size:.72rem;color:rgba(255,255,255,.18);font-style:italic;margin-bottom:.8rem;}
-.cc-footer-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-bottom:.6rem;}
-.cc-footer-links a{font-size:.68rem;color:rgba(255,255,255,.2);text-decoration:none;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
-.cc-footer-links a:active{color:var(--amber);}
-.cc-footer-copy{font-size:.62rem;color:rgba(255,255,255,.1);}
-
 </style>
 </head>
 <body>
@@ -526,6 +441,35 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="shelf-row" id="quizShelf"><div style="padding:1.2rem;font-size:.80rem;color:rgba(242,232,216,.3);font-style:italic;">Loading…</div></div>
     </div>
 
+    <!-- LEGACY FEATURES — only for Legacy tier -->
+    <div id="legacyShelf" style="display:none;margin:.4rem 0;">
+      <div class="shelf-header">
+        <span class="shelf-title">Living Legacy</span>
+        <span class="shelf-count" style="color:rgba(201,125,58,.5);">Free to start</span>
+      </div>
+      <div class="shelf-row">
+        <!-- Family Tree tile -->
+        <div onclick="window.location.href='family-tree.html'" style="flex-shrink:0;width:160px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#120d06,#1e1608);border:1px solid rgba(138,96,16,.28);cursor:pointer;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(138,96,16,.15),transparent 70%);pointer-events:none;"></div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(180,130,50,.75);margin-bottom:.5rem;">Family Tree · Free</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.7rem;">Your family, mapped across time. Import from Ancestry or start fresh.</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(160,115,40,.6);">Start Free →</div>
+        </div>
+        <!-- Living Leaf / Contribute tile -->
+        <div onclick="window.location.href='family-tree.html?start=legacy'" style="flex-shrink:0;width:160px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#0a2010,#1a0a08);border:1px solid rgba(42,138,80,.28);cursor:pointer;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(42,138,80,.2),transparent 70%);pointer-events:none;"></div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(58,173,144,.8);margin-bottom:.5rem;">Living Leaf · Free to Create</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.7rem;">Preserve a life before it's gone. Free to build, paid to keep open.</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(58,173,144,.6);">Start Free →</div>
+        </div>
+        <!-- Contribute tile (for when someone invites you) -->
+        <div onclick="showToast('Share your link with family to invite contributors')" style="flex-shrink:0;width:140px;border-radius:20px;padding:1rem;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.08);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-align:center;">
+          <div style="font-size:1.2rem;opacity:.3;">✦</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.25);line-height:1.4;">Invite someone to contribute</div>
+        </div>
+      </div>
+    </div>
+
     <!-- MY CIRCLES -->
     <div class="circles-section">
       <div style="position:relative;z-index:2;padding:0 1rem;margin-bottom:.9rem;display:flex;align-items:baseline;justify-content:space-between;">
@@ -555,31 +499,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
     <div style="height:1.2rem;"></div>
   </div><!-- /scroll -->
-
-
-  <!-- ── FOOTER ── -->
-  <div class="cc-footer">
-    <div class="cc-footer-logo">Curated Connections™</div>
-    <div class="cc-footer-tag">Play. Discover. Connect.</div>
-    <div class="cc-footer-links">
-      <a onclick="showTOS()">Terms of Service</a>
-      <a onclick="showPP()">Privacy Policy</a>
-      <a href="mailto:hello@joincuratedconnections.com">Support</a>
-    </div>
-    <div class="cc-footer-copy">© 2026 RespondIQ, LLC · All rights reserved</div>
-  </div>
-
-
-  <div class="cc-footer">
-    <div class="cc-footer-logo">Curated Connections™</div>
-    <div class="cc-footer-tag">Play. Discover. Connect.</div>
-    <div class="cc-footer-links">
-      <a onclick="showTOS()">Terms of Service</a>
-      <a onclick="showPP()">Privacy Policy</a>
-      <a href="mailto:hello@joincuratedconnections.com">Support</a>
-    </div>
-    <div class="cc-footer-copy">© 2026 RespondIQ, LLC · All rights reserved</div>
-  </div>
 
   <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,12,9,.96);border-top:1px solid rgba(201,125,58,.12);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;">
     <div onclick="window.location.href='gather.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:1;min-width:20%;cursor:pointer;">
@@ -698,7 +617,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <input class="sheet-input" type="text" placeholder="Your first name" id="acctName" autocomplete="given-name"/>
         <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail" autocomplete="email"/>
         <input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password"/>
-        <input class="sheet-input" type="text" placeholder="Promo code (optional)" id="acctPromoCode" autocomplete="off" style="text-transform:uppercase;font-size:.82rem;opacity:.7;"/>
         <button class="sheet-btn" onclick="createAcct()">Create Free Account →</button>
       </div>
 
@@ -707,7 +625,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <input class="sheet-input" type="email" placeholder="Email address" id="signinEmail" autocomplete="email"/>
         <input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password"/>
         <button class="sheet-btn" onclick="signIn()">Sign In →</button>
-        <div onclick="forgotPassword()" style="text-align:center;font-family:'DM Sans',sans-serif;font-size:.75rem;color:rgba(201,125,58,.55);cursor:pointer;margin-top:.6rem;padding:.3rem;">Forgot password?</div>
       </div>
 
       <button class="sheet-cancel" onclick="closeAccount()">Maybe later</button>
@@ -742,14 +659,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div class="qz-journal-prompt" id="qzJPrompt"></div>
         <button class="qz-journal-btn" onclick="goToJournal()">Open Journal &rarr;</button>
       </div>
-      <!-- Share result natively -->
-      <button class="qz-done-btn" id="qzShareBtn" style="margin-bottom:.5rem;background:linear-gradient(135deg,rgba(201,125,58,.25),rgba(201,125,58,.15));border:1.5px solid rgba(201,125,58,.4);" onclick="shareQuizResult()">Share Your Result ↗</button>
-      <button class="qz-done-btn" style="margin-bottom:.5rem;opacity:.7;" onclick="shareQuizToCircle()">Share to Circle →</button>
-      <!-- Your Truth AI insight -->
-      <div id="qzYourTruth" style="display:none;margin:.7rem 0;padding:.9rem 1rem;background:rgba(107,77,130,.12);border:1px solid rgba(107,77,130,.25);border-radius:16px;">
-        <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(155,109,212,.6);margin-bottom:.4rem;">Your Truth</div>
-        <div id="qzYourTruthText" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.8);line-height:1.65;"></div>
-      </div>
+      <button class="qz-done-btn" style="margin-bottom:.5rem;" onclick="shareQuizToCircle()">Share result to Circle →</button>
       <button class="qz-done-btn" onclick="closeQuiz()">Done</button>
     </div>
   </div>
@@ -1284,126 +1194,6 @@ if (fbAuth) {
   });
 }
 
-// ── LEGAL DOCUMENTS ──────────────────────────────────────────────
-var TOS_TEXT = 'CURATED CONNECTIONS™ — TERMS OF SERVICE\n\nEffective: May 5, 2026 | RespondIQ, LLC\n\n1. ACCEPTANCE\nBy using joincuratedconnections.com you confirm you are 18+ and agree to these terms.\n\n2. SERVICE\nSubscription platform providing conversation card games, quizzes, and related features.\n\n3. ACCOUNT\nYou must provide accurate info and keep credentials confidential. Contact support@joincuratedconnections.com if you suspect unauthorized access.\n\n4. BILLING\nGather: Free. Connect: $4.99/mo. Insight: $9.99/mo. Legacy: $19.99/mo. Billed monthly.\n\n5. CANCELLATION\nCancel anytime. Cancellation takes effect at billing period end. No partial refunds.\n\n6. YOUR CONTENT\nYou own all content you create. We do not sell it or use it to train AI models.\n\n7. INTELLECTUAL PROPERTY\nCurated Connections™ and all features are owned by RespondIQ, LLC.\n\n8. LIABILITY\nRespondIQ, LLC is not liable for indirect or consequential damages.\n\n9. GOVERNING LAW\nKansas law. Disputes in Scott County, Kansas courts.\n\n10. CONTACT\nhello@joincuratedconnections.com | RespondIQ, LLC | Scott City, KS';
-
-var PP_TEXT = 'CURATED CONNECTIONS™ — PRIVACY POLICY\n\nEffective: May 5, 2026 | RespondIQ, LLC\n\n1. WHAT WE COLLECT\nEmail, display name, password (hashed). Payment info processed by Stripe only. Journal entries and responses you create. Usage data.\n\n2. HOW WE USE IT\nTo provide and improve the service. To process payments. We do NOT sell your data. We do NOT use your content to train AI. We show no ads.\n\n3. WHERE IT LIVES\nGoogle Firebase Firestore under your unique account ID. Accessible only to you.\n\n4. RETENTION\nActive accounts: retained for life of account. Cancelled: 90 days then deleted.\n\n5. YOUR RIGHTS\nAccess, export, or delete your data anytime. Contact us and we will respond within 30 days.\n\n6. THIRD PARTIES\nStripe (payments), Google Firebase (storage/auth), Airtable (content). Each has their own privacy policy.\n\n7. CHILDREN\nNot intended for users under 18.\n\n8. CONTACT\nhello@joincuratedconnections.com | RespondIQ, LLC | Scott City, KS';
-
-function showTOS() {
-  var el = document.getElementById('tosContent');
-  if (el) el.textContent = TOS_TEXT;
-  document.getElementById('tosModal').classList.remove('cc-hidden');
-}
-function showPP() {
-  var el = document.getElementById('ppContent');
-  if (el) el.textContent = PP_TEXT;
-  document.getElementById('ppModal').classList.remove('cc-hidden');
-}
-
-// ── CAR MODE ─────────────────────────────────────────────────────
-var CAR_INDEX = 0;
-var CAR_PROMPTS = [];
-
-function carModeStart() {
-  var cached = [];
-  try { cached = JSON.parse(localStorage.getItem('cc_conv_cards') || '[]'); } catch(e) {}
-  CAR_PROMPTS = cached.map(function(c){ return c.prompt || c.Prompt || ''; }).filter(Boolean);
-  if (CAR_PROMPTS.length < 5) {
-    CAR_PROMPTS = [
-      "What's something you've been meaning to say to someone in this car?",
-      "What was the best part of your week?",
-      "If you could go anywhere right now, where would it be?",
-      "What's a memory that always makes you smile?",
-      "What are you grateful for right now?",
-      "What's one thing you want to accomplish this year?",
-      "What's a lesson life taught you the hard way?",
-      "What's something you've never told anyone in this car?",
-      "If you could have dinner with anyone, who would it be?",
-      "What does home mean to you?"
-    ];
-  }
-  CAR_INDEX = 0;
-  carShowPrompt();
-  document.getElementById('carModeOverlay').classList.remove('cc-hidden');
-}
-
-function carShowPrompt() {
-  if (CAR_INDEX >= CAR_PROMPTS.length) CAR_INDEX = 0;
-  document.getElementById('carPromptText').textContent = CAR_PROMPTS[CAR_INDEX] || 'What is on your mind right now?';
-  document.getElementById('carStatus').textContent = 'Read it aloud. Answer when ready.';
-  document.getElementById('carCounter').textContent = (CAR_INDEX + 1) + ' of ' + CAR_PROMPTS.length;
-}
-
-function carNext() {
-  CAR_INDEX++;
-  if (CAR_INDEX >= CAR_PROMPTS.length) CAR_INDEX = 0;
-  carShowPrompt();
-}
-
-function carExit() {
-  document.getElementById('carModeOverlay').classList.add('cc-hidden');
-}
-
-// ── PROMO CODE ────────────────────────────────────────────────────
-async function applyPromoCode(inputId) {
-  var inputEl = document.getElementById(inputId || 'promoCodeInput');
-  var code = inputEl ? inputEl.value.trim().toUpperCase() : '';
-  if (!code) return;
-  var msgEl = inputEl ? inputEl.closest('.promo-wrap').querySelector('.promo-msg') : null;
-  try {
-    var res = await fetch('/api/airtable', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'list', table:'Promo Codes', filterFormula:'AND({Code}="'+code+'",{Active}=1)'})
-    });
-    var data = await res.json();
-    var records = data.records || [];
-    if (!records.length) {
-      if (msgEl){ msgEl.className='promo-msg err'; msgEl.style.display='block'; msgEl.textContent='Invalid or expired code.'; }
-      return;
-    }
-    var tier = 'connect';
-    var ct = records[0].fields['Type'];
-    if (typeof ct === 'object') ct = ct.name || 'Founder';
-    if (ct === 'Founder') tier = 'legacy';
-    var user = {};
-    try { user = JSON.parse(localStorage.getItem('cc_user') || '{}'); } catch(e) {}
-    if (!user.user_id) user.user_id = 'promo_' + Date.now();
-    user.tier = tier;
-    localStorage.setItem('cc_user', JSON.stringify(user));
-    if (msgEl){ msgEl.className='promo-msg ok'; msgEl.style.display='block'; msgEl.textContent='✓ Access unlocked! Reloading…'; }
-    setTimeout(function(){ window.location.reload(); }, 1200);
-  } catch(e) {
-    if (msgEl){ msgEl.className='promo-msg err'; msgEl.style.display='block'; msgEl.textContent='Could not verify. Try again.'; }
-  }
-}
-
-
-// ── FIRST-VISIT ONBOARDING ────────────────────────────────────────
-function initOnboarding() {
-  try {
-    if (localStorage.getItem('cc_onboarded')) return; // Already seen it
-    var el = document.getElementById('obOverlay');
-    if (el) {
-      el.style.display = 'flex';
-      // Small delay so page loads behind it
-      setTimeout(function() { el.style.opacity = '1'; }, 50);
-    }
-  } catch(e) {}
-}
-
-function dismissOnboarding() {
-  try { localStorage.setItem('cc_onboarded', '1'); } catch(e) {}
-  var el = document.getElementById('obOverlay');
-  if (!el) return;
-  el.classList.add('fade-out');
-  setTimeout(function() { el.style.display = 'none'; }, 500);
-}
-
-// Run on load
-window.addEventListener('DOMContentLoaded', function() {
-  setTimeout(initOnboarding, 300);
-});
-
 function openAccount(context) {
   var u = CC.getUser ? CC.getUser() : null;
   if (u) {
@@ -1475,54 +1265,11 @@ async function createAcct() {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    // Check promo code if provided
-    var promoInput = document.getElementById('acctPromoCode');
-    var promoCode  = promoInput ? promoInput.value.trim().toUpperCase() : '';
-    var startTier  = 'free';
-
-    if (promoCode) {
-      try {
-        var pRes = await fetch('/api/airtable', {
-          method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({action:'list', table:'Promo Codes',
-            filterFormula: 'AND({Code}="' + promoCode + '",{Active}=1)', maxRecords:1})
-        });
-        var pData = await pRes.json();
-        var pRec  = (pData.records || [])[0];
-        if (pRec) {
-          var ct = pRec.fields['Type'];
-          if (typeof ct === 'object') ct = ct.name || 'Founder';
-          startTier = ct === 'Founder' ? 'legacy' : 'connect';
-        }
-      } catch(e) { console.warn('Promo check error:', e); }
-    }
-
-    // Update Firestore tier if promo applied
-    if (startTier !== 'free') {
-      await fbDb.collection('users').doc(uid).update({ tier: startTier });
-    }
-
     // Save to localStorage for CC.getUser()
-    var ccUser = { user_id: uid, email: email, name: name, tier: startTier };
+    var ccUser = { user_id: uid, email: email, name: name, tier: 'free' };
     localStorage.setItem('cc_user', JSON.stringify(ccUser));
 
-    // Create Airtable Users record
-    try {
-      await fetch('/api/airtable', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({action:'create', table:'Users', fields:{
-          'user_id': uid, 'email': email, 'display_name': name,
-          'subscription_tier': startTier, 'active': true,
-          'created_at': new Date().toISOString().split('T')[0],
-          'promo_code_used': promoCode || ''
-        }})
-      });
-    } catch(e) { console.warn('Airtable user create error:', e); }
-
-    var welcome = startTier !== 'free'
-      ? 'Welcome, ' + name.split(' ')[0] + ' ✦ ' + startTier.charAt(0).toUpperCase() + startTier.slice(1) + ' unlocked!'
-      : 'Welcome, ' + name.split(' ')[0] + ' ✦';
-    showToast(welcome);
+    showToast('Welcome, ' + name.split(' ')[0] + ' ✦');
     closeAccount();
   } catch(e) {
     errEl.textContent =
@@ -1564,26 +1311,6 @@ async function signIn() {
       name: profile.displayName || cred.user.displayName || email.split('@')[0],
       tier: profile.tier || 'free'
     };
-    // Sync tier from Airtable (catches Stripe-paid upgrades)
-    try {
-      var atRes = await fetch('/api/airtable', {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({action:'list', table:'Users',
-          filterFormula: '{email}="' + cred.user.email + '"', maxRecords: 1})
-      });
-      var atData = await atRes.json();
-      var atRec  = (atData.records || [])[0];
-      if (atRec && atRec.fields.subscription_tier) {
-        var atTier = atRec.fields.subscription_tier;
-        if (typeof atTier === 'object') atTier = atTier.name || 'free';
-        if (atTier !== 'free') {
-          ccUser.tier = atTier;
-          // Keep Firebase in sync too
-          try { await fbDb.collection('users').doc(uid).update({ tier: atTier }); } catch(e) {}
-        }
-      }
-    } catch(e) { console.warn('Tier sync error:', e); }
-
     localStorage.setItem('cc_user', JSON.stringify(ccUser));
 
     showToast('Welcome back, ' + ccUser.name.split(' ')[0] + ' ✦');
@@ -1603,25 +1330,6 @@ async function signOut() {
   if (fbAuth) await fbAuth.signOut();
   localStorage.removeItem('cc_user');
   showToast('Signed out.');
-}
-
-async function forgotPassword() {
-  var email = document.getElementById('signinEmail').value.trim();
-  if (!email) {
-    document.getElementById('acctError').textContent = 'Enter your email address above first.';
-    return;
-  }
-  if (!fbAuth) { showToast('Password reset unavailable. Try again later.'); return; }
-  try {
-    await fbAuth.sendPasswordResetEmail(email);
-    document.getElementById('acctError').style.color = '#60c070';
-    document.getElementById('acctError').textContent = 'Reset email sent. Check your inbox.';
-    setTimeout(function(){ document.getElementById('acctError').style.color = ''; }, 4000);
-  } catch(e) {
-    document.getElementById('acctError').textContent =
-      e.code === 'auth/user-not-found' ? 'No account found with that email.' :
-      'Could not send reset email. Try again.';
-  }
 }
 // ─────────────────────────────────────────────────────
 
@@ -1760,68 +1468,11 @@ function showQzResult() {
   document.getElementById('qzQScreen').style.display = 'none';
   document.getElementById('qzRScreen').style.display = 'block';
   document.getElementById('qzScroll').scrollTop = 0;
-
-  // Hide Your Truth block until it loads (Insight+ only)
-  document.getElementById('qzYourTruth').style.display = 'none';
-  if (CC.tierLevel && CC.tierLevel() >= 2) {
-    // Fire Your Truth AI for Insight and Legacy tiers
-    setTimeout(function() {
-      getYourTruth(result.title || '', result.body || '', qzState.title || '');
-    }, 600);
-  }
 }
 
 function goToJournal() {
   closeQuiz();
   window.location.href = 'journal.html';
-}
-
-function shareQuizResult() {
-  var title     = document.getElementById('qzRTitle').textContent;
-  var body      = document.getElementById('qzRBody').textContent;
-  var quizTitle = qzState.title || 'Curated Connections';
-  var shareText = 'I got "' + title + '" on the ' + quizTitle + ' quiz. ' + body.substring(0, 120) + '…';
-  var shareUrl  = 'https://joincuratedconnections.com';
-
-  if (navigator.share) {
-    navigator.share({ title: title, text: shareText, url: shareUrl }).catch(function(){});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(shareText + ' ' + shareUrl);
-    showToast('Result copied to clipboard ✦');
-  } else {
-    showToast('Your result: "' + title + '"');
-  }
-}
-
-async function getYourTruth(resultTitle, resultBody, quizTitle) {
-  var block   = document.getElementById('qzYourTruth');
-  var textEl  = document.getElementById('qzYourTruthText');
-  if (!block || !textEl) return;
-
-  textEl.textContent = 'Reflecting on your answers…';
-  block.style.display = 'block';
-
-  try {
-    var res = await fetch('/api/your-truth', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        quizTitle:   quizTitle,
-        resultTitle: resultTitle,
-        resultBody:  resultBody.substring(0, 300)
-      })
-    });
-    var data = await res.json();
-    var truth = data.truth || data.content || '';
-    if (truth) {
-      textEl.textContent = truth;
-    } else {
-      block.style.display = 'none';
-    }
-  } catch(e) {
-    console.warn('Your Truth error:', e);
-    block.style.display = 'none';
-  }
 }
 
 function shareQuizToCircle() {
@@ -2012,7 +1663,9 @@ document.addEventListener('DOMContentLoaded', function() {
   loadWitWonder();
   loadQuizSection();
   loadCircles();
-
+  // Living Legacy is free to start — show to everyone
+  var ls = document.getElementById('legacyShelf');
+  if (ls) ls.style.display = 'block';
 });
 
 
@@ -2099,162 +1752,6 @@ async function loadQuizSection(){
 }
 
 </script>
-
-
-<!-- ── DEV TESTING PANEL ─────────────────────────────────────────
-     Only visible when URL contains ?dev=FOUNDER2026
-     Use this to test each tier without paying.
-     URL: joincuratedconnections.com/gather.html?dev=FOUNDER2026
-─────────────────────────────────────────────────────────────────── -->
-<div id="devPanel" style="display:none;position:fixed;bottom:5.5rem;right:.8rem;z-index:9999;background:rgba(6,12,9,.96);border:1px solid rgba(201,125,58,.4);border-radius:16px;padding:.7rem .85rem;backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,.5);">
-  <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.5rem;">Dev · Tier Switch</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;" id="devTierBtns"></div>
-  <div style="margin-top:.5rem;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.06);">
-    <div onclick="devClearData()" style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,80,80,.45);cursor:pointer;">Clear All Data</div>
-  </div>
-</div>
-
-<script>
-(function() {
-  var DEV_CODE = 'FOUNDER2026';
-  var params = new URLSearchParams(window.location.search);
-  if (params.get('dev') !== DEV_CODE) return;
-
-  // Show the panel
-  document.getElementById('devPanel').style.display = 'block';
-
-  var TIERS = [
-    { key: 'free',    label: 'Free / Gather',  color: 'rgba(255,255,255,.35)' },
-    { key: 'connect', label: 'Connect $4.99',  color: 'rgba(90,159,212,.8)'   },
-    { key: 'insight', label: 'Insight $9.99',  color: 'rgba(155,109,212,.8)'  },
-    { key: 'legacy',  label: 'Legacy $19.99',  color: 'rgba(201,125,58,.9)'   },
-  ];
-
-  function getCurrentTier() {
-    try { return JSON.parse(localStorage.getItem('cc_user') || '{}').tier || 'free'; } catch(e) { return 'free'; }
-  }
-
-  function renderBtns() {
-    var current = getCurrentTier();
-    var container = document.getElementById('devTierBtns');
-    container.innerHTML = '';
-    TIERS.forEach(function(t) {
-      var btn = document.createElement('div');
-      var isActive = t.key === current;
-      btn.style.cssText = 'font-family:Nunito,sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.04em;padding:.3rem .65rem;border-radius:8px;cursor:pointer;border:1px solid;transition:all .15s;';
-      btn.style.color = isActive ? '#fff' : t.color;
-      btn.style.borderColor = isActive ? t.color : 'rgba(255,255,255,.1)';
-      btn.style.background = isActive ? t.color.replace(')', ',.2)').replace('rgba(', 'rgba(') : 'rgba(255,255,255,.03)';
-      btn.textContent = (isActive ? '✓ ' : '') + t.label;
-      btn.onclick = function() { devSetTier(t.key); };
-      container.appendChild(btn);
-    });
-  }
-
-  window.devSetTier = function(tier) {
-    var user = {};
-    try { user = JSON.parse(localStorage.getItem('cc_user') || '{}'); } catch(e) {}
-    if (!user.user_id) {
-      // No account yet — create a test one
-      user = { user_id: 'dev_test_' + Date.now(), name: 'Dev Tester', email: 'dev@test.com', tier: tier };
-    } else {
-      user.tier = tier;
-    }
-    localStorage.setItem('cc_user', JSON.stringify(user));
-    renderBtns();
-    // Show confirmation
-    var toast = document.getElementById('toastEl') || document.getElementById('toastMsg');
-    if (toast) {
-      toast.textContent = 'Tier set to ' + tier + ' ✦ Refreshing…';
-      toast.classList.add('show');
-    }
-    setTimeout(function() { window.location.reload(); }, 800);
-  };
-
-  window.devClearData = function() {
-    var keys = [];
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (k && k.startsWith('cc_')) keys.push(k);
-    }
-    keys.forEach(function(k) { localStorage.removeItem(k); });
-    window.location.reload();
-  };
-
-  renderBtns();
-})();
-</script>
-
-
-<div id="tosModal" class="legal-modal cc-hidden">
-  <div class="legal-modal-header">
-    <div class="legal-modal-title">Terms of Service</div>
-    <button class="legal-modal-close" onclick="document.getElementById('tosModal').classList.add('cc-hidden')">&#x2715;</button>
-  </div>
-  <div class="legal-modal-body"><pre id="tosContent"></pre></div>
-</div>
-<div id="ppModal" class="legal-modal cc-hidden">
-  <div class="legal-modal-header">
-    <div class="legal-modal-title">Privacy Policy</div>
-    <button class="legal-modal-close" onclick="document.getElementById('ppModal').classList.add('cc-hidden')">&#x2715;</button>
-  </div>
-  <div class="legal-modal-body"><pre id="ppContent"></pre></div>
-</div>
-<div id="carModeOverlay" class="car-overlay cc-hidden">
-  <div class="car-eyebrow">&#128664; Car Mode</div>
-  <div class="car-prompt" id="carPromptText">Loading…</div>
-  <div class="car-status" id="carStatus">Tap Next when ready for the next question.</div>
-  <button class="car-next-btn" onclick="carNext()">Next Question →</button>
-  <button class="car-exit-btn" onclick="carExit()">Exit Car Mode</button>
-  <div class="car-counter" id="carCounter"></div>
-</div>
-
-
-<!-- ── FIRST-VISIT ONBOARDING THRESHOLD ── -->
-<div class="ob-overlay" id="obOverlay" style="display:none;">
-  <div class="ob-brand">Curated Connections™</div>
-  <div class="ob-tagline">A place where conversations go deeper.</div>
-  <div class="ob-spaces">
-    <div class="ob-space">
-      <div class="ob-space-icon" style="background:rgba(201,125,58,.2);">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#c97d3a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      </div>
-      <div>
-        <div class="ob-space-name">Gather</div>
-        <div class="ob-space-desc">Cards, quizzes, Wit & Wonder. Start here.</div>
-      </div>
-    </div>
-    <div class="ob-space">
-      <div class="ob-space-icon" style="background:rgba(58,141,110,.2);">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3a8d6e" stroke-width="2" stroke-linecap="round" width="16" height="16"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg>
-      </div>
-      <div>
-        <div class="ob-space-name">Circles</div>
-        <div class="ob-space-desc">Your people. Shared questions and answers.</div>
-      </div>
-    </div>
-    <div class="ob-space">
-      <div class="ob-space-icon" style="background:rgba(220,80,40,.15);">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#e85030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
-      </div>
-      <div>
-        <div class="ob-space-name">Games</div>
-        <div class="ob-space-desc">Really Bad Day, That Tracks, Your Deck.</div>
-      </div>
-    </div>
-    <div class="ob-space">
-      <div class="ob-space-icon" style="background:rgba(107,77,130,.2);">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#9b6dd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      </div>
-      <div>
-        <div class="ob-space-name">Journal & Stories</div>
-        <div class="ob-space-desc">Private reflection. Deeper prompts over time.</div>
-      </div>
-    </div>
-  </div>
-  <button class="ob-start-btn" onclick="dismissOnboarding()">Start with one card →</button>
-  <div class="ob-note">No account required to begin.</div>
-</div>
 
 </body>
 </html>

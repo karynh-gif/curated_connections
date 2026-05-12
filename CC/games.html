@@ -376,10 +376,57 @@ body::before{content:"";position:fixed;inset:0;
 
     <!-- COMING SOON -->
     <div class="coming-section">
+      <div class="sec-lbl" style="margin-top:.6rem;">Coming soon</div>
+      <div class="coming-grid">
 
-    <div style="text-align:center;padding:1.2rem 1.1rem 2rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(255,255,255,.2);">More games coming soon ✦</div>
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(255,210,77,.08),transparent 60%);">
+          <div class="cc-icon">🃏</div>
+          <div class="cc-name">No Way!</div>
+          <div class="cc-desc">Lay down cards and bluff. The app knows exactly who's lying.</div>
+          <div class="cc-soon">Multiplayer · Soon</div>
+        </div>
 
-    
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(0,196,154,.08),transparent 60%);">
+          <div class="cc-icon">🐟</div>
+          <div class="cc-name">Go Fish</div>
+          <div class="cc-desc">The classic — but the app deals, tracks, and catches cheaters.</div>
+          <div class="cc-soon">Kids friendly · Soon</div>
+        </div>
+
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(255,80,56,.08),transparent 60%);">
+          <div class="cc-icon">👑</div>
+          <div class="cc-name">Old Maid</div>
+          <div class="cc-desc">Nobody wants to be left holding it. Digital twist incoming.</div>
+          <div class="cc-soon">Kids mode · Soon</div>
+        </div>
+
+        <div class="coming-card" style="--cc-glow:radial-gradient(ellipse at 30% 30%,rgba(139,92,246,.08),transparent 60%);">
+          <div class="cc-icon">🌀</div>
+          <div class="cc-name">Crazy Eights</div>
+          <div class="cc-desc">Fast, chaotic, and no physical deck required.</div>
+          <div class="cc-soon">All ages · Soon</div>
+        </div>
+
+      </div>
+
+      <!-- Kids mode banner -->
+      <div style="margin:1rem .9rem 0;background:linear-gradient(135deg,rgba(255,210,77,.1),rgba(255,140,32,.06));border:1px solid rgba(255,210,77,.2);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.7rem;">
+        <div style="font-size:1.5rem;">🧒</div>
+        <div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;color:var(--gold);margin-bottom:.1rem;">Kids Mode · Coming Soon</div>
+          <div style="font-size:.80rem;color:rgba(255,255,255,.38);line-height:1.5;">Go Fish, No Way!, Old Maid — family versions for all ages playing together.</div>
+        </div>
+      </div>
+
+      <!-- Join with code — ACTIVE -->
+      <div style="margin:.6rem .9rem 0;background:rgba(255,140,32,.07);border:1.5px solid rgba(255,140,32,.22);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.65rem;cursor:pointer;" onclick="launchGame('curated-connections-play.html','connect')">
+        <div style="font-size:1.4rem;flex-shrink:0;">🔗</div>
+        <div style="flex:1;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--amber);margin-bottom:.1rem;">Join with Code</div>
+          <div style="font-size:.72rem;color:rgba(244,236,220,.55);line-height:1.5;">Everyone on their own phone. No passing required. Enter a 4-digit code and you're in.</div>
+        </div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--amber);flex-shrink:0;">Enter →</div>
+      </div>
     </div>
 
   </div>
@@ -705,58 +752,17 @@ function showGameUpgradeModal(tier) {
   sub.style.cssText = 'font-size:.82rem;color:rgba(242,232,216,.45);line-height:1.65;margin-bottom:1.1rem;';
   sub.textContent = 'Really Bad Day, That Tracks, and the full game library are included with Connect and above. Your deck, your circles, your journal — all unlocked too.';
 
-  // Billing toggle
-  var billingMode = 'monthly';
-  var links = {
-    monthly: 'https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00',
-    annual:  'ANNUAL_CONNECT_PLACEHOLDER'
-  };
-
-  var toggleWrap = document.createElement('div');
-  toggleWrap.style.cssText = 'display:flex;background:rgba(255,255,255,.06);border-radius:999px;padding:3px;margin-bottom:.9rem;';
-
-  function renderToggle() {
-    var mActive = billingMode === 'monthly';
-    toggleWrap.innerHTML =
-      '<div onclick="(function(){billingMode=\'monthly\';renderToggle();updateBtn();})()" style="flex:1;text-align:center;padding:.4rem;border-radius:999px;' +
-      (mActive ? 'background:#c97d3a;color:#fff;' : 'color:rgba(242,232,216,.4);') +
-      'font-family:Nunito,sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;">Monthly</div>' +
-      '<div onclick="(function(){billingMode=\'annual\';renderToggle();updateBtn();})()" style="flex:1;text-align:center;padding:.4rem;border-radius:999px;' +
-      (!mActive ? 'background:#c97d3a;color:#fff;' : 'color:rgba(242,232,216,.4);') +
-      'font-family:Nunito,sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;">Annual · 2 months free</div>';
-  }
-
   var btn = document.createElement('button');
   btn.style.cssText = 'width:100%;padding:.85rem;background:#c97d3a;border:none;border-radius:999px;font-family:Nunito,sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.06em;color:#fff;cursor:pointer;margin-bottom:.5rem;';
-
-  function updateBtn() {
-    if (billingMode === 'annual' && links.annual && links.annual !== 'ANNUAL_CONNECT_PLACEHOLDER') {
-      btn.textContent = 'Upgrade to Connect — $39.99/yr · 2 months free →';
-      btn.onclick = function() { window.open(links.annual, '_blank'); };
-    } else if (billingMode === 'annual') {
-      btn.textContent = 'Annual plan — coming soon';
-      btn.onclick = null;
-    } else {
-      btn.textContent = 'Upgrade to Connect — $4.99/mo →';
-      btn.onclick = function() { window.open(links.monthly, '_blank'); };
-    }
-  }
-
-  renderToggle();
-  updateBtn();
+  btn.textContent = 'Upgrade to Connect — $4.99/mo →';
+  btn.onclick = function() { window.open('https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00','_blank'); };
 
   var cancel = document.createElement('button');
   cancel.style.cssText = 'width:100%;padding:.5rem;background:none;border:none;font-size:.85rem;color:rgba(242,232,216,.3);cursor:pointer;font-style:italic;';
   cancel.textContent = 'Maybe later';
   cancel.onclick = function() { overlay.remove(); };
 
-  var promoId = 'promo_' + Date.now();
-  var promoWrap = document.createElement('div');
-  promoWrap.className = 'promo-wrap';
-  promoWrap.style.cssText = 'margin-top:.9rem;padding-top:.9rem;border-top:1px solid rgba(255,255,255,.06);';
-  promoWrap.innerHTML = '<div style=\"display:flex;gap:.4rem;\"><input id=\"'+promoId+'\" type=\"text\" placeholder=\"Promo code\" maxlength=\"20\" style=\"flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.55rem .75rem;font-family:DM Sans,sans-serif;font-size:.82rem;color:#f2e8d8;outline:none;text-transform:uppercase;\" /><button onclick=\"applyPromoCode(\''+promoId+'\')\" style=\"padding:.55rem .9rem;background:rgba(201,125,58,.2);border:1px solid rgba(201,125,58,.3);border-radius:12px;font-family:Nunito,sans-serif;font-size:.72rem;font-weight:800;color:#c97d3a;cursor:pointer;white-space:nowrap;\">Apply</button></div><div id=\"promo-msg-'+promoId+'\" style=\"font-size:.72rem;margin-top:.35rem;display:none;\"></div>';
-
-  [handle, kicker, title, sub, toggleWrap, btn, cancel, promoWrap].forEach(function(el) { sheet.appendChild(el); });
+  [handle, kicker, title, sub, btn, cancel].forEach(function(el) { sheet.appendChild(el); });
   overlay.appendChild(sheet);
   overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
   document.body.appendChild(overlay);
