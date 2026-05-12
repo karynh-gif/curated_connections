@@ -790,7 +790,7 @@ async function loadWitWonder() {
       var type = f.Type || 'Riddle';
       var dk = WW_TYPES[type] || WW_TYPES['Riddle'];
       var key = 'ww_' + i;
-      WW_DATA[key] = {type:type, q:f.Prompt||'', a:f.Answer||f['Conversation Bridge']||''};
+      WW_DATA[key] = {type:type, q:f.Prompt||'', a:f.Answer||f['Conversation Bridge']||'', bg:dk.frontBg};
       html += '<div class="fc-scene"><div class="fc-inner" id="fc_' + key + '" data-state="back" data-key="' + key + '" style="background:' + dk.backBg + ';border:1px solid ' + dk.border + ';" onclick="wwTap(this)">';
       // BACK
       // Unique back icon per type
@@ -824,10 +824,11 @@ function wwTap(inner) {
   if (inner.dataset.state === 'back') {
     // Tap 1: flip to front
     inner.style.transform = 'scaleX(0)';
+    inner.style.transition = 'transform 0.15s ease';
     setTimeout(function() {
       inner.querySelector('.fc-back').style.display = 'none';
       inner.querySelector('.fc-front').style.display = 'block';
-      inner.style.background = WW_TYPES[WW_DATA[inner.dataset.key].type].frontBg;
+      inner.style.background = WW_TYPES[WW_DATA[inner.dataset.key] ? WW_DATA[inner.dataset.key].type : 'Riddle'] ? WW_TYPES[WW_DATA[inner.dataset.key].type].frontBg : '';
       inner.style.transform = 'scaleX(1)';
       inner.dataset.state = 'front';
     }, 150);
