@@ -90,8 +90,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;}
 .quiz-label{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.45rem;opacity:.8;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--cream);margin-bottom:.32rem;}
-.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.5);line-height:1.5;margin-bottom:.7rem;}
-.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;}
+.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.5);line-height:1.5;margin-bottom:.55rem;}
+.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:.65rem;}
 /* CIRCLES */
 .circles-section{position:relative;background:linear-gradient(180deg,#08101e,#0a0e1c);margin-top:2rem;overflow:hidden;padding:1.8rem 0 1.4rem;}
 /* WRITE EXP */
@@ -947,7 +947,7 @@ async function loadQuizSection(){
     var html='';
     picks.forEach(function(rec,i){
       var f=rec.fields,st=QS[i%QS.length];
-      html+='<div class="quiz-card" style="background:'+st.bg+';border:1px solid '+st.border+';" onclick="toast(\'Quiz coming soon\')">';
+      html+='<div class="quiz-card" style="background:'+st.bg+';border:1px solid '+st.border+';" onclick="showToast(\'Quiz launching soon \u2014 check back shortly\')">';
       html+='<div class="quiz-label" style="color:'+st.accent+';">'+st.label+'</div>';
       html+='<div class="quiz-title">'+(f.Title||'')+'</div>';
       html+='<div class="quiz-sub">'+(f.Subtitle||'')+'</div>';
