@@ -645,12 +645,28 @@ function fcFlipBack(inner) {
 async function loadTonightCards() {
   var shelf = document.getElementById('tonightShelf');
   if (!shelf) return;
+  shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Loading cards...</div>';
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula:'{Active}=TRUE', maxRecords:30})});
-    if (!res.ok) return;
+    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula:'{Active}=1', maxRecords:30})});
+    if (!res.ok) {
+      shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Error ' + res.status + ' — tap to retry</div>';
+      shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
+      return;
+    }
     var data = await res.json();
-    if (data.records && data.records.length) renderTonightCards(shelf, data.records);
-  } catch(e) {}
+    if (data.error) {
+      shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">' + data.error + '</div>';
+      return;
+    }
+    if (data.records && data.records.length) {
+      renderTonightCards(shelf, data.records);
+    } else {
+      shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">No active cards found</div>';
+    }
+  } catch(e) {
+    shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Connection error — tap to retry</div>';
+    shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
+  }
 }
 
 // ── CARD OVERLAY ──
