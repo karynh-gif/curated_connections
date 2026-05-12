@@ -448,17 +448,24 @@ function getTierLevel() {
 
 // ── DECK DEFINITIONS ──
 var DECK_COLORS = {
-  'Family':      {backBg:'linear-gradient(145deg,#1e0c02,#4a2206)', frontBg:'linear-gradient(145deg,#3a1800,#7a3810)', border:'rgba(201,125,58,0.28)', accent:'#e89448'},
-  'Couples':     {backBg:'linear-gradient(145deg,#1a0410,#4a0c20)', frontBg:'linear-gradient(145deg,#3a0818,#7a1030)', border:'rgba(192,80,120,0.28)', accent:'#e07060'},
-  'Faith':       {backBg:'linear-gradient(145deg,#0e0820,#2a1050)', frontBg:'linear-gradient(145deg,#1a1040,#381868)', border:'rgba(107,60,162,0.28)', accent:'#9b6dd4'},
-  'Dinner Table':{backBg:'linear-gradient(145deg,#041408,#0e3018)', frontBg:'linear-gradient(145deg,#0a2818,#1a5030)', border:'rgba(42,138,114,0.28)', accent:'#3aad90'},
-  'Friends':     {backBg:'linear-gradient(145deg,#060e1a,#102040)', frontBg:'linear-gradient(145deg,#1a2840,#2a4070)', border:'rgba(58,106,170,0.28)', accent:'#3a6aaa'},
-  'Legacy':      {backBg:'linear-gradient(145deg,#100e02,#302808)', frontBg:'linear-gradient(145deg,#201800,#402800)', border:'rgba(184,134,11,0.28)', accent:'#c9a830'},
-  'Get Real':    {backBg:'linear-gradient(145deg,#0e0808,#200e0e)', frontBg:'linear-gradient(145deg,#200808,#3c1010)', border:'rgba(160,50,50,0.28)', accent:'#c85050'},
-  'Grandparents':{backBg:'linear-gradient(145deg,#1e0c02,#4a2206)', frontBg:'linear-gradient(145deg,#3a1800,#7a3810)', border:'rgba(201,125,58,0.28)', accent:'#e89448'},
-  'Kids':        {backBg:'linear-gradient(145deg,#0e0820,#2a1050)', frontBg:'linear-gradient(145deg,#1a1040,#381868)', border:'rgba(107,60,162,0.28)', accent:'#9b6dd4'},
-  'Teen':        {backBg:'linear-gradient(145deg,#0e0820,#2a1050)', frontBg:'linear-gradient(145deg,#1a1040,#381868)', border:'rgba(107,60,162,0.28)', accent:'#9b6dd4'},
-  'Team':        {backBg:'linear-gradient(145deg,#060e1a,#102040)', frontBg:'linear-gradient(145deg,#1a2840,#2a4070)', border:'rgba(58,106,170,0.28)', accent:'#3a6aaa'},
+  // ── ACTIVE DECKS ──────────────────────────────────────────────────────────
+  'Family':          {backBg:'linear-gradient(145deg,#120610,#2a0e1e)', frontBg:'linear-gradient(145deg,#1e0818,#3a1028)', border:'rgba(155,73,104,0.3)',  accent:'#9b4968'},
+  'Couples':         {backBg:'linear-gradient(145deg,#140608,#300a12)', frontBg:'linear-gradient(145deg,#220810,#3e101e)', border:'rgba(193,91,120,0.3)',  accent:'#c15b78'},
+  'Social Translation':{backBg:'linear-gradient(145deg,#04100e,#0a2018)', frontBg:'linear-gradient(145deg,#081a16,#123022)', border:'rgba(47,165,141,0.3)', accent:'#2fa58d'},
+  'Two Truths':      {backBg:'linear-gradient(145deg,#060a18,#0e1430)', frontBg:'linear-gradient(145deg,#0c1228,#161e40)', border:'rgba(79,109,184,0.3)',  accent:'#4f6db8'},
+  // ── FUTURE DECKS ──────────────────────────────────────────────────────────
+  'Legacy':          {backBg:'linear-gradient(145deg,#100e02,#261c04)', frontBg:'linear-gradient(145deg,#1c1604,#322408)', border:'rgba(195,162,42,0.3)',  accent:'#c3a22a'},
+  'Insight':         {backBg:'linear-gradient(145deg,#0c0618,#1a0e30)', frontBg:'linear-gradient(145deg,#14083e,#220e5a)', border:'rgba(123,93,200,0.3)',  accent:'#7b5dc8'},
+  'Friendship':      {backBg:'linear-gradient(145deg,#140802,#2e1006)', frontBg:'linear-gradient(145deg,#201008,#3c1a0c)', border:'rgba(212,117,90,0.3)',  accent:'#d4755a'},
+  'Faith':           {backBg:'linear-gradient(145deg,#100c02,#241802)', frontBg:'linear-gradient(145deg,#1c1404,#302006)', border:'rgba(212,168,106,0.3)', accent:'#d4a86a'},
+  'Kids':            {backBg:'linear-gradient(145deg,#040e14,#081a24)', frontBg:'linear-gradient(145deg,#081828,#102434)', border:'rgba(109,180,200,0.3)', accent:'#6db4c8'},
+  'Teen':            {backBg:'linear-gradient(145deg,#060810,#0e1228)', frontBg:'linear-gradient(145deg,#0a1022,#141a38)', border:'rgba(100,130,220,0.3)', accent:'#6482dc'},
+  'Grandparents':    {backBg:'linear-gradient(145deg,#100808,#261014)', frontBg:'linear-gradient(145deg,#1a0e12,#2e1820)', border:'rgba(175,93,118,0.3)',  accent:'#af5d76'},
+  'Get Real':        {backBg:'linear-gradient(145deg,#0e0606,#200808)', frontBg:'linear-gradient(145deg,#1c0808,#300c0c)', border:'rgba(180,60,60,0.3)',   accent:'#b43c3c'},
+  'Dinner Table':    {backBg:'linear-gradient(145deg,#041410,#0a2018)', frontBg:'linear-gradient(145deg,#081c18,#122c22)', border:'rgba(42,138,114,0.28)', accent:'#3aad90'},
+  'Team':            {backBg:'linear-gradient(145deg,#04080e,#0c1020)', frontBg:'linear-gradient(145deg,#0a1020,#141c34)', border:'rgba(58,106,170,0.28)', accent:'#3a6aaa'},
+  'Friends':         {backBg:'linear-gradient(145deg,#04080e,#0c1020)', frontBg:'linear-gradient(145deg,#0a1020,#141c34)', border:'rgba(90,138,238,0.28)', accent:'#5a8aee'},
+  'Road Trip':       {backBg:'linear-gradient(145deg,#041410,#0a2018)', frontBg:'linear-gradient(145deg,#081c14,#142c1e)', border:'rgba(42,158,114,0.28)', accent:'#2a9e72'},
 };
 
 // ── HARDCODED CARDS ──
@@ -744,7 +751,7 @@ async function loadWitWonder() {
   var countEl = document.getElementById('wwCount');
   if (!shelf) return;
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', filterFormula:'AND({Active}=1,{Gather Pool}=1)', maxRecords:60})});
+    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', filterFormula:'{Active}=1', maxRecords:60})});
     if (!res.ok) { countEl.textContent = 'error'; return; }
     var data = await res.json();
     if (!data.records || !data.records.length) { countEl.textContent = 'none'; return; }
@@ -764,11 +771,19 @@ async function loadWitWonder() {
       WW_DATA[key] = {type:type, q:f.Prompt||'', a:f.Answer||f['Conversation Bridge']||''};
       html += '<div class="fc-scene"><div class="fc-inner" id="fc_' + key + '" data-state="back" data-key="' + key + '" style="background:' + dk.backBg + ';border:1px solid ' + dk.border + ';" onclick="wwTap(this)">';
       // BACK
+      // Unique back icon per type
+      var backIcon = '';
+      if (type === 'Riddle') {
+        backIcon = '<div style="font-family:Georgia,serif;font-style:italic;font-size:52px;color:' + dk.accent + ';text-shadow:0 0 24px ' + dk.accent + '66;line-height:1;margin-bottom:10px;">?</div>';
+      } else if (type === 'Joke') {
+        backIcon = '<svg width="52" height="44" viewBox="0 0 80 68" fill="none" style="margin-bottom:10px;filter:drop-shadow(0 0 12px ' + dk.accent + '66)"><path d="M8 52 C2 42,0 26,10 16 C14 11,20 10,22 15 C24 20,18 30,22 38" stroke="' + dk.accent + '" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="8" cy="55" r="5" stroke="' + dk.accent + '" stroke-width="1.6" fill="none"/><path d="M40 46 C38 36,32 18,35 7 C37 1,43 1,45 7 C48 18,42 36,40 46" stroke="' + dk.accent + '" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="40" cy="60" r="5" stroke="' + dk.accent + '" stroke-width="1.6" fill="none"/><path d="M72 52 C78 42,80 26,70 16 C66 11,60 10,58 15 C56 20,62 30,58 38" stroke="' + dk.accent + '" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="72" cy="55" r="5" stroke="' + dk.accent + '" stroke-width="1.6" fill="none"/><path d="M22 38 Q31 44 40 46 Q49 44 58 38" stroke="' + dk.accent + '" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="30" cy="42" r="1.8" fill="' + dk.accent + '" opacity="0.5"/><circle cx="40" cy="44" r="1.8" fill="' + dk.accent + '" opacity="0.5"/><circle cx="50" cy="42" r="1.8" fill="' + dk.accent + '" opacity="0.5"/></svg>';
+      } else {
+        backIcon = '<div style="position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px"><span style="font-size:38px;line-height:1;filter:grayscale(1) sepia(1) hue-rotate(232deg) saturate(3) brightness(0.75);">&#x1F9E0;</span><span style="position:absolute;top:-8px;right:-14px;font-family:Georgia,serif;font-style:italic;font-size:14px;color:' + dk.accent + ';opacity:0.95;">?</span><span style="position:absolute;top:6px;right:-21px;font-family:Georgia,serif;font-style:italic;font-size:11px;color:' + dk.accent + ';opacity:0.6;">?</span><span style="position:absolute;top:20px;right:-15px;font-family:Georgia,serif;font-style:italic;font-size:8px;color:' + dk.accent + ';opacity:0.3;">?</span></div>';
+      }
       html += '<div class="fc-back"><div class="fc-back-shine"></div>';
-      html += '<div class="fc-back-hatch" style="background-image:repeating-linear-gradient(45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px),repeating-linear-gradient(-45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px);"></div>';
-      html += '<div class="fc-brand" style="color:' + dk.accent + ';text-shadow:0 0 20px ' + dk.accent + '55;">Curated Connections</div>';
-      html += '<div class="fc-deck">' + type + '</div>';
-      html += '<div class="fc-tap" style="color:' + dk.accent + '66;">✦ tap to reveal ✦</div></div>';
+      html += '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">' + backIcon + '</div>';
+      html += '<div class="fc-label" style="color:' + dk.accent + '99;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;position:relative;z-index:1;margin-top:4px;">' + (type==='Riddle'?'R I D D L E':type==='Joke'?'J O K E':'BRAIN TEASER') + '</div>';
+      html += '<div class="fc-tap" style="color:' + dk.accent + '44;margin-top:14px;position:relative;z-index:1;">&#x2736; tap to reveal &#x2736;</div></div>';
       // FRONT
       html += '<div class="fc-front" style="background:' + dk.frontBg + ';"><div class="fc-front-shine"></div>';
       html += '<div class="fc-label" style="color:' + dk.accent + ';">' + type + '</div>';
