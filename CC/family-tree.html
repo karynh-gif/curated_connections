@@ -198,17 +198,14 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
       <div style="width:1rem;flex-shrink:0;"></div>
 
-      <div class="node" onclick="openDetail('ggp3',true)">
-        <div class="node-card has-leaf">
-          <div class="node-initial" style="background:#6b4d82;">H</div>
-          <div class="node-name">Harold Burke</div>
-          <div class="node-years">1878 – 1951</div>
-          <div class="node-media">
-            <div class="nm" style="background:var(--amber);"></div>
-            <div class="nm" style="background:var(--teal);"></div>
-          </div>
+      <div class="node" onclick="openDetail('ggp3',false)">
+        <div class="node-card empty">
+          <div class="node-initial" style="background:rgba(40,22,0,.12);">?</div>
+          <div class="node-name">Unknown</div>
+          <div class="node-years">b. ~1878</div>
         </div>
         <div class="node-rel">Gt. Grandfather</div>
+        <div class="node-start">+ Start leaf</div>
       </div>
 
       <div class="node" onclick="openDetail('ggp4',false)">
@@ -244,18 +241,14 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
       <div style="width:.5rem;"></div>
 
-      <div class="node" onclick="openDetail('gp2',true)">
-        <div class="node-card has-leaf">
-          <div class="node-initial" style="background:#a85548;">E</div>
-          <div class="node-name">Edna Burke</div>
-          <div class="node-years">1908 – 1979</div>
-          <div class="node-media">
-            <div class="nm" style="background:var(--amber);"></div>
-            <div class="nm" style="background:var(--teal);"></div>
-            <div class="nm" style="background:#6b4d82;"></div>
-          </div>
+      <div class="node" onclick="openDetail('gp2',false)">
+        <div class="node-card empty">
+          <div class="node-initial" style="background:rgba(40,22,0,.12);">?</div>
+          <div class="node-name">Unknown</div>
+          <div class="node-years">b. ~1908</div>
         </div>
         <div class="node-rel">Grandmother</div>
+        <div class="node-start">+ Start leaf</div>
       </div>
     </div>
 
@@ -278,17 +271,14 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
       <div class="heart-connector">♡</div>
 
-      <div class="node" onclick="openDetail('mom',true)">
-        <div class="node-card has-leaf">
-          <div class="node-initial" style="background:#b07838;">M</div>
-          <div class="node-name">Margaret Burke</div>
-          <div class="node-years">1930 – 2008</div>
-          <div class="node-media">
-            <div class="nm" style="background:var(--amber);"></div>
-            <div class="nm" style="background:var(--teal);"></div>
-          </div>
+      <div class="node" onclick="openDetail('mom',false)">
+        <div class="node-card empty">
+          <div class="node-initial" style="background:rgba(40,22,0,.12);">?</div>
+          <div class="node-name">Unknown</div>
+          <div class="node-years">b. ~1930</div>
         </div>
         <div class="node-rel">Mother</div>
+        <div class="node-start">+ Start leaf</div>
       </div>
     </div>
 
@@ -300,24 +290,22 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
     <!-- SUBJECT ROW -->
     <div class="spouse-row" style="animation:fadeUp .4s .2s ease both;">
       <div class="node" onclick="openDetail('spouse',false)">
-        <div class="node-card has-leaf">
-          <div class="node-initial" style="background:#3d7a6b;">W</div>
-          <div class="node-name">Spouse</div>
-          <div class="node-years">1948 – 2019</div>
-          <div class="node-media">
-            <div class="nm" style="background:var(--teal);"></div>
-          </div>
+        <div class="node-card empty">
+          <div class="node-initial" style="background:rgba(40,22,0,.12);">?</div>
+          <div class="node-name" id="spouseNodeName">Spouse</div>
+          <div class="node-years"></div>
         </div>
-        <div class="node-rel">Husband</div>
+        <div class="node-rel">Spouse</div>
+        <div class="node-start">+ Start leaf</div>
       </div>
 
       <div class="heart-connector" style="font-size:1rem;color:rgba(201,125,58,.65);">♡</div>
 
       <div class="node" onclick="openDetail('subject',true)">
         <div class="node-card subject">
-          <div class="node-initial" style="background:var(--amber);">R</div>
-          <div class="node-name" id="subjectNodeName">Family Member</div>
-          <div class="node-years">1920 · 105 yrs</div>
+          <div class="node-initial" style="background:var(--amber);" id="subjectInitial">?</div>
+          <div class="node-name" id="subjectNodeName">Your family member</div>
+          <div class="node-years" id="subjectYears"></div>
           <div class="node-media">
             <div class="nm" style="background:var(--amber);"></div>
             <div class="nm" style="background:var(--teal);"></div>
@@ -422,105 +410,223 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 <div class="toast" id="toastEl"></div>
 
 <script>
-// ── DYNAMIC FAMILY DATA ─────────────────────────────────────────
-// Loads from URL params or Airtable Living Legacy records for current user
-// URL: family-tree.html?subject=NAME&keeper=KEEPER
+// ── FAMILY TREE ENGINE ─────────────────────────────────────────
 var params = new URLSearchParams(window.location.search);
 var subjectName = params.get('subject') ? decodeURIComponent(params.get('subject')) : null;
-var keeperName  = params.get('keeper')  ? decodeURIComponent(params.get('keeper'))  : null;
 
-// Default empty tree — will be populated from Airtable in V2
-var PEOPLE = {
-  subject: {name: subjectName || 'Your Family Member', years: '', rel: 'The leaf — this archive is for them', hasLeaf: true, media: ['Written stories', 'Voice recordings', 'Photos', 'Video clips'], color: '#c97d3a'},
+// Load saved tree from localStorage or start fresh
+var TREE_KEY = 'cc_tree_' + (subjectName || 'default');
+var TREE = {};
+try { TREE = JSON.parse(localStorage.getItem(TREE_KEY) || '{}'); } catch(e) {}
+
+// REL labels for each node position
+var REL_LABELS = {
+  ggp1:'Great-Grandfather', ggp2:'Great-Grandmother',
+  ggp3:'Great-Grandfather', ggp4:'Great-Grandmother',
+  gp1:'Grandfather', gp2:'Grandmother',
+  dad:'Father', mom:'Mother',
+  spouse:'Spouse', subject:'The Leaf',
+  child1:'Child', child2:'Child', child3:'Child'
 };
-if (keeperName) {
-  PEOPLE.child1 = {name: keeperName, years: '', rel: 'Keeper of this archive', hasLeaf: true, media: ['Written stories', 'Photos'], color: '#6b4d82'};
+
+function saveTree() {
+  try { localStorage.setItem(TREE_KEY, JSON.stringify(TREE)); } catch(e) {}
 }
 
-// Update the visible name in the header
 window.addEventListener('DOMContentLoaded', function() {
-  if (subjectName) {
-    document.querySelectorAll('.h-name').forEach(function(el) { el.textContent = subjectName; });
-    document.querySelectorAll('.node-name').forEach(function(el) {
-      if (el.textContent.includes('Ruth') || el.textContent.includes('Calloway')) {
-        el.textContent = subjectName;
-      }
-    });
-  }
-  // Load from CC auth if available
-  if (typeof CC !== 'undefined' && CC.getUser) {
-    var user = CC.getUser();
-    if (user && user.name && !subjectName) {
-      // Show empty tree state
-      showEmptyTreeState(user.name);
-    }
+  initSubject();
+  renderAllNodes();
+  showStatusBar();
+
+  // Show "name your tree" modal if no subject yet
+  if (!subjectName && !TREE.subject) {
+    setTimeout(showNameModal, 500);
   }
 });
 
-
-  // Show status bar and tier-appropriate message
-  window.addEventListener('DOMContentLoaded', function() {
-    var bar = document.getElementById('legacyStatusBar');
-    if (bar) bar.style.display = 'block';
-    
-    var isOpen = typeof CC !== 'undefined' && CC.hasFeature && CC.hasFeature('living_legacy_open');
-    var statusEl = document.getElementById('leafStatusText');
-    var upgradeEl = document.getElementById('leafUpgradeLink');
-    
-    if (isOpen) {
-      if (statusEl) statusEl.textContent = 'Open · Accepting contributions';
-    } else {
-      if (statusEl) statusEl.textContent = 'Building · Free  ·  Closed to contributions';
-      if (upgradeEl) upgradeEl.style.display = 'inline';
-    }
-  });
-
-
-function showEmptyTreeState(userName) {
-  var header = document.querySelector('.h-name');
-  if (header && header.textContent.includes('Ruth')) {
-    header.textContent = 'Your Family Tree';
+function initSubject() {
+  var name = subjectName || (TREE.subject && TREE.subject.name) || null;
+  if (name) {
+    // Update header
+    document.querySelectorAll('.h-name').forEach(function(el) { el.textContent = name + "'s Legacy"; });
+    // Update subject node
+    var nameEl = document.getElementById('subjectNodeName');
+    var initEl = document.getElementById('subjectInitial');
+    if (nameEl) nameEl.textContent = name;
+    if (initEl) initEl.textContent = name[0].toUpperCase();
+    // Save to tree
+    if (!TREE.subject) TREE.subject = {};
+    TREE.subject.name = name;
+    saveTree();
   }
+}
+
+function renderAllNodes() {
+  // For each saved node, update its display
+  Object.keys(TREE).forEach(function(id) {
+    var person = TREE[id];
+    if (!person || !person.name) return;
+    updateNodeDisplay(id, person);
+  });
+}
+
+function updateNodeDisplay(id, person) {
+  // Find the node by its onclick attribute
+  var node = document.querySelector('[onclick*="\'' + id + '\'"]');
+  if (!node) return;
+  var card = node.querySelector('.node-card');
+  if (!card) return;
+  
+  card.classList.remove('empty');
+  card.classList.add('has-leaf');
+  
+  var initEl = card.querySelector('.node-initial');
+  var nameEl = card.querySelector('.node-name');
+  var yearsEl = card.querySelector('.node-years');
+  
+  if (initEl) { initEl.textContent = person.name[0].toUpperCase(); initEl.style.background = person.color || '#c97d3a'; }
+  if (nameEl) nameEl.textContent = person.name;
+  if (yearsEl && person.years) yearsEl.textContent = person.years;
+  
+  // Remove "+ Start leaf" prompt
+  var startEl = node.querySelector('.node-start');
+  if (startEl) startEl.style.display = 'none';
+  
+  // Update hasLeaf in onclick
+  node.setAttribute('onclick', "openDetail('" + id + "',true)");
+}
+
+function showStatusBar() {
+  var bar = document.getElementById('legacyStatusBar');
+  if (bar) bar.style.display = 'block';
+  var isOpen = typeof CC !== 'undefined' && CC.hasFeature && CC.hasFeature('living_legacy_open');
+  var statusEl = document.getElementById('leafStatusText');
+  var upgradeEl = document.getElementById('leafUpgradeLink');
+  if (isOpen) {
+    if (statusEl) statusEl.textContent = 'Open · Accepting contributions';
+  } else {
+    if (statusEl) statusEl.textContent = 'Building · Free  ·  Closed to contributions';
+    if (upgradeEl) upgradeEl.style.display = 'inline';
+  }
+}
+
+// ── MODALS ──
+
+// Add person modal
+var currentNodeId = null;
+
+function showNameModal() {
+  document.getElementById('nameModal').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('subjectInput').focus(); }, 200);
+}
+
+function submitSubjectName() {
+  var name = document.getElementById('subjectInput').value.trim();
+  if (!name) { treeToast('Who is this tree for?'); return; }
+  subjectName = name;
+  TREE_KEY = 'cc_tree_' + name;
+  if (!TREE.subject) TREE.subject = {};
+  TREE.subject.name = name;
+  saveTree();
+  document.getElementById('nameModal').style.display = 'none';
+  initSubject();
+  treeToast(name + "'s tree started ✦");
+}
+
+function showAddPersonModal(nodeId) {
+  currentNodeId = nodeId;
+  var relLabel = REL_LABELS[nodeId] || 'Family Member';
+  document.getElementById('addPersonRel').textContent = relLabel;
+  document.getElementById('addPersonName').value = '';
+  document.getElementById('addPersonYears').value = '';
+  document.getElementById('addPersonModal').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('addPersonName').focus(); }, 200);
+}
+
+function submitAddPerson() {
+  var name = document.getElementById('addPersonName').value.trim();
+  var years = document.getElementById('addPersonYears').value.trim();
+  if (!name) { treeToast('Enter a name'); return; }
+  
+  var colors = ['#c97d3a','#3d7a6b','#6b4d82','#b07838','#a85548','#3a6aaa'];
+  var color = colors[Object.keys(TREE).length % colors.length];
+  
+  TREE[currentNodeId] = {name: name, years: years, color: color, rel: REL_LABELS[currentNodeId] || ''};
+  saveTree();
+  updateNodeDisplay(currentNodeId, TREE[currentNodeId]);
+  document.getElementById('addPersonModal').style.display = 'none';
+  treeToast(name + ' added ✦');
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function treeToast(msg) {
+  var t = document.getElementById('toastEl');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.classList.remove('show'); }, 2500);
 }
 // ─────────────────────────────────────────────────────────────────
 
-const EMPTY = {
-  ggp1:{name:'Unknown',rel:'Great-grandfather · No leaf yet'},
-  ggp2:{name:'Unknown',rel:'Great-grandmother · No leaf yet'},
-  ggp4:{name:'Unknown',rel:'Great-grandmother · No leaf yet'},
-  gp1:{name:'Unknown',rel:'Grandfather · No leaf yet'},
-  dad:{name:'Unknown',rel:'Father · No leaf yet'},
-  spouse:{name:'Add spouse',rel:'Not yet added to this tree'},
-  child3:{name:'Not added yet',rel:'Add another family member'},
-};
-
 function openDetail(id, hasLeaf) {
-  const p = hasLeaf ? PEOPLE[id] : EMPTY[id];
-  if(!p) return;
+  var relLabel = REL_LABELS[id] || 'Family Member';
+  var person = TREE[id];
 
-  document.getElementById('detailContent').innerHTML = hasLeaf ? `
-    <div class="ds-eye">Living Legacy · ${p.rel}</div>
-    <div class="ds-name">${p.name}</div>
-    <div class="ds-years">${p.years}</div>
-    <div class="ds-media-row">${p.media.map(m=>`<div class="ds-chip">${m}</div>`).join('')}</div>
-    <div class="ds-actions">
-      <button class="ds-btn ds-primary" onclick="t('Opening ${p.name}\'s archive...');closeDetail()">Open archive →</button>
-      <button class="ds-btn ds-secondary" onclick="t('Invite link copied ✦');closeDetail()">Invite contributors</button>
-      <button class="ds-btn ds-secondary" onclick="t('Opening family tree for ${p.name}...')">View their family tree</button>
-    </div>
-  ` : `
-    <div class="ds-eye">Family Tree · ${p.rel}</div>
-    <div class="ds-name">${p.name}</div>
-    <div class="ds-years" style="color:rgba(40,22,0,.4);font-style:italic;">No archive started yet</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(40,22,0,.55);line-height:1.65;margin-top:.75rem;">Start a leaf for them — invite family to add what they remember before those memories fade.</div>
-    <div class="ds-actions">
-      <button class="ds-btn ds-primary" onclick="t('Creating new leaf...');closeDetail()">Start their archive →</button>
-      <button class="ds-btn ds-secondary" onclick="closeDetail()">Not now</button>
-    </div>
-  `;
+  if (hasLeaf && person) {
+    // Show this person's leaf detail
+    document.getElementById('detailContent').innerHTML =
+      '<div class="ds-eye">Living Legacy · ' + relLabel + '</div>' +
+      '<div class="ds-name">' + person.name + '</div>' +
+      (person.years ? '<div class="ds-years">' + person.years + '</div>' : '') +
+      '<div class="ds-media-row">' +
+        '<div class="ds-chip">Written stories</div>' +
+        '<div class="ds-chip">Photos</div>' +
+        '<div class="ds-chip">Voice recordings</div>' +
+      '</div>' +
+      '<div class="ds-actions">' +
+        '<button class="ds-btn ds-primary" onclick="openContribute('' + id + '')">Open archive →</button>' +
+        '<button class="ds-btn ds-secondary" onclick="copyInviteLink('' + id + '')">Invite contributors</button>' +
+        '<button class="ds-btn ds-secondary" onclick="closeDetail()">Back to tree</button>' +
+      '</div>';
+  } else {
+    // Empty node — prompt to add this person
+    document.getElementById('detailContent').innerHTML =
+      '<div class="ds-eye">Family Tree · ' + relLabel + '</div>' +
+      '<div class="ds-name" style="color:rgba(40,22,0,.4);font-style:italic;">Not added yet</div>' +
+      '<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(40,22,0,.55);line-height:1.65;margin-top:.75rem;">Start a leaf for them — invite family to add what they remember before those memories fade.</div>' +
+      '<div class="ds-actions">' +
+        '<button class="ds-btn ds-primary" onclick="closeDetail();showAddPersonModal('' + id + '')">Add ' + relLabel + ' →</button>' +
+        '<button class="ds-btn ds-secondary" onclick="closeDetail()">Not now</button>' +
+      '</div>';
+  }
 
   document.getElementById('overlay').classList.add('open');
   document.getElementById('detailSheet').classList.add('open');
+}
+
+
+function openContribute(nodeId) {
+  var person = TREE[nodeId];
+  if (!person) return;
+  var url = 'contribute.html?person=' + encodeURIComponent(person.name);
+  if (subjectName) url += '&keeper=' + encodeURIComponent(subjectName || '');
+  window.location.href = url;
+}
+
+function copyInviteLink(nodeId) {
+  var person = TREE[nodeId];
+  var name = person ? person.name : 'this person';
+  var url = window.location.origin + '/contribute.html?person=' + encodeURIComponent(name);
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() { treeToast('Invite link copied ✦'); });
+  } else {
+    treeToast('Copy this link: ' + url);
+  }
+  closeDetail();
 }
 
 function closeDetail(){
@@ -549,5 +655,37 @@ function t(m){
 }
 </script>
 <div style="text-align:center;padding:.8rem 1.5rem;font-size:.75rem;color:rgba(40,22,0,.35);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+
+<!-- ── NAME YOUR TREE MODAL ── -->
+<div id="nameModal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;">
+  <div style="width:100%;max-width:430px;background:#fdf6ec;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem calc(1.6rem + env(safe-area-inset-bottom));border-top:1px solid rgba(40,22,0,.08);">
+    <div style="width:36px;height:4px;background:rgba(40,22,0,.1);border-radius:2px;margin:0 auto .9rem;"></div>
+    <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.3rem;">New Living Legacy</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#281600;margin-bottom:.35rem;">Whose story are you preserving?</div>
+    <div style="font-size:.82rem;color:rgba(40,22,0,.45);line-height:1.6;margin-bottom:1rem;">Enter the name of the person at the center of this family archive. You can always edit this.</div>
+    <input id="subjectInput" type="text" placeholder="e.g. Grandma Rose, James Sr., Aunt Clara" maxlength="50"
+      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.78rem .9rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#281600;outline:none;margin-bottom:.7rem;"
+      onkeydown="if(event.key==='Enter')submitSubjectName()"/>
+    <button onclick="submitSubjectName()" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;">Start Their Legacy →</button>
+    <button onclick="closeModal('nameModal')" style="width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;margin-top:.2rem;">Not now</button>
+  </div>
+</div>
+
+<!-- ── ADD PERSON MODAL ── -->
+<div id="addPersonModal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;">
+  <div style="width:100%;max-width:430px;background:#fdf6ec;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem calc(1.6rem + env(safe-area-inset-bottom));border-top:1px solid rgba(40,22,0,.08);">
+    <div style="width:36px;height:4px;background:rgba(40,22,0,.1);border-radius:2px;margin:0 auto .9rem;"></div>
+    <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.3rem;">Add Family Member</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:#281600;margin-bottom:.8rem;">Add <span id="addPersonRel" style="color:#c97d3a;">this person</span></div>
+    <input id="addPersonName" type="text" placeholder="Full name" maxlength="50"
+      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.72rem .9rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#281600;outline:none;margin-bottom:.5rem;"
+      onkeydown="if(event.key==='Enter')document.getElementById('addPersonYears').focus()"/>
+    <input id="addPersonYears" type="text" placeholder="Years (e.g. 1932 – 2018) — optional" maxlength="30"
+      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.72rem .9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:#281600;outline:none;margin-bottom:.7rem;"
+      onkeydown="if(event.key==='Enter')submitAddPerson()"/>
+    <button onclick="submitAddPerson()" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;">Add to Tree →</button>
+    <button onclick="closeModal('addPersonModal')" style="width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;margin-top:.2rem;">Cancel</button>
+  </div>
+</div>
 </body>
 </html>
