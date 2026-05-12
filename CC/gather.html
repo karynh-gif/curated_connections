@@ -239,6 +239,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .threads-dot:nth-child(2){animation-delay:.2s;}
 .threads-dot:nth-child(3){animation-delay:.4s;}
 @keyframes dotPulse{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.65;transform:scale(1.35)}}
+
+/* ── CARD BACK-FACE FLIP SYSTEM ── */
+.cc-flip-scene { flex-shrink: 0; width: 210px; min-height: 200px; }
+.cc-flip-scene.squishing .cc-flip-inner { transform: scaleX(0); }
+.cc-card-back-face, .cc-card-front-face { transition: none; }
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-cards.js"></script>
@@ -617,6 +622,40 @@ var currentCardId = 'tonight';
 var currentWWId = null;
 
 // ── CARD OPEN / CLOSE ──
+
+// ── CARD BACK/FRONT FLIP ──
+function handleCardTap(scene) {
+  if (!scene) return;
+  var state = scene.dataset.state;
+  var inner = scene.querySelector('.cc-flip-inner');
+  if (state === 'back') {
+    // Tap 1: flip to front
+    inner.style.transform = 'scaleX(0)';
+    setTimeout(function() {
+      scene.querySelector('.cc-card-back-face').style.display = 'none';
+      scene.querySelector('.cc-card-front-face').style.display = 'block';
+      inner.style.transform = 'scaleX(1)';
+      scene.dataset.state = 'front';
+    }, 150);
+  } else {
+    // Tap 2: open fullscreen
+    var ckey = scene.dataset.ckey;
+    openCard(ckey);
+  }
+}
+
+function flipCardBack(scene) {
+  if (!scene) return;
+  var inner = scene.querySelector('.cc-flip-inner');
+  inner.style.transform = 'scaleX(0)';
+  setTimeout(function() {
+    scene.querySelector('.cc-card-front-face').style.display = 'none';
+    scene.querySelector('.cc-card-back-face').style.display = 'flex';
+    inner.style.transform = 'scaleX(1)';
+    scene.dataset.state = 'back';
+  }, 150);
+}
+
 function openCard(id) {
   // Clear any running thread timers
   if (window._threadTimers) window._threadTimers.forEach(clearTimeout);
@@ -855,15 +894,32 @@ async function loadTonightCards() {
     var edition = (f.Edition && f.Edition.name) ? f.Edition.name : (f.Edition || 'Family');
     var cls = editionClass[edition] || 'card-family';
     var bg = editionBg[edition] || editionBg['Family'];
+    var deck = deckColors[edition] || deckColors['Family'];
     var key = 'at_' + idx;
     var lbl = edition + ' Edition';
     var labelColor = cls === 'card-couples' ? 'var(--coral2)' : cls === 'card-faith' ? 'var(--purple2)' : cls === 'card-dinner' ? 'var(--teal2)' : cls === 'card-friends' ? 'var(--navy2)' : cls === 'card-legacy' ? '#c9a830' : cls === 'card-getreal' ? '#c85050' : 'var(--amber2)';
     LIVE_CARDS[key] = {label:lbl, badge:'Curated Connections', q:'"' + (f.Prompt || '') + '"', connectThread:f.Hint || '', insightThread:f['Insight Layer'] || '', legacyThread:f['Legacy Layer'] || '', bg:bg, labelColor:labelColor};
-    html += '<div class="conv-card ' + cls + '" data-ckey="' + key + '" onclick="openCard(this.dataset.ckey)">';
-    html += '<div class="conv-card-label">' + edition + '</div>';
-    html += '<div class="conv-card-q">&ldquo;' + (f.Prompt || '') + '&rdquo;</div>';
-    if (f.Hint) html += '<div class="conv-card-hint">' + f.Hint + '</div>';
-    html += '<div class="conv-card-tap">Tap to open</div></div>';
+    // Card back face wrapper — tap 1 flips, tap 2 opens fullscreen
+    html += '<div class="cc-flip-scene" data-ckey="' + key + '" data-state="back" data-cls="' + cls + '" onclick="handleCardTap(this)">';
+    html += '<div class="cc-flip-inner" style="background:' + bg.replace('175deg','145deg') + ';border:1px solid ' + deck.border + ';border-radius:22px;min-height:200px;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.15s ease;">';
+    // BACK FACE
+    html += '<div class="cc-card-back-face" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 18px;z-index:2;">';
+    html += '<div style="position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(45deg,' + deck.accent + ' 0,' + deck.accent + ' 1px,transparent 1px,transparent 16px),repeating-linear-gradient(-45deg,' + deck.accent + ' 0,' + deck.accent + ' 1px,transparent 1px,transparent 16px);pointer-events:none;"></div>';
+    html += '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(255,255,255,0.12),transparent 50%);pointer-events:none;"></div>';
+    html += '<div style="font-family:Pacifico,cursive;font-size:18px;color:' + deck.accent + ';text-shadow:0 0 20px ' + deck.accent + '55;margin-bottom:7px;position:relative;z-index:1;line-height:1.2;">Curated Connections</div>';
+    html += '<div style="font-family:Georgia,serif;font-style:italic;font-size:12px;color:rgba(242,232,216,0.38);letter-spacing:0.07em;margin-bottom:22px;position:relative;z-index:1;">' + edition + '</div>';
+    html += '<div style="font-family:Nunito,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:' + deck.accent + '66;position:relative;z-index:1;">✦ tap to reveal ✦</div>';
+    html += '</div>';
+    // FRONT FACE (hidden initially)
+    html += '<div class="cc-card-front-face" style="position:absolute;inset:0;display:none;padding:14px 14px 12px;z-index:2;">';
+    html += '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,0.1),transparent 40%);pointer-events:none;"></div>';
+    html += '<div style="font-family:Nunito,sans-serif;font-size:8px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:' + deck.accent + ';margin-bottom:7px;opacity:0.85;position:relative;z-index:1;">' + edition + '</div>';
+    html += '<div style="font-family:Georgia,serif;font-size:13px;font-style:italic;color:#f2e8d8;line-height:1.5;margin-bottom:10px;position:relative;z-index:1;">&ldquo;' + (f.Prompt || '') + '&rdquo;</div>';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px;margin-top:auto;position:relative;z-index:1;">';
+    html += '<div style="font-family:Nunito,sans-serif;font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:' + deck.accent + ';opacity:0.7;">Tap to open →</div>';
+    html += '<div onclick="event.stopPropagation();flipCardBack(this.closest(\'.cc-flip-scene\'))" style="font-family:Nunito,sans-serif;font-size:8px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:rgba(242,232,216,0.22);cursor:pointer;">↩ flip back</div>';
+    html += '</div></div>';
+    html += '</div></div>';
   });
 
   // Locked upgrade card
