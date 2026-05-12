@@ -320,7 +320,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div class="shelf" style="animation:fadeUp .5s .08s ease both;">
       <div class="shelf-header">
         <div class="shelf-title">Tonight's Cards</div>
-        <div class="shelf-link" id="tonightCount">loading...</div>
+        <div class="shelf-link" id="tonightCount">2 today</div>
       </div>
       <div class="shelf-row" id="tonightShelf">
         <div class="conv-card card-family" data-ckey="default_0" onclick="openCard('family')">
@@ -646,9 +646,9 @@ function openCard(id) {
   });
 
   // Set thread text content
-  if (document.getElementById('threadConnectText')) document.getElementById('threadConnectText').textContent = c.push || c.hint || '';
-  if (document.getElementById('threadInsightText')) document.getElementById('threadInsightText').textContent = c.story || '';
-  if (document.getElementById('threadLegacyText')) document.getElementById('threadLegacyText').textContent = c.social || '';
+  if (document.getElementById('threadConnectText')) document.getElementById('threadConnectText').textContent = c.connectThread || '';
+  if (document.getElementById('threadInsightText')) document.getElementById('threadInsightText').textContent = c.insightThread || '';
+  if (document.getElementById('threadLegacyText')) document.getElementById('threadLegacyText').textContent = c.legacyThread || '';
 
   // Upgrade nudge for free users
   var nudge = document.getElementById('cfUpgradeNudge');
@@ -858,7 +858,7 @@ async function loadTonightCards() {
     var key = 'at_' + idx;
     var lbl = edition + ' Edition';
     var labelColor = cls === 'card-couples' ? 'var(--coral2)' : cls === 'card-faith' ? 'var(--purple2)' : cls === 'card-dinner' ? 'var(--teal2)' : cls === 'card-friends' ? 'var(--navy2)' : cls === 'card-legacy' ? '#c9a830' : cls === 'card-getreal' ? '#c85050' : 'var(--amber2)';
-    LIVE_CARDS[key] = {label:lbl, badge:'Curated Connections', q:'"' + (f.Prompt || '') + '"', hint:f.Hint || '', push:f['Insight Layer'] || '', story:f['Legacy Layer'] || '', social:'', bg:bg, labelColor:labelColor};
+    LIVE_CARDS[key] = {label:lbl, badge:'Curated Connections', q:'"' + (f.Prompt || '') + '"', connectThread:f.Hint || '', insightThread:f['Insight Layer'] || '', legacyThread:f['Legacy Layer'] || '', bg:bg, labelColor:labelColor};
     html += '<div class="conv-card ' + cls + '" data-ckey="' + key + '" onclick="openCard(this.dataset.ckey)">';
     html += '<div class="conv-card-label">' + edition + '</div>';
     html += '<div class="conv-card-q">&ldquo;' + (f.Prompt || '') + '&rdquo;</div>';
