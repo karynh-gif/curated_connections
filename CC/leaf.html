@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Living Legacy · Curated Connections™</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="/cc-auth.js"></script>
+<script src="/cc-firebase.js"></script>
+<style>
+:root {
+  --parchment: #f4ead8;
+  --cream:     #fdf6ec;
+  --ink:       #281600;
+  --bark:      #6b4420;
+  --bark-soft: rgba(40,22,0,.38);
+  --bark-faint:rgba(40,22,0,.12);
+  --amber:     #c97d3a;
+  --amber-soft:rgba(201,125,58,.14);
+  --teal:      #3a8d6e;
+  --teal-soft: rgba(58,141,110,.1);
+  --seal-gold: #8a6010;
+  --r-lg: 16px;
+  --r-xl: 22px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-text-size-adjust:100%;}
+body{background:var(--parchment);font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100svh;-webkit-font-smoothing:antialiased;}
+
+@media(min-width:500px){
+  body{background:#e8d8b8;display:flex;justify-content:center;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 80% at -5% 50%,rgba(138,96,16,.08),transparent 55%),radial-gradient(ellipse 60% 80% at 105% 50%,rgba(138,96,16,.06),transparent 55%),radial-gradient(ellipse 80% 40% at 50% 105%,rgba(100,60,10,.1),transparent 50%);pointer-events:none;z-index:0;}
+}
+
+.app{max-width:430px;width:100%;min-height:100svh;background:var(--cream);position:relative;z-index:1;padding-bottom:6rem;}
+
+/* ── HEADER ── */
+.lf-header{padding:.8rem 1rem .7rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid var(--bark-faint);background:linear-gradient(180deg,#f2e4ca,#fdf6ec);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);}
+.lf-back{background:none;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--bark-soft);cursor:pointer;padding:.3rem .5rem .3rem 0;flex-shrink:0;}
+.lf-header-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:400;color:var(--ink);flex:1;text-align:center;}
+.lf-header-action{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);cursor:pointer;padding:.3rem 0 .3rem .5rem;}
+
+/* ── HERO ── */
+.lf-hero{padding:1.6rem 1.1rem 1.3rem;background:linear-gradient(180deg,#fdf6ec,#f8f0e2);border-bottom:1px solid var(--bark-faint);position:relative;overflow:hidden;}
+.lf-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(201,125,58,.07),transparent 65%);pointer-events:none;}
+.lf-initial-row{display:flex;align-items:flex-start;gap:.9rem;margin-bottom:1rem;}
+.lf-initial{width:68px;height:68px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;color:#fff;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,.14);}
+.lf-name-block{flex:1;padding-top:.2rem;}
+.lf-name{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--ink);line-height:1.08;margin-bottom:.25rem;}
+.lf-years{font-size:.82rem;color:var(--bark-soft);margin-bottom:.45rem;font-family:'DM Sans',sans-serif;}
+.lf-status-pill{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .7rem;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;}
+.status-active  {background:rgba(58,141,110,.1);color:#2a7a58;border:1px solid rgba(58,141,110,.22);}
+.status-building{background:rgba(201,125,58,.1);color:#a06020;border:1px solid rgba(201,125,58,.22);}
+.status-sealed  {background:rgba(138,96,16,.1);color:var(--seal-gold);border:1px solid rgba(138,96,16,.22);}
+.status-readonly{background:rgba(40,22,0,.06);color:var(--bark-soft);border:1px solid var(--bark-faint);}
+
+/* Stats row */
+.lf-stats{display:flex;gap:.4rem;margin-top:.9rem;}
+.lf-stat{flex:1;background:rgba(40,22,0,.04);border:1px solid var(--bark-faint);border-radius:14px;padding:.65rem .7rem;text-align:center;}
+.lf-stat-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--ink);line-height:1;}
+.lf-stat-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark-soft);margin-top:.1rem;}
+
+/* ── STATUS BAR ── */
+.lf-status-bar{margin:1rem .9rem;border-radius:var(--r-xl);overflow:hidden;}
+/* Building — warm amber prompt */
+.lf-sb-building{background:linear-gradient(135deg,rgba(201,125,58,.1),rgba(201,125,58,.05));border:1px solid rgba(201,125,58,.25);padding:1rem 1.1rem;}
+.lf-sb-eyebrow{font-family:'Nunito',sans-serif;font-size:.64rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.65);margin-bottom:.35rem;}
+.lf-sb-text{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(40,22,0,.65);line-height:1.55;margin-bottom:.8rem;}
+.lf-sb-actions{display:flex;gap:.5rem;}
+.lf-sb-btn{flex:1;padding:.65rem .5rem;border-radius:14px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.04em;cursor:pointer;text-align:center;transition:all .15s;border:none;}
+.lf-sb-btn-seal{background:rgba(138,96,16,.14);border:1.5px solid rgba(138,96,16,.3);color:var(--seal-gold);}
+.lf-sb-btn-seal:active{background:rgba(138,96,16,.22);}
+.lf-sb-btn-keep{background:rgba(58,141,110,.1);border:1.5px solid rgba(58,141,110,.25);color:var(--teal);}
+/* Sealed — gold stamp feeling */
+.lf-sb-sealed{background:linear-gradient(135deg,rgba(138,96,16,.08),rgba(138,96,16,.04));border:1px solid rgba(138,96,16,.2);padding:1rem 1.1rem;text-align:center;}
+.lf-sb-seal-icon{font-size:1.6rem;margin-bottom:.4rem;opacity:.7;}
+.lf-sb-seal-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--seal-gold);margin-bottom:.2rem;}
+.lf-sb-seal-sub{font-size:.78rem;color:var(--bark-soft);line-height:1.5;margin-bottom:.7rem;}
+.lf-sb-btn-reopen{width:100%;padding:.65rem;border-radius:14px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.04em;cursor:pointer;background:rgba(201,125,58,.12);border:1.5px solid rgba(201,125,58,.28);color:var(--amber);}
+/* Read-only */
+.lf-sb-readonly{background:rgba(40,22,0,.04);border:1px solid var(--bark-faint);padding:.9rem 1.1rem;display:flex;align-items:center;gap:.7rem;}
+.lf-sb-readonly-text{font-size:.82rem;color:var(--bark-soft);line-height:1.5;flex:1;}
+.lf-sb-btn-restore{padding:.55rem 1rem;border-radius:14px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.04em;cursor:pointer;background:var(--amber-soft);border:1.5px solid rgba(201,125,58,.28);color:var(--amber);white-space:nowrap;flex-shrink:0;}
+
+/* ── SECTION HEADERS ── */
+.lf-section{padding:.8rem .9rem .3rem;}
+.lf-section-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--ink);margin-bottom:.1rem;}
+.lf-section-sub{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;color:var(--bark-soft);letter-spacing:.06em;text-transform:uppercase;}
+.lf-divider{height:1px;background:var(--bark-faint);margin:.2rem .9rem;}
+
+/* ── CONTRIBUTION CARDS ── */
+.lf-contributions{padding:0 .9rem;}
+.lf-contrib-card{background:#fff;border:1px solid var(--bark-faint);border-radius:var(--r-lg);padding:1rem 1.05rem;margin-bottom:.65rem;position:relative;}
+.lf-contrib-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
+.lf-contrib-card.written::before{background:var(--amber);}
+.lf-contrib-card.memory::before{background:var(--teal);}
+.lf-contrib-card.prompted::before{background:#6b4d82;}
+.lf-contrib-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.lf-contrib-author{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:var(--bark-soft);letter-spacing:.04em;}
+.lf-contrib-date{font-size:.7rem;color:rgba(40,22,0,.3);font-family:'DM Sans',sans-serif;}
+.lf-contrib-type{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.15rem .5rem;border-radius:999px;margin-bottom:.5rem;display:inline-block;}
+.type-written {background:rgba(201,125,58,.1);color:#a06020;}
+.type-memory  {background:rgba(58,141,110,.1);color:#2a7a58;}
+.type-prompted{background:rgba(107,77,130,.1);color:#6b4d82;}
+.lf-contrib-prompt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:var(--bark-soft);margin-bottom:.4rem;line-height:1.5;}
+.lf-contrib-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink);line-height:1.65;}
+
+/* ── EMPTY STATE ── */
+.lf-empty{padding:2rem 1.1rem;text-align:center;}
+.lf-empty-icon{font-size:2rem;opacity:.25;margin-bottom:.7rem;}
+.lf-empty-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--bark-soft);line-height:1.6;margin-bottom:.7rem;}
+.lf-empty-cta{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.5);}
+
+/* ── SEAL MODAL ── */
+.lf-modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center;}
+.lf-modal-overlay.open{display:flex;animation:fadeIn .18s ease;}
+.lf-modal-sheet{width:100%;max-width:430px;background:var(--cream);border-radius:24px 24px 0 0;padding:1.4rem 1.2rem calc(1.6rem + env(safe-area-inset-bottom));border-top:2px solid rgba(138,96,16,.15);}
+.lf-modal-handle{width:36px;height:4px;background:var(--bark-faint);border-radius:2px;margin:0 auto .9rem;}
+.lf-modal-eyebrow{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(138,96,16,.6);margin-bottom:.3rem;}
+.lf-modal-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--ink);margin-bottom:.4rem;}
+.lf-modal-sub{font-size:.82rem;color:var(--bark-soft);line-height:1.6;margin-bottom:1.1rem;}
+/* Seal options */
+.lf-seal-options{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1rem;}
+.lf-seal-option{border-radius:var(--r-lg);padding:1rem 1.1rem;cursor:pointer;border:1.5px solid;transition:all .15s;}
+.lf-seal-option.standard{background:rgba(138,96,16,.06);border-color:rgba(138,96,16,.2);}
+.lf-seal-option.standard:hover{background:rgba(138,96,16,.1);border-color:rgba(138,96,16,.35);}
+.lf-seal-option.large{background:rgba(201,125,58,.06);border-color:rgba(201,125,58,.2);}
+.lf-seal-option.large:hover{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.35);}
+.lf-seal-option-name{font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:var(--ink);margin-bottom:.15rem;}
+.lf-seal-option-desc{font-size:.78rem;color:var(--bark-soft);line-height:1.5;margin-bottom:.4rem;}
+.lf-seal-option-price{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--seal-gold);}
+.lf-seal-btn{width:100%;padding:.8rem;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;color:#fff;cursor:pointer;border:none;margin-bottom:.4rem;}
+.lf-seal-btn-std{background:linear-gradient(135deg,#8a6010,#b07e20);}
+.lf-seal-btn-lg{background:linear-gradient(135deg,#c97d3a,#e89448);}
+.lf-modal-cancel{width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bark-soft);cursor:pointer;}
+
+/* ── BOTTOM NAV ── */
+.lf-bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(253,246,236,.96);border-top:1px solid var(--bark-faint);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
+.lf-bn{display:flex;flex-direction:column;align-items:center;gap:.15rem;cursor:pointer;opacity:.35;transition:opacity .2s;min-width:44px;}
+.lf-bn.active{opacity:1;}
+.lf-bn-i{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--bark);}
+.lf-bn-l{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--bark);}
+
+/* Toast */
+.lf-toast{display:none;position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.88);border-radius:999px;padding:.4rem .9rem;font-size:.75rem;color:var(--cream);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
+.lf-toast.show{opacity:1;display:block;transform:translateX(-50%) translateY(0);}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .35s ease both;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="lf-header">
+    <button class="lf-back" onclick="window.location.href='family-tree.html'">← Tree</button>
+    <div class="lf-header-title" id="lfHeaderTitle">Living Legacy</div>
+    <div class="lf-header-action" onclick="openInviteContributor()">Invite +</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="lf-hero anim" id="lfHero">
+    <div class="lf-initial-row">
+      <div class="lf-initial" id="lfInitial" style="background:#c97d3a;">?</div>
+      <div class="lf-name-block">
+        <div class="lf-name" id="lfName">Loading…</div>
+        <div class="lf-years" id="lfYears"></div>
+        <div class="lf-status-pill status-building" id="lfStatusPill">Building</div>
+      </div>
+    </div>
+    <div class="lf-stats">
+      <div class="lf-stat">
+        <div class="lf-stat-num" id="lfContribCount">0</div>
+        <div class="lf-stat-label">Contributions</div>
+      </div>
+      <div class="lf-stat">
+        <div class="lf-stat-num" id="lfContributorCount">0</div>
+        <div class="lf-stat-label">Contributors</div>
+      </div>
+      <div class="lf-stat">
+        <div class="lf-stat-num" id="lfDaysOpen">—</div>
+        <div class="lf-stat-label">Days Open</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS BAR — shown/hidden by JS based on leaf status -->
+  <div class="lf-status-bar" id="lfStatusBar" style="display:none;"></div>
+
+  <!-- CONTRIBUTIONS -->
+  <div class="lf-section" style="margin-top:.5rem;">
+    <div class="lf-section-title">Contributions</div>
+    <div class="lf-section-sub" id="lfContribSub">Everything added to this leaf</div>
+  </div>
+  <div class="lf-divider"></div>
+
+  <div class="lf-contributions" id="lfContributions">
+    <!-- Populated by JS -->
+    <div class="lf-empty">
+      <div class="lf-empty-icon">🌿</div>
+      <div class="lf-empty-text">No contributions yet. Share the invite link to bring in the people who knew them.</div>
+      <div class="lf-empty-cta" id="lfEmptyCta" onclick="openInviteContributor()" style="cursor:pointer;">Invite a contributor →</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="lf-bnav">
+    <div class="lf-bn" onclick="window.location.href='gather.html'">
+      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="lf-bn-l">Gather</div>
+    </div>
+    <div class="lf-bn" onclick="window.location.href='family-tree.html'">
+      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="12" y1="7" x2="12" y2="13"/><path d="M8 13h8"/><line x1="8" y1="13" x2="8" y2="19"/><line x1="16" y1="13" x2="16" y2="19"/><circle cx="12" cy="5" r="2"/></svg></div>
+      <div class="lf-bn-l">Tree</div>
+    </div>
+    <div class="lf-bn active">
+      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="lf-bn-l">Leaf</div>
+    </div>
+    <div class="lf-bn" onclick="openContribute()">
+      <div class="lf-bn-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div class="lf-bn-l">Add</div>
+    </div>
+  </nav>
+</div>
+
+<!-- SEAL MODAL -->
+<div class="lf-modal-overlay" id="sealModal" onclick="if(event.target===this)closeSealModal()">
+  <div class="lf-modal-sheet">
+    <div class="lf-modal-handle"></div>
+    <div class="lf-modal-eyebrow">Seal This Leaf</div>
+    <div class="lf-modal-title">Preserve it permanently.</div>
+    <div class="lf-modal-sub">Sealing closes the leaf to new contributions and preserves it forever — even if you cancel your subscription. Choose based on the size of this archive.</div>
+    <div class="lf-seal-options">
+      <div class="lf-seal-option standard" onclick="sealLeaf('standard')">
+        <div class="lf-seal-option-name">Standard Seal</div>
+        <div class="lf-seal-option-desc">For most archives — written memories, prompted answers, photos. Up to ~100 entries.</div>
+        <div class="lf-seal-option-price">$49.99 · One time</div>
+      </div>
+      <div class="lf-seal-option large" onclick="sealLeaf('large')">
+        <div class="lf-seal-option-name">Large Archive Seal</div>
+        <div class="lf-seal-option-desc">For archives with voice recordings, many photos, or 100+ entries.</div>
+        <div class="lf-seal-option-price">$99.99 · One time</div>
+      </div>
+    </div>
+    <div class="lf-modal-sub" style="font-size:.75rem;color:rgba(40,22,0,.3);border-top:1px solid var(--bark-faint);padding-top:.8rem;">After sealing, you can reopen for a 30-day contribution window at any time for $4.99.</div>
+    <button class="lf-modal-cancel" onclick="closeSealModal()">Not yet</button>
+  </div>
+</div>
+
+<div class="lf-toast" id="lfToast"></div>
+
+<script>
+// ── STRIPE LINKS ──────────────────────────────────────────────────
+var STRIPE_LINKS = {
+  seal_standard:  'https://buy.stripe.com/3cIcMZ4DP0eJbrW6bt7EQ07',  // $49.99 one-time
+  seal_large:     'https://buy.stripe.com/9B65kx1rDd1v0Ni43l7EQ06',  // $99.99 one-time
+  reopen_30day:   'https://buy.stripe.com/28EaER5HT1iN8fK9nF7EQ05',  // $4.99 one-time
+  leaf_monthly:   'https://buy.stripe.com/fZu4gtc6hd1v0Ni8jB7EQ08'   // Monthly recurring
+};
+
+// ── LEAF STATE ────────────────────────────────────────────────────
+var LEAF = {
+  id:       null,
+  name:     null,
+  years:    null,
+  status:   'building', // building | active | sealed | readonly
+  recordId: null,       // Airtable record ID
+  contributions: [],
+};
+
+var INITIAL_COLORS = ['#c97d3a','#3a8d6e','#6b4d82','#a85548','#3a6aaa','#b07838'];
+
+// ── INIT ──────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  var params = new URLSearchParams(window.location.search);
+  LEAF.name     = params.get('name')     ? decodeURIComponent(params.get('name'))     : null;
+  LEAF.id       = params.get('leafId')   ? params.get('leafId')                       : null;
+  LEAF.recordId = params.get('recordId') ? params.get('recordId')                     : null;
+
+  if (!LEAF.name && !LEAF.id) {
+    // Try to get from localStorage (family-tree context)
+    try {
+      var treeKey = Object.keys(localStorage).find(function(k) { return k.startsWith('cc_tree_'); });
+      if (treeKey) {
+        var tree = JSON.parse(localStorage.getItem(treeKey) || '{}');
+        if (tree.subject && tree.subject.name) {
+          LEAF.name = tree.subject.name;
+        }
+      }
+    } catch(e) {}
+  }
+
+  loadLeaf();
+});
+
+async function loadLeaf() {
+  if (!LEAF.name && !LEAF.id) {
+    showError('No leaf specified. Return to the family tree.');
+    return;
+  }
+
+  // Set name immediately
+  var name = LEAF.name || 'This Person';
+  document.getElementById('lfName').textContent = name;
+  document.getElementById('lfHeaderTitle').textContent = name;
+  document.getElementById('lfInitial').textContent = name[0].toUpperCase();
+  document.getElementById('lfInitial').style.background = INITIAL_COLORS[name.charCodeAt(0) % INITIAL_COLORS.length];
+
+  // Try to load from Airtable Living Legacy Leaves
+  if (LEAF.name || LEAF.id) {
+    await loadLeafRecord();
+  }
+
+  // Load contributions
+  await loadContributions();
+
+  // Render status bar
+  renderStatusBar();
+}
+
+async function loadLeafRecord() {
+  try {
+    var filterFormula = LEAF.recordId
+      ? 'RECORD_ID()="' + LEAF.recordId + '"'
+      : '{Full Name}="' + LEAF.name + '"';
+
+    var res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'list', table: 'Living Legacy Leaves', filterFormula: filterFormula, maxRecords: 1})
+    });
+    var data = await res.json();
+    var records = data.records || [];
+
+    if (records.length > 0) {
+      var f = records[0].fields;
+      LEAF.recordId = records[0].id;
+      LEAF.id       = f['Leaf ID'] || records[0].id;
+
+      // Update display
+      if (f['Full Name']) document.getElementById('lfName').textContent = f['Full Name'];
+      if (f['Known As']) document.getElementById('lfHeaderTitle').textContent = f['Known As'] + "'s Legacy";
+
+      var years = '';
+      if (f['Birth Year']) years += f['Birth Year'];
+      if (f['Passing Year']) years += ' – ' + f['Passing Year'];
+      else if (f['Birth Year']) years += ' · Living';
+      if (years) document.getElementById('lfYears').textContent = years;
+
+      // Status
+      var leafStatus = f['Leaf Status'];
+      var statusName = leafStatus && typeof leafStatus === 'object' ? leafStatus.name : leafStatus;
+      if (statusName) LEAF.status = statusName.toLowerCase().replace(' ', '');
+
+      // Stats
+      if (f['Contributor Count']) document.getElementById('lfContributorCount').textContent = f['Contributor Count'];
+
+      // Days open
+      if (records[0].createdTime) {
+        var created = new Date(records[0].createdTime);
+        var days = Math.floor((new Date() - created) / (1000 * 60 * 60 * 24));
+        document.getElementById('lfDaysOpen').textContent = days;
+      }
+    } else {
+      // No Airtable record yet — this is a locally-started leaf
+      LEAF.status = 'building';
+      createLeafRecord();
+    }
+  } catch(e) {
+    console.warn('Leaf record load error:', e);
+  }
+}
+
+async function createLeafRecord() {
+  // Create the leaf record in Airtable when one doesn't exist yet
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user || !LEAF.name) return;
+  try {
+    await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Living Legacy Leaves',
+        fields: {
+          'Full Name':        LEAF.name,
+          'Keeper User ID':   user.user_id || '',
+          'Leaf ID':          'leaf_' + Date.now(),
+          'Leaf Status':      'Active',
+          'Subject Living':   false,
+          'Contributor Count': 0
+        }
+      })
+    });
+  } catch(e) { console.warn('Leaf create error:', e); }
+}
+
+async function loadContributions() {
+  // Load contributions from Firestore first, then Airtable
+  if (!LEAF.name && !LEAF.id) return;
+
+  var contribs = [];
+
+  // Check Firestore
+  try {
+    if (typeof CCFB !== 'undefined' && CCFB.getUid && CCFB.getUid()) {
+      // Load from Firestore leaf contributions subcollection
+      // For now use localStorage as fallback
+    }
+  } catch(e) {}
+
+  // Check localStorage
+  try {
+    var key = 'cc_leaf_contributions_' + (LEAF.name || LEAF.id || 'default');
+    contribs = JSON.parse(localStorage.getItem(key) || '[]');
+  } catch(e) {}
+
+  LEAF.contributions = contribs;
+  renderContributions(contribs);
+  document.getElementById('lfContribCount').textContent = contribs.length;
+}
+
+function renderContributions(contribs) {
+  var container = document.getElementById('lfContributions');
+
+  if (!contribs.length) {
+    container.innerHTML = '<div class="lf-empty"><div class="lf-empty-icon">🌿</div><div class="lf-empty-text">No contributions yet. Share the invite link to bring in the people who knew them.</div><div class="lf-empty-cta" onclick="openInviteContributor()" style="cursor:pointer;">Invite a contributor →</div></div>';
+    return;
+  }
+
+  var html = '';
+  contribs.forEach(function(c) {
+    var typeClass = c.type === 'memory' ? 'memory' : (c.type === 'prompted' ? 'prompted' : 'written');
+    var typeLabel = c.type === 'memory' ? 'Memory' : (c.type === 'prompted' ? 'Prompted' : 'Written');
+    html += '<div class="lf-contrib-card ' + typeClass + '">';
+    html += '<div class="lf-contrib-meta"><span class="lf-contrib-author">' + (c.author || 'Anonymous') + '</span><span class="lf-contrib-date">' + formatDate(c.date) + '</span></div>';
+    html += '<span class="lf-contrib-type type-' + typeClass + '">' + typeLabel + '</span>';
+    if (c.prompt) html += '<div class="lf-contrib-prompt">"' + c.prompt + '"</div>';
+    html += '<div class="lf-contrib-text">' + (c.text || '') + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function renderStatusBar() {
+  var bar = document.getElementById('lfStatusBar');
+  var pill = document.getElementById('lfStatusPill');
+  bar.style.display = 'block';
+
+  // Update status pill
+  pill.className = 'lf-status-pill';
+  var status = LEAF.status || 'building';
+
+  if (status === 'active' || status === 'building') {
+    pill.classList.add('status-building');
+    pill.textContent = status === 'active' ? 'Open · Accepting Contributions' : 'Building · Free';
+    bar.innerHTML = '<div class="lf-sb-building">'
+      + '<div class="lf-sb-eyebrow">Leaf Status</div>'
+      + '<div class="lf-sb-text">This leaf is open and building. Seal it permanently whenever you\'re ready, or keep adding to it.</div>'
+      + '<div class="lf-sb-actions">'
+      + '<button class="lf-sb-btn lf-sb-btn-seal" onclick="openSealModal()">Seal Permanently</button>'
+      + '<button class="lf-sb-btn lf-sb-btn-keep" onclick="leafToast(\'Leaf stays open ✦\')">Keep Building</button>'
+      + '</div></div>';
+  } else if (status === 'sealed') {
+    pill.classList.add('status-sealed');
+    pill.textContent = 'Sealed · Preserved';
+    var sealDate = LEAF.sealedDate ? ' on ' + formatDate(LEAF.sealedDate) : '';
+    bar.innerHTML = '<div class="lf-sb-sealed">'
+      + '<div class="lf-sb-seal-icon">🌿</div>'
+      + '<div class="lf-sb-seal-title">Sealed' + sealDate + '</div>'
+      + '<div class="lf-sb-seal-sub">This archive is permanently preserved. It will never disappear.</div>'
+      + '<button class="lf-sb-btn-reopen" onclick="reopenLeaf()">Reopen for 30 Days · $4.99</button>'
+      + '</div>';
+  } else if (status === 'readonly') {
+    pill.classList.add('status-readonly');
+    pill.textContent = 'Read Only';
+    bar.innerHTML = '<div class="lf-sb-readonly">'
+      + '<div class="lf-sb-readonly-text">Subscription lapsed. This leaf is view-only. Restore to keep accepting contributions.</div>'
+      + '<button class="lf-sb-btn-restore" onclick="window.location.href=\'https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00\'">Restore</button>'
+      + '</div>';
+  }
+}
+
+// ── SEAL FLOW ─────────────────────────────────────────────────────
+function openSealModal() {
+  document.getElementById('sealModal').classList.add('open');
+}
+
+function closeSealModal() {
+  document.getElementById('sealModal').classList.remove('open');
+}
+
+function sealLeaf(type) {
+  var leafId = LEAF.id || LEAF.recordId || LEAF.name || 'unknown';
+  var link = type === 'standard' ? STRIPE_LINKS.seal_standard : STRIPE_LINKS.seal_large;
+  // Pass leaf ID as client_reference_id so webhook knows which leaf to seal
+  var url = link + '?client_reference_id=' + encodeURIComponent('seal_' + leafId);
+  window.open(url, '_blank');
+  closeSealModal();
+  leafToast('Opening secure payment… leaf will seal after payment confirms.');
+}
+
+function openLeafMonthly() {
+  var leafId = LEAF.id || LEAF.recordId || LEAF.name || 'unknown';
+  var url = STRIPE_LINKS.leaf_monthly + '?client_reference_id=' + encodeURIComponent('monthly_' + leafId);
+  window.open(url, '_blank');
+  leafToast('Opening monthly plan… leaf stays active after payment.');
+}
+
+function reopenLeaf() {
+  var leafId = LEAF.id || LEAF.recordId || LEAF.name || 'unknown';
+  var url = STRIPE_LINKS.reopen_30day + '?client_reference_id=' + encodeURIComponent('reopen_' + leafId);
+  window.open(url, '_blank');
+  leafToast('Opening payment… 30-day window opens after payment confirms.');
+}
+
+// ── INVITE & CONTRIBUTE ───────────────────────────────────────────
+function openInviteContributor() {
+  var name = LEAF.name || 'this person';
+  var url = window.location.origin + '/contribute.html?person=' + encodeURIComponent(name);
+  if (LEAF.id) url += '&leafId=' + encodeURIComponent(LEAF.id);
+  if (navigator.share) {
+    navigator.share({
+      title: 'Add to ' + name + "'s Legacy",
+      text: "I'm building a legacy archive for " + name + ". Would you share a memory?",
+      url: url
+    }).catch(function(){});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url);
+    leafToast('Invite link copied ✦');
+  }
+}
+
+function openContribute() {
+  var name = LEAF.name || '';
+  var url = 'contribute.html?person=' + encodeURIComponent(name);
+  if (LEAF.id) url += '&leafId=' + encodeURIComponent(LEAF.id);
+  window.location.href = url;
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    var d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
+  } catch(e) { return ''; }
+}
+
+function leafToast(msg) {
+  var t = document.getElementById('lfToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.classList.remove('show'); }, 2600);
+}
+
+function showError(msg) {
+  document.getElementById('lfName').textContent = 'Not found';
+  leafToast(msg);
+}
+</script>
+</body>
+</html>
