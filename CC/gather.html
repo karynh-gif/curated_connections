@@ -894,6 +894,20 @@ async function loadTonightCards() {
     var edition = (f.Edition && f.Edition.name) ? f.Edition.name : (f.Edition || 'Family');
     var cls = editionClass[edition] || 'card-family';
     var bg = editionBg[edition] || editionBg['Family'];
+    var deckColors = {
+      'Family':      {border:'rgba(201,125,58,0.28)',  accent:'#e89448'},
+      'Couples':     {border:'rgba(192,80,120,0.28)',  accent:'#e07060'},
+      'Faith':       {border:'rgba(107,60,162,0.28)',  accent:'#9b6dd4'},
+      'Dinner Table':{border:'rgba(42,138,114,0.28)',  accent:'#3aad90'},
+      'Friends':     {border:'rgba(58,106,170,0.28)',  accent:'#3a6aaa'},
+      'Legacy':      {border:'rgba(184,134,11,0.28)',  accent:'#c9a830'},
+      'Get Real':    {border:'rgba(160,50,50,0.28)',   accent:'#c85050'},
+      'Grandparents':{border:'rgba(201,125,58,0.28)',  accent:'#e89448'},
+      'Kids':        {border:'rgba(107,60,162,0.28)',  accent:'#9b6dd4'},
+      'Teen':        {border:'rgba(107,60,162,0.28)',  accent:'#9b6dd4'},
+      'Team':        {border:'rgba(58,106,170,0.28)',  accent:'#3a6aaa'},
+      'Road Trip':   {border:'rgba(42,138,114,0.28)',  accent:'#3aad90'},
+    };
     var deck = deckColors[edition] || deckColors['Family'];
     var key = 'at_' + idx;
     var lbl = edition + ' Edition';
