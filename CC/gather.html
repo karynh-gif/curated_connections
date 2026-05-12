@@ -212,6 +212,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 <script src="/cc-auth.js"></script>
 <script src="/cc-cards.js"></script>
 <script src="/atmosphere.js" defer></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div class="app">
@@ -449,26 +453,41 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     </div>
   </div>
 
-  <!-- ACCOUNT MODAL -->
+  <!-- ACCOUNT MODAL — Firebase Auth -->
   <div class="acct-modal" id="acctModal">
     <div class="acct-sheet">
       <div class="sheet-handle"></div>
-      <div class="sheet-kicker" id="acctKicker">Create your profile</div>
-      <div class="sheet-title" id="acctTitle">Keep this moment.</div>
-      <div class="sheet-sub" id="acctSub">Create your free Gather profile to save answers, share with people you love, and come back to what matters.</div>
-      <input class="sheet-input" type="text" placeholder="Your first name" id="acctName"/>
-      <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail"/>
-      <div style="font-size:.75rem;color:rgba(242,232,216,.28);line-height:1.7;margin-bottom:.65rem;text-align:center;">By continuing you agree to our <span style="color:rgba(201,125,58,.55);cursor:pointer;">Terms of Service</span> and <span style="color:rgba(201,125,58,.55);cursor:pointer;">Privacy Policy</span>.<br/>Curated Connections™ is for entertainment purposes only.</div>
-      <button class="sheet-btn" onclick="createAcct()">Create Free Profile →</button>
-      <button class="sheet-cancel" onclick="closeAccount()">Not now — keep browsing</button>
-      <div class="sheet-note">Free forever · No card required · Cancel anytime</div>
+      <div class="sheet-kicker" id="acctKicker">Create your free profile</div>
+
+      <!-- Tab switcher -->
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem;">
+        <div id="acctTabSignup" onclick="showSignupTab()" style="flex:1;text-align:center;padding:.4rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:1;border-bottom:2px solid var(--amber);">Create Account</div>
+        <div id="acctTabSignin" onclick="showSigninTab()" style="flex:1;text-align:center;padding:.4rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:0.4;border-bottom:2px solid transparent;">Sign In</div>
+      </div>
+
+      <!-- Error message -->
+      <div id="acctError" style="font-size:.78rem;color:#e07060;margin-bottom:.5rem;min-height:1.1rem;"></div>
+
+      <!-- Sign-up form -->
+      <div id="acctSignupForm">
+        <input class="sheet-input" type="text" placeholder="Your first name" id="acctName" autocomplete="given-name"/>
+        <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail" autocomplete="email"/>
+        <input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password"/>
+        <button class="sheet-btn" onclick="createAcct()">Create Free Account →</button>
+      </div>
+
+      <!-- Sign-in form -->
+      <div id="acctSigninForm" style="display:none;">
+        <input class="sheet-input" type="email" placeholder="Email address" id="signinEmail" autocomplete="email"/>
+        <input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password"/>
+        <button class="sheet-btn" onclick="signIn()">Sign In →</button>
+      </div>
+
+      <button class="sheet-cancel" onclick="closeAccount()">Maybe later</button>
     </div>
   </div>
 
-  <!-- TOAST -->
-  <div class="toast-wrap" id="toastWrap" style="display:none;">
-    <div class="toast" id="toastMsg"></div>
-  </div>
+</div>
 
 <!-- ── QUIZ OVERLAY ───────────────────────────── -->
 <div class="quiz-overlay" id="quizOverlay">
@@ -941,20 +960,196 @@ async function loadCircles() {
 }
 
 // ── ACCOUNT MODAL ──
+// ── FIREBASE AUTH ──────────────────────────────────────────
+var FB_CONFIG = {
+  apiKey: "AIzaSyB6wEldIMuAlcnEE9EGnZJ8hufWFFwmDbQ",
+  authDomain: "curated-connections-dcf01.firebaseapp.com",
+  databaseURL: "https://curated-connections-dcf01-default-rtdb.firebaseio.com",
+  projectId: "curated-connections-dcf01",
+  storageBucket: "curated-connections-dcf01.firebasestorage.app",
+  messagingSenderId: "472185773381",
+  appId: "1:472185773381:web:0b53e6dd7b0b54a317722c"
+};
+
+var fbApp, fbAuth, fbDb;
+try {
+  if (!firebase.apps.length) {
+    fbApp = firebase.initializeApp(FB_CONFIG);
+  } else {
+    fbApp = firebase.app();
+  }
+  fbAuth = firebase.auth();
+  fbDb   = firebase.firestore();
+} catch(e) {
+  console.warn('Firebase init error:', e);
+}
+
+// Auth state — fires on every page load
+if (fbAuth) {
+  fbAuth.onAuthStateChanged(function(user) {
+    if (user) {
+      // Logged in — load profile and update CC.getUser
+      fbDb.collection('users').doc(user.uid).get().then(function(doc) {
+        var profile = doc.exists ? doc.data() : {};
+        var ccUser = {
+          user_id: user.uid,
+          email: user.email,
+          name: profile.displayName || user.displayName || user.email.split('@')[0],
+          tier: profile.tier || 'free'
+        };
+        localStorage.setItem('cc_user', JSON.stringify(ccUser));
+        // Update avatar initial in topbar
+        var av = document.getElementById('topbarAvatar') || document.querySelector('.topbar-avatar');
+        if (av) av.textContent = ccUser.name[0].toUpperCase();
+        showToast('Welcome back, ' + ccUser.name.split(' ')[0] + ' ✦');
+      }).catch(function(e) {
+        console.warn('Profile load error:', e);
+      });
+    } else {
+      // Not logged in — clear session
+      localStorage.removeItem('cc_user');
+    }
+  });
+}
+
 function openAccount(context) {
   var u = CC.getUser ? CC.getUser() : null;
-  if (u) { showToast('Profile coming soon'); return; }
-  document.getElementById('acctKicker').textContent = context || 'Create your profile';
+  if (u) {
+    // Signed in — show profile toast
+    showToast('Signed in as ' + u.name.split(' ')[0]);
+    return;
+  }
+  document.getElementById('acctKicker').textContent = context || 'Create your free profile';
   document.getElementById('acctModal').classList.add('open');
+  // Switch to appropriate tab
+  showSignupTab();
 }
-function closeAccount() { document.getElementById('acctModal').classList.remove('open'); }
-function createAcct() {
-  var name = document.getElementById('acctName').value.trim();
+
+function closeAccount() {
+  document.getElementById('acctModal').classList.remove('open');
+  document.getElementById('acctError').textContent = '';
+}
+
+function showSignupTab() {
+  document.getElementById('acctSignupForm').style.display = 'block';
+  document.getElementById('acctSigninForm').style.display = 'none';
+  document.getElementById('acctTabSignup').style.opacity = '1';
+  document.getElementById('acctTabSignin').style.opacity = '0.4';
+}
+
+function showSigninTab() {
+  document.getElementById('acctSignupForm').style.display = 'none';
+  document.getElementById('acctSigninForm').style.display = 'block';
+  document.getElementById('acctTabSignup').style.opacity = '0.4';
+  document.getElementById('acctTabSignin').style.opacity = '1';
+}
+
+async function createAcct() {
+  var name  = document.getElementById('acctName').value.trim();
   var email = document.getElementById('acctEmail').value.trim();
-  if (!name || !email) { showToast('Please fill in both fields'); return; }
-  showToast('Welcome, ' + name + ' \u2726');
-  closeAccount();
+  var pass  = document.getElementById('acctPassword').value;
+  var errEl = document.getElementById('acctError');
+  errEl.textContent = '';
+
+  if (!name)  { errEl.textContent = 'What should we call you?'; return; }
+  if (!email) { errEl.textContent = 'Email address is required.'; return; }
+  if (!pass || pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+
+  if (!fbAuth) {
+    // Firebase not available — save to localStorage only
+    var user = { user_id: 'local_' + Date.now(), name: name, email: email, tier: 'free' };
+    localStorage.setItem('cc_user', JSON.stringify(user));
+    showToast('Welcome, ' + name.split(' ')[0] + ' ✦');
+    closeAccount();
+    return;
+  }
+
+  document.querySelector('[onclick="createAcct()"]').disabled = true;
+  document.querySelector('[onclick="createAcct()"]').textContent = 'Creating account…';
+
+  try {
+    var cred = await fbAuth.createUserWithEmailAndPassword(email, pass);
+    var uid  = cred.user.uid;
+
+    // Update Firebase display name
+    await cred.user.updateProfile({ displayName: name });
+
+    // Create Firestore profile
+    await fbDb.collection('users').doc(uid).set({
+      uid: uid,
+      email: email,
+      displayName: name,
+      tier: 'free',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Save to localStorage for CC.getUser()
+    var ccUser = { user_id: uid, email: email, name: name, tier: 'free' };
+    localStorage.setItem('cc_user', JSON.stringify(ccUser));
+
+    showToast('Welcome, ' + name.split(' ')[0] + ' ✦');
+    closeAccount();
+  } catch(e) {
+    errEl.textContent =
+      e.code === 'auth/email-already-in-use' ? 'An account with that email already exists. Sign in instead.' :
+      e.code === 'auth/invalid-email'         ? 'Please enter a valid email address.' :
+      e.code === 'auth/weak-password'         ? 'Password must be at least 6 characters.' :
+      'Account creation failed. Please try again.';
+    document.querySelector('[onclick="createAcct()"]').disabled = false;
+    document.querySelector('[onclick="createAcct()"]').textContent = 'Create Free Account →';
+  }
 }
+
+async function signIn() {
+  var email = document.getElementById('signinEmail').value.trim();
+  var pass  = document.getElementById('signinPassword').value;
+  var errEl = document.getElementById('acctError');
+  errEl.textContent = '';
+
+  if (!email || !pass) { errEl.textContent = 'Email and password required.'; return; }
+
+  if (!fbAuth) {
+    errEl.textContent = 'Sign-in unavailable. Try refreshing.';
+    return;
+  }
+
+  document.querySelector('[onclick="signIn()"]').disabled = true;
+  document.querySelector('[onclick="signIn()"]').textContent = 'Signing in…';
+
+  try {
+    var cred = await fbAuth.signInWithEmailAndPassword(email, pass);
+    var uid  = cred.user.uid;
+
+    // Load profile from Firestore
+    var doc = await fbDb.collection('users').doc(uid).get();
+    var profile = doc.exists ? doc.data() : {};
+    var ccUser = {
+      user_id: uid,
+      email: cred.user.email,
+      name: profile.displayName || cred.user.displayName || email.split('@')[0],
+      tier: profile.tier || 'free'
+    };
+    localStorage.setItem('cc_user', JSON.stringify(ccUser));
+
+    showToast('Welcome back, ' + ccUser.name.split(' ')[0] + ' ✦');
+    closeAccount();
+  } catch(e) {
+    errEl.textContent =
+      e.code === 'auth/user-not-found'  ? 'No account found with that email.' :
+      e.code === 'auth/wrong-password'  ? 'Incorrect password.' :
+      e.code === 'auth/invalid-email'   ? 'Please enter a valid email address.' :
+      'Sign in failed. Please try again.';
+    document.querySelector('[onclick="signIn()"]').disabled = false;
+    document.querySelector('[onclick="signIn()"]').textContent = 'Sign In →';
+  }
+}
+
+async function signOut() {
+  if (fbAuth) await fbAuth.signOut();
+  localStorage.removeItem('cc_user');
+  showToast('Signed out.');
+}
+// ─────────────────────────────────────────────────────
 
 // ── QUIZ ENGINE ──────────────────────────────────────────────
 var QUIZ_CACHE = {};

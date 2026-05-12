@@ -18,7 +18,7 @@ html{font-size:18px;-webkit-text-size-adjust:100%;}
   --r-md:14px;--r-lg:20px;--r-xl:26px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;background:var(--ivory);font-family:'DM Sans',sans-serif;color:var(--espresso);-webkit-font-smoothing:antialiased;overflow:hidden;}
+html,body{height:100%;background:var(--ivory);sans-serif;color:var(--espresso);-webkit-font-smoothing:antialiased;overflow:hidden;}
 body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");background-size:140px;pointer-events:none;z-index:0;}
 body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 20% 0%,rgba(235,195,110,.2),transparent 55%);pointer-events:none;z-index:0;}
 
@@ -30,11 +30,11 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
 /* HEADER */
 .header{padding:.8rem 1rem .7rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--bark-ghost);flex-shrink:0;background:rgba(244,232,212,.92);backdrop-filter:blur(12px);}
-.h-back{background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--bark-mid);cursor:pointer;padding:0;}
+.h-back{background:none;border:none;serif;font-style:italic;font-size:.9rem;color:var(--bark-mid);cursor:pointer;padding:0;}
 .h-title{flex:1;text-align:center;}
-.h-name{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--espresso);font-weight:500;}
+.h-name{serif;font-size:1rem;color:var(--espresso);font-weight:500;}
 .h-sub{font-size:.70rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--bark-soft);margin-top:.05rem;}
-.h-fs{background:rgba(62,128,112,.1);border:1px solid rgba(62,128,112,.25);border-radius:999px;padding:.28rem .65rem;font-size:.75rem;font-weight:700;color:var(--teal);cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.h-fs{background:rgba(62,128,112,.1);border:1px solid rgba(62,128,112,.25);border-radius:999px;padding:.28rem .65rem;font-size:.75rem;font-weight:700;color:var(--teal);cursor:pointer;sans-serif;white-space:nowrap;}
 
 /* TREE AREA */
 .tree-area{flex:1;overflow:auto;padding:1.5rem 1rem 5rem;position:relative;}
@@ -92,27 +92,27 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .node-initial{
   width:32px;height:32px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:900;
+  sans-serif;font-size:.85rem;font-weight:900;
   color:rgba(255,255,255,.9);
   margin:0 auto .28rem;
 }
 .node-card.subject .node-initial{width:38px;height:38px;font-size:1rem;}
 .node-card.empty .node-initial{background:rgba(40,22,0,.1)!important;color:rgba(40,22,0,.3);}
 
-.node-name{font-family:'Cormorant Garamond',serif;font-size:.72rem;color:var(--espresso);line-height:1.3;font-weight:500;}
+.node-name{serif;font-size:.72rem;color:var(--espresso);line-height:1.3;font-weight:500;}
 .node-card.subject .node-name{font-size:.8rem;font-weight:600;}
 .node-card.empty .node-name{color:var(--bark-soft);}
-.node-years{font-size:.70rem;color:var(--bark-soft);margin-top:.1rem;font-family:'DM Sans',sans-serif;}
+.node-years{font-size:.70rem;color:var(--bark-soft);margin-top:.1rem;sans-serif;}
 
 /* Media indicators */
 .node-media{display:flex;justify-content:center;gap:2px;margin-top:.22rem;}
 .nm{width:5px;height:5px;border-radius:50%;}
 
 /* Relationship label below node */
-.node-rel{font-size:.70rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bark-soft);font-family:'Nunito',sans-serif;}
+.node-rel{font-size:.70rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bark-soft);sans-serif;}
 
 /* Start leaf CTA on empty nodes */
-.node-start{font-size:.70rem;color:var(--amber);font-family:'Nunito',sans-serif;font-weight:700;margin-top:.18rem;}
+.node-start{font-size:.70rem;color:var(--amber);sans-serif;font-weight:700;margin-top:.18rem;}
 
 /* SPOUSE ROW — horizontal with heart */
 .spouse-row{display:flex;align-items:center;justify-content:center;gap:.35rem;margin-bottom:0;}
@@ -120,7 +120,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
 /* LEGEND */
 .legend{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);display:flex;gap:.65rem;background:rgba(244,232,212,.92);border:1px solid var(--bark-ghost);border-radius:999px;padding:.38rem .85rem;backdrop-filter:blur(10px);z-index:50;}
-.leg-item{display:flex;align-items:center;gap:.25rem;font-size:.72rem;color:var(--bark-mid);font-family:'Nunito',sans-serif;font-weight:700;}
+.leg-item{display:flex;align-items:center;gap:.25rem;font-size:.72rem;color:var(--bark-mid);sans-serif;font-weight:700;}
 .leg-dot{width:8px;height:8px;border-radius:50%;}
 
 /* BOTTOM NAV */
@@ -141,14 +141,14 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 .detail-sheet.open{transform:translateX(-50%) translateY(0);}
 .ds-handle{width:28px;height:2.5px;background:rgba(40,22,0,.14);border-radius:2px;margin:0 auto .9rem;}
 .ds-eye{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal);margin-bottom:.3rem;}
-.ds-name{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--espresso);font-weight:400;margin-bottom:.15rem;}
+.ds-name{serif;font-size:1.7rem;color:var(--espresso);font-weight:400;margin-bottom:.15rem;}
 .ds-years{font-size:.72rem;color:var(--bark-soft);margin-bottom:.8rem;}
 .ds-actions{display:flex;flex-direction:column;gap:.42rem;margin-top:1rem;}
-.ds-btn{width:100%;padding:.82rem;border-radius:var(--r-lg);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;text-align:center;transition:all .2s;}
+.ds-btn{width:100%;padding:.82rem;border-radius:var(--r-lg);sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;text-align:center;transition:all .2s;}
 .ds-primary{background:linear-gradient(135deg,var(--amber),#e89448);color:#fff;border:none;box-shadow:0 4px 14px rgba(201,125,58,.3);}
 .ds-secondary{background:none;border:1px solid var(--bark-ghost);color:var(--bark-mid);}
 .ds-media-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.65rem;}
-.ds-chip{font-size:.75rem;font-weight:700;font-family:'Nunito',sans-serif;padding:.22rem .55rem;background:var(--teal-ghost);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:var(--teal);}
+.ds-chip{font-size:.75rem;font-weight:700;sans-serif;padding:.22rem .55rem;background:var(--teal-ghost);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:var(--teal);}
 
 /* Toast */
 .toast{display:none;position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.88);border-radius:999px;padding:.4rem .9rem;font-size:.78rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;}
@@ -402,7 +402,7 @@ body::after{content:"";position:fixed;inset:0;background:radial-gradient(ellipse
 
 
   <!-- Tier-aware status bar -->
-  <div id="legacyStatusBar" style="display:none;margin:.6rem .9rem;padding:.65rem .9rem;border-radius:14px;font-family:'Nunito',sans-serif;font-size:.72rem;background:rgba(42,138,80,.08);border:1px solid rgba(42,138,80,.18);">
+  <div id="legacyStatusBar" style="display:none;margin:.6rem .9rem;padding:.65rem .9rem;border-radius:14px;sans-serif;font-size:.72rem;background:rgba(42,138,80,.08);border:1px solid rgba(42,138,80,.18);">
     <span style="color:rgba(58,173,144,.8);font-weight:800;letter-spacing:.08em;text-transform:uppercase;">Leaf Status: </span>
     <span id="leafStatusText" style="color:rgba(242,232,216,.5);">Building · Free</span>
     <span id="leafUpgradeLink" style="display:none;margin-left:.6rem;color:#c97d3a;font-weight:700;cursor:pointer;" onclick="window.location.href='index.html#upgrade'">Keep it open →</span>
@@ -601,25 +601,46 @@ function goToKeepers() {
 }
 
 function openFamilySearch() {
-  // Show import instructions first
   var overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;';
-  overlay.innerHTML = '<div style="width:100%;max-width:430px;background:#fdf6ec;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem 2rem;border-top:1px solid rgba(40,22,0,.08);">'
-    + '<div style="width:36px;height:4px;background:rgba(40,22,0,.1);border-radius:2px;margin:0 auto .9rem;"></div>'
-    + '<div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">Import from Family Search</div>'
-    + '<div style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:#281600;margin-bottom:.7rem;">Find your family tree data</div>'
-    + '<div style="font-size:.82rem;color:rgba(40,22,0,.5);line-height:1.7;margin-bottom:1.1rem;">'
-    + '1. Visit FamilySearch.org and log in<br>'
-    + '2. Search for your family member<br>'
-    + '3. Export or note names, dates, and relationships<br>'
-    + '4. Return here and add them to your tree with + Start Leaf'
-    + '</div>'
-    + '<button onclick="window.open('https://familysearch.org','_blank')" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:#fff;cursor:pointer;margin-bottom:.5rem;">Open FamilySearch.org ↗</button>'
-    + '<button onclick="window.open('https://ancestry.com','_blank')" style="width:100%;padding:.75rem;background:rgba(40,22,0,.06);border:1px solid rgba(40,22,0,.12);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:rgba(40,22,0,.6);cursor:pointer;margin-bottom:.4rem;">Open Ancestry.com ↗</button>'
-    + '<button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;">Done</button>'
-    + '</div>';
-  document.body.appendChild(overlay);
+
+  var sheet = document.createElement('div');
+  sheet.style.cssText = 'width:100%;max-width:430px;background:#fdf6ec;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem 2rem;border-top:1px solid rgba(40,22,0,.08);';
+
+  var handle = document.createElement('div');
+  handle.style.cssText = 'width:36px;height:4px;background:rgba(40,22,0,.1);border-radius:2px;margin:0 auto .9rem;';
+
+  var kicker = document.createElement('div');
+  kicker.style.cssText = 'font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;';
+  kicker.textContent = 'Import from Family Search';
+
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:1.35rem;color:#281600;margin-bottom:.7rem;';
+  title.textContent = 'Find your family tree data';
+
+  var steps = document.createElement('div');
+  steps.style.cssText = 'font-size:.82rem;color:rgba(40,22,0,.5);line-height:1.7;margin-bottom:1.1rem;';
+  steps.innerHTML = '1. Visit FamilySearch.org and log in<br>2. Search for your family member<br>3. Note names, dates, and relationships<br>4. Return here and add them with + Start Leaf';
+
+  var btn1 = document.createElement('button');
+  btn1.style.cssText = 'width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;font-size:.85rem;font-weight:800;color:#fff;cursor:pointer;margin-bottom:.5rem;';
+  btn1.textContent = 'Open FamilySearch.org ↗';
+  btn1.onclick = function() { window.open('https://familysearch.org','_blank'); };
+
+  var btn2 = document.createElement('button');
+  btn2.style.cssText = 'width:100%;padding:.75rem;background:rgba(40,22,0,.06);border:1px solid rgba(40,22,0,.12);border-radius:999px;font-size:.82rem;font-weight:700;color:rgba(40,22,0,.6);cursor:pointer;margin-bottom:.4rem;';
+  btn2.textContent = 'Open Ancestry.com ↗';
+  btn2.onclick = function() { window.open('https://ancestry.com','_blank'); };
+
+  var cancel = document.createElement('button');
+  cancel.style.cssText = 'width:100%;padding:.5rem;background:none;border:none;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;';
+  cancel.textContent = 'Done';
+  cancel.onclick = function() { overlay.remove(); };
+
+  [handle, kicker, title, steps, btn1, btn2, cancel].forEach(function(el) { sheet.appendChild(el); });
+  overlay.appendChild(sheet);
   overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
 }
 // ─────────────────────────────────────────────────────────────
 // ─────────────────────────────────────────────────────────────────
@@ -627,33 +648,66 @@ function openFamilySearch() {
 function openDetail(id, hasLeaf) {
   var relLabel = REL_LABELS[id] || 'Family Member';
   var person = TREE[id];
+  var dc = document.getElementById('detailContent');
+  if (!dc) return;
+  dc.innerHTML = '';
+
+  function el(tag, text, css) {
+    var e = document.createElement(tag);
+    if (text) e.textContent = text;
+    if (css) e.style.cssText = css;
+    return e;
+  }
 
   if (hasLeaf && person) {
-    // Show this person's leaf detail
-    document.getElementById('detailContent').innerHTML =
-      '<div class="ds-eye">Living Legacy · ' + relLabel + '</div>' +
-      '<div class="ds-name">' + person.name + '</div>' +
-      (person.years ? '<div class="ds-years">' + person.years + '</div>' : '') +
-      '<div class="ds-media-row">' +
-        '<div class="ds-chip">Written stories</div>' +
-        '<div class="ds-chip">Photos</div>' +
-        '<div class="ds-chip">Voice recordings</div>' +
-      '</div>' +
-      '<div class="ds-actions">' +
-        '<button class="ds-btn ds-primary" onclick="openContribute('' + id + '')">Open archive →</button>' +
-        '<button class="ds-btn ds-secondary" onclick="copyInviteLink('' + id + '')">Invite contributors</button>' +
-        '<button class="ds-btn ds-secondary" onclick="closeDetail()">Back to tree</button>' +
-      '</div>';
+    dc.appendChild(el('div', 'Living Legacy · ' + relLabel, 'font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#3aad90;margin-bottom:.3rem;'));
+    dc.appendChild(el('div', person.name, 'font-size:1.7rem;color:#281600;margin-bottom:.15rem;'));
+    if (person.years) dc.appendChild(el('div', person.years, 'font-size:.72rem;color:rgba(40,22,0,.45);margin-bottom:.8rem;'));
+
+    var mediaRow = document.createElement('div');
+    mediaRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;';
+    ['Written stories','Photos','Voice recordings'].forEach(function(m) {
+      var chip = el('div', m, 'padding:.3rem .75rem;background:rgba(40,22,0,.06);border-radius:999px;font-size:.75rem;color:rgba(40,22,0,.55);');
+      mediaRow.appendChild(chip);
+    });
+    dc.appendChild(mediaRow);
+
+    var actions = document.createElement('div');
+    actions.className = 'ds-actions';
+
+    var b1 = el('button', 'Open archive →', null);
+    b1.className = 'ds-btn ds-primary';
+    b1.onclick = function() { openContribute(id); };
+
+    var b2 = el('button', 'Invite contributors', null);
+    b2.className = 'ds-btn ds-secondary';
+    b2.onclick = function() { copyInviteLink(id); };
+
+    var b3 = el('button', 'Back to tree', null);
+    b3.className = 'ds-btn ds-secondary';
+    b3.onclick = closeDetail;
+
+    [b1, b2, b3].forEach(function(b) { actions.appendChild(b); });
+    dc.appendChild(actions);
+
   } else {
-    // Empty node — prompt to add this person
-    document.getElementById('detailContent').innerHTML =
-      '<div class="ds-eye">Family Tree · ' + relLabel + '</div>' +
-      '<div class="ds-name" style="color:rgba(40,22,0,.4);font-style:italic;">Not added yet</div>' +
-      '<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(40,22,0,.55);line-height:1.65;margin-top:.75rem;">Start a leaf for them — invite family to add what they remember before those memories fade.</div>' +
-      '<div class="ds-actions">' +
-        '<button class="ds-btn ds-primary" onclick="closeDetail();showAddPersonModal('' + id + '')">Add ' + relLabel + ' →</button>' +
-        '<button class="ds-btn ds-secondary" onclick="closeDetail()">Not now</button>' +
-      '</div>';
+    dc.appendChild(el('div', 'Family Tree · ' + relLabel, 'font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#3aad90;margin-bottom:.3rem;'));
+    dc.appendChild(el('div', 'Not added yet', 'font-size:1.4rem;color:rgba(40,22,0,.4);font-style:italic;margin-bottom:.6rem;'));
+    dc.appendChild(el('div', 'Start a leaf for them — invite family to add what they remember before those memories fade.', 'font-size:.95rem;color:rgba(40,22,0,.55);line-height:1.65;margin-top:.5rem;font-style:italic;margin-bottom:.8rem;'));
+
+    var actions = document.createElement('div');
+    actions.className = 'ds-actions';
+
+    var b1 = el('button', 'Add ' + relLabel + ' →', null);
+    b1.className = 'ds-btn ds-primary';
+    b1.onclick = function() { closeDetail(); showAddPersonModal(id); };
+
+    var b2 = el('button', 'Not now', null);
+    b2.className = 'ds-btn ds-secondary';
+    b2.onclick = closeDetail;
+
+    [b1, b2].forEach(function(b) { actions.appendChild(b); });
+    dc.appendChild(actions);
   }
 
   document.getElementById('overlay').classList.add('open');
@@ -706,20 +760,20 @@ function t(m){
   clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2600);
 }
 </script>
-<div style="text-align:center;padding:.8rem 1.5rem;font-size:.75rem;color:rgba(40,22,0,.35);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
+<div style="text-align:center;padding:.8rem 1.5rem;font-size:.75rem;color:rgba(40,22,0,.35);serif;font-style:italic;border-top:1px solid rgba(40,22,0,.08);background:#f4e8d4;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
 
 <!-- ── NAME YOUR TREE MODAL ── -->
 <div id="nameModal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;">
   <div style="width:100%;max-width:430px;background:#fdf6ec;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem calc(1.6rem + env(safe-area-inset-bottom));border-top:1px solid rgba(40,22,0,.08);">
     <div style="width:36px;height:4px;background:rgba(40,22,0,.1);border-radius:2px;margin:0 auto .9rem;"></div>
-    <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.3rem;">New Living Legacy</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#281600;margin-bottom:.35rem;">Whose story are you preserving?</div>
+    <div style="sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.3rem;">New Living Legacy</div>
+    <div style="serif;font-size:1.55rem;color:#281600;margin-bottom:.35rem;">Whose story are you preserving?</div>
     <div style="font-size:.82rem;color:rgba(40,22,0,.45);line-height:1.6;margin-bottom:1rem;">Enter the name of the person at the center of this family archive. You can always edit this.</div>
     <input id="subjectInput" type="text" placeholder="e.g. Grandma Rose, James Sr., Aunt Clara" maxlength="50"
-      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.78rem .9rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#281600;outline:none;margin-bottom:.7rem;"
+      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.78rem .9rem;serif;font-size:1.1rem;color:#281600;outline:none;margin-bottom:.7rem;"
       onkeydown="if(event.key==='Enter')submitSubjectName()"/>
-    <button onclick="submitSubjectName()" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;">Start Their Legacy →</button>
-    <button onclick="closeModal('nameModal')" style="width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;margin-top:.2rem;">Not now</button>
+    <button onclick="submitSubjectName()" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;">Start Their Legacy →</button>
+    <button onclick="closeModal('nameModal')" style="width:100%;padding:.5rem;background:none;border:none;serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;margin-top:.2rem;">Not now</button>
   </div>
 </div>
 
@@ -727,16 +781,16 @@ function t(m){
 <div id="addPersonModal" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;">
   <div style="width:100%;max-width:430px;background:#fdf6ec;border-radius:24px 24px 0 0;padding:1.4rem 1.2rem calc(1.6rem + env(safe-area-inset-bottom));border-top:1px solid rgba(40,22,0,.08);">
     <div style="width:36px;height:4px;background:rgba(40,22,0,.1);border-radius:2px;margin:0 auto .9rem;"></div>
-    <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.3rem;">Add Family Member</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:#281600;margin-bottom:.8rem;">Add <span id="addPersonRel" style="color:#c97d3a;">this person</span></div>
+    <div style="sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.3rem;">Add Family Member</div>
+    <div style="serif;font-size:1.45rem;color:#281600;margin-bottom:.8rem;">Add <span id="addPersonRel" style="color:#c97d3a;">this person</span></div>
     <input id="addPersonName" type="text" placeholder="Full name" maxlength="50"
-      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.72rem .9rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#281600;outline:none;margin-bottom:.5rem;"
+      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.72rem .9rem;serif;font-size:1.05rem;color:#281600;outline:none;margin-bottom:.5rem;"
       onkeydown="if(event.key==='Enter')document.getElementById('addPersonYears').focus()"/>
     <input id="addPersonYears" type="text" placeholder="Years (e.g. 1932 – 2018) — optional" maxlength="30"
-      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.72rem .9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:#281600;outline:none;margin-bottom:.7rem;"
+      style="width:100%;background:rgba(40,22,0,.04);border:1px solid rgba(40,22,0,.12);border-radius:14px;padding:.72rem .9rem;sans-serif;font-size:.88rem;color:#281600;outline:none;margin-bottom:.7rem;"
       onkeydown="if(event.key==='Enter')submitAddPerson()"/>
-    <button onclick="submitAddPerson()" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;">Add to Tree →</button>
-    <button onclick="closeModal('addPersonModal')" style="width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;margin-top:.2rem;">Cancel</button>
+    <button onclick="submitAddPerson()" style="width:100%;padding:.8rem;background:#c97d3a;border:none;border-radius:999px;sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;">Add to Tree →</button>
+    <button onclick="closeModal('addPersonModal')" style="width:100%;padding:.5rem;background:none;border:none;serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.3);cursor:pointer;margin-top:.2rem;">Cancel</button>
   </div>
 </div>
 </body>
