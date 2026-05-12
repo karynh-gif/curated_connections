@@ -185,3 +185,167 @@
   .cc-atm-right-panel,
   #cc-particles { display: none; }
 }
+
+
+/*
+  ══════════════════════════════════════════════════════════
+  TABLET IMMERSIVE ENVIRONMENT
+  Activates at 768px+. Expands the app canvas ~20% and
+  deepens the surrounding atmosphere into something cinematic.
+  Feels like: lantern light, distant fireflies, nighttime reflection.
+  The app becomes an object you enter — not a screen you read.
+  ══════════════════════════════════════════════════════════
+*/
+@media (min-width: 768px) {
+
+  /* ── EXPAND THE APP CANVAS ── */
+  /* All pages use a centered container. Gently expand it. */
+  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow) {
+    max-width: 520px !important;
+  }
+
+  /* Side panels recalculate around the larger 520px canvas */
+  .cc-atm-left-panel,
+  .cc-atm-right-panel {
+    width: calc((100vw - 520px) / 2);
+  }
+
+  /* ── FRAME GLOW — the app window glows softly from within ── */
+  /* A bloom of warmth that surrounds the larger container */
+  #cc-frame-glow {
+    position: fixed;
+    top:    0;
+    bottom: 0;
+    left:   calc((100vw - 520px) / 2);
+    width:  520px;
+    z-index: 0;
+    pointer-events: none;
+    /* Multi-layer bloom: amber warmth bleeds outward from the app edge */
+    box-shadow:
+      0   0   40px  4px  rgba(180, 100, 30, 0.055),
+      0   0   80px  12px rgba(160,  80, 20, 0.035),
+      0   0  140px  24px rgba(120,  55, 15, 0.018),
+      0   0  220px  40px rgba( 90,  35, 10, 0.010);
+    border-left:  1px solid rgba(180, 100, 30, 0.04);
+    border-right: 1px solid rgba(180, 100, 30, 0.04);
+  }
+
+  /* ── DEEPEN THE AMBIENT GLOWS FOR TABLET ── */
+  /* More presence, more warmth — still whispering, never shouting */
+
+  .cc-atm-glow-1 {
+    width:  75vw;
+    height: 70vh;
+    background: radial-gradient(
+      ellipse at 25% 75%,
+      rgba(190,  95, 22, 0.11)  0%,
+      rgba(150,  65, 12, 0.065) 35%,
+      rgba(110,  42,  6, 0.025) 60%,
+      transparent               80%
+    );
+  }
+
+  .cc-atm-glow-2 {
+    width:  60vw;
+    height: 55vh;
+    background: radial-gradient(
+      ellipse at 75% 20%,
+      rgba( 55,  75, 115, 0.075) 0%,
+      rgba( 38,  52,  88, 0.04)  40%,
+      transparent                70%
+    );
+  }
+
+  .cc-atm-glow-3 {
+    width:  50vw;
+    height: 50vh;
+    background: radial-gradient(
+      ellipse at 60% 50%,
+      rgba( 85,  42, 115, 0.058) 0%,
+      rgba( 55,  28,  80, 0.028) 45%,
+      transparent                70%
+    );
+  }
+
+  /* Fourth glow — tablet only. Deep indigo from below, like reflected water */
+  .cc-atm-glow-4 {
+    position: absolute;
+    width:  55vw;
+    height: 45vh;
+    bottom: -5%;
+    right:  10%;
+    background: radial-gradient(
+      ellipse at 60% 85%,
+      rgba( 40,  50, 110, 0.055) 0%,
+      rgba( 25,  32,  80, 0.025) 50%,
+      transparent                75%
+    );
+    animation: atmBreath2 18s ease-in-out infinite;
+    animation-delay: -6s;
+  }
+
+  /* ── DEEPER VIGNETTE — pulls the eye to the expanded center ── */
+  .cc-atm-vignette {
+    background: radial-gradient(
+      ellipse 58% 70% at 50% 50%,
+      transparent                    40%,
+      rgba(2,  4,  8,  0.20)         62%,
+      rgba(1,  2,  6,  0.50)         78%,
+      rgba(0,  1,  4,  0.80)        100%
+    );
+  }
+
+  /* ── PARTICLES: slightly more visible on tablet ── */
+  #cc-particles {
+    opacity: 0.72;
+  }
+
+  /* ── SIDE PANEL EDGE GLOWS: warmer and more present ── */
+  .cc-atm-left-panel::after,
+  .cc-atm-right-panel::after {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(180, 100, 30, 0.09) 25%,
+      rgba(180, 100, 30, 0.13) 50%,
+      rgba(180, 100, 30, 0.09) 75%,
+      transparent
+    );
+  }
+
+  /* Tablet-specific: a second inner glow line, wider and softer */
+  .cc-atm-left-panel::before,
+  .cc-atm-right-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+    background-size: 180px;
+    opacity: 0.5;
+  }
+}
+
+
+/* ── LARGE TABLET / SMALL DESKTOP: even more cinematic ── */
+@media (min-width: 1024px) {
+
+  /* Slightly more breathing room at larger sizes */
+  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow) {
+    max-width: 540px !important;
+  }
+
+  .cc-atm-left-panel,
+  .cc-atm-right-panel {
+    width: calc((100vw - 540px) / 2);
+  }
+
+  #cc-frame-glow {
+    left:  calc((100vw - 540px) / 2);
+    width: 540px;
+    box-shadow:
+      0   0   50px   6px rgba(180, 100, 30, 0.065),
+      0   0  100px  16px rgba(160,  80, 20, 0.040),
+      0   0  180px  32px rgba(120,  55, 15, 0.022),
+      0   0  280px  55px rgba( 90,  35, 10, 0.012);
+  }
+}
