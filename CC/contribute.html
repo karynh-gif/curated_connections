@@ -170,6 +170,9 @@ body::after{content:"";position:fixed;inset:0;
 .rel-chip{padding:.4rem .82rem;background:rgba(255,252,244,.5);border:1.5px solid rgba(40,22,0,.1);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;color:rgba(40,22,0,.55);cursor:pointer;transition:all .18s;}
 .rel-chip.sel{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.35);color:var(--amber);}
 </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="/cc-auth.js"></script>
+  <script src="/cc-firebase.js"></script>
 </head>
 <body>
 <div class="app">
@@ -515,28 +518,90 @@ function toggleRecording(btn) {
 function goContribute() { showScreen('contributeScreen'); }
 function goBack() { showScreen('welcomeScreen'); }
 
-function submitContribution() {
-  const name = document.getElementById('contributorName').value.trim();
+async function submitContribution() {
+  const name  = document.getElementById('contributorName').value.trim();
   const story = document.getElementById('storyText').value.trim();
-  if(!name) { t('Please add your name'); return; }
-  if(!story && selectedMedia.length <= 1) { t('Please share something — a story, photo, or recording'); return; }
+  if (!name)  { t('Please add your name'); return; }
+  if (!story && selectedMedia.length <= 1) { t('Please share something — a story, photo, or recording'); return; }
 
-  // Build summary
-  document.getElementById('tySummaryChapter').textContent = selectedChapter + ' · <span class="legacy-person-name">this person</span>';
-  document.getElementById('tySummaryPreview').textContent = story ?
-    (story.length > 100 ? story.substring(0, 100) + '...' : story) :
-    'Your contribution has been received and is now part of her Living Legacy archive.';
+  // Disable button while saving
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  // Get person and leafId from URL params
+  const params   = new URLSearchParams(window.location.search);
+  const person   = params.get('person')   ? decodeURIComponent(params.get('person'))   : personName || 'Unknown';
+  const leafId   = params.get('leafId')   ? params.get('leafId')                       : null;
+  const keeper   = params.get('keeper')   ? decodeURIComponent(params.get('keeper'))   : '';
+
+  const mediaLabels = {
+    story: 'Written story', photo: 'Photos',
+    voice: 'Contributor voice', theirvoice: "Their voice preserved", document: 'Document'
+  };
+  const mediaList = selectedMedia.map(function(m) { return mediaLabels[m] || m; }).join(', ');
+
+  // Save to Airtable Leaf Tags
+  try {
+    await fetch('/api/airtable', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'create',
+        table:  'Leaf Tags',
+        fields: {
+          'Tag ID':             'tag_' + Date.now(),
+          'Leaf Subject Name':  person,
+          'Leaf ID':            leafId || '',
+          'Tagged By User ID':  name,
+          'Source Type':        selectedMedia.includes('story') ? 'Written Memory' : (selectedMedia.includes('photo') ? 'Photo' : 'Contribution'),
+          'Source Content':     story || ('Media contributed: ' + mediaList),
+          'Tagger Note':        selectedChapter ? ('Chapter: ' + selectedChapter) : '',
+          'Why This Matters':   mediaList,
+          'Keeper Approved':    false,
+          'Tagged Date':        new Date().toISOString().split('T')[0]
+        }
+      })
+    });
+  } catch(e) {
+    console.warn('Airtable save error:', e);
+    // Continue to thank you screen even if save fails — don't block the user
+  }
+
+  // Save to localStorage as backup
+  try {
+    var key = 'cc_leaf_contributions_' + (leafId || person || 'default');
+    var contribs = JSON.parse(localStorage.getItem(key) || '[]');
+    contribs.unshift({
+      id:      Date.now(),
+      author:  name,
+      chapter: selectedChapter,
+      type:    selectedMedia.includes('story') ? 'written' : (selectedMedia.includes('photo') ? 'memory' : 'prompted'),
+      prompt:  selectedChapter ? 'Chapter: ' + selectedChapter : '',
+      text:    story,
+      media:   mediaList,
+      date:    new Date().toISOString()
+    });
+    localStorage.setItem(key, JSON.stringify(contribs));
+  } catch(e) {}
+
+  // Build thank you summary
+  document.getElementById('tySummaryChapter').innerHTML = selectedChapter + ' &middot; <span class="legacy-person-name">' + person + '</span>';
+  document.getElementById('tySummaryPreview').textContent = story
+    ? (story.length > 100 ? story.substring(0, 100) + '...' : story)
+    : 'Your contribution has been received and is now part of their Living Legacy archive.';
 
   const chips = document.getElementById('tyMediaChips');
   chips.innerHTML = '';
-  const mediaLabels = {'story':'Written story','photo':'Photos','voice':'Your voice','theirvoice':'Their voice preserved','document':'Documents analyzed'};
-  selectedMedia.forEach(m => {
-    const chip = document.createElement('div');
+  selectedMedia.forEach(function(m) {
+    var chip = document.createElement('div');
     chip.className = 'ty-chip';
     chip.textContent = mediaLabels[m] || m;
     chips.appendChild(chip);
   });
 
+  btn.disabled = false;
+  btn.textContent = 'Add to their archive →';
   showScreen('thankyouScreen');
 }
 

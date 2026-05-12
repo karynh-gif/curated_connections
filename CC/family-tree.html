@@ -590,8 +590,9 @@ function treeToast(msg) {
 // ── LEGACY NAV FUNCTIONS ─────────────────────────────────────
 function goToArchive() {
   var name = subjectName || (TREE.subject && TREE.subject.name) || null;
-  var url = 'contribute.html';
-  if (name) url += '?person=' + encodeURIComponent(name);
+  // Archive tab goes to the leaf page
+  var url = 'leaf.html';
+  if (name) url += '?name=' + encodeURIComponent(name);
   window.location.href = url;
 }
 
@@ -693,7 +694,11 @@ function openDetail(id, hasLeaf) {
 
     var b1 = el('button', 'Open archive →', null);
     b1.className = 'ds-btn ds-primary';
-    b1.onclick = function() { openContribute(id); };
+    b1.onclick = function() { openContribute(id); }; // → leaf.html
+    
+    var b1b = el('button', 'Add a Memory +', null);
+    b1b.className = 'ds-btn ds-secondary';
+    b1b.onclick = function() { closeDetail(); addContribution(id); };
 
     var b2 = el('button', 'Invite contributors', null);
     b2.className = 'ds-btn ds-secondary';
@@ -732,6 +737,16 @@ function openDetail(id, hasLeaf) {
 
 
 function openContribute(nodeId) {
+  var person = TREE[nodeId];
+  if (!person) return;
+  // "Open archive" goes to the leaf page — the preserved memory space
+  var url = 'leaf.html?name=' + encodeURIComponent(person.name);
+  if (TREE[nodeId].leafId) url += '&leafId=' + encodeURIComponent(TREE[nodeId].leafId);
+  window.location.href = url;
+}
+
+function addContribution(nodeId) {
+  // "Add a memory" goes to contribute.html
   var person = TREE[nodeId];
   if (!person) return;
   var url = 'contribute.html?person=' + encodeURIComponent(person.name);

@@ -348,7 +348,7 @@ body::before{content:"";position:fixed;inset:0;
           <div class="ghc-meta-item">🎡 6 decks</div>
         </div>
         <div class="ghc-actions">
-          <button class="play-btn rbd-play" onclick="t('Opening Really Bad Day...')">Play Now →</button>
+          <button class="play-btn rbd-play" onclick="window.location.href='bad-day-to-worst.html'">Play Now →</button>
           <div class="how-btn" onclick="openHow('rbd')">How to play</div>
         </div>
       </div>
@@ -371,7 +371,7 @@ body::before{content:"";position:fixed;inset:0;
           <div class="ghc-meta-item">🃏 Plot Twists</div>
         </div>
         <div class="ghc-actions">
-          <button class="play-btn tt-play" onclick="t('Opening That Tracks...')">Play Now →</button>
+          <button class="play-btn tt-play" onclick="window.location.href='curated-connections-play.html'">Play Now →</button>
           <div class="how-btn" onclick="openHow('tt')">How to play</div>
         </div>
       </div>
@@ -422,7 +422,7 @@ body::before{content:"";position:fixed;inset:0;
       </div>
 
       <!-- Join with code — ACTIVE -->
-      <div style="margin:.6rem .9rem 0;background:rgba(255,140,32,.07);border:1.5px solid rgba(255,140,32,.22);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.65rem;cursor:pointer;" onclick="t('Opening Join with Code...')">
+      <div style="margin:.6rem .9rem 0;background:rgba(255,140,32,.07);border:1.5px solid rgba(255,140,32,.22);border-radius:var(--r-xl);padding:1rem 1.1rem;display:flex;align-items:center;gap:.65rem;cursor:pointer;" onclick="window.location.href='curated-connections-play.html'">
         <div style="font-size:1.4rem;flex-shrink:0;">🔗</div>
         <div style="flex:1;">
           <div style="font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--amber);margin-bottom:.1rem;">Join with Code</div>
@@ -525,7 +525,7 @@ function openHow(game){
           <div><div class="wo-name">${w.name}</div><div class="wo-desc">${w.desc}</div></div>
         </div>`).join('')}
     </div>
-    <button class="hs-play-btn" style="background:${h.btnColor}" onclick="closeHow();t('Opening ${h.title}...')">${h.btnText}</button>
+    <button class="hs-play-btn" style="background:${h.btnColor}" onclick="closeHow();window.location.href=(game==='rbd'?'bad-day-to-worst.html':'curated-connections-play.html')">${h.btnText}</button>
   `;
   document.getElementById('overlay').classList.add('open');
   document.getElementById('howSheet').classList.add('open');
