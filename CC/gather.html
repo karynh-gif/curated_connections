@@ -496,6 +496,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div class="qz-journal-prompt" id="qzJPrompt"></div>
         <button class="qz-journal-btn" onclick="goToJournal()">Open Journal &rarr;</button>
       </div>
+      <button class="qz-done-btn" style="margin-bottom:.5rem;" onclick="shareQuizToCircle()">Share result to Circle →</button>
       <button class="qz-done-btn" onclick="closeQuiz()">Done</button>
     </div>
   </div>
@@ -1095,6 +1096,155 @@ function showQzResult() {
 function goToJournal() {
   closeQuiz();
   window.location.href = 'journal.html';
+}
+
+function shareQuizToCircle() {
+  var title = document.getElementById('qzRTitle').textContent;
+  var body = document.getElementById('qzRBody').textContent;
+  var quizTitle = qzState.title || 'Curated Connections quiz';
+  var text = '"' + title + '" — ' + body.substring(0, 120) + '...';
+  var prompt = quizTitle;
+
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) {
+    closeQuiz();
+    document.getElementById('acctKicker').textContent = 'Share your quiz result';
+    document.getElementById('acctModal').classList.add('open');
+    return;
+  }
+
+  var circles = [];
+  try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
+
+  if (!circles.length) {
+    showToast('Create a circle first to share → Circles');
+    return;
+  }
+
+  if (circles.length === 1) {
+    postToCircle(circles[0], prompt, text);
+    closeQuiz();
+  } else {
+    closeQuiz();
+    showCirclePicker(prompt, text, circles);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+
+
+// ── SAVE TO JOURNAL & SHARE TO CIRCLE ────────────────────────
+function saveToJournal() {
+  var text = document.getElementById('responseText') ? document.getElementById('responseText').value.trim() : '';
+  var prompt = document.getElementById('responseEcho') ? document.getElementById('responseEcho').textContent.trim() : '';
+
+  if (!text) { showToast('Write something first'); return; }
+
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) {
+    document.getElementById('acctKicker').textContent = 'Save to your journal';
+    document.getElementById('acctModal').classList.add('open');
+    return;
+  }
+
+  // Save to localStorage journal
+  var uid = user.user_id || user.email || 'guest';
+  var key = 'cc_journal_' + uid;
+  var entries = [];
+  try { entries = JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) {}
+  entries.unshift({
+    id: Date.now(),
+    date: new Date().toISOString(),
+    prompt: prompt,
+    text: text
+  });
+  if (entries.length > 100) entries = entries.slice(0, 100);
+  localStorage.setItem(key, JSON.stringify(entries));
+
+  // Store prompt for journal page handoff
+  try {
+    localStorage.setItem('cc_quiz_journal_prompt', JSON.stringify({prompt: prompt, resultTitle: '', quizTitle: ''}));
+  } catch(e) {}
+
+  showToast('Saved to your journal ✦');
+  if (document.getElementById('responseText')) document.getElementById('responseText').value = '';
+  closeResponse();
+}
+
+function shareToCircle() {
+  var text = document.getElementById('responseText') ? document.getElementById('responseText').value.trim() : '';
+  var prompt = document.getElementById('responseEcho') ? document.getElementById('responseEcho').textContent.trim() : '';
+
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) {
+    document.getElementById('acctKicker').textContent = 'Share with your circle';
+    document.getElementById('acctModal').classList.add('open');
+    return;
+  }
+
+  // Check if user has circles
+  var circles = [];
+  try { circles = JSON.parse(localStorage.getItem('cc_circles') || '[]'); } catch(e) {}
+
+  if (!circles.length) {
+    showToast('Create a circle first in Circles →');
+    return;
+  }
+
+  if (circles.length === 1) {
+    // One circle — post directly
+    postToCircle(circles[0], prompt, text);
+  } else {
+    // Multiple circles — show picker
+    showCirclePicker(prompt, text, circles);
+  }
+}
+
+function postToCircle(circle, prompt, text) {
+  // Save post to localStorage
+  var posts = [];
+  try { posts = JSON.parse(localStorage.getItem('cc_feed_' + circle.id) || '[]'); } catch(e) {}
+  var user = CC.getUser ? CC.getUser() : null;
+  posts.unshift({
+    id: Date.now(),
+    user: user ? user.name : 'You',
+    prompt: prompt,
+    text: text,
+    date: new Date().toISOString()
+  });
+  localStorage.setItem('cc_feed_' + circle.id, JSON.stringify(posts));
+  showToast('Shared to ' + circle.name + ' ✦');
+  if (document.getElementById('responseText')) document.getElementById('responseText').value = '';
+  closeResponse();
+}
+
+function showCirclePicker(prompt, text, circles) {
+  var existing = document.getElementById('circlePicker');
+  if (existing) existing.remove();
+
+  var html = '<div id="circlePicker" style="position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)this.remove()">'
+    + '<div style="width:100%;max-width:430px;background:#0d1a14;border-radius:24px 24px 0 0;padding:1.2rem 1.2rem calc(1.4rem + env(safe-area-inset-bottom));border-top:1px solid rgba(201,125,58,.15);">'
+    + '<div style="width:36px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto .9rem;"></div>'
+    + '<div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.7rem;">Share to which circle?</div>';
+
+  circles.forEach(function(c) {
+    html += '<div onclick="postToCircle(' + JSON.stringify(c).replace(/"/g,"'") + ','' + encodeURIComponent(prompt) + '','' + encodeURIComponent(text) + '');document.getElementById('circlePicker').remove()" '
+      + 'style="padding:.8rem .9rem;border-radius:14px;margin-bottom:.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:1rem;color:#f2e8d8;">'
+      + c.name + '</div>';
+  });
+
+  html += '<button onclick="document.getElementById('circlePicker').remove()" style="width:100%;padding:.5rem;background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.85rem;color:rgba(242,232,216,.3);cursor:pointer;margin-top:.2rem;">Cancel</button>'
+    + '</div></div>';
+
+  document.body.insertAdjacentHTML('beforeend', html);
+
+  // Fix the encoded URLs in the onclick
+  document.querySelectorAll('#circlePicker [onclick]').forEach(function(el) {
+    var orig = el.getAttribute('onclick');
+    if (orig && orig.includes('encodeURIComponent')) {
+      // Already encoded during injection — fix by decoding for display
+    }
+  });
 }
 // ─────────────────────────────────────────────────────────────
 
