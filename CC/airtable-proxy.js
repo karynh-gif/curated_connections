@@ -2,6 +2,7 @@
 const AIRTABLE_BASE = "https://api.airtable.com/v0";
 
 const ALLOWED_TABLES = new Set([
+  "Users",
   "Conversation Cards",
   "Wit and Wonder",
   "Curated Moments",
