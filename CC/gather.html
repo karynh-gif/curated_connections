@@ -76,10 +76,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .hero-eyebrow{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.85);margin-bottom:.6rem;display:flex;align-items:center;gap:.3rem;}
 .hero-eyebrow::before{content:'✦';font-size:.75rem;}
 .hero-question{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:var(--cream);line-height:1.42;margin-bottom:.9rem;}
-.hero-icon-bar{display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem;}
-.hib-btn{display:flex;flex-direction:column;align-items:center;gap:.18rem;background:none;border:none;cursor:pointer;padding:.2rem .3rem;}
-.hib-icon{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:.82rem;color:rgba(255,255,255,.85);}
-.hib-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.hero-icon-bar{display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);padding:.7rem .4rem 1rem;}
+.hib-btn{display:flex;flex-direction:column;align-items:center;gap:.15rem;background:none;border:none;cursor:pointer;padding:.2rem .35rem;}
+.hib-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--card-accent, rgba(255,255,255,.85));transition:all .15s;}
+.hib-icon:hover{background:rgba(255,255,255,.18);}
+.hib-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--card-accent-dim, rgba(255,255,255,.35));}
 /* ── UNIVERSAL RATING ROW ── */
 .cc-rate-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.35rem .5rem .2rem;border-top:1px solid rgba(255,255,255,.05);}
 .cc-rate-btn{display:flex;flex-direction:column;align-items:center;gap:.18rem;background:none;border:none;cursor:pointer;padding:.3rem .6rem;border-radius:8px;transition:all .18s;opacity:.32;}
@@ -88,8 +89,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-rate-btn.selected.up{background:rgba(58,173,144,.12);border:1px solid rgba(58,173,144,.25);}
 .cc-rate-btn.selected.mid{background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.22);}
 .cc-rate-btn.selected.dn{background:rgba(192,80,56,.09);border:1px solid rgba(192,80,56,.2);}
-.cc-rate-emoji{font-size:1.05rem;line-height:1;}
-.cc-rate-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.4);}
+.cc-rate-emoji{font-size:.88rem;line-height:1;}
+.cc-rate-label{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(242,232,216,.4);}
 .cc-share-row{display:flex;justify-content:flex-end;padding:.1rem .5rem .4rem;}
 .cc-share-link{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.2rem .4rem;border:none;background:none;}
 .cc-share-link:hover{color:rgba(201,125,58,.7);}
@@ -319,8 +320,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   .quiz-start  { font-size: .95rem !important; padding: .4rem .9rem !important; }
 
   /* ── RATING ROW ── */
-  .cc-rate-emoji { font-size: 1.3rem !important; }
-  .cc-rate-label { font-size: .75rem !important; }
+  .cc-rate-emoji { font-size: 1rem !important; }
+  .cc-rate-label { font-size: .65rem !important; }
   .cc-share-link { font-size: .85rem !important; }
 
   /* ── RESPONSE SCREEN ── */
@@ -640,15 +641,18 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     </div>
 
     <!-- WRITE YOUR EXPERIENCE -->
+    <!-- QUICK REFLECTION -->
     <div class="write-exp">
       <div class="shelf-header" style="padding:0;margin-bottom:.65rem;">
-        <div class="shelf-title">Write Your Experience</div>
+        <div class="shelf-title">Reflect on today</div>
+        <a href="journal.html" style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.6);text-decoration:none;">Open journal →</a>
       </div>
-      <div class="write-exp-inner" onclick="openAccount('write your experience')">
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(242,232,216,.3);line-height:1.65;">What came up for you tonight? A moment, a memory, something that surprised you.</div>
-        <div style="margin-top:.8rem;display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.42);">Start writing →</div>
-          <div style="font-size:.72rem;color:rgba(242,232,216,.16);font-style:italic;">Saved to your leaf</div>
+      <div class="write-exp-inner" style="cursor:default;" onclick="event.stopPropagation()">
+        <div id="quickReflectPrompt" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(242,232,216,.55);line-height:1.65;margin-bottom:.6rem;">What came up for you today? A moment, a feeling, something that stuck.</div>
+        <textarea id="quickReflectText" placeholder="Write a few words..." style="width:100%;min-height:72px;padding:.65rem .8rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(242,232,216,.8);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.3)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;">
+          <div id="reflectRetention" style="font-family:'DM Sans',sans-serif;font-size:.65rem;color:rgba(242,232,216,.2);font-style:italic;"></div>
+          <button onclick="saveQuickReflect()" style="padding:.4rem .9rem;background:linear-gradient(135deg,rgba(201,125,58,.6),rgba(232,160,69,.6));border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save ✦</button>
         </div>
       </div>
     </div>
@@ -742,6 +746,25 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- Sign out -->
       <div onclick="signOutUser()" style="text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.35);">Sign Out</div>
+
+      <!-- Sign in / Create account — shown when not logged in -->
+      <div id="ppSignInRow" style="display:none;">
+        <div onclick="closeProfilePanel();openAccount('create your free account')" style="text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,.15),rgba(201,125,58,.08));border:1px solid rgba(201,125,58,.25);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;margin-bottom:.5rem;">Create Free Account →</div>
+        <div onclick="closeProfilePanel();openAccount('sign in')" style="text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.35);">Sign In</div>
+      </div>
+
+      <!-- Rate experience -->
+      <div style="margin-top:1.2rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;text-align:center;">
+        <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.2);margin-bottom:.6rem;">Rate your experience</div>
+        <div style="display:flex;justify-content:center;gap:.4rem;" id="ppRateStars">
+          <span onclick="ppRate(1)" style="font-size:1.3rem;cursor:pointer;opacity:.3;transition:all .15s;" onmouseover="ppHover(1)" onmouseout="ppUnhover()">★</span>
+          <span onclick="ppRate(2)" style="font-size:1.3rem;cursor:pointer;opacity:.3;transition:all .15s;" onmouseover="ppHover(2)" onmouseout="ppUnhover()">★</span>
+          <span onclick="ppRate(3)" style="font-size:1.3rem;cursor:pointer;opacity:.3;transition:all .15s;" onmouseover="ppHover(3)" onmouseout="ppUnhover()">★</span>
+          <span onclick="ppRate(4)" style="font-size:1.3rem;cursor:pointer;opacity:.3;transition:all .15s;" onmouseover="ppHover(4)" onmouseout="ppUnhover()">★</span>
+          <span onclick="ppRate(5)" style="font-size:1.3rem;cursor:pointer;opacity:.3;transition:all .15s;" onmouseover="ppHover(5)" onmouseout="ppUnhover()">★</span>
+        </div>
+        <div id="ppRateThanks" style="display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(242,232,216,.4);margin-top:.4rem;">Thank you ✦</div>
+      </div>
 
       <!-- Legal links -->
       <div style="display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;">
@@ -1013,20 +1036,27 @@ var heroSquishing = false;
 function heroTap() {
   if (heroSquishing) return;
   if (heroState === 'back') {
-    // Flip to reveal
     heroSquishing = true;
     var card = document.getElementById('heroCard');
     card.style.transform = 'scaleX(0)';
     card.style.transition = 'transform 0.15s ease';
     setTimeout(function() {
       document.getElementById('heroBk').style.display = 'none';
-      document.getElementById('heroFt').style.display = 'block';
+      var ft = document.getElementById('heroFt');
+      ft.style.display = 'block';
       card.style.transform = 'scaleX(1)';
       heroState = 'front';
+      // Apply accent color from current card
+      var c = LIVE_CARDS['at_0'] || CARDS.tonight;
+      if (c && c.accent) {
+        var accent = c.accent;
+        // Set CSS vars on hero-front so buttons inherit card color
+        ft.style.setProperty('--card-accent',     accent);
+        ft.style.setProperty('--card-accent-dim', accent.replace(')',', .45)').replace('rgb(','rgba('));
+      }
       setTimeout(function() { heroSquishing = false; }, 150);
     }, 150);
   } else {
-    // Open fullscreen
     openCardOverlay('tonight');
   }
 }
@@ -1485,15 +1515,18 @@ function openProfilePanel() {
   var u = CC.getUser ? CC.getUser() : null;
 
   if (!u) {
-    // Not logged in — show sign in / create account options
-    document.getElementById('ppAvatar').textContent = '?';
-    document.getElementById('ppName').textContent = 'Not signed in';
-    document.getElementById('ppTier').textContent = 'Free';
+    document.getElementById('ppAvatar').textContent = '✦';
+    document.getElementById('ppName').textContent = 'Welcome';
+    document.getElementById('ppTier').textContent = 'Not signed in';
     document.getElementById('ppUpgradeRow').style.display = 'none';
     document.getElementById('ppBillingRow').style.display = 'none';
+    document.getElementById('ppSignInRow').style.display = 'block';
+    document.querySelector('[onclick="signOutUser()"]').style.display = 'none';
     document.getElementById('profilePanel').style.display = 'block';
     return;
   }
+  document.getElementById('ppSignInRow').style.display = 'none';
+  document.querySelector('[onclick="signOutUser()"]').style.display = '';
 
   // Populate panel
   var initial = (u.name || 'U').charAt(0).toUpperCase();
@@ -1626,6 +1659,33 @@ function toggleUpdateVis() {
   toggle.innerHTML = isPublic
     ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span id="updateVisLabel">Public</span>'
     : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg><span id="updateVisLabel">Private</span>';
+}
+
+// ── PROFILE PANEL STARS ──────────────────────────────────────
+function ppHover(n) {
+  var stars = document.querySelectorAll('#ppRateStars span');
+  stars.forEach(function(s,i){ s.style.opacity = i<n?'1':'.2'; s.style.color = i<n?'#c97d3a':''; });
+}
+function ppUnhover() {
+  var stars = document.querySelectorAll('#ppRateStars span');
+  stars.forEach(function(s){ s.style.opacity='.3'; s.style.color=''; });
+}
+function ppRate(n) {
+  var stars = document.querySelectorAll('#ppRateStars span');
+  stars.forEach(function(s,i){ s.style.opacity=i<n?'1':'.15'; s.style.color=i<n?'#c97d3a':''; });
+  document.getElementById('ppRateStars').style.pointerEvents='none';
+  document.getElementById('ppRateThanks').style.display='block';
+  try {
+    localStorage.setItem('cc_last_rated', Date.now().toString());
+    var r=JSON.parse(localStorage.getItem('cc_ratings')||'[]');
+    r.unshift({rating:n,page:'profile',date:new Date().toISOString()});
+    localStorage.setItem('cc_ratings',JSON.stringify(r));
+  } catch(e){}
+  fetch('/api/airtable',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'create',table:'Responses',fields:{
+      'response_id':'rate_'+Date.now(),'user_id':'rating',
+      'spoken_answer':'profile · '+n+'/5','is_living_legacy':false,'recorded_at':new Date().toISOString()
+    }})}).catch(function(){});
 }
 
 function postUpdate() {
@@ -1958,7 +2018,39 @@ function ccShareFallback(text) {
   openShareOptions(text, 'https://joincuratedconnections.com', '');
 }
 
-// ── DAILY UPLIFT ─────────────────────────────────────────────
+// ── QUICK REFLECT ─────────────────────────────────────────────
+function saveQuickReflect() {
+  var text = document.getElementById('quickReflectText').value.trim();
+  if (!text) { showToast('Write something first'); return; }
+  var user = CC.getUser ? CC.getUser() : null;
+  var post = {
+    id:         'post_' + Date.now(),
+    type:       'reflection',
+    body:       text,
+    snippet:    text.substring(0,120),
+    userId:     user ? user.user_id : 'local',
+    date:       new Date().toISOString(),
+    visibility: 'private'
+  };
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed.unshift(post);
+    if (feed.length > 50) feed = feed.slice(0,50);
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
+  } catch(e) {}
+  document.getElementById('quickReflectText').value = '';
+  showToast('Saved to your feed ✦');
+  showMyFeedSection();
+}
+
+// Show 30-day retention notice for free tier
+function showRetentionNotice() {
+  var tier = (CC.getUser && CC.getUser()) ? (CC.getUser().tier || 'free') : 'free';
+  var el = document.getElementById('reflectRetention');
+  if (el && tier === 'free') {
+    el.textContent = 'Free: saves for 30 days';
+  }
+}
 var UPLIFTS = [
   "You don't have to have it all figured out. You just have to keep going.",
   "The people who changed your life probably didn't know they were doing it.",
@@ -3023,9 +3115,10 @@ document.addEventListener('DOMContentLoaded', function() {
   showAddToHomePrompt();
   loadDailyUplift();
   // Rate experience
-  setTimeout(function(){ injectRateExperience('scroll'); }, 5000);
+  setTimeout(function(){ injectRateExperience('scroll'); }, 2000);
 
   loadSavedProfilePic();
+  showRetentionNotice();
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);

@@ -2,14 +2,11 @@
 // Inject at bottom of any page's scroll area
 
 function injectRateExperience(containerId) {
-  var container = document.getElementById(containerId);
+  var container = document.getElementById(containerId) || document.querySelector('.' + containerId) || document.querySelector('[class*="' + containerId + '"]');
   if (!container) return;
 
-  // Don't show if rated in last 3 days
-  try {
-    var last = parseInt(localStorage.getItem('cc_last_rated') || '0');
-    if (Date.now() - last < 1000 * 60 * 60 * 24 * 3) return;
-  } catch(e) {}
+  // Cooldown: skip if rated in last 3 days
+  // (disabled for now — re-enable after testing)
 
   var page = window.location.pathname.split('/').pop().replace('.html','') || 'gather';
 
