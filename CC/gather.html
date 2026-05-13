@@ -574,7 +574,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div id="legacyShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header">
         <span class="shelf-title">Living Legacy</span>
-        <a href="legacy.html" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;text-decoration:none;">See All</a>
       </div>
 
       <!-- My Leaves button -->
@@ -932,6 +931,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <input class="sheet-input" type="email" placeholder="Email address" id="signinEmail" autocomplete="email"/>
         <input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password"/>
         <button class="sheet-btn" onclick="signIn()">Sign In →</button>
+        <div style="text-align:center;margin-top:.5rem;">
+          <span onclick="forgotPassword()" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(201,125,58,.55);cursor:pointer;text-decoration:underline;">Forgot password?</span>
+        </div>
       </div>
 
       <button class="sheet-cancel" onclick="closeAccount()">Maybe later</button>
@@ -1572,9 +1574,22 @@ function openProfilePanel() {
   var panel = document.getElementById('profilePanel');
   if (!panel) return;
 
-  // Always show the panel — populate based on auth state
+  // Check both CC.getUser() and Firebase currentUser directly
   var u = null;
   try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+
+  // Fallback to Firebase currentUser if localStorage not set yet
+  if (!u && fbAuth && fbAuth.currentUser) {
+    var fu = fbAuth.currentUser;
+    u = {
+      user_id: fu.uid,
+      email:   fu.email,
+      name:    fu.displayName || fu.email.split('@')[0],
+      tier:    'free'
+    };
+    // Write to localStorage so next call works
+    try { localStorage.setItem('cc_user', JSON.stringify(u)); } catch(e) {}
+  }
 
   var signOutBtn = document.querySelector('[onclick="signOutUser()"]');
   var signInRow  = document.getElementById('ppSignInRow');
@@ -2865,25 +2880,55 @@ function signOutUser() { signOut(); }
 function syncAccountTier() {
   var u = null;
   try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
-  if (!u || !u.email) { showToast('Sign in first'); return; }
+
+  // Also check Firebase directly in case cc_user isn't set yet
+  var email = (u && u.email) ? u.email : (fbAuth && fbAuth.currentUser ? fbAuth.currentUser.email : null);
+  var uid   = (u && u.user_id) ? u.user_id : (fbAuth && fbAuth.currentUser ? fbAuth.currentUser.uid : null);
+
+  if (!email) { showToast('Sign in first'); return; }
   showToast('Checking your subscription…');
-  fetch('/.netlify/functions/stripe-sync?email=' + encodeURIComponent(u.email))
+
+  fetch('/.netlify/functions/stripe-sync?email=' + encodeURIComponent(email))
     .then(function(r){ return r.json(); })
     .then(function(data) {
       if (data.tier && data.tier !== 'free') {
+        // Update localStorage
         try {
           var stored = JSON.parse(localStorage.getItem('cc_user') || '{}');
           stored.tier = data.tier;
+          stored.email = email;
+          if (uid) stored.user_id = uid;
           localStorage.setItem('cc_user', JSON.stringify(stored));
         } catch(e) {}
+        // Write tier to Firestore so it persists on every login
+        if (fbDb && uid) {
+          fbDb.collection('users').doc(uid).set({ tier: data.tier, email: email }, { merge: true })
+            .catch(function(e){ console.warn('Firestore write failed:', e); });
+        }
         closeProfilePanel();
         showToast('Synced! You are on ' + data.tier.charAt(0).toUpperCase() + data.tier.slice(1) + ' ✦');
         setTimeout(function(){ window.location.reload(); }, 1200);
       } else {
-        showToast('No active subscription found');
+        showToast('No active subscription found in Stripe');
       }
     })
-    .catch(function(){ showToast('Could not reach Stripe — try again'); });
+    .catch(function(){ showToast('Could not reach Stripe — check env vars'); });
+}
+
+async function forgotPassword() {
+  var email = document.getElementById('signinEmail').value.trim();
+  if (!email) {
+    document.getElementById('acctError').textContent = 'Enter your email address above first.';
+    return;
+  }
+  try {
+    await fbAuth.sendPasswordResetEmail(email);
+    document.getElementById('acctError').textContent = '';
+    showToast('Reset email sent to ' + email + ' ✦');
+    closeAccount();
+  } catch(e) {
+    document.getElementById('acctError').textContent = 'Could not send reset email. Check the address and try again.';
+  }
 }
 
 async function resetPassword() {
