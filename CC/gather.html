@@ -473,16 +473,17 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     </div>
     <div class="topbar-right">
       <div class="topbar-btn" onclick="openNotifications()">🔔</div>
-      <div class="topbar-avatar" id="topbarAvatar" onclick="if(typeof openProfilePanel==='function'&&(typeof CC!=='undefined'&&CC.getUser&&CC.getUser())){openProfilePanel();}else if(typeof openAccount==='function'){openAccount('sign in');}">G</div>
+      <div class="topbar-avatar" id="topbarAvatar" onclick="openProfilePanel()">G</div>
     </div>
   </div>
 
   <!-- SCROLL -->
   <div class="scroll">
 
-    <!-- Orientation -->
-    <div style="padding:1.5rem 1.2rem .3rem;text-align:center;">
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.36);line-height:1.8;">Your daily space to reflect, connect, and play.<br>A question. A card. Ten minutes. Start anywhere.</p>
+    <!-- DAILY UPLIFT -->
+    <div style="padding:1.4rem 1.4rem .5rem;text-align:center;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.4);margin-bottom:.5rem;">Today</div>
+      <div id="dailyUplift" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;color:rgba(242,232,216,.62);line-height:1.7;max-width:320px;margin:0 auto;"></div>
     </div>
 
     <!-- HERO CARD -->
@@ -574,6 +575,20 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div id="myFeedList" style="padding:0 .8rem;"></div>
     </div>
 
+    <!-- GRAD 2026 PROMO -->
+    <div style="margin:.4rem 0 0;">
+      <div style="padding:.6rem 1rem .35rem;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--cream);">Class of 2026</span>
+        <a href="grad2026.html" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;text-decoration:none;">Learn More</a>
+      </div>
+      <a href="gift-leaf.html?occasion=graduation2026" style="text-decoration:none;display:block;margin:.2rem .9rem .8rem;padding:1.1rem 1.2rem;background:linear-gradient(135deg,rgba(201,125,58,.1),rgba(100,65,5,.15));border:1px solid rgba(201,125,58,.22);border-radius:16px;cursor:pointer;">
+        <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.35rem;">🎓 Time Capsule</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(242,232,216,.88);margin-bottom:.2rem;">Capture this moment before it's gone.</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:.76rem;color:rgba(242,232,216,.38);line-height:1.5;">Build a time capsule for your graduate. Their words, your memories, their people. Start for $4.99.</div>
+        <div style="margin-top:.6rem;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(201,125,58,.7);">Start a capsule →</div>
+      </a>
+    </div>
+
     <div id="legacyShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header">
         <span class="shelf-title">Living Legacy</span>
@@ -653,7 +668,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="cc-nl">Journal</div>
       <div class="cc-ni-dot"></div>
     </div>
-    <div class="cc-ni" onclick="if(typeof openProfilePanel==='function'&&(typeof CC!=='undefined'&&CC.getUser&&CC.getUser())){openProfilePanel();}else if(typeof openAccount==='function'){openAccount('sign in');}else{window.location.href='gather.html?signin=1';}">
+    <div class="cc-ni" onclick="openProfilePanel()">
       <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div class="cc-nl" id="ccNavMeLbl">Me</div>
       <div class="cc-ni-dot"></div>
@@ -2663,7 +2678,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   // Open profile panel if redirected here with ?profile=1
   if (params.get('profile') === '1') {
-    setTimeout(function(){ if (CC.getUser()) openProfilePanel(); }, 800);
+    setTimeout(function(){ openProfilePanel(); }, 600);
   }
 });
 

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Start a Time Capsule — Curated Connections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CSCN4MBVZ0"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CSCN4MBVZ0');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--ink:#03060a;--gold:#c97d3a;--gold2:#e8a045;--cream:#f2e8d8;}
+html,body{min-height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;}
+.page{max-width:480px;margin:0 auto;padding:2rem 1.2rem 5rem;}
+.back-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.3);background:none;border:none;cursor:pointer;margin-bottom:2rem;text-decoration:none;}
+.steps-nav{display:flex;align-items:center;gap:.4rem;margin-bottom:2.4rem;}
+.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);transition:all .3s;}
+.step-dot.active{background:var(--gold);width:24px;border-radius:4px;}
+.step-dot.done{background:rgba(201,125,58,.35);}
+.screen{display:none;}
+.screen.active{display:block;}
+.screen-eyebrow{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.7rem;}
+.screen-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:.5rem;}
+.screen-title em{font-style:italic;color:var(--gold);}
+.screen-sub{font-size:.85rem;color:rgba(242,232,216,.42);line-height:1.7;margin-bottom:1.8rem;}
+.field-group{margin-bottom:1.1rem;}
+.field-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.45);margin-bottom:.4rem;display:block;}
+.field-input{width:100%;padding:.82rem 1rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--cream);outline:none;transition:border-color .2s;}
+.field-input:focus{border-color:rgba(201,125,58,.4);}
+.field-input::placeholder{color:rgba(242,232,216,.22);}
+.mode-options{display:grid;gap:.7rem;margin-bottom:1.4rem;}
+.mode-opt{padding:1.1rem 1rem;border:1.5px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;transition:all .18s;background:rgba(255,255,255,.025);}
+.mode-opt.selected{border-color:rgba(201,125,58,.45);background:rgba(201,125,58,.07);}
+.mode-opt-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--cream);margin-bottom:.2rem;}
+.mode-opt.selected .mode-opt-title{color:var(--gold);}
+.mode-opt-desc{font-size:.76rem;color:rgba(242,232,216,.38);line-height:1.5;}
+.occasion-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.4rem;}
+.occ-chip{padding:.4rem .9rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.45);cursor:pointer;background:rgba(255,255,255,.03);transition:all .18s;}
+.occ-chip.selected{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.4);color:var(--gold);}
+.btn-next{width:100%;padding:.95rem;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 6px 24px rgba(201,125,58,.28);transition:all .2s;margin-top:.5rem;}
+.btn-next:disabled{opacity:.35;cursor:not-allowed;}
+.btn-back-step{width:100%;padding:.7rem;margin-top:.5rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;}
+.field-error{font-size:.72rem;color:#e07060;margin-top:.3rem;min-height:.9rem;}
+.share-box{padding:1.2rem;background:rgba(201,125,58,.07);border:1px solid rgba(201,125,58,.2);border-radius:14px;margin:1.4rem 0;}
+.share-url{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.65);word-break:break-all;margin-bottom:.7rem;}
+.btn-copy{width:100%;padding:.65rem;background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer;}
+.share-options{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.8rem;}
+.share-opt{padding:.75rem .5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;text-align:center;cursor:pointer;text-decoration:none;display:block;}
+.share-opt-icon{font-size:1.2rem;display:block;margin-bottom:.2rem;}
+.share-opt-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.4);}
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-btn" href="grad2026.html">← Back</a>
+
+  <div class="steps-nav">
+    <div class="step-dot active" id="dot0"></div>
+    <div class="step-dot" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+
+  <!-- SCREEN 0: OCCASION -->
+  <div class="screen active" id="screen0">
+    <div class="screen-eyebrow">Step 1 of 4</div>
+    <div class="screen-title">What are you<br><em>celebrating?</em></div>
+    <div class="screen-sub">Pick the occasion — we'll tailor the prompts to this moment.</div>
+    <div class="occasion-chips">
+      <div class="occ-chip selected" onclick="selectOccasion(this,'Graduation 2026')">🎓 Graduation 2026</div>
+      <div class="occ-chip" onclick="selectOccasion(this,'Retirement')">🌅 Retirement</div>
+      <div class="occ-chip" onclick="selectOccasion(this,'Milestone Birthday')">🎂 Milestone Birthday</div>
+      <div class="occ-chip" onclick="selectOccasion(this,'New Parent')">🌱 New Parent</div>
+      <div class="occ-chip" onclick="selectOccasion(this,'End of Season')">🏆 End of Season</div>
+      <div class="occ-chip" onclick="selectOccasion(this,'Wedding')">💍 Wedding</div>
+      <div class="occ-chip" onclick="selectOccasion(this,'Just Because')">✦ Just Because</div>
+    </div>
+    <div class="screen-sub">When do you want to give it to them?</div>
+    <div class="mode-options">
+      <div class="mode-opt selected" id="modeNow" onclick="selectMode('now')">
+        <div class="mode-opt-title">🎁 Gift Now & Send</div>
+        <div class="mode-opt-desc">Collect memories this week. Present it at graduation or send the link.</div>
+      </div>
+      <div class="mode-opt" id="modeLater" onclick="selectMode('later')">
+        <div class="mode-opt-title">⏳ Start Now, Gift Later</div>
+        <div class="mode-opt-desc">Build quietly over time. They won't know until you're ready.</div>
+      </div>
+    </div>
+    <button class="btn-next" onclick="goStep(1)">Continue →</button>
+  </div>
+
+  <!-- SCREEN 1: WHO -->
+  <div class="screen" id="screen1">
+    <div class="screen-eyebrow">Step 2 of 4</div>
+    <div class="screen-title">Who is this<br><em>for?</em></div>
+    <div class="screen-sub">This becomes the cover of their capsule.</div>
+    <div class="field-group">
+      <label class="field-label">Their full name</label>
+      <input class="field-input" id="recipientName" type="text" placeholder="e.g. Jordan Lee Collins" maxlength="60"/>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Your relationship to them</label>
+      <input class="field-input" id="recipientRelation" type="text" placeholder="e.g. Mom, Coach, Best friend, Teacher"/>
+    </div>
+    <div style="display:flex;gap:.6rem;">
+      <div class="field-group" style="flex:1;">
+        <label class="field-label">Grad year</label>
+        <input class="field-input" id="recipientYear" type="text" placeholder="2026" value="2026" maxlength="4"/>
+      </div>
+      <div class="field-group" style="flex:1;">
+        <label class="field-label">School / team</label>
+        <input class="field-input" id="recipientSchool" type="text" placeholder="optional"/>
+      </div>
+    </div>
+    <div class="field-error" id="screen1Error"></div>
+    <button class="btn-next" onclick="goStep(2)">Continue →</button>
+    <button class="btn-back-step" onclick="goStep(0)">← Back</button>
+  </div>
+
+  <!-- SCREEN 2: YOUR INFO -->
+  <div class="screen" id="screen2">
+    <div class="screen-eyebrow">Step 3 of 4</div>
+    <div class="screen-title">You're the<br><em>Keeper.</em></div>
+    <div class="screen-sub">You control this capsule. No one sees it until you're ready to present it.</div>
+    <div class="field-group">
+      <label class="field-label">Your name</label>
+      <input class="field-input" id="keeperName" type="text" placeholder="Your name"/>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Your email</label>
+      <input class="field-input" id="keeperEmail" type="email" placeholder="For your capsule link and weekly prompts"/>
+    </div>
+    <div style="background:rgba(201,125,58,.06);border:1px solid rgba(201,125,58,.15);border-radius:14px;padding:1rem 1.1rem;margin:1.2rem 0;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">What you get</div>
+      <div style="font-size:.82rem;color:rgba(242,232,216,.5);line-height:1.7;">One time capsule · Unlimited contributor invites · Weekly prompts for 12 weeks · Private until you present it</div>
+      <div style="margin-top:.8rem;font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--cream);">$4.99 <span style="font-size:.75rem;font-family:'DM Sans',sans-serif;color:rgba(242,232,216,.3);">one-time</span></div>
+    </div>
+    <div class="field-error" id="screen2Error"></div>
+    <button class="btn-next" onclick="startCapsule()" id="step2Btn">Start the Capsule — $4.99 →</button>
+    <div style="font-size:.7rem;color:rgba(242,232,216,.2);text-align:center;margin-top:.6rem;">Secure payment via Stripe. No subscription.</div>
+    <button class="btn-back-step" onclick="goStep(1)">← Back</button>
+  </div>
+
+  <!-- SCREEN 3: SUCCESS -->
+  <div class="screen" id="screen3">
+    <div style="font-size:3rem;text-align:center;margin-bottom:1rem;">🎓</div>
+    <div class="screen-eyebrow">Time capsule started</div>
+    <div class="screen-title">It's alive.<br><em>Invite people.</em></div>
+    <div class="screen-sub">Share this link with anyone who wants to add a memory. No account needed. Five minutes.</div>
+    <div class="share-box">
+      <div class="share-url" id="shareUrl">joincuratedconnections.com/contribute/...</div>
+      <button class="btn-copy" id="copyBtn" onclick="copyLink()">📋 Copy contributor link</button>
+      <div class="share-options">
+        <a class="share-opt" onclick="shareSMS()"><span class="share-opt-icon">💬</span><span class="share-opt-label">Text</span></a>
+        <a class="share-opt" onclick="shareNative()"><span class="share-opt-icon">📤</span><span class="share-opt-label">Share…</span></a>
+      </div>
+    </div>
+    <div style="padding:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:1rem;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.35rem;">Your first prompt</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.7);line-height:1.55;" id="firstPrompt"></div>
+    </div>
+    <div style="font-size:.78rem;color:rgba(242,232,216,.3);line-height:1.7;margin-bottom:1.4rem;">Weekly prompts sent to <span id="confirmEmail" style="color:rgba(201,125,58,.5);"></span></div>
+    <a href="gather.html" class="btn-next" style="text-decoration:none;display:block;text-align:center;">Go to your account →</a>
+  </div>
+
+</div>
+<script>
+var C={occasion:'Graduation 2026',mode:'now',leafId:null};
+var params=new URLSearchParams(window.location.search);
+if(params.get('occasion')&&params.get('occasion').includes('graduation'))C.occasion='Graduation 2026';
+
+function selectOccasion(el,v){document.querySelectorAll('.occ-chip').forEach(function(c){c.classList.remove('selected');});el.classList.add('selected');C.occasion=v;}
+function selectMode(m){C.mode=m;document.getElementById('modeNow').classList.toggle('selected',m==='now');document.getElementById('modeLater').classList.toggle('selected',m==='later');}
+
+function goStep(n){
+  if(n===2){
+    var nm=document.getElementById('recipientName').value.trim();
+    if(!nm){document.getElementById('screen1Error').textContent='Please enter their name.';return;}
+    document.getElementById('screen1Error').textContent='';
+  }
+  for(var i=0;i<4;i++){
+    var d=document.getElementById('dot'+i);
+    d.className='step-dot'+(i<n?' done':i===n?' active':'');
+  }
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('screen'+n).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startCapsule(){
+  var nm=document.getElementById('keeperName').value.trim();
+  var em=document.getElementById('keeperEmail').value.trim();
+  if(!nm){document.getElementById('screen2Error').textContent='Please enter your name.';return;}
+  if(!em||!em.includes('@')){document.getElementById('screen2Error').textContent='Please enter a valid email.';return;}
+  document.getElementById('screen2Error').textContent='';
+  var btn=document.getElementById('step2Btn');
+  btn.textContent='Creating…';btn.disabled=true;
+
+  var leafId='leaf_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
+  C.leafId=leafId;C.keeperName=nm;C.keeperEmail=em;
+  C.recipientName=document.getElementById('recipientName').value.trim();
+  C.recipientRelation=document.getElementById('recipientRelation').value.trim();
+  C.recipientYear=document.getElementById('recipientYear').value.trim();
+  C.created=new Date().toISOString();
+
+  try{
+    var caps=JSON.parse(localStorage.getItem('cc_capsules')||'[]');
+    caps.unshift(C);localStorage.setItem('cc_capsules',JSON.stringify(caps));
+    localStorage.setItem('cc_capsule_'+leafId,JSON.stringify(C));
+  }catch(e){}
+
+  fetch('/api/airtable',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    action:'create',table:'Living Legacy Leaves',
+    fields:{'Full Name':C.recipientName,'Known As':C.recipientName.split(' ')[0],'Relationship':C.recipientRelation,'Keeper User ID':em,'Leaf Status':'Active','Subject Living':true}
+  })}).catch(function(){});
+
+  setTimeout(function(){
+    var url='https://joincuratedconnections.com/contribute/'+leafId;
+    document.getElementById('shareUrl').textContent=url;
+    document.getElementById('confirmEmail').textContent=em;
+    var prompts={'Graduation 2026':'"What do you want them to remember about who they are right now — before everything changes?"','Retirement':'"What did this season of life teach you that had nothing to do with the work?"','default':'"What do you see in them that they probably can\'t see in themselves?"'};
+    document.getElementById('firstPrompt').textContent=prompts[C.occasion]||prompts.default;
+    goStep(3);
+    btn.textContent='Start the Capsule — $4.99 →';btn.disabled=false;
+  },800);
+}
+
+function copyLink(){
+  var url=document.getElementById('shareUrl').textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){
+    document.getElementById('copyBtn').textContent='✦ Copied!';
+    setTimeout(function(){document.getElementById('copyBtn').textContent='📋 Copy contributor link';},2000);
+  });}
+}
+function shareSMS(){
+  var nm=C.recipientName?C.recipientName.split(' ')[0]:'them';
+  var url=document.getElementById('shareUrl').textContent;
+  window.open('sms:?body='+encodeURIComponent('I\'m building a time capsule for '+nm+'. Would you add a memory? Takes 5 minutes — '+url));
+}
+function shareNative(){
+  var nm=C.recipientName?C.recipientName.split(' ')[0]:'them';
+  var url=document.getElementById('shareUrl').textContent;
+  if(navigator.share){navigator.share({text:'I\'m building a time capsule for '+nm+'. Would you add a memory?',url:url});}
+  else{copyLink();}
+}
+</script>
+</body>
+</html>

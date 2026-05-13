@@ -2,643 +2,316 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Share a Memory — Curated Connections</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-html{font-size:18px;-webkit-text-size-adjust:100%;}
-:root{
-  --ivory:#f4e8d4;
-  --parchment:#ece0c8;
-  --espresso:#281600;
-  --bark:rgba(40,22,0,.85);
-  --bark-mid:rgba(40,22,0,.65);
-  --bark-soft:rgba(40,22,0,.52);
-  --bark-ghost:rgba(40,22,0,.12);
-  --gold:#8a6010;
-  --gold-soft:rgba(138,96,16,.4);
-  --gold-ghost:rgba(138,96,16,.1);
-  --teal-mute:rgba(62,128,112,.65);
-  --teal-ghost:rgba(62,128,112,.1);
-  --amber:#c97d3a;
-  --r-md:14px;--r-lg:20px;--r-xl:26px;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;background:var(--ivory);font-family:'DM Sans',sans-serif;color:var(--espresso);-webkit-font-smoothing:antialiased;overflow:hidden;}
-
-body::before{content:"";position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
-  background-size:180px;pointer-events:none;z-index:9999;}
-body::after{content:"";position:fixed;inset:0;
-  background:radial-gradient(ellipse at 20% 0%,rgba(235,195,110,.18) 0%,transparent 52%),
-             radial-gradient(ellipse at 85% 90%,rgba(201,125,58,.08) 0%,transparent 48%);
-  pointer-events:none;z-index:0;}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes leafSway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-@keyframes savedPop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
-@keyframes breathe{0%,100%{opacity:.5}50%{opacity:.85}}
-
-.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:1;background:var(--ivory);}
-
-/* SCREENS */
-.screen{position:absolute;inset:0;display:none;flex-direction:column;z-index:5;background:var(--ivory);}
-.screen.active{display:flex;}
-
-/* ══ WELCOME SCREEN ══ */
-.welcome-scroll{flex:1;overflow-y:auto;padding:0 0 3rem;}
-.welcome-scroll::-webkit-scrollbar{display:none;}
-
-/* Tree hero */
-.tree-hero{padding:1.8rem 1.3rem 1.2rem;text-align:center;position:relative;}
-.tree-emoji{font-size:3.5rem;display:block;margin-bottom:.6rem;animation:leafSway 4s ease-in-out infinite;transform-origin:bottom center;}
-.th-brand{font-size:.78rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.35rem;}
-.th-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--espresso);line-height:1.3;margin-bottom:.4rem;}
-.th-title strong{font-weight:600;color:var(--amber);}
-.th-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;color:var(--bark-mid);line-height:1.68;max-width:280px;margin:0 auto;}
-
-/* Gold rule */
-.gold-rule{width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:.9rem auto 1.1rem;}
-
-/* About section */
-.about-section{padding:0 1.3rem 1.2rem;}
-.about-card{background:rgba(255,252,244,.75);border:1px solid rgba(40,22,0,.12);border-radius:var(--r-xl);padding:1.4rem 1.3rem;margin-bottom:.5rem;box-shadow:0 3px 16px rgba(40,22,0,.08);}
-.ac-eyebrow{font-size:.70rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-mute);margin-bottom:.38rem;}
-.ac-name{font-family:'Cormorant Garamond',serif;font-size:1.75rem;color:#1e1000;font-weight:500;margin-bottom:.25rem;}
-.ac-keeper{font-size:.8rem;color:rgba(40,22,0,.6);}
-.ac-desc{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:rgba(40,22,0,.72);line-height:1.75;margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(40,22,0,.1);}
-
-/* What you can share */
-.share-types{padding:0 1.3rem .8rem;}
-.st-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.65rem;}
-.st-grid{display:grid;grid-template-columns:1fr 1fr;gap:.42rem;}
-.st-tile{background:rgba(255,252,244,.5);border:1px solid var(--bark-ghost);border-radius:var(--r-lg);padding:.8rem .75rem;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(40,22,0,.04);}
-.st-tile:hover{border-color:rgba(138,96,16,.22);transform:translateY(-1px);}
-.st-tile:active{transform:scale(.97);}
-.st-icon{width:28px;height:28px;margin-bottom:.5rem;display:flex;align-items:center;}
-.st-name{font-family:'Nunito',sans-serif;font-size:.98rem;font-weight:800;color:var(--espresso);margin-bottom:.14rem;}
-.st-desc{font-size:.76rem;color:var(--bark-soft);line-height:1.52;}
-
-/* Begin button */
-.begin-section{padding:.8rem 1.3rem 0;}
-.begin-btn{width:100%;padding:.95rem;background:linear-gradient(135deg,var(--amber),#e89448);color:#fff;border:none;border-radius:var(--r-xl);font-family:'Nunito',sans-serif;font-size:1rem;font-weight:900;cursor:pointer;letter-spacing:.04em;box-shadow:0 6px 20px rgba(201,125,58,.3);transition:all .2s;}
-.begin-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,125,58,.4);}
-.no-account{font-size:.75rem;color:var(--bark-soft);text-align:center;margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;}
-
-/* ══ CONTRIBUTE SCREEN ══ */
-.contribute-header{padding:.75rem 1rem .65rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--bark-ghost);flex-shrink:0;background:rgba(248,242,232,.95);}
-.ch-back{background:none;border:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--bark-mid);cursor:pointer;}
-.ch-title{flex:1;text-align:center;font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--espresso);font-weight:500;}
-.ch-step{font-size:.75rem;font-weight:700;color:var(--bark-soft);font-family:'Nunito',sans-serif;}
-
-.contribute-scroll{flex:1;overflow-y:auto;padding:.9rem 1.1rem 3rem;}
-.contribute-scroll::-webkit-scrollbar{display:none;}
-
-/* Chapter selector */
-.chapter-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.55rem;}
-.chapter-scroll{display:flex;gap:.38rem;overflow-x:auto;padding-bottom:.3rem;margin-bottom:1.1rem;}
-.chapter-scroll::-webkit-scrollbar{display:none;}
-.chapter-chip{flex-shrink:0;padding:.42rem .82rem;background:rgba(255,252,244,.6);border:1px solid var(--bark-ghost);border-radius:999px;font-size:.75rem;font-weight:700;color:var(--bark-mid);cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;transition:all .18s;}
-.chapter-chip.sel{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.3);color:var(--amber);}
-
-/* Contribution prompt */
-.contrib-prompt{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-style:italic;color:var(--espresso);line-height:1.7;margin-bottom:.9rem;font-weight:400;}
-.prompt-hint{font-size:.8rem;color:var(--bark-soft);line-height:1.62;margin-bottom:1.1rem;font-family:'Cormorant Garamond',serif;font-style:italic;}
-
-/* Media type selector */
-.media-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.55rem;}
-.media-types{display:flex;gap:.38rem;flex-wrap:wrap;margin-bottom:1rem;}
-.media-type{display:flex;align-items:center;gap:.3rem;padding:.44rem .78rem;background:rgba(255,252,244,.6);border:1.5px solid var(--bark-ghost);border-radius:999px;font-size:.76rem;font-weight:700;color:var(--bark-mid);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .18s;}
-.media-type.sel{background:rgba(62,128,112,.08);border-color:rgba(62,128,112,.35);color:rgba(62,128,112,.85);}
-.media-type-icon{font-size:.85rem;}
-
-/* Media input areas */
-.media-area{display:none;margin-bottom:.8rem;animation:fadeIn .25s ease both;}
-.media-area.show{display:block;}
-
-/* Story textarea */
-.story-ta{width:100%;background:rgba(255,250,240,.7);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--espresso);line-height:1.78;padding:.9rem .95rem;outline:none;resize:none;min-height:120px;}
-.story-ta:focus{border-color:rgba(138,96,16,.28);}
-.story-ta::placeholder{color:rgba(40,22,0,.22);font-style:italic;}
-
-/* Photo upload zone */
-.photo-zone{background:rgba(255,250,240,.5);border:1.5px dashed rgba(138,96,16,.2);border-radius:var(--r-lg);padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all .2s;}
-.photo-zone:hover{border-color:rgba(138,96,16,.35);background:rgba(255,250,240,.7);}
-.pz-icon{font-size:2rem;margin-bottom:.4rem;display:block;}
-.pz-label{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bark-mid);}
-.pz-sub{font-size:.72rem;color:var(--bark-soft);margin-top:.22rem;}
-.photo-preview{display:none;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.4rem;}
-.photo-preview.show{display:grid;}
-.photo-thumb{border-radius:var(--r-md);aspect-ratio:1;background:var(--parchment);overflow:hidden;position:relative;}
-.photo-thumb img{width:100%;height:100%;object-fit:cover;}
-.photo-rm{position:absolute;top:4px;right:4px;background:rgba(40,22,0,.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-/* Voice zone */
-.voice-zone{background:rgba(255,250,240,.5);border:1.5px solid var(--bark-ghost);border-radius:var(--r-lg);padding:1.2rem 1rem;text-align:center;}
-.vz-icon{font-size:2.2rem;display:block;margin-bottom:.35rem;animation:breathe 2s ease-in-out infinite;}
-.vz-label{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--bark-mid);margin-bottom:.6rem;}
-.vz-btn{display:inline-block;padding:.65rem 1.5rem;background:rgba(201,125,58,.12);border:1px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--amber);cursor:pointer;}
-
-/* Video zone */
-.video-zone{background:rgba(255,250,240,.5);border:1.5px dashed rgba(138,96,16,.2);border-radius:var(--r-lg);padding:1.5rem 1rem;text-align:center;cursor:pointer;}
-.video-zone:hover{border-color:rgba(138,96,16,.35);}
-
-/* Submit section */
-.contrib-submit{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(248,242,232,.96);border-top:1px solid var(--bark-ghost);padding:.7rem 1.1rem calc(.7rem + env(safe-area-inset-bottom));backdrop-filter:blur(14px);z-index:50;}
-.submit-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--amber),#e89448);color:#fff;border:none;border-radius:var(--r-xl);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;letter-spacing:.04em;box-shadow:0 4px 16px rgba(201,125,58,.3);}
-.submit-btn:disabled{opacity:.45;pointer-events:none;}
-
-/* ══ THANK YOU SCREEN ══ */
-.thankyou-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;}
-.ty-leaf{font-size:3rem;margin-bottom:.8rem;animation:leafSway 4s ease-in-out infinite;transform-origin:bottom center;display:block;}
-.ty-title{font-family:'Pacifico',cursive;font-size:1.6rem;color:var(--amber);margin-bottom:.4rem;}
-.ty-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.12rem;color:var(--bark-mid);line-height:1.72;max-width:290px;margin:0 auto 1.4rem;}
-.gold-rule-center{width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:.6rem auto 1.2rem;}
-.ty-summary{background:rgba(255,252,244,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-xl);padding:1rem 1.1rem;margin-bottom:1.3rem;text-align:left;width:100%;max-width:320px;box-shadow:0 2px 10px rgba(40,22,0,.05);}
-.ty-summary-lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-mute);margin-bottom:.35rem;}
-.ty-summary-chapter{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--amber);margin-bottom:.25rem;}
-.ty-summary-preview{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark-mid);line-height:1.65;font-style:italic;}
-.ty-media-chips{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.65rem;}
-.ty-chip{font-size:.78rem;font-weight:700;font-family:'Nunito',sans-serif;padding:.2rem .52rem;background:rgba(62,128,112,.08);border:1px solid rgba(62,128,112,.2);border-radius:999px;color:rgba(62,128,112,.7);}
-
-.ty-add-more{width:100%;max-width:320px;padding:.8rem;background:rgba(201,125,58,.08);border:1px solid rgba(201,125,58,.22);border-radius:var(--r-lg);font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:var(--amber);cursor:pointer;margin-bottom:.5rem;}
-.ty-done{width:100%;max-width:320px;padding:.8rem;background:none;border:1px solid var(--bark-ghost);border-radius:var(--r-lg);font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--bark-soft);cursor:pointer;}
-
-.ty-footer{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.78rem;color:var(--bark-soft);margin-top:1rem;line-height:1.55;}
-.rel-chip{padding:.4rem .82rem;background:rgba(255,252,244,.5);border:1.5px solid rgba(40,22,0,.1);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;color:rgba(40,22,0,.55);cursor:pointer;transition:all .18s;}
-.rel-chip.sel{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.35);color:var(--amber);}
-</style>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="/cc-auth.js"></script>
-  <script src="/cc-firebase.js"></script>
-<!-- Google Analytics -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Add Your Memory — Curated Connections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSCN4MBVZ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-CSCN4MBVZ0");
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CSCN4MBVZ0');</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--ink:#03060a;--gold:#c97d3a;--gold2:#e8a045;--cream:#f2e8d8;}
+html,body{min-height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;}
+body{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1.2rem 5rem;}
+
+.page{width:100%;max-width:480px;}
+
+.brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.5);margin-bottom:2rem;text-align:center;}
+
+/* HERO CARD */
+.capsule-hero{
+  padding:1.6rem;
+  background:linear-gradient(145deg,rgba(201,125,58,.08),rgba(100,65,5,.12));
+  border:1px solid rgba(201,125,58,.2);
+  border-radius:18px;margin-bottom:2rem;text-align:center;
+}
+.capsule-occasion{
+  font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(201,125,58,.55);margin-bottom:.5rem;
+}
+.capsule-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:.3rem;
+}
+.capsule-sub{font-size:.8rem;color:rgba(242,232,216,.38);line-height:1.6;}
+
+/* FORM */
+.section-label{
+  font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(242,232,216,.35);margin-bottom:.8rem;
+}
+
+.prompt-card{
+  padding:1rem 1.1rem;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;margin-bottom:1.4rem;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:1.05rem;
+  color:rgba(242,232,216,.75);line-height:1.5;
+}
+
+.field-label{
+  font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(242,232,216,.4);margin-bottom:.4rem;display:block;
+}
+.field-input{
+  width:100%;padding:.78rem .9rem;
+  background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(255,255,255,.09);
+  border-radius:12px;font-family:'DM Sans',sans-serif;
+  font-size:.92rem;color:var(--cream);outline:none;
+  transition:border-color .2s;margin-bottom:1rem;
+}
+.field-input:focus{border-color:rgba(201,125,58,.4);}
+.field-input::placeholder{color:rgba(242,232,216,.2);}
+textarea.field-input{min-height:140px;resize:vertical;line-height:1.6;}
+
+.btn-submit{
+  width:100%;padding:.95rem;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:#fff;cursor:pointer;
+  box-shadow:0 6px 24px rgba(201,125,58,.25);
+  transition:all .2s;
+}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;}
+
+/* PROMPTS PICKER */
+.prompt-options{display:grid;gap:.5rem;margin-bottom:1.2rem;}
+.prompt-opt{
+  padding:.75rem .9rem;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:.9rem;
+  color:rgba(242,232,216,.55);
+  background:rgba(255,255,255,.025);
+  transition:all .16s;line-height:1.4;
+}
+.prompt-opt:hover{border-color:rgba(201,125,58,.25);color:rgba(242,232,216,.8);}
+.prompt-opt.selected{border-color:rgba(201,125,58,.4);background:rgba(201,125,58,.06);color:var(--cream);}
+
+/* SUCCESS */
+.success{display:none;text-align:center;padding:3rem 1rem;}
+.success-icon{font-size:3rem;margin-bottom:1rem;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:.6rem;}
+.success-body{font-size:.88rem;color:rgba(242,232,216,.45);line-height:1.8;max-width:320px;margin:0 auto 2rem;}
+.success-cta{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.5);}
+.success-cta a{color:inherit;text-decoration:underline;}
+</style>
 </head>
 <body>
-<div class="app">
+<div class="page">
 
-  <!-- ══ WELCOME SCREEN ══ -->
-  <div class="screen active" id="welcomeScreen">
-    <div class="welcome-scroll">
-      <div class="tree-hero" style="animation:fadeUp .5s ease both;">
-        <span class="tree-emoji">🌳</span>
-        <div class="th-brand">Curated Connections · Living Legacy</div>
-        <div class="th-title">Add your piece of<br><strong id="personName">their story</strong></div>
-        <div class="th-sub"><span id="inviterNameContrib">Someone</span> has invited you to add your memories, stories, and moments to their Living Legacy archive.</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:rgba(40,22,0,.38);margin-top:.5rem;">Every answer is a moment waiting to be captured.</div>
-      </div>
+  <div class="brand">Curated Connections</div>
 
-      <div class="gold-rule"></div>
+  <!-- CAPSULE HEADER — populated by JS -->
+  <div class="capsule-hero">
+    <div class="capsule-occasion" id="capsuleOccasion">Graduation 2026 · Time Capsule</div>
+    <div class="capsule-name" id="capsuleName">Loading…</div>
+    <div class="capsule-sub" id="capsuleSub">Someone who loves them is building something special.<br>Your memory is part of it.</div>
+  </div>
 
-      <!-- Who Ruth is -->
-      <div class="about-section">
-        <div class="about-card" style="animation:fadeUp .5s .08s ease both;">
-          <div class="ac-eyebrow">About this leaf</div>
-          <div class="ac-name"><span class="legacy-person-name">this person</span></div>
-          <div class="ac-keeper">Kept by <span id="keeperName">the family</span> · Family archive</div>
-          <div class="ac-desc">"Mom was the person who remembered everything — birthdays, recipes, the way things sounded before we moved. This archive is for all of us who knew her."</div>
-        </div>
-      </div>
+  <!-- FORM -->
+  <div id="formArea">
+    <div class="section-label">Choose a prompt to answer</div>
+    <div class="prompt-options" id="promptOptions">
+      <!-- populated by JS based on occasion -->
+    </div>
 
-      <!-- What you can share -->
-      <div class="share-types" style="animation:fadeUp .5s .14s ease both;">
-        <div class="st-lbl">Preserve their story</div>
-        <div class="st-grid">
-          <div class="st-tile">
-            <div class="st-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="rgba(40,22,0,.55)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M20 4l4 4-12 12H8v-4L20 4z"/>
-  <line x1="17" y1="7" x2="21" y2="11"/>
-</svg></div>
-            <div class="st-name">A story or memory</div>
-            <div class="st-desc">In your own words — anything you carry</div>
-          </div>
-          <div class="st-tile">
-            <div class="st-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="rgba(40,22,0,.55)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <rect x="3" y="7" width="22" height="16" rx="2"/>
-  <circle cx="14" cy="15" r="4"/>
-  <path d="M10 7l2-3h4l2 3"/>
-  <circle cx="21" cy="11" r="1" fill="rgba(40,22,0,.4)" stroke="none"/>
-</svg></div>
-            <div class="st-name">Photos & keepsakes</div>
-            <div class="st-desc">Snap a recipe card, letter, or old photo</div>
-          </div>
-          <div class="st-tile">
-            <div class="st-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="rgba(40,22,0,.55)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <rect x="10" y="3" width="8" height="13" rx="4"/>
-  <path d="M6 15a8 8 0 0 0 16 0"/>
-  <line x1="14" y1="23" x2="14" y2="26"/>
-  <line x1="10" y1="26" x2="18" y2="26"/>
-</svg></div>
-            <div class="st-name">Share your voice</div>
-            <div class="st-desc">Tell the story the way only you remember it</div>
-          </div>
-          <div class="st-tile" style="border-color:rgba(138,96,16,.18);background:rgba(255,248,230,.6);">
-            <div class="st-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="rgba(40,22,0,.55)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M4 22c0 0 4-8 12-8s10 4 10 4"/>
-  <path d="M14 14c0 0-2-6 2-10 2 2 4 6 0 10"/>
-  <path d="M14 14l6-4"/>
-  <circle cx="12" cy="16" r="1" fill="rgba(40,22,0,.4)" stroke="none"/>
-</svg></div>
-            <div class="st-name" style="color:var(--amber);">Preserve their voice</div>
-            <div class="st-desc">Upload a recording, voicemail, or video clip of theirs</div>
-          </div>
-        </div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(138,96,16,.6);margin-top:.65rem;padding:.65rem .8rem;background:rgba(255,248,230,.5);border-radius:var(--r-md);border-left:2px solid rgba(138,96,16,.25);line-height:1.6;">
-          "A voicemail, a home video, an answering machine message — if you have anything with her voice in it, this is where it belongs."
-        </div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bark-soft);margin-top:.65rem;text-align:center;">You can add as many types as you want in a single contribution.</div>
-      </div>
+    <label class="field-label">Your answer</label>
+    <textarea class="field-input" id="answerText" placeholder="Take your time. Write as little or as much as you want."></textarea>
 
-      <!-- How did you know them -->
-      <div style="padding:0 1.3rem .8rem;animation:fadeUp .5s .18s ease both;">
-        <div class="st-lbl">How did you know this person?</div>
-        <div style="display:flex;flex-wrap:wrap;gap:.38rem;" id="relationshipChips">
-          <div class="rel-chip" onclick="selRelationship(this,'Family member')">Family member</div>
-          <div class="rel-chip" onclick="selRelationship(this,'Close friend')">Close friend</div>
-          <div class="rel-chip" onclick="selRelationship(this,'Coworker / Colleague')">Coworker</div>
-          <div class="rel-chip" onclick="selRelationship(this,'Neighbor')">Neighbor</div>
-          <div class="rel-chip" onclick="selRelationship(this,'Faith community')">Faith community</div>
-          <div class="rel-chip" onclick="selRelationship(this,'Caregiver / Healthcare')">Caregiver</div>
-          <div class="rel-chip" onclick="selRelationship(this,'Former student')">Former student</div>
-          <div class="rel-chip" onclick="selRelationship(this,'I knew them in another way')">Another way</div>
-        </div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(40,22,0,.45);margin-top:.55rem;line-height:1.6;">Your relationship to this person gives her story more dimension. People knew her differently — all of it matters.</div>
-      </div>
+    <label class="field-label">Your name <span style="font-weight:400;opacity:.5;">(shown to the recipient)</span></label>
+    <input class="field-input" id="contributorName" type="text" placeholder="e.g. Coach Williams, Aunt Sarah, or just First Name"/>
 
-      <div class="begin-section" style="animation:fadeUp .5s .2s ease both;">
-        <button class="begin-btn" onclick="goContribute()">Add to Her Story →</button>
-        <div class="no-account">No account needed. Free. Takes just a few minutes.</div>
-      </div>
+    <label class="field-label">Your relationship to them</label>
+    <input class="field-input" id="contributorRelation" type="text" placeholder="e.g. Coach, Teacher, Teammate, Friend"/>
+
+    <div style="font-size:.72rem;color:rgba(242,232,216,.22);line-height:1.6;margin-bottom:1.2rem;">Your response goes directly into their time capsule. The recipient won't see it until the Keeper decides to present it.</div>
+
+    <div style="font-size:.72rem;color:#e07060;margin-bottom:.5rem;min-height:.9rem;" id="formError"></div>
+    <button class="btn-submit" id="submitBtn" onclick="submitMemory()">Add My Memory →</button>
+
+    <div style="margin-top:1.4rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;text-align:center;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.2);margin-bottom:.4rem;">Want to build one for someone you love?</div>
+      <a href="grad2026.html" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.5);text-decoration:none;">Start a time capsule →</a>
     </div>
   </div>
 
-  <!-- ══ CONTRIBUTE SCREEN ══ -->
-  <div class="screen" id="contributeScreen">
-    <div class="contribute-header">
-      <button class="ch-back" onclick="goBack()">← Back</button>
-      <div class="ch-title">Share a memory</div>
-      <div class="ch-step" id="stepLabel">Step 1 of 2</div>
+  <!-- SEALED STATE -->
+  <div id="sealedArea" style="display:none;text-align:center;padding:2rem 0;">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">✦</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--cream);margin-bottom:.5rem;">This capsule has been presented.</div>
+    <div style="font-size:.85rem;color:rgba(242,232,216,.38);line-height:1.8;margin-bottom:2rem;">Thank you for being part of it. Your memory is in there.</div>
+
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.4rem;text-align:left;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.3);margin-bottom:.6rem;">Still have something to say?</div>
+      <div style="font-size:.85rem;color:rgba(242,232,216,.42);line-height:1.6;margin-bottom:1rem;">Send it to the Keeper — they may add it.</div>
+      <textarea id="lateMessage" placeholder="Write your message here..." style="width:100%;min-height:100px;padding:.8rem .9rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--cream);outline:none;resize:none;line-height:1.6;margin-bottom:.7rem;" onfocus="this.style.borderColor='rgba(201,125,58,.4)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"></textarea>
+      <input id="lateName" type="text" placeholder="Your name" style="width:100%;padding:.7rem .9rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--cream);outline:none;margin-bottom:.7rem;" onfocus="this.style.borderColor='rgba(201,125,58,.4)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"/>
+      <button onclick="sendLateMessage()" style="width:100%;padding:.8rem;background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);cursor:pointer;">Send to Keeper →</button>
+      <div id="lateConfirm" style="display:none;text-align:center;padding:.8rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.6);">Sent. The Keeper will see it. ✦</div>
     </div>
 
-    <div class="contribute-scroll">
-      <!-- Life chapter -->
-      <div style="animation:fadeUp .3s ease both;">
-        <div class="chapter-lbl">Which chapter of her life?</div>
-        <div class="chapter-scroll">
-          <div class="chapter-chip sel" onclick="selChapter(this,'Childhood')">Childhood</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Family')">Family</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Love Story')">Love Story</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Faith')">Faith</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Traditions')">Traditions</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Recipes')">Recipes & Handmade</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Hard Seasons')">Hard Seasons</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Lessons')">Lessons She Taught</div>
-          <div class="chapter-chip" onclick="selChapter(this,'Things Never Said')">Things I Never Said</div>
-          <div class="chapter-chip" onclick="selChapter(this,'General')">Just a Memory</div>
-        </div>
-      </div>
-
-      <!-- Prompt -->
-      <div style="animation:fadeUp .3s .06s ease both;">
-        <div class="contrib-prompt" id="chapterPrompt">"What's your earliest memory of them?"</div>
-        <div class="prompt-hint">There's no wrong answer. Write as much or as little as feels right. This is for the people who loved her.</div>
-      </div>
-
-      <!-- Media types -->
-      <div style="animation:fadeUp .3s .1s ease both;">
-        <div class="media-lbl">What would you like to add?</div>
-        <div class="media-types">
-          <div class="media-type sel" onclick="toggleMedia(this,'story')"><span class="media-type-icon">✍️</span> Written story</div>
-          <div class="media-type" onclick="toggleMedia(this,'photo')"><span class="media-type-icon">📸</span> Photos</div>
-          <div class="media-type" onclick="toggleMedia(this,'voice')"><span class="media-type-icon">🎙️</span> Your voice</div>
-          <div class="media-type" onclick="toggleMedia(this,'theirvoice')" style="border-color:rgba(138,96,16,.2);"><span class="media-type-icon">🕊️</span> Their voice</div>
-          <div class="media-type" onclick="toggleMedia(this,'document')"><span class="media-type-icon">📄</span> Documents & records</div>
-        </div>
-
-        <!-- Story area -->
-        <div class="media-area show" id="area-story">
-          <textarea class="story-ta" id="storyText" placeholder="Start wherever feels right. A smell, a sound, a moment. You don't have to have it all figured out before you begin..."></textarea>
-        </div>
-
-        <!-- Photo area -->
-        <div class="media-area" id="area-photo">
-          <div class="photo-zone" onclick="triggerPhotoUpload()">
-            <span class="pz-icon">📷</span>
-            <div class="pz-label">Tap to add a photo</div>
-            <div class="pz-sub">Recipe cards, letters, old photos — anything you can photograph</div>
-          </div>
-          <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotos(this)"/>
-          <div class="photo-preview" id="photoPreview"></div>
-        </div>
-
-        <!-- Voice area -->
-        <div class="media-area" id="area-voice">
-          <div class="voice-zone">
-            <span class="vz-icon">🎙️</span>
-            <div class="vz-label">Record yourself telling the memory out loud</div>
-            <div class="vz-btn" onclick="toggleRecording(this)">Start Recording</div>
-          </div>
-        </div>
-
-        <!-- Document area -->
-        <div class="media-area" id="area-document">
-          <div style="background:rgba(255,250,240,.5);border:1.5px solid var(--bark-ghost);border-radius:var(--r-lg);padding:1.3rem 1.1rem;">
-            <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.75rem;">
-              <svg width="26" height="26" viewBox="0 0 28 28" fill="none" stroke="rgba(40,22,0,.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
-              <div>
-                <div style="font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;color:var(--espresso);">Documents & Records</div>
-                <div style="font-size:.78rem;color:var(--bark-soft);">Book pages, letters, certificates, clippings</div>
-              </div>
-            </div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--bark-mid);line-height:1.65;margin-bottom:.9rem;">Photograph any page or document. The app will read it, extract the family information, and retell the story in its own words — no copyright issues.</div>
-            <div onclick="t('Opening camera...')" style="padding:.72rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.28);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:var(--amber);cursor:pointer;text-align:center;margin-bottom:.42rem;">📷 Photograph a page</div>
-            <div onclick="t('Opening files...')" style="padding:.72rem;background:rgba(255,252,240,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:var(--bark-mid);cursor:pointer;text-align:center;">Upload a scan or PDF</div>
-            <div style="font-size:.75rem;color:var(--bark-soft);margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center;">Facts can't be copyrighted. Names, dates, stories — all preserved. The words will be ours.</div>
-          </div>
-        </div>
-
-        <!-- Their voice area -->
-        <div class="media-area" id="area-theirvoice">
-          <div style="background:rgba(255,248,230,.6);border:1.5px solid rgba(138,96,16,.2);border-radius:var(--r-lg);padding:1.3rem 1.1rem;text-align:center;">
-            <span style="font-size:2rem;display:block;margin-bottom:.4rem;">🕊️</span>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--espresso);margin-bottom:.3rem;font-weight:500;">Preserve their voice</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--bark-soft);line-height:1.6;margin-bottom:.9rem;">A voicemail, home movie, answering machine recording — anything that captured her voice, her laugh, her words.</div>
-            <div style="display:flex;flex-direction:column;gap:.38rem;">
-              <div onclick="t('Opening your files...')" style="padding:.65rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.28);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:var(--amber);cursor:pointer;">Upload audio or video file</div>
-              <div onclick="t('Opening your camera roll...')" style="padding:.65rem;background:rgba(255,252,244,.6);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;color:var(--bark-mid);cursor:pointer;">Choose from camera roll</div>
-            </div>
-            <div style="font-size:.75rem;color:var(--bark-soft);margin-top:.65rem;font-family:'Cormorant Garamond',serif;font-style:italic;">Accepted: video, audio, voicemail files. Any length.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Your name -->
-      <div style="margin-top:.4rem;animation:fadeUp .3s .14s ease both;">
-        <div class="chapter-lbl" style="margin-top:.4rem;">Your name</div>
-        <input type="text" id="contributorName" placeholder="How should their family know you?" style="width:100%;background:rgba(255,250,240,.7);border:1px solid var(--bark-ghost);border-radius:var(--r-md);font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--espresso);padding:.78rem .9rem;outline:none;margin-bottom:.3rem;"/>
-        <div style="font-size:.75rem;color:var(--bark-soft);font-family:'Cormorant Garamond',serif;font-style:italic;">Your name helps the family know whose memory this is.</div>
-      </div>
-    </div>
-
-    <!-- Submit bar -->
-    <div class="contrib-submit">
-      <button class="submit-btn" id="submitBtn" onclick="submitContribution()">Add to her archive →</button>
+    <div style="margin-top:1.6rem;">
+      <a href="grad2026.html" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.45);text-decoration:none;">Start a capsule for someone you love →</a>
     </div>
   </div>
-
-  <!-- ══ THANK YOU SCREEN ══ -->
-  <div class="screen" id="thankyouScreen">
-    <div class="thankyou-body">
-      <span class="ty-leaf">🍃</span>
-      <div class="ty-title">It's been added.</div>
-      <div class="ty-sub">"Your memory now lives in her archive. The people who loved them will carry this forward."</div>
-      <div class="gold-rule-center"></div>
-
-      <div class="ty-summary">
-        <div class="ty-summary-lbl">What you shared</div>
-        <div class="ty-summary-chapter" id="tySummaryChapter">Childhood · <span class="legacy-person-name">this person</span></div>
-        <div class="ty-summary-preview" id="tySummaryPreview">Your contribution has been received and is now part of her Living Legacy archive.</div>
-        <div class="ty-media-chips" id="tyMediaChips"></div>
-      </div>
-
-      <button class="ty-add-more" onclick="addMore()">Add another memory →</button>
-      <button class="ty-done" onclick="t('Thank you for sharing. This window can be closed.')">I\'m done</button>
-
-      <div class="ty-footer">"No account needed. Your memory is preserved permanently."</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.72rem;color:rgba(138,96,16,.4);margin-top:.5rem;line-height:1.6;">For entertainment and personal reflection purposes only.</div>
-    </div>
+    <div class="success-icon">✦</div>
+    <div class="success-title">Your memory is in.</div>
+    <div class="success-body">It's been added to their capsule. They'll receive it at exactly the right moment — when the Keeper decides to present it.</div>
+    <div class="success-cta">Want to build one for someone you love?<br><a href="grad2026.html">Start a time capsule →</a></div>
   </div>
 
 </div>
 
-<div style="display:none;position:fixed;bottom:3rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(40,22,0,.9);border-radius:999px;padding:.4rem .9rem;font-size:.75rem;color:var(--ivory);z-index:9999;white-space:nowrap;opacity:0;transition:all .22s;pointer-events:none;" id="toastEl"></div>
-
 <script>
-// ── DYNAMIC LOADING FROM URL PARAMS ──────────────────────────────
-// URL format: contribute.html?person=NAME&keeper=KEEPER_NAME&token=TOKEN
-(function() {
-  var params = new URLSearchParams(window.location.search);
-  var personParam = params.get('person');
-  var keeperParam = params.get('keeper');
-
-  function setDynamic(selector, text) {
-    document.querySelectorAll(selector).forEach(function(el) { el.textContent = text; });
-  }
-
-  window.addEventListener('DOMContentLoaded', function() {
-    if (personParam) {
-      var name = decodeURIComponent(personParam);
-      setDynamic('.legacy-person-name', name + "'s story");
-      // Update the strong title
-      var titleEl = document.getElementById('personName');
-      if (titleEl) titleEl.textContent = name + "'s story";
-      // Update the inviterNameContrib
-      var invEl = document.getElementById('inviterNameContrib');
-      if (invEl && !invEl.textContent.trim()) invEl.textContent = keeperParam ? decodeURIComponent(keeperParam) : 'someone';
-    }
-    if (keeperParam) {
-      var keepEl = document.getElementById('keeperName');
-      if (keepEl) keepEl.textContent = decodeURIComponent(keeperParam);
-    }
-  });
-})();
-// ─────────────────────────────────────────────────────────────────
-
-const PROMPTS = {
-  'Childhood': '"What\'s your earliest memory of them?"',
-  'Family': '"What was their home like — what do you remember about it?"',
-  'Love Story': '"What do you remember about <span class="person-q"></span> and the people she loved?"',
-  'Faith': '"How did their faith show up in everyday life?"',
-  'Traditions': '"What\'s a tradition they kept that you still think about?"',
-  'Recipes': '"Is there a recipe or something she made that you\'d want to preserve?"',
-  'Hard Seasons': '"What were they like when things were hard? How did she carry it?"',
-  'Lessons': '"What did they teach you — in words or just by how she lived?"',
-  'Things Never Said': '"Is there something you wish you\'d said to them? This is the place."',
-  'General': '"What\'s one thing about them you never want to forget?"'
-};
-
-let selectedChapter = 'Childhood';
-let selectedMedia = ['story']; document.getElementById('area-theirvoice').classList.remove('show');
-let isRecording = false;
-
-function selChapter(el, chapter) {
-  document.querySelectorAll('.chapter-chip').forEach(c => c.classList.remove('sel'));
-  el.classList.add('sel');
-  selectedChapter = chapter;
-  document.getElementById('chapterPrompt').textContent = PROMPTS[chapter] || '"What do you remember about <span class="person-q"></span>?"';
+// Check if leaf is sealed
+var leafStatus = (capsuleData && capsuleData.status) || 'open';
+if (leafStatus === 'sealed') {
+  document.getElementById('formArea').style.display = 'none';
+  document.getElementById('sealedArea').style.display = 'block';
 }
 
-function toggleMedia(el, type) {
-  el.classList.toggle('sel');
-  const area = document.getElementById('area-' + type);
-  if(el.classList.contains('sel')) {
-    selectedMedia.push(type);
-    area.classList.add('show');
-  } else {
-    selectedMedia = selectedMedia.filter(m => m !== type);
-    area.classList.remove('show');
-  }
-}
+function sendLateMessage() {
+  var msg = document.getElementById('lateMessage').value.trim();
+  var name = document.getElementById('lateName').value.trim();
+  if (!msg) return;
 
-function triggerPhotoUpload() {
-  document.getElementById('photoInput').click();
-}
+  // Save to Airtable as a pending contribution
+  fetch('/api/airtable', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      action: 'create', table: 'Responses',
+      fields: {
+        'response_id':    'late_' + Date.now(),
+        'user_id':        leafId,
+        'spoken_answer':  '[Late message from ' + (name||'Anonymous') + ']\n\n' + msg,
+        'is_living_legacy': true,
+        'recorded_at':    new Date().toISOString()
+      }
+    })
+  }).catch(function(){});
 
-function handlePhotos(input) {
-  const preview = document.getElementById('photoPreview');
-  preview.classList.add('show');
-  preview.innerHTML = '';
-  Array.from(input.files).slice(0, 4).forEach(file => {
-    const url = URL.createObjectURL(file);
-    const thumb = document.createElement('div');
-    thumb.className = 'photo-thumb';
-    thumb.innerHTML = `<img src="${url}" alt="photo"/><button class="photo-rm" onclick="this.parentElement.remove()">✕</button>`;
-    preview.appendChild(thumb);
-  });
-  t(input.files.length + ' photo' + (input.files.length > 1 ? 's' : '') + ' added');
-}
-
-function toggleRecording(btn) {
-  isRecording = !isRecording;
-  if(isRecording) {
-    btn.textContent = '⏹ Stop Recording';
-    btn.style.background = 'rgba(255,80,56,.15)';
-    btn.style.borderColor = 'rgba(255,80,56,.3)';
-    btn.style.color = '#ff5038';
-    t('Recording started...');
-  } else {
-    btn.textContent = '▶ Play Back · Re-record';
-    btn.style.background = 'rgba(62,128,112,.1)';
-    btn.style.borderColor = 'rgba(62,128,112,.3)';
-    btn.style.color = 'rgba(62,128,112,.85)';
-    t('Recording saved ✦');
-  }
-}
-
-function goContribute() { showScreen('contributeScreen'); }
-function goBack() { showScreen('welcomeScreen'); }
-
-async function submitContribution() {
-  const name  = document.getElementById('contributorName').value.trim();
-  const story = document.getElementById('storyText').value.trim();
-  if (!name)  { t('Please add your name'); return; }
-  if (!story && selectedMedia.length <= 1) { t('Please share something — a story, photo, or recording'); return; }
-
-  // Disable button while saving
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-
-  // Get person and leafId from URL params
-  const params   = new URLSearchParams(window.location.search);
-  const person   = params.get('person')   ? decodeURIComponent(params.get('person'))   : personName || 'Unknown';
-  const leafId   = params.get('leafId')   ? params.get('leafId')                       : null;
-  const keeper   = params.get('keeper')   ? decodeURIComponent(params.get('keeper'))   : '';
-
-  const mediaLabels = {
-    story: 'Written story', photo: 'Photos',
-    voice: 'Contributor voice', theirvoice: "Their voice preserved", document: 'Document'
-  };
-  const mediaList = selectedMedia.map(function(m) { return mediaLabels[m] || m; }).join(', ');
-
-  // Save to Airtable Leaf Tags
+  // Save locally
   try {
-    await fetch('/api/airtable', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'create',
-        table:  'Leaf Tags',
-        fields: {
-          'Tag ID':             'tag_' + Date.now(),
-          'Leaf Subject Name':  person,
-          'Leaf ID':            leafId || '',
-          'Tagged By User ID':  name,
-          'Source Type':        selectedMedia.includes('story') ? 'Written Memory' : (selectedMedia.includes('photo') ? 'Photo' : 'Contribution'),
-          'Source Content':     story || ('Media contributed: ' + mediaList),
-          'Tagger Note':        selectedChapter ? ('Chapter: ' + selectedChapter) : '',
-          'Why This Matters':   mediaList,
-          'Keeper Approved':    false,
-          'Tagged Date':        new Date().toISOString().split('T')[0]
-        }
-      })
-    });
-  } catch(e) {
-    console.warn('Airtable save error:', e);
-    // Continue to thank you screen even if save fails — don't block the user
-  }
-
-  // Save to localStorage as backup
-  try {
-    var key = 'cc_leaf_contributions_' + (leafId || person || 'default');
-    var contribs = JSON.parse(localStorage.getItem(key) || '[]');
-    contribs.unshift({
-      id:      Date.now(),
-      author:  name,
-      chapter: selectedChapter,
-      type:    selectedMedia.includes('story') ? 'written' : (selectedMedia.includes('photo') ? 'memory' : 'prompted'),
-      prompt:  selectedChapter ? 'Chapter: ' + selectedChapter : '',
-      text:    story,
-      media:   mediaList,
-      date:    new Date().toISOString()
-    });
-    localStorage.setItem(key, JSON.stringify(contribs));
+    var lates = JSON.parse(localStorage.getItem('cc_late_' + leafId) || '[]');
+    lates.push({ name: name||'Anonymous', message: msg, date: new Date().toISOString() });
+    localStorage.setItem('cc_late_' + leafId, JSON.stringify(lates));
   } catch(e) {}
 
-  // Build thank you summary
-  document.getElementById('tySummaryChapter').innerHTML = selectedChapter + ' &middot; <span class="legacy-person-name">' + person + '</span>';
-  document.getElementById('tySummaryPreview').textContent = story
-    ? (story.length > 100 ? story.substring(0, 100) + '...' : story)
-    : 'Your contribution has been received and is now part of their Living Legacy archive.';
+  document.getElementById('lateMessage').style.display = 'none';
+  document.getElementById('lateName').style.display = 'none';
+  document.querySelector('[onclick="sendLateMessage()"]').style.display = 'none';
+  document.getElementById('lateConfirm').style.display = 'block';
+}
+var PROMPTS = {
+  'Graduation 2026': [
+    "What did you see in them that they probably couldn't see in themselves?",
+    "What moment do you never want them to forget?",
+    "What did they teach you — even if they didn't know they were teaching you?",
+    "What do you hope they carry with them into whatever comes next?",
+    "What's something about them that made a room feel different when they walked in?"
+  ],
+  'Retirement': [
+    "What will be different now that they're gone from this chapter?",
+    "What did this person teach you about showing up?",
+    "What moment do you never want them to forget from this season?",
+    "What would you want them to know they meant to the people around them?"
+  ],
+  'default': [
+    "What do you see in them that they probably can't see in themselves?",
+    "What moment do you never want them to forget?",
+    "What did they teach you — even if they didn't know they were teaching you?",
+    "What do you hope they carry with them into whatever comes next?"
+  ]
+};
 
-  const chips = document.getElementById('tyMediaChips');
-  chips.innerHTML = '';
-  selectedMedia.forEach(function(m) {
-    var chip = document.createElement('div');
-    chip.className = 'ty-chip';
-    chip.textContent = mediaLabels[m] || m;
-    chips.appendChild(chip);
-  });
+// Load capsule data from URL
+var params = new URLSearchParams(window.location.search);
+var leafId = params.get('id') || window.location.pathname.split('/').pop();
+var capsuleData = null;
+var selectedPrompt = '';
 
-  btn.disabled = false;
-  btn.textContent = 'Add to their archive →';
-  showScreen('thankyouScreen');
+// Try to load from localStorage
+try {
+  var stored = localStorage.getItem('cc_capsule_' + leafId);
+  if (stored) capsuleData = JSON.parse(stored);
+} catch(e) {}
+
+// Populate UI
+var occasion = (capsuleData && capsuleData.occasion) || 'Graduation 2026';
+var recipientName = (capsuleData && capsuleData.recipientName) || 'Someone special';
+var recipientFirst = recipientName.split(' ')[0];
+
+document.getElementById('capsuleName').textContent = recipientName;
+document.getElementById('capsuleOccasion').textContent = occasion + ' · Time Capsule';
+document.getElementById('capsuleSub').textContent = 'Someone who loves ' + recipientFirst + ' is building something special. Your memory is part of it.';
+
+// Build prompt options
+var prompts = PROMPTS[occasion] || PROMPTS.default;
+var html = '';
+prompts.forEach(function(p, i) {
+  html += '<div class="prompt-opt' + (i===0?' selected':'') + '" onclick="selectPrompt(this,\'' + p.replace(/'/g,"&#39;") + '\')">"' + p + '"</div>';
+});
+document.getElementById('promptOptions').innerHTML = html;
+selectedPrompt = '"' + prompts[0] + '"';
+
+function selectPrompt(el, p) {
+  document.querySelectorAll('.prompt-opt').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedPrompt = '"' + p + '"';
 }
 
-function addMore() {
-  document.getElementById('storyText').value = '';
-  document.getElementById('contributorName').value = '';
-  document.getElementById('photoPreview').innerHTML = '';
-  document.getElementById('photoPreview').classList.remove('show');
-  selectedMedia = ['story']; document.getElementById('area-theirvoice').classList.remove('show');
-  document.querySelectorAll('.media-type').forEach(m => m.classList.remove('sel'));
-  document.querySelectorAll('.media-area').forEach(a => a.classList.remove('show'));
-  document.querySelector('.media-type').classList.add('sel');
-  document.getElementById('area-story').classList.add('show');
-  showScreen('contributeScreen');
-}
+function submitMemory() {
+  var answer = document.getElementById('answerText').value.trim();
+  var name = document.getElementById('contributorName').value.trim();
+  var relation = document.getElementById('contributorRelation').value.trim();
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  // Scroll to top
-  const scroll = document.querySelector('#' + id + ' .contribute-scroll, #' + id + ' .welcome-scroll');
-  if(scroll) scroll.scrollTop = 0;
-}
+  if (!answer) { document.getElementById('formError').textContent = 'Please write your memory first.'; return; }
+  if (!name)   { document.getElementById('formError').textContent = 'Please add your name so they know it\'s from you.'; return; }
+  document.getElementById('formError').textContent = '';
 
-function t(m) {
-  const e = document.getElementById('toastEl');
-  e.textContent = m; e.style.display = 'block'; e.style.opacity = '1'; e.style.transform = 'translateX(-50%) translateY(0)';
-  clearTimeout(e._t);
-  e._t = setTimeout(() => { e.style.opacity = '0'; setTimeout(() => e.style.display = 'none', 300); }, 2600);
+  var btn = document.getElementById('submitBtn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  // Save to Airtable
+  fetch('/api/airtable', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      action: 'create',
+      table: 'Responses',
+      fields: {
+        'response_id':    'contrib_' + Date.now(),
+        'user_id':        leafId,
+        'spoken_answer':  selectedPrompt + '\n\n' + answer + '\n\n— ' + name + (relation ? ' (' + relation + ')' : ''),
+        'is_living_legacy': true,
+        'recorded_at':    new Date().toISOString()
+      }
+    })
+  }).catch(function(){});
+
+  // Save locally too
+  try {
+    var contribs = JSON.parse(localStorage.getItem('cc_contrib_' + leafId) || '[]');
+    contribs.push({ name, relation, prompt: selectedPrompt, answer, date: new Date().toISOString() });
+    localStorage.setItem('cc_contrib_' + leafId, JSON.stringify(contribs));
+  } catch(e) {}
+
+  setTimeout(function() {
+    document.getElementById('formArea').style.display = 'none';
+    document.getElementById('successArea').style.display = 'block';
+    window.scrollTo(0,0);
+  }, 600);
 }
 </script>
 </body>
