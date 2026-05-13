@@ -333,11 +333,11 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     </div>
 
     <!-- ENTER THE TREE — primary CTA -->
-    <div onclick="openTreeScreen()" style="margin:0 1.2rem 1.4rem;background:linear-gradient(135deg,rgba(184,134,11,.1),rgba(100,65,5,.15));border:1px solid rgba(184,134,11,.25);border-radius:16px;padding:1.4rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:1rem;">
+    <div style="margin:0 1.2rem 1.4rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:1.4rem 1.2rem;display:flex;align-items:center;gap:1rem;opacity:.5;">
       <div style="font-size:2.2rem;flex-shrink:0;">🌳</div>
       <div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:rgba(242,232,216,.9);margin-bottom:.25rem;">Open the Family Tree</div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(184,134,11,.6);">Tap a person to work on their leaf · Tap + to add someone new</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:rgba(242,232,216,.5);margin-bottom:.25rem;">Family Tree — Coming Soon</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(184,134,11,.3);">Full family tree building coming in the next release.</div>
       </div>
       <div style="margin-left:auto;color:rgba(184,134,11,.5);font-size:1.1rem;">→</div>
     </div>
@@ -369,7 +369,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
   <!-- BOTTOM NAV -->
   <div class="bnav">
     <div class="bn active"><div class="bn-i">🏠</div><div class="bn-l">Home</div></div>
-    <div class="bn" onclick="openTreeScreen()"><div class="bn-i">🌳</div><div class="bn-l">Tree</div></div>
+    
     <div class="bn-ctr" onclick="openLeafScreen()">✦</div>
     <div class="bn" onclick="t('Archive coming soon')"><div class="bn-i">📖</div><div class="bn-l">Archive</div></div>
     <div class="bn" onclick="t('Invite family to contribute')"><div class="bn-i">📨</div><div class="bn-l">Invite</div></div>
@@ -377,7 +377,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 </div>
 
 <!-- TREE SCREEN -->
-<div class="tree-screen" id="treeScreen">
+<div class="tree-screen" id="treeScreen" style="display:none;">
   <div class="screen-top">
     <button class="screen-back" onclick="closeTree()">← Home</button>
     <div class="screen-title">Family Tree</div>

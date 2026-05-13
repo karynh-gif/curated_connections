@@ -256,10 +256,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   .shelf-row    { overflow-x: visible; flex-wrap: nowrap; }
 
   /* ── FOOTER NAV ── */
-  .nav-label    { font-size: 1rem !important; }
-  .nav-icon     { font-size: 1.3rem !important; }
-  .nav-compose  { width: 50px !important; height: 50px !important; font-size: 1.1rem !important; }
-  .nav          { height: 70px !important; }
+  .nav-label    { font-size: .78rem !important; }
+  .nav-icon     { font-size: 1.05rem !important; }
+  .nav-compose  { width: 42px !important; height: 42px !important; font-size: .9rem !important; }
+  .nav          { height: 60px !important; }
 
   /* ── TOPBAR ── */
   .topbar-name  { font-size: 1.6rem !important; }
@@ -340,7 +340,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-ni.active .cc-nl{color:#c97d3a;}
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
-@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:1rem !important;} .cc-ni-icon,.cc-ni svg{width:26px !important;height:26px !important;}}
+@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:.72rem !important;} .cc-ni-icon,.cc-ni svg{width:22px !important;height:22px !important;}}
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-firebase.js"></script>
@@ -565,6 +565,15 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     </div>
 
     <!-- LEGACY FEATURES — only for Legacy tier -->
+    <!-- MY FEED -->
+    <div id="myFeedShelf" style="display:none;margin:.4rem 0;">
+      <div class="shelf-header" style="padding:.5rem 1rem .4rem;display:flex;align-items:center;justify-content:space-between;">
+        <div class="shelf-title">My Feed</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;color:rgba(201,125,58,.6);cursor:pointer;" onclick="window.location.href='profile.html'">See all →</div>
+      </div>
+      <div id="myFeedList" style="padding:0 .8rem;"></div>
+    </div>
+
     <div id="legacyShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header">
         <span class="shelf-title">Living Legacy</span>
@@ -891,6 +900,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <button class="qz-journal-btn" onclick="goToJournal()">Open Journal &rarr;</button>
       </div>
       <button class="qz-done-btn" style="margin-bottom:.5rem;" onclick="shareQuizResult()">Share my result →</button>
+      <button class="qz-done-btn" style="margin-bottom:.5rem;background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);" onclick="saveToFeed('quiz')">Save to my feed ✦</button>
       <button class="qz-done-btn" onclick="closeQuiz()">Done</button>
     </div>
   </div>
@@ -1652,9 +1662,7 @@ function fireShare(i) {
   if (!_sharePicker || !_sharePicker[i]) return;
   var msg = _sharePicker[i].message;
   closeSharePicker();
-  if (navigator.share) {
-    navigator.share({ text: msg }).catch(function(e){ if (e.name !== 'AbortError') ccShareFallback(msg); });
-  } else { ccShareFallback(msg); }
+  openShareOptions(msg, 'https://joincuratedconnections.com', '');
 }
 
 // Card share — shows picker with 3 human options
@@ -1689,19 +1697,177 @@ function shareQuizResult() {
   var quiz    = qzState.title || 'the quiz';
   var snippet = body.split('.')[0];
   if (snippet.length > 90) snippet = snippet.substring(0, 87) + '\u2026';
-  var msg = 'I got "' + title + '" on ' + quiz + '. ' + snippet + '.\n\njoincuratedconnections.com';
+  var msg = 'I got \u201c' + title + '\u201d on ' + quiz + '. ' + snippet + '.\n\njoincuratedconnections.com';
+  var url = 'https://joincuratedconnections.com';
+  openShareOptions(msg, url, title);
+}
+
+function openShareOptions(msg, url, title) {
+  var existing = document.getElementById('shareOptionsPanel');
+  if (existing) existing.remove();
+
+  var panel = document.createElement('div');
+  panel.id = 'shareOptionsPanel';
+  panel.style.cssText = 'position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;';
+  panel.onclick = function(e){ if(e.target===panel) panel.remove(); };
+
+  var smsMsg = encodeURIComponent(msg);
+  var fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(msg);
+
+  panel.innerHTML = '<div onclick="event.stopPropagation()" style="width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#080f0a);border-radius:20px 20px 0 0;padding:1.4rem 1.2rem 2.4rem;border-top:1px solid rgba(201,125,58,.15);">'
+    + '<div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin:0 auto 1.2rem;"></div>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:1rem;">Share your result</div>'
+    
+    // Preview of message
+    + '<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:.85rem 1rem;margin-bottom:1rem;font-family:\'DM Sans\',sans-serif;font-size:.8rem;color:rgba(242,232,216,.55);line-height:1.6;">' + msg.replace(/\n/g,'<br>') + '</div>'
+
+    // Share options
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;">'
+
+    // Native share (best — opens system sheet with all apps)
+    + '<div onclick="nativeShare(\'' + encodeURIComponent(msg) + '\',\'' + encodeURIComponent(url) + '\')" style="padding:.85rem .7rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.25);border-radius:12px;text-align:center;cursor:pointer;">'
+    + '<div style="font-size:1.3rem;margin-bottom:.25rem;">📤</div>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;color:rgba(242,232,216,.8);">Share…</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.65rem;color:rgba(242,232,216,.35);">All apps</div></div>'
+
+    // SMS / Text message
+    + '<a href="sms:?body=' + smsMsg + '" style="text-decoration:none;padding:.85rem .7rem;background:rgba(58,173,144,.08);border:1px solid rgba(58,173,144,.2);border-radius:12px;text-align:center;cursor:pointer;display:block;">'
+    + '<div style="font-size:1.3rem;margin-bottom:.25rem;">💬</div>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;color:rgba(242,232,216,.8);">Text Message</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.65rem;color:rgba(242,232,216,.35);">Opens Messages</div></a>'
+
+    // Facebook
+    + '<a href="' + fbUrl + '" target="_blank" style="text-decoration:none;padding:.85rem .7rem;background:rgba(24,119,242,.08);border:1px solid rgba(24,119,242,.2);border-radius:12px;text-align:center;cursor:pointer;display:block;">'
+    + '<div style="font-size:1.3rem;margin-bottom:.25rem;">📘</div>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;color:rgba(242,232,216,.8);">Facebook</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.65rem;color:rgba(242,232,216,.35);">Opens Facebook</div></a>'
+
+    // Copy
+    + '<div onclick="copyShareMsg(\'' + encodeURIComponent(msg) + '\')" style="padding:.85rem .7rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;text-align:center;cursor:pointer;">'
+    + '<div style="font-size:1.3rem;margin-bottom:.25rem;">📋</div>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;color:rgba(242,232,216,.8);">Copy Text</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.65rem;color:rgba(242,232,216,.35);">Paste anywhere</div></div>'
+
+    + '</div>'
+    + '<button onclick="document.getElementById(\'shareOptionsPanel\').remove()" style="width:100%;padding:.65rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:\'Nunito\',sans-serif;font-size:.75rem;font-weight:700;color:rgba(242,232,216,.3);cursor:pointer;">Cancel</button>'
+    + '</div>';
+
+  document.body.appendChild(panel);
+}
+
+function nativeShare(encMsg, encUrl) {
+  var msg = decodeURIComponent(encMsg);
+  var url = decodeURIComponent(encUrl);
   if (navigator.share) {
-    navigator.share({ text: msg }).catch(function(e){ if (e.name !== 'AbortError') ccShareFallback(msg); });
-  } else { ccShareFallback(msg); }
+    navigator.share({ text: msg, url: url })
+      .catch(function(e){ if (e.name !== 'AbortError') copyShareMsg(encMsg); });
+  } else { copyShareMsg(encMsg); }
+}
+
+function copyShareMsg(encMsg) {
+  var msg = decodeURIComponent(encMsg);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(msg).then(function(){ showToast('Copied ✦ — paste anywhere'); });
+  } else { showToast('Copy: ' + msg.substring(0,40) + '…'); }
+  var p = document.getElementById('shareOptionsPanel');
+  if (p) p.remove();
 }
 
 function ccShareFallback(text) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function(){ showToast('Copied ✦'); }).catch(function(){ showToast('joincuratedconnections.com'); });
-  } else { showToast('joincuratedconnections.com'); }
+  openShareOptions(text, 'https://joincuratedconnections.com', '');
 }
 
-// ── RESPONSE PHOTO + VOICE ────────────────────────────────────
+// ── PERSONAL FEED ─────────────────────────────────────────────
+function saveToFeed(type) {
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) { openAccount('save to your feed'); return; }
+
+  var post = {
+    id:       'post_' + Date.now(),
+    type:     type,
+    userId:   user.user_id,
+    userName: user.name || 'You',
+    date:     new Date().toISOString(),
+    public:   true
+  };
+
+  if (type === 'quiz') {
+    post.title   = (document.getElementById('qzRTitle') || {}).textContent || '';
+    post.body    = (document.getElementById('qzRBody')  || {}).textContent || '';
+    post.quiz    = qzState.title || '';
+    post.snippet = post.body.split('.')[0];
+    if (post.snippet.length > 120) post.snippet = post.snippet.substring(0,117) + '\u2026';
+  }
+
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed.unshift(post);
+    if (feed.length > 50) feed = feed.slice(0,50);
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
+  } catch(e) {}
+
+  // Attempt Airtable save
+  fetch('/api/airtable', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      action: 'create', table: 'Responses',
+      fields: {
+        response_id: post.id, user_id: post.userId,
+        spoken_answer: (post.title ? post.title + ': ' : '') + (post.snippet || post.body || ''),
+        is_living_legacy: false, recorded_at: post.date
+      }
+    })
+  }).catch(function(){});
+
+  showToast('Saved to your feed ✦');
+  showMyFeedSection();
+}
+
+function showMyFeedSection() {
+  var shelf = document.getElementById('myFeedShelf');
+  if (!shelf) return;
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    if (!feed.length) return;
+    shelf.style.display = 'block';
+    var html = feed.slice(0,3).map(function(p) {
+      var icon = p.type === 'quiz' ? '🧠' : '✦';
+      var label = p.type === 'quiz' ? (p.quiz || 'Quiz result') : 'Reflection';
+      return '<div style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:.5rem;">'
+        + '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.3rem;">' + icon + ' ' + label + '</div>'
+        + (p.title ? '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;color:rgba(242,232,216,.9);margin-bottom:.2rem;">' + p.title + '</div>' : '')
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.5;">' + (p.snippet || p.body || '').substring(0,100) + '</div>'
+        + '</div>';
+    }).join('');
+    document.getElementById('myFeedList').innerHTML = html;
+  } catch(e) {}
+}
+
+// ── ADD TO HOME SCREEN PROMPT ─────────────────────────────────
+function showAddToHomePrompt() {
+  // Only show on iOS Safari, not in standalone mode, not shown before
+  var isStandalone = window.navigator.standalone;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var shown = localStorage.getItem('cc_h2s_shown');
+  if (isStandalone || shown) return;
+
+  setTimeout(function() {
+    var banner = document.createElement('div');
+    banner.id = 'h2sBanner';
+    banner.style.cssText = 'position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:500;background:linear-gradient(180deg,#0e1a14,#080f0a);border-top:1px solid rgba(201,125,58,.2);padding:1.2rem 1.2rem calc(1.2rem + env(safe-area-inset-bottom));';
+    banner.innerHTML = '<div style="display:flex;align-items:flex-start;gap:.85rem;">'
+      + '<div style="font-size:1.8rem;flex-shrink:0;">📱</div>'
+      + '<div style="flex:1;">'
+      + '<div style="font-family:\'Nunito\',sans-serif;font-size:.82rem;font-weight:800;color:rgba(242,232,216,.9);margin-bottom:.3rem;">Add to your Home Screen</div>'
+      + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.75rem;color:rgba(242,232,216,.5);line-height:1.55;margin-bottom:.7rem;">Get the full experience. Tap <strong style="color:rgba(201,125,58,.8);">Share</strong> ' + (isIOS ? '( ↑ )' : '') + ' then <strong style="color:rgba(201,125,58,.8);">Add to Home Screen</strong>.</div>'
+      + '<div style="display:flex;gap:.5rem;">'
+      + '<button onclick="document.getElementById(\'h2sBanner\').remove();localStorage.setItem(\'cc_h2s_shown\',\'1\')" style="flex:1;padding:.5rem;background:linear-gradient(135deg,var(--amber),var(--amber2));border:none;border-radius:8px;font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;color:#fff;cursor:pointer;">Got it ✦</button>'
+      + '<button onclick="document.getElementById(\'h2sBanner\').remove()" style="padding:.5rem .8rem;background:none;border:1px solid rgba(255,255,255,.1);border-radius:8px;font-family:\'Nunito\',sans-serif;font-size:.72rem;color:rgba(242,232,216,.35);cursor:pointer;">Later</button>'
+      + '</div></div></div>';
+    document.body.appendChild(banner);
+    localStorage.setItem('cc_h2s_shown', '1');
+  }, isIOS ? 8000 : 5000); // Show after 8s on iOS, 5s elsewhere
+}
 function handleRespPhoto() {
   var tier = getTier ? getTier() : 'free';
   if (tier === 'free') {
@@ -2470,6 +2636,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var ls = document.getElementById('legacyShelf');
   if (ls) ls.style.display = 'block';
   checkNotifBadge();
+  showMyFeedSection();
+  showAddToHomePrompt();
+  showMyFeedSection();
+  showAddToHomePrompt();
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);
