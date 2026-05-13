@@ -676,7 +676,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="cc-nl">Journal</div>
       <div class="cc-ni-dot"></div>
     </div>
-    <div class="cc-ni" onclick="openProfilePanel()">
+    <div class="cc-ni" onclick="(typeof CC!=='undefined'&&CC.getUser&&CC.getUser())?openProfilePanel():openAccount('create your free account')">
       <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div class="cc-nl" id="ccNavMeLbl">Me</div>
       <div class="cc-ni-dot"></div>
@@ -713,12 +713,21 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- Name + tier badge -->
       <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.6rem;">
-        <div id="ppAvatar" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#c97d3a,#e8a045);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:#fff;flex-shrink:0;">K</div>
-        <div>
+        <div style="position:relative;flex-shrink:0;" onclick="changeProfilePic()">
+          <div id="ppAvatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#c97d3a,#e8a045);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:#fff;cursor:pointer;overflow:hidden;">K</div>
+          <div style="position:absolute;bottom:0;right:0;width:20px;height:20px;border-radius:50%;background:#c97d3a;border:2px solid #080f0a;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+        </div>
+        <div style="flex:1;">
           <div id="ppName" style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:rgba(242,232,216,0.95);margin-bottom:.2rem;">Your Name</div>
           <div id="ppTier" style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#c97d3a;">Free</div>
+          <div onclick="shareProfileUpdate()" style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(242,232,216,.3);cursor:pointer;margin-top:.3rem;">Share an update ↗</div>
         </div>
       </div>
+
+      <!-- Hidden file input for profile pic -->
+      <input type="file" id="profilePicInput" accept="image/*" style="display:none;" onchange="handleProfilePicUpload(this)"/>
 
       <!-- Upgrade nudge — hidden for paid tiers -->
       <div id="ppUpgradeRow" style="margin-bottom:1rem;">
@@ -1494,10 +1503,149 @@ function openProfilePanel() {
     document.getElementById('ppUpgradeRow').style.display = (tier === 'legacy' || tier === 'founder') ? 'none' : 'block';
   }
   document.getElementById('profilePanel').style.display = 'block';
+  loadSavedProfilePic();
 }
 
-function closeProfilePanel() {
-  document.getElementById('profilePanel').style.display = 'none';
+// ── PROFILE PICTURE ──────────────────────────────────────────
+function changeProfilePic() {
+  // Show camera vs library choice
+  var existing = document.getElementById('picChoicePanel');
+  if (existing) { existing.remove(); return; }
+
+  var panel = document.createElement('div');
+  panel.id = 'picChoicePanel';
+  panel.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.7);display:flex;align-items:flex-end;justify-content:center;';
+  panel.onclick = function(e){ if(e.target===panel) panel.remove(); };
+  panel.innerHTML = '<div onclick="event.stopPropagation()" style="width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#080f0a);border-radius:20px 20px 0 0;padding:1.4rem 1.2rem 2.4rem;border-top:1px solid rgba(201,125,58,.15);">'
+    + '<div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin:0 auto 1.2rem;"></div>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:1rem;">Profile Photo</div>'
+    + '<div onclick="openCamera()" style="padding:.9rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:.5rem;cursor:pointer;display:flex;align-items:center;gap:.8rem;">'
+    + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(201,125,58,.8)" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.82rem;font-weight:700;color:rgba(242,232,216,.8);">Take a photo</div></div>'
+    + '<div onclick="openLibrary()" style="padding:.9rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:.5rem;cursor:pointer;display:flex;align-items:center;gap:.8rem;">'
+    + '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(201,125,58,.8)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'
+    + '<div style="font-family:\'Nunito\',sans-serif;font-size:.82rem;font-weight:700;color:rgba(242,232,216,.8);">Choose from library</div></div>'
+    + '<button onclick="document.getElementById(\'picChoicePanel\').remove()" style="width:100%;padding:.65rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:\'Nunito\',sans-serif;font-size:.75rem;font-weight:700;color:rgba(242,232,216,.3);cursor:pointer;margin-top:.3rem;">Cancel</button>'
+    + '</div>';
+  document.body.appendChild(panel);
+}
+
+function openCamera() {
+  document.getElementById('picChoicePanel').remove();
+  var input = document.getElementById('profilePicInput');
+  input.setAttribute('capture', 'environment');
+  input.click();
+}
+
+function openLibrary() {
+  document.getElementById('picChoicePanel').remove();
+  var input = document.getElementById('profilePicInput');
+  input.removeAttribute('capture');
+  input.click();
+}
+
+function handleProfilePicUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    // Save to localStorage
+    try { localStorage.setItem('cc_profile_pic', dataUrl); } catch(err) {}
+    // Update all avatars
+    applyProfilePic(dataUrl);
+    showToast('Profile photo updated ✦');
+  };
+  reader.readAsDataURL(file);
+}
+
+function applyProfilePic(dataUrl) {
+  // Update profile panel avatar
+  var ppAv = document.getElementById('ppAvatar');
+  if (ppAv) {
+    ppAv.innerHTML = '<img src="' + dataUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>';
+  }
+  // Update topbar avatar
+  var tbAv = document.getElementById('topbarAvatar');
+  if (tbAv) {
+    tbAv.innerHTML = '<img src="' + dataUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>';
+    tbAv.style.padding = '0';
+    tbAv.style.overflow = 'hidden';
+  }
+}
+
+function loadSavedProfilePic() {
+  try {
+    var saved = localStorage.getItem('cc_profile_pic');
+    if (saved) applyProfilePic(saved);
+  } catch(e) {}
+}
+
+// ── SHARE PROFILE UPDATE ─────────────────────────────────────
+function shareProfileUpdate() {
+  // Open a small compose panel
+  var existing = document.getElementById('shareUpdatePanel');
+  if (existing) { existing.remove(); return; }
+
+  var panel = document.createElement('div');
+  panel.id = 'shareUpdatePanel';
+  panel.style.cssText = 'margin-top:.8rem;padding:1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;';
+  panel.innerHTML = '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.3);margin-bottom:.5rem;">Share an update</div>'
+    + '<textarea id="updateText" placeholder="What\'s on your mind? A reflection, a moment, something worth sharing..." style="width:100%;min-height:80px;padding:.7rem .8rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:\'Cormorant Garamond\',serif;font-size:.95rem;color:rgba(242,232,216,.8);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor=\'rgba(201,125,58,.4)\'" onblur="this.style.borderColor=\'rgba(255,255,255,.1)\'"></textarea>'
+    + '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;">'
+    + '<div id="updateVisToggle" onclick="toggleUpdateVis()" style="font-family:\'Nunito\',sans-serif;font-size:.65rem;font-weight:700;color:rgba(242,232,216,.3);cursor:pointer;display:flex;align-items:center;gap:.3rem;">'
+    + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    + '<span id="updateVisLabel">Private</span></div>'
+    + '<button onclick="postUpdate()" style="padding:.45rem 1rem;background:linear-gradient(135deg,var(--amber),var(--amber2));border:none;border-radius:8px;font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;color:#fff;cursor:pointer;">Post ✦</button>'
+    + '</div>';
+
+  // Insert after the share update link
+  var nameDiv = document.getElementById('ppName').closest('div[style*="flex:1"]') || document.getElementById('ppName').parentElement;
+  nameDiv.after(panel);
+  document.getElementById('updateText').focus();
+  window._updateVis = 'private';
+}
+
+function toggleUpdateVis() {
+  window._updateVis = window._updateVis === 'private' ? 'public' : 'private';
+  var isPublic = window._updateVis === 'public';
+  var toggle = document.getElementById('updateVisToggle');
+  var label  = document.getElementById('updateVisLabel');
+  if (label) label.textContent = isPublic ? 'Public' : 'Private';
+  if (toggle) toggle.style.color = isPublic ? 'rgba(58,173,144,.7)' : 'rgba(242,232,216,.3)';
+  toggle.innerHTML = isPublic
+    ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span id="updateVisLabel">Public</span>'
+    : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg><span id="updateVisLabel">Private</span>';
+}
+
+function postUpdate() {
+  var text = (document.getElementById('updateText') || {}).value || '';
+  text = text.trim();
+  if (!text) { showToast('Write something first'); return; }
+
+  var user = CC.getUser ? CC.getUser() : null;
+  var post = {
+    id:         'post_' + Date.now(),
+    type:       'update',
+    body:       text,
+    snippet:    text.substring(0, 120),
+    userId:     user ? user.user_id : 'local',
+    userName:   user ? (user.name || 'You') : 'You',
+    date:       new Date().toISOString(),
+    visibility: window._updateVis || 'private'
+  };
+
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed.unshift(post);
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
+  } catch(e) {}
+
+  var panel = document.getElementById('shareUpdatePanel');
+  if (panel) panel.remove();
+  closeProfilePanel();
+  showMyFeedSection();
+  showToast('Posted to your feed ✦');
 }
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────
@@ -1981,8 +2129,8 @@ function showMyFeedSection() {
     var visLabel = { private:'Private', gift:'In the gift', public:'Public' };
 
     var html = feed.slice(0,5).map(function(p) {
-      var icon  = p.type === 'quiz' ? '🧠' : '✦';
-      var label = p.type === 'quiz' ? (p.quiz || 'Quiz result') : 'Reflection';
+      var icon  = p.type === 'quiz' ? '🧠' : p.type === 'card' ? '✦' : '◎';
+      var label = p.type === 'quiz' ? (p.quiz || 'Quiz result') : p.type === 'card' ? 'Card response' : 'Update';
       var vis   = p.visibility || 'private';
 
       return '<div style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:.5rem;">'
@@ -1993,6 +2141,7 @@ function showMyFeedSection() {
         + '<button onclick="deleteFeedItem(\'' + p.id + '\')" style="background:none;border:none;color:rgba(242,232,216,.18);font-size:.85rem;cursor:pointer;padding:.1rem .2rem;line-height:1;">✕</button>'
         + '</div></div>'
         + (p.title ? '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;color:rgba(242,232,216,.9);margin-bottom:.2rem;">' + p.title + '</div>' : '')
+        + (p.question && p.type === 'card' ? '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:.82rem;color:rgba(242,232,216,.35);margin-bottom:.2rem;">' + p.question.substring(0,80) + (p.question.length>80?'\u2026':'') + '</div>' : '')
         + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.5;">' + (p.snippet || p.body || '').substring(0,120) + '</div>'
         + '</div>';
     }).join('');
@@ -2133,11 +2282,11 @@ function toggleRespRecording() {
 
 function saveResponse(visibility) {
   var user = CC.getUser ? CC.getUser() : null;
-  if (!user) { openAccount('save your answer'); return; }
 
   var text = document.getElementById('responseText').value.trim();
   var hasPhoto = document.getElementById('respPhotoPreview').style.display !== 'none';
   var hasVoice = !!_respBlobUrl;
+  var question = document.getElementById('responseEcho').textContent;
 
   if (!text && !hasPhoto && !hasVoice) {
     showToast('Add your answer first');
@@ -2147,17 +2296,47 @@ function saveResponse(visibility) {
   // Save locally
   try {
     var entry = {
-      id: 'resp_'+Date.now(), text, hasPhoto, hasVoice,
-      visibility, date: new Date().toISOString(),
-      question: document.getElementById('responseEcho').textContent
+      id: 'resp_'+Date.now(), text: text, hasPhoto: hasPhoto, hasVoice: hasVoice,
+      visibility: visibility, date: new Date().toISOString(),
+      question: question
     };
     var saved = JSON.parse(localStorage.getItem('cc_responses')||'[]');
     saved.unshift(entry); if(saved.length>100) saved=saved.slice(0,100);
     localStorage.setItem('cc_responses', JSON.stringify(saved));
+
+    // Also add to feed
+    var feedPost = {
+      id:         'post_' + Date.now(),
+      type:       'card',
+      question:   question,
+      body:       text,
+      snippet:    text ? text.substring(0,120) : (hasPhoto ? '📷 Photo response' : '🎙 Voice response'),
+      userId:     user ? user.user_id : 'local',
+      userName:   user ? (user.name || 'You') : 'You',
+      date:       new Date().toISOString(),
+      visibility: visibility === 'circle' ? 'gift' : 'private'
+    };
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed')||'[]');
+    feed.unshift(feedPost);
+    if(feed.length>50) feed=feed.slice(0,50);
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
   } catch(e){}
 
-  showToast(visibility === 'circle' ? 'Shared with your circle ✦' : 'Saved privately ✦');
+  // Attempt Airtable save
+  if (user) {
+    fetch('/api/airtable', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'create', table:'Responses', fields:{
+        'response_id': 'resp_'+Date.now(), 'user_id': user.user_id||'',
+        'spoken_answer': (question?question+'\n\n':'') + (text||''),
+        'is_living_legacy': false, 'recorded_at': new Date().toISOString()
+      }})
+    }).catch(function(){});
+  }
+
+  showToast(visibility === 'circle' ? 'Shared with your circle ✦' : 'Saved to your feed ✦');
   closeResponse();
+  showMyFeedSection();
 }
 
 function closeResponse() {
@@ -2833,6 +3012,7 @@ document.addEventListener('DOMContentLoaded', function() {
   showMyFeedSection();
   showAddToHomePrompt();
   loadDailyUplift();
+  loadSavedProfilePic();
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);
@@ -2967,7 +3147,7 @@ function updateNavLabels() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
   var ml = document.getElementById('ccNavMeLbl');
   var sl = document.getElementById('ccNavSecondLbl');
-  if (ml) ml.textContent = u ? 'Me' : 'Sign In';
+  if (ml) ml.textContent = u ? 'Me' : 'Join';
   if (sl) sl.textContent = u ? 'Circles' : 'Gather';
 }
 if (document.readyState === 'loading') {

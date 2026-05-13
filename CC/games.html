@@ -1514,15 +1514,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── STANDARD NAV FUNCTIONS ────────────────────────────────────
 function navMe() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
-  if (u) {
-    if (typeof openProfilePanel === 'function') { openProfilePanel(); }
-    else { window.location.href = 'gather.html?profile=1'; }
-  } else {
-    if (typeof openAccount === 'function') {
-      openAccount('sign in');
-      if (typeof showSigninTab === 'function') showSigninTab();
-    } else { window.location.href = 'gather.html?signin=1'; }
-  }
+  window.location.href = u ? 'gather.html?profile=1' : 'gather.html?signin=1';
 }
 function navSecond() {
   window.location.href = 'circles.html';
@@ -1531,7 +1523,7 @@ function updateNavLabels() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
   var ml = document.getElementById('ccNavMeLbl');
   var sl = document.getElementById('ccNavSecondLbl');
-  if (ml) ml.textContent = u ? 'Me' : 'Sign In';
+  if (ml) ml.textContent = u ? 'Me' : 'Join';
   if (sl) sl.textContent = u ? 'Circles' : 'Gather';
 }
 if (document.readyState === 'loading') {

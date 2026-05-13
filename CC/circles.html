@@ -602,7 +602,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-function navMe(){window.location.href="gather.html?profile=1";}
+function navMe(){var u=(typeof CC!=="undefined"&&CC.getUser)?CC.getUser():null;window.location.href=u?"gather.html?profile=1":"gather.html?signin=1";}
 function navSecond(){window.location.href="circles.html";}
 function updateNavLabels(){var u=(typeof CC!=="undefined"&&CC.getUser)?CC.getUser():null;var ml=document.getElementById("ccNavMeLbl");var sl=document.getElementById("ccNavSecondLbl");if(ml)ml.textContent=u?"Me":"Sign In";if(sl)sl.textContent=u?"Circles":"Gather";}
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",updateNavLabels);}else{updateNavLabels();}
