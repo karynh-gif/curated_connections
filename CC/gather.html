@@ -2076,6 +2076,91 @@ function showRetentionNotice() {
     el.textContent = 'Free: saves for 30 days';
   }
 }
+
+// ── FIRST VISIT ORIENTATION ──────────────────────────────────
+function showFirstVisitOrientation() {
+  try {
+    if (localStorage.getItem('cc_oriented')) return;
+    var u = CC && CC.getUser ? CC.getUser() : null;
+    if (u) return;
+  } catch(e) { return; }
+
+  var STEPS = [
+    { icon:'✦', title:'Welcome to Curated Connections.', body:'Your daily space to reflect, connect, and play.\nOne question. One card. Ten minutes. Start anywhere.', highlight:null, cta:'Show me around →' },
+    { icon:'🃏', title:'Your daily card.', body:'Every day a new question lands here. Tap to reveal it. Answer honestly. Share it if you want. Two minutes. Stays with you longer than that.', highlight:'heroCard', cta:'Got it →' },
+    { icon:'🎴', title:'Tonight\'s Cards.', body:'Curated decks for different moments — family, friendship, deep conversations. Free accounts get 2 cards a day. Upgrade for more.', highlight:'tonightShelf', cta:'Got it →' },
+    { icon:'◎', title:'Circles.', body:'Your people. Invite family, friends, a team. Share prompts, play together, stay connected in a way that actually means something.', highlight:null, cta:'Got it →' },
+    { icon:'🍃', title:'Living Legacy.', body:'Build a time capsule for someone you love. Capture memories, invite contributors, present it at exactly the right moment.', highlight:null, cta:'Got it →' },
+    { icon:'🔒', title:'Your reflections deserve to stay.', body:'Everything you save lives here for 30 days on a free account.\n\nCreate a free account — no credit card, 30 seconds — and your data stays as long as you do.', highlight:null, cta:'Create free account', ctaAlt:'Maybe later', isLast:true }
+  ];
+
+  var step = 0;
+
+  function render() {
+    var s = STEPS[step];
+    var existing = document.getElementById('orientOverlay');
+    if (existing) existing.remove();
+
+    var ov = document.createElement('div');
+    ov.id = 'orientOverlay';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:450;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;';
+
+    // Backdrop
+    var bg = document.createElement('div');
+    bg.style.cssText = 'position:absolute;inset:0;background:rgba(0,0,0,' + (s.highlight ? '.72' : '.55') + ');';
+    bg.onclick = function(){ if (!s.isLast) next(); };
+    ov.appendChild(bg);
+
+    // Spotlight
+    if (s.highlight) {
+      var el = document.getElementById(s.highlight);
+      if (el) {
+        var r = el.getBoundingClientRect();
+        var sp = document.createElement('div');
+        sp.style.cssText = 'position:absolute;left:'+(r.left-8)+'px;top:'+(r.top-8)+'px;width:'+(r.width+16)+'px;height:'+(r.height+16)+'px;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.72),0 0 0 2px rgba(201,125,58,.55),0 0 24px rgba(201,125,58,.25);pointer-events:none;z-index:1;';
+        ov.appendChild(sp);
+      }
+    }
+
+    // Progress bar
+    var dots = STEPS.map(function(_,i){
+      return '<div style="height:3px;border-radius:2px;flex:1;background:'+(i<=step?'rgba(201,125,58,.8)':'rgba(255,255,255,.15)')+';transition:all .3s;"></div>';
+    }).join('');
+
+    // Card
+    var card = document.createElement('div');
+    card.style.cssText = 'position:relative;z-index:2;width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#060f09);border-radius:24px 24px 0 0;padding:1.8rem 1.5rem calc(2rem + env(safe-area-inset-bottom));border-top:1px solid rgba(201,125,58,.2);';
+
+    card.innerHTML = '<div style="display:flex;gap:.3rem;margin-bottom:1.3rem;">' + dots + '</div>'
+      + '<div style="font-size:1.8rem;margin-bottom:.5rem;">' + s.icon + '</div>'
+      + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.55rem;font-weight:300;color:rgba(242,232,216,.95);line-height:1.2;margin-bottom:.7rem;">' + s.title + '</div>'
+      + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.86rem;color:rgba(242,232,216,.5);line-height:1.75;margin-bottom:1.5rem;white-space:pre-line;">' + s.body + '</div>'
+      + (s.isLast
+        ? '<button id="oCta" style="width:100%;padding:.95rem;background:linear-gradient(135deg,#c97d3a,#e8a045);border:none;border-radius:12px;font-family:\'Nunito\',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;margin-bottom:.5rem;">' + s.cta + '</button><button id="oSkip" style="width:100%;padding:.65rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.25);cursor:pointer;">' + s.ctaAlt + '</button>'
+        : '<button id="oCta" style="width:100%;padding:.95rem;background:rgba(201,125,58,.12);border:1px solid rgba(201,125,58,.28);border-radius:12px;font-family:\'Nunito\',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(201,125,58,.9);cursor:pointer;">' + s.cta + '</button>'
+      );
+
+    ov.appendChild(card);
+    document.body.appendChild(ov);
+
+    document.getElementById('oCta').onclick = function() {
+      if (s.isLast) { done(); openAccount('create your free account'); }
+      else next();
+    };
+    if (s.isLast) document.getElementById('oSkip').onclick = done;
+  }
+
+  function next() { step++; if (step >= STEPS.length) { done(); return; } render(); }
+
+  function done() {
+    try { localStorage.setItem('cc_oriented','1'); } catch(e) {}
+    var el = document.getElementById('orientOverlay');
+    if (el) { el.style.transition='opacity .3s'; el.style.opacity='0'; setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },300); }
+  }
+
+  setTimeout(render, 900);
+}
+
 var UPLIFTS = [
   "You don't have to have it all figured out. You just have to keep going.",
   "The people who changed your life probably didn't know they were doing it.",
@@ -3181,6 +3266,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   loadSavedProfilePic();
   showRetentionNotice();
+  showFirstVisitOrientation();
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);
