@@ -284,6 +284,17 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
 @media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:1rem !important;} .cc-ni-icon,.cc-ni svg{width:26px !important;height:26px !important;}}
+/* ── VISIBILITY TOGGLE ── */
+.vis-opt{
+  padding:.35rem .75rem;border-radius:999px;
+  border:1px solid rgba(184,134,11,.2);
+  font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;
+  color:var(--bark-soft);cursor:pointer;
+  background:rgba(255,255,255,.3);
+  transition:all .15s;white-space:nowrap;
+}
+.vis-opt:hover{border-color:rgba(184,134,11,.4);color:var(--bark);}
+.vis-opt.selected{background:rgba(184,134,11,.12);border-color:rgba(184,134,11,.45);color:var(--bark);}
 </style>
   <script src="/cc-auth.js"></script>
   <link rel="stylesheet" href="/atmosphere.css"/>
@@ -830,7 +841,17 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     </div>
     <label class="leaf-field-label">Your answer</label>
     <textarea id="writeAnswerText" placeholder="Take your time. Write as little or as much as you want..." style="width:100%;min-height:200px;padding:.9rem 1rem;border:1.5px solid rgba(184,134,11,.25);border-radius:var(--r-md);background:rgba(255,255,255,.7);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark);line-height:1.65;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(184,134,11,.55)'" onblur="this.style.borderColor='rgba(184,134,11,.25)'"></textarea>
-    <div style="font-size:.72rem;color:var(--bark-soft);font-style:italic;margin:.4rem 0 1rem;line-height:1.5;">This is your leaf. Only you can see it unless you choose to share.</div>
+
+    <!-- VISIBILITY TOGGLE -->
+    <div style="margin:.8rem 0 1.1rem;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.5rem;">Who sees this?</div>
+      <div style="display:flex;gap:.5rem;" id="writeVisibilityPicker">
+        <div class="vis-opt selected" data-vis="private"   onclick="setVisibility('write','private')">🔒 Just me</div>
+        <div class="vis-opt"          data-vis="gift"      onclick="setVisibility('write','gift')">🎁 In the gift</div>
+        <div class="vis-opt"          data-vis="public"    onclick="setVisibility('write','public')">🌐 Public</div>
+      </div>
+    </div>
+
     <button class="import-btn" id="writeAnswerSaveBtn" onclick="saveWrittenAnswer()">Save Answer →</button>
     <button class="import-cancel-btn" onclick="closeWriteAnswer()">Not ready yet</button>
   </div>
@@ -886,7 +907,18 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     </div>
     <label class="leaf-field-label">Your memory</label>
     <textarea id="addMemoryText" placeholder="Write your memory here — a moment, a feeling, a detail you never want to forget..." style="width:100%;min-height:180px;padding:.9rem 1rem;border:1.5px solid rgba(184,134,11,.25);border-radius:var(--r-md);background:rgba(255,255,255,.7);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark);line-height:1.65;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(184,134,11,.55)'" onblur="this.style.borderColor='rgba(184,134,11,.25)'"></textarea>
-    <button class="import-btn" onclick="savePersonMemory()" style="margin-top:.8rem;">Save Memory →</button>
+
+    <!-- VISIBILITY TOGGLE -->
+    <div style="margin:.8rem 0 1.1rem;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.5rem;">Who sees this?</div>
+      <div style="display:flex;gap:.5rem;" id="memoryVisibilityPicker">
+        <div class="vis-opt selected" data-vis="gift"   onclick="setVisibility('memory','gift')">🎁 In the gift</div>
+        <div class="vis-opt"          data-vis="private" onclick="setVisibility('memory','private')">🔒 Just me</div>
+        <div class="vis-opt"          data-vis="public"  onclick="setVisibility('memory','public')">🌐 Public</div>
+      </div>
+    </div>
+
+    <button class="import-btn" onclick="savePersonMemory()" style="margin-top:.4rem;">Save Memory →</button>
     <button class="import-cancel-btn" onclick="closeAddMemory()">Not yet</button>
   </div>
 </div>
@@ -1306,6 +1338,31 @@ function closeWriteAnswer() {
   document.getElementById('writeAnswerScreen').classList.remove('open');
 }
 
+// ── VISIBILITY ────────────────────────────────────────────────
+var _vis = { write: 'private', memory: 'gift', voice: 'private' };
+
+function setVisibility(context, val) {
+  _vis[context] = val;
+  var picker = document.getElementById(context === 'write' ? 'writeVisibilityPicker' : context === 'memory' ? 'memoryVisibilityPicker' : 'voiceVisibilityPicker');
+  if (!picker) return;
+  picker.querySelectorAll('.vis-opt').forEach(function(el) {
+    el.classList.toggle('selected', el.dataset.vis === val);
+  });
+}
+
+// ── VISIBILITY LABELS ─────────────────────────────────────────
+var VIS_LABELS = {
+  'private': '🔒 Just me',
+  'gift':    '🎁 In the gift',
+  'public':  '🌐 Public'
+};
+
+function visibilityBadge(vis) {
+  var labels = { private:'🔒', gift:'🎁', public:'🌐' };
+  var colors = { private:'rgba(100,100,100,.5)', gift:'rgba(201,125,58,.6)', public:'rgba(58,173,144,.6)' };
+  return '<span style="font-family:\'Nunito\',sans-serif;font-size:.58rem;font-weight:700;color:' + (colors[vis]||colors.private) + ';margin-left:.4rem;">' + (labels[vis]||'🔒') + '</span>';
+}
+
 function saveWrittenAnswer() {
   var text = document.getElementById('writeAnswerText').value.trim();
   if (!text) { t('Write something first — even a few words'); return; }
@@ -1314,13 +1371,14 @@ function saveWrittenAnswer() {
   btn.textContent = 'Saving...'; btn.disabled = true;
 
   var entry = {
-    id:       'ans_' + Date.now(),
-    type:     'written',
-    chapter:  _currentChapter,
-    prompt:   _currentPrompt,
-    text:     text,
-    date:     new Date().toISOString(),
-    author:   'You'
+    id:         'ans_' + Date.now(),
+    type:       'written',
+    chapter:    _currentChapter,
+    prompt:     _currentPrompt,
+    text:       text,
+    date:       new Date().toISOString(),
+    author:     'You',
+    visibility: _vis.write || 'private'
   };
 
   // Save to localStorage
@@ -1521,13 +1579,14 @@ function savePersonMemory() {
   if (!text) { t('Write something first'); return; }
 
   var entry = {
-    id:       'mem_' + Date.now(),
-    type:     'memory',
-    person:   _currentPersonId || 'unknown',
-    prompt:   document.getElementById('addMemoryPrompt').textContent,
-    text:     text,
-    date:     new Date().toISOString(),
-    author:   'You'
+    id:         'mem_' + Date.now(),
+    type:       'memory',
+    person:     _currentPersonId || 'unknown',
+    prompt:     document.getElementById('addMemoryPrompt').textContent,
+    text:       text,
+    date:       new Date().toISOString(),
+    author:     'You',
+    visibility: _vis.memory || 'gift'
   };
 
   // Save to localStorage under person key
@@ -1645,6 +1704,72 @@ function openPerson(id){
   if(p.vt){document.getElementById('storyVoiceText').textContent=p.vt;document.getElementById('storyVoiceDur').textContent=p.vd;sv.style.display='';}else{sv.style.display='none';}
   document.getElementById('storyPrompt').textContent=p.pt;
   document.getElementById('storyScreen').classList.add('open');
+  renderLeafEntries();
+}
+
+function renderLeafEntries() {
+  // Find or create entries container in story screen
+  var container = document.getElementById('leafEntriesContainer');
+  if (!container) {
+    var scroll = document.querySelector('#storyScreen .story-scroll');
+    if (!scroll) return;
+    container = document.createElement('div');
+    container.id = 'leafEntriesContainer';
+    container.style.cssText = 'padding:.6rem 1rem 1rem;';
+    scroll.appendChild(container);
+  }
+
+  try {
+    var answers = JSON.parse(localStorage.getItem('cc_leaf_answers') || '[]');
+    var memories = JSON.parse(localStorage.getItem('cc_leaf_memories_' + (_currentPersonId || 'unknown')) || '[]');
+    var all = answers.concat(memories).sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+
+    if (!all.length) { container.innerHTML = ''; return; }
+
+    container.innerHTML = '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--bark-soft);margin-bottom:.6rem;">Saved Entries</div>'
+      + all.map(function(e) {
+          var vis = e.visibility || 'private';
+          var visColor = { private:'rgba(100,100,100,.55)', gift:'rgba(201,125,58,.7)', public:'rgba(58,173,144,.7)' }[vis];
+          var visLabel = { private:'🔒 Just me', gift:'🎁 In the gift', public:'🌐 Public' }[vis];
+          return '<div style="background:rgba(255,255,255,.5);border:1px solid rgba(184,134,11,.12);border-radius:12px;padding:.85rem 1rem;margin-bottom:.5rem;">'
+            + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;">'
+            + '<div style="font-family:\'Nunito\',sans-serif;font-size:.58rem;font-weight:700;color:var(--bark-soft);">' + new Date(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + '</div>'
+            + '<div onclick="cycleVisibility(\'' + e.id + '\')" style="font-family:\'Nunito\',sans-serif;font-size:.6rem;font-weight:800;color:' + visColor + ';cursor:pointer;border:1px solid ' + visColor + ';border-radius:999px;padding:.15rem .5rem;" id="vis_' + e.id + '">' + visLabel + '</div>'
+            + '</div>'
+            + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:.95rem;color:var(--bark);line-height:1.55;">' + (e.text || '').substring(0,200) + (e.text && e.text.length > 200 ? '\u2026' : '') + '</div>'
+            + '</div>';
+        }).join('');
+  } catch(e2) {}
+}
+
+function cycleVisibility(entryId) {
+  var order = ['private','gift','public'];
+  try {
+    // Find and update in localStorage
+    ['cc_leaf_answers', 'cc_leaf_memories_' + (_currentPersonId||'unknown')].forEach(function(key) {
+      var items = JSON.parse(localStorage.getItem(key) || '[]');
+      var changed = false;
+      items = items.map(function(item) {
+        if (item.id === entryId) {
+          var cur = order.indexOf(item.visibility || 'private');
+          item.visibility = order[(cur + 1) % order.length];
+          changed = true;
+          // Update badge in DOM
+          var badge = document.getElementById('vis_' + entryId);
+          if (badge) {
+            var vis = item.visibility;
+            var visColor = { private:'rgba(100,100,100,.55)', gift:'rgba(201,125,58,.7)', public:'rgba(58,173,144,.7)' }[vis];
+            var visLabel = { private:'🔒 Just me', gift:'🎁 In the gift', public:'🌐 Public' }[vis];
+            badge.textContent = visLabel;
+            badge.style.color = visColor;
+            badge.style.borderColor = visColor;
+          }
+        }
+        return item;
+      });
+      if (changed) localStorage.setItem(key, JSON.stringify(items));
+    });
+  } catch(e) {}
 }
 
 function closeStory(){

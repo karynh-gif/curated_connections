@@ -602,10 +602,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
           <div style="flex:1;">
             <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.7);margin-bottom:.18rem;">🎓 Class of 2026</div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.82);line-height:1.35;">Capture this moment before it's gone.</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:700;color:rgba(201,125,58,.45);margin-top:.2rem;">Code: GIFT2026 · Free through Dec 31</div>
           </div>
           <div style="text-align:right;flex-shrink:0;">
-            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:rgba(201,125,58,.8);">$4.99</div>
-            <div style="font-family:'Nunito',sans-serif;font-size:.6rem;color:rgba(201,125,58,.4);">one-time</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:rgba(201,125,58,.8);text-decoration:line-through;opacity:.5;">$4.99</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:rgba(201,125,58,1);">FREE</div>
           </div>
         </div>
         <!-- Mother's Day row -->
@@ -613,10 +614,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
           <div style="flex:1;">
             <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,100,140,.7);margin-bottom:.18rem;">🌸 Mother's Day</div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.82);line-height:1.35;">Tell her what she means — before the day passes.</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:700;color:rgba(200,100,140,.45);margin-top:.2rem;">Code: MOTHERS2026 · Free through Dec 31</div>
           </div>
           <div style="text-align:right;flex-shrink:0;">
-            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:rgba(200,100,140,.8);">$4.99</div>
-            <div style="font-family:'Nunito',sans-serif;font-size:.6rem;color:rgba(200,100,140,.4);">one-time</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:rgba(200,100,140,.8);text-decoration:line-through;opacity:.5;">$4.99</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;color:rgba(200,100,140,1);">FREE</div>
           </div>
         </div>
       </div>
@@ -1909,15 +1911,14 @@ function loadDailyUplift() {
 }
 function saveToFeed(type) {
   var user = CC.getUser ? CC.getUser() : null;
-  if (!user) { openAccount('save to your feed'); return; }
 
   var post = {
     id:       'post_' + Date.now(),
     type:     type,
-    userId:   user.user_id,
-    userName: user.name || 'You',
+    userId:   user ? user.user_id : 'local',
+    userName: user ? (user.name || 'You') : 'You',
     date:     new Date().toISOString(),
-    public:   true
+    public:   false
   };
 
   if (type === 'quiz') {
@@ -1928,6 +1929,7 @@ function saveToFeed(type) {
     if (post.snippet.length > 120) post.snippet = post.snippet.substring(0,117) + '\u2026';
   }
 
+  // Save locally regardless of login
   try {
     var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
     feed.unshift(post);
@@ -1935,21 +1937,31 @@ function saveToFeed(type) {
     localStorage.setItem('cc_my_feed', JSON.stringify(feed));
   } catch(e) {}
 
-  // Attempt Airtable save
-  fetch('/api/airtable', {
-    method: 'POST', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      action: 'create', table: 'Responses',
-      fields: {
-        response_id: post.id, user_id: post.userId,
-        spoken_answer: (post.title ? post.title + ': ' : '') + (post.snippet || post.body || ''),
-        is_living_legacy: false, recorded_at: post.date
-      }
-    })
-  }).catch(function(){});
+  // Save to Airtable if logged in
+  if (user) {
+    fetch('/api/airtable', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action: 'create', table: 'Responses',
+        fields: {
+          response_id: post.id, user_id: post.userId,
+          spoken_answer: (post.title ? post.title + ': ' : '') + (post.snippet || post.body || ''),
+          is_living_legacy: false, recorded_at: post.date
+        }
+      })
+    }).catch(function(){});
+  }
 
-  showToast('Saved to your feed ✦');
+  // Close quiz and show confirmation
+  closeQuiz();
   showMyFeedSection();
+
+  // Show clear toast with sign-in nudge if not logged in
+  if (!user) {
+    showToast('Saved ✦  Sign in to keep it across devices');
+  } else {
+    showToast('Saved to your feed ✦');
+  }
 }
 
 function showMyFeedSection() {
