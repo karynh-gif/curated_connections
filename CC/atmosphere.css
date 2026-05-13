@@ -185,15 +185,16 @@
 
 /*
   ══════════════════════════════════════════════════════════
-  TABLET ENVIRONMENT — 768px+
-  Wider content. Soft edge blending. Real visible sparkles.
-  Sitting under fireflies at night. Starlit. Not a webpage.
+  TABLET CINEMATIC ENVIRONMENT — 768px+
+  Wider content stage. Soft edge blending. No sparkles.
+  Bokeh · dust · embers · depth fog · warmth bleed.
+  Late-night porch. Lantern-lit cabin. Candlelit reflection.
   ══════════════════════════════════════════════════════════
 */
 @media (min-width: 768px) {
 
-  /* ── WIDEN THE CONTENT STAGE ── */
-  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right) {
+  /* ── WIDER CONTENT STAGE ── */
+  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right):not(#cc-fog):not(#cc-fairy-lights) {
     max-width: 600px !important;
   }
 
@@ -201,118 +202,81 @@
     width: calc((100vw - 600px) / 2);
   }
 
-  /* ── EDGE FADE — dissolves the hard line ── */
-  /* Gradient overlays that sit on top of the content edges */
+  /* ── EDGE DISSOLVE — no hard line ── */
   #cc-edge-fade-left {
-    position: fixed;
-    top: 0; bottom: 0;
+    position: fixed; top: 0; bottom: 0;
     left: calc((100vw - 600px) / 2);
-    width: 32px;
-    z-index: 2;
-    pointer-events: none;
-    background: linear-gradient(to right,
-      rgba(4, 8, 6, 0.55) 0%,
-      rgba(4, 8, 6, 0.20) 40%,
-      transparent 100%
-    );
+    width: 36px; z-index: 12; pointer-events: none;
+    background: linear-gradient(to right, rgba(2,5,8,0.72) 0%, transparent 100%);
   }
-
   #cc-edge-fade-right {
-    position: fixed;
-    top: 0; bottom: 0;
+    position: fixed; top: 0; bottom: 0;
     right: calc((100vw - 600px) / 2);
-    width: 32px;
-    z-index: 2;
-    pointer-events: none;
-    background: linear-gradient(to left,
-      rgba(4, 8, 6, 0.55) 0%,
-      rgba(4, 8, 6, 0.20) 40%,
-      transparent 100%
-    );
+    width: 36px; z-index: 12; pointer-events: none;
+    background: linear-gradient(to left, rgba(2,5,8,0.72) 0%, transparent 100%);
   }
 
-  /* ── FRAME GLOW ── warm amber bloom around the content stage */
+  /* ── CONTAINER WARMTH BLEED ── */
+  /* The app is the light source. Warmth radiates outward from it. */
   #cc-frame-glow {
-    position: fixed;
-    top: 0; bottom: 0;
+    position: fixed; top: 0; bottom: 0;
     left: calc((100vw - 600px) / 2);
-    width: 600px;
-    z-index: 0;
-    pointer-events: none;
+    width: 600px; z-index: 3; pointer-events: none;
     box-shadow:
-      0 0 40px  6px  rgba(200, 120, 40, 0.10),
-      0 0 90px  18px rgba(170,  90, 25, 0.07),
-      0 0 160px 36px rgba(130,  60, 15, 0.04),
-      0 0 280px 70px rgba( 90,  35, 10, 0.022);
+      -30px 0  60px  8px rgba(195,115,38,0.09),
+       30px 0  60px  8px rgba(195,115,38,0.09),
+      -65px 0 120px 22px rgba(165,82,22,0.055),
+       65px 0 120px 22px rgba(165,82,22,0.055),
+     -110px 0 220px 40px rgba(130,58,15,0.028),
+      110px 0 220px 40px rgba(130,58,15,0.028);
   }
 
-  /* ── MUCH STRONGER AMBIENT GLOWS ── */
+  /* ── DEEPER AMBIENT GLOWS ── */
   .cc-atm-glow-1 {
-    width: 70vw; height: 70vh;
-    bottom: -10%; left: -8%;
+    width: 55vw; height: 65vh; bottom: -12%; left: -8%;
     background: radial-gradient(ellipse at 22% 78%,
-      rgba(200, 105, 28, 0.16) 0%,
-      rgba(160,  72, 16, 0.09) 30%,
-      rgba(120,  48,  8, 0.04) 55%,
-      transparent 78%);
+      rgba(195,100,25,0.13) 0%, rgba(155,68,14,0.07) 30%,
+      rgba(115,42,8,0.028) 55%, transparent 78%);
   }
-
   .cc-atm-glow-2 {
-    width: 60vw; height: 60vh;
-    top: -8%; right: -8%;
+    width: 48vw; height: 52vh; top: -6%; right: -6%;
     background: radial-gradient(ellipse at 78% 18%,
-      rgba(62, 85, 140, 0.12) 0%,
-      rgba(42, 60, 105, 0.06) 40%,
-      transparent 68%);
+      rgba(55,75,128,0.09) 0%, rgba(38,55,98,0.045) 40%, transparent 68%);
   }
-
   .cc-atm-glow-3 {
-    width: 50vw; height: 55vh;
-    top: 28%; right: 2%;
-    background: radial-gradient(ellipse at 62% 48%,
-      rgba(92, 48, 125, 0.09) 0%,
-      rgba(62, 32,  88, 0.04) 44%,
-      transparent 70%);
-  }
-
-  .cc-atm-glow-4 {
-    position: absolute;
-    width: 55vw; height: 50vh;
-    bottom: -8%; right: 6%;
+    width: 50vw; height: 48vh; bottom: -8%; right: 5%;
     background: radial-gradient(ellipse at 58% 88%,
-      rgba(42, 52, 118, 0.10) 0%,
-      rgba(28, 34,  85, 0.05) 50%,
-      transparent 76%);
-    animation: atmBreath2 18s ease-in-out infinite;
-    animation-delay: -6s;
+      rgba(38,48,108,0.08) 0%, rgba(24,30,78,0.038) 50%, transparent 75%);
+    animation: atmBreath2 19s ease-in-out infinite;
+    animation-delay: -7s;
   }
 
   /* ── DEEPER VIGNETTE ── */
   .cc-atm-vignette {
-    background: radial-gradient(ellipse 55% 68% at 50% 50%,
-      transparent 35%,
-      rgba(2, 4, 10, 0.28) 58%,
-      rgba(1, 2,  8, 0.60) 75%,
-      rgba(0, 1,  6, 0.86) 100%);
+    background: radial-gradient(ellipse 52% 66% at 50% 50%,
+      transparent 32%, rgba(2,4,10,0.28) 56%,
+      rgba(1,2,8,0.62) 74%, rgba(0,1,6,0.88) 100%);
   }
 
-  /* ── PARTICLES: actually visible ── */
-  #cc-particles { opacity: 1.0; }
+  /* Fog and fairy lights canvases */
+  #cc-fog {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  }
+  #cc-fairy-lights {
+    position: fixed; inset: 0; z-index: 6; pointer-events: none;
+  }
+  #cc-particles { opacity: 1; z-index: 7; }
 
-  /* Side panel edge glow — warmer */
   .cc-atm-left-panel::after, .cc-atm-right-panel::after {
     background: linear-gradient(to bottom,
-      transparent,
-      rgba(185, 105, 32, 0.12) 22%,
-      rgba(185, 105, 32, 0.18) 50%,
-      rgba(185, 105, 32, 0.12) 78%,
-      transparent);
+      transparent, rgba(185,105,32,0.10) 22%,
+      rgba(185,105,32,0.15) 50%, rgba(185,105,32,0.10) 78%, transparent);
   }
 }
 
 /* ── LARGE TABLET / LANDSCAPE ── */
 @media (min-width: 1024px) {
-  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right) {
+  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right):not(#cc-fog):not(#cc-fairy-lights) {
     max-width: 660px !important;
   }
   .cc-atm-left-panel, .cc-atm-right-panel { width: calc((100vw - 660px) / 2); }

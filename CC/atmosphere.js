@@ -1,16 +1,32 @@
 /**
- * CC Atmosphere — Particle Engine
- * Real sparkles. Real fireflies. Starlit nighttime space.
- * Only runs on screens ≥ 520px.
+ * CC Atmosphere — Cinematic Emotional Environment
+ * Bokeh · dust motes · embers · depth fog · fairy lights · warmth bleed
+ * Only activates at 520px+. Tablet (768px+) gets the full environment.
+ * No sparkles. No star arms. Light suspended in air.
  */
 (function() {
   'use strict';
 
   if (window.innerWidth < 520) return;
 
-  var tablet  = function() { return window.innerWidth >= 768; };
-  var appW    = function() { return window.innerWidth >= 1024 ? 660 : window.innerWidth >= 768 ? 600 : 430; };
+  var isTablet = function() { return window.innerWidth >= 768; };
+  var appW     = function() { return window.innerWidth >= 1024 ? 660 : window.innerWidth >= 768 ? 600 : 430; };
 
+  function getAppBounds() {
+    var aw = Math.min(appW(), window.innerWidth);
+    var l  = (window.innerWidth - aw) / 2;
+    return { left: l, right: l + aw };
+  }
+
+  function sideX(b) {
+    var W = window.innerWidth;
+    var s = Math.random() < 0.5 ? 'L' : 'R';
+    if (s === 'L' && b.left  > 8) return Math.random() * b.left;
+    if (s === 'R' && W - b.right > 8) return b.right + Math.random() * (W - b.right);
+    return Math.random() < 0.5 ? Math.random() * 50 : W - Math.random() * 50;
+  }
+
+  // ── INJECT DOM ──────────────────────────────────────────────
   function injectAtmosphere() {
     if (document.getElementById('cc-atmosphere')) return;
 
@@ -21,7 +37,6 @@
       '<div class="cc-atm-glow-1"></div>' +
       '<div class="cc-atm-glow-2"></div>' +
       '<div class="cc-atm-glow-3"></div>' +
-      '<div class="cc-atm-glow-4"></div>' +
       '<canvas id="cc-particles"></canvas>' +
       '<div class="cc-atm-vignette"></div>';
     document.body.insertBefore(atm, document.body.firstChild);
@@ -34,397 +49,261 @@
     rp.className = 'cc-atm-right-panel';
     document.body.appendChild(rp);
 
-    if (tablet()) {
-      // Frame glow
+    if (isTablet()) {
+      // Warmth bleed — app is the light source
       var fg = document.createElement('div');
       fg.id = 'cc-frame-glow';
       document.body.appendChild(fg);
-      // Edge fades — dissolve the hard line
-      var el = document.createElement('div');
+
+      // Edge dissolve — no hard line at container boundary
+      var el = document.createElement('canvas');
       el.id = 'cc-edge-fade-left';
       document.body.appendChild(el);
-      var er = document.createElement('div');
+
+      var er = document.createElement('canvas');
       er.id = 'cc-edge-fade-right';
       document.body.appendChild(er);
+
+      // Depth fog canvas
+      var fog = document.createElement('canvas');
+      fog.id = 'cc-fog';
+      document.body.appendChild(fog);
+
+      // Fairy lights canvas
+      var fl = document.createElement('canvas');
+      fl.id = 'cc-fairy-lights';
+      document.body.appendChild(fl);
+
+      initFog(fog);
+      initFairyLights(fl);
     }
 
-    initParticles();
+    initParticles(document.getElementById('cc-particles'));
   }
 
-  function initParticles() {
-    var canvas = document.getElementById('cc-particles');
-    if (!canvas) return;
+  // ── DEPTH FOG ───────────────────────────────────────────────
+  function initFog(canvas) {
     var ctx = canvas.getContext('2d');
-    var W = canvas.width  = window.innerWidth;
-    var H = canvas.height = window.innerHeight;
+    var W, H;
 
-    window.addEventListener('resize', function() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    });
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
 
-    // Particle counts — tablet gets real atmosphere
-    var COUNT_FIREFLY = tablet() ? 22 : 0;
-    var COUNT_SPARKLE = tablet() ? 35 : 14;
-    var COUNT_STAR    = tablet() ? 50 : 20;
-    var TOTAL = COUNT_FIREFLY + COUNT_SPARKLE + COUNT_STAR;
-
-    function getAppBounds() {
-      var aw   = Math.min(appW(), W);
-      var left = (W - aw) / 2;
-      return { left: left, right: left + aw, w: aw };
-    }
-
-    function sideX(bounds) {
-      var side = Math.random() < 0.5 ? 'left' : 'right';
-      if (side === 'left'  && bounds.left  > 10) return Math.random() * bounds.left;
-      if (side === 'right' && W - bounds.right > 10) return bounds.right + Math.random() * (W - bounds.right);
-      return Math.random() < 0.5 ? Math.random() * 60 : W - Math.random() * 60;
-    }
-
-    var particles = [];
-
-    function makeFirefly(bounds) {
-      return {
-        type: 'firefly',
-        x: sideX(bounds),
-        y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.18,
-        vy: -(0.05 + Math.random() * 0.12),
-        life: Math.random(),
-        lifeSpeed: 0.0003 + Math.random() * 0.0004,
-        size: 2.2 + Math.random() * 2.0,
-        maxAlpha: 0.55 + Math.random() * 0.35,  // BRIGHT — actually visible
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.006 + Math.random() * 0.01,
-        hue: 140 + Math.random() * 50,           // cool green-teal
-        sat: 55 + Math.random() * 25,
-        lit: 62 + Math.random() * 22,
-      };
-    }
-
-    function makeSparkle(bounds) {
-      return {
-        type: 'sparkle',
-        x: sideX(bounds),
-        y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.12,
-        vy: -(0.08 + Math.random() * 0.22),
-        life: Math.random(),
-        lifeSpeed: 0.0006 + Math.random() * 0.0008,
-        size: 1.4 + Math.random() * 1.8,
-        maxAlpha: tablet() ? 0.45 + Math.random() * 0.40 : 0.18 + Math.random() * 0.20,
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.01 + Math.random() * 0.015,
-        // Warm amber-gold sparkles
-        hue: 28 + Math.random() * 22,
-        sat: 75 + Math.random() * 20,
-        lit: 60 + Math.random() * 25,
-      };
-    }
-
-    function makeStar(bounds) {
-      return {
-        type: 'star',
-        x: sideX(bounds),
-        y: Math.random() * H,
-        vx: 0, vy: -0.015,
-        life: Math.random(),
-        lifeSpeed: 0.0004 + Math.random() * 0.0006,
-        size: 0.6 + Math.random() * 1.0,
-        maxAlpha: tablet() ? 0.30 + Math.random() * 0.35 : 0.12 + Math.random() * 0.16,
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.005 + Math.random() * 0.008,
-        hue: 38 + Math.random() * 20,
-        sat: 35 + Math.random() * 30,
-        lit: 80 + Math.random() * 15,
-      };
-    }
-
-    var bounds = getAppBounds();
-    for (var i = 0; i < TOTAL; i++) {
-      var p;
-      if (i < COUNT_FIREFLY) p = makeFirefly(bounds);
-      else if (i < COUNT_FIREFLY + COUNT_SPARKLE) p = makeSparkle(bounds);
-      else p = makeStar(bounds);
-      particles.push(p);
-    }
-
-    function alpha(p) {
-      var a;
-      if      (p.life < 0.15) a = p.life / 0.15;
-      else if (p.life < 0.82) a = 1;
-      else                    a = 1 - (p.life - 0.82) / 0.18;
-      return a * p.maxAlpha;
-    }
-
-    function draw(p) {
-      var a = alpha(p);
-      if (a < 0.006) return;
-      var size = p.size * Math.min(1, (p.life < 0.15 ? p.life / 0.15 : 1) * 4);
-      ctx.save();
-      ctx.globalAlpha = a;
-
-      if (p.type === 'firefly') {
-        // Pulse with wobble — living light
-        var pulse = 0.60 + 0.40 * Math.sin(p.wobble * 2.2);
-        var r = size * 3.8 * pulse;
-        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
-        var col = 'hsl(' + p.hue + ',' + p.sat + '%,' + p.lit + '%)';
-        g.addColorStop(0,    col);
-        g.addColorStop(0.35, 'hsla(' + p.hue + ',' + p.sat + '%,' + p.lit + '%,0.35)');
-        g.addColorStop(1,    'transparent');
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-        ctx.fill();
-
-      } else if (p.type === 'sparkle') {
-        // Bright amber glow + 4-point star cross
-        var r2 = size * 2.8;
-        var g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r2);
-        var c2 = 'hsl(' + p.hue + ',' + p.sat + '%,' + p.lit + '%)';
-        g2.addColorStop(0,    c2);
-        g2.addColorStop(0.4,  'hsla(' + p.hue + ',' + p.sat + '%,' + p.lit + '%,0.5)');
-        g2.addColorStop(1,    'transparent');
-        ctx.fillStyle = g2;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r2, 0, Math.PI * 2);
-        ctx.fill();
-        // 4-point star sparkle arms
-        if (size > 1.8) {
-          ctx.globalAlpha = a * 0.7;
-          ctx.strokeStyle = c2;
-          ctx.lineWidth = size * 0.22;
-          ctx.lineCap = 'round';
-          var arm = size * 2.2;
-          ctx.beginPath(); ctx.moveTo(p.x - arm, p.y); ctx.lineTo(p.x + arm, p.y); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(p.x, p.y - arm); ctx.lineTo(p.x, p.y + arm); ctx.stroke();
-          // Diagonal shorter arms
-          ctx.globalAlpha = a * 0.35;
-          ctx.lineWidth = size * 0.14;
-          var arm2 = arm * 0.55;
-          ctx.beginPath(); ctx.moveTo(p.x-arm2, p.y-arm2); ctx.lineTo(p.x+arm2, p.y+arm2); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(p.x+arm2, p.y-arm2); ctx.lineTo(p.x-arm2, p.y+arm2); ctx.stroke();
-        }
-
-      } else {
-        // Star — soft glow dot, twinkles with wobble
-        var tw = 0.7 + 0.3 * Math.sin(p.wobble * 3);
-        ctx.globalAlpha = a * tw;
-        var r3 = size * 1.8;
-        var g3 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r3);
-        var c3 = 'hsl(' + p.hue + ',' + p.sat + '%,' + p.lit + '%)';
-        g3.addColorStop(0,   c3);
-        g3.addColorStop(0.5, 'hsla(' + p.hue + ',' + p.sat + '%,' + p.lit + '%,0.4)');
-        g3.addColorStop(1,   'transparent');
-        ctx.fillStyle = g3;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r3, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    var lastTime = 0;
-    function animate(now) {
-      requestAnimationFrame(animate);
-      var dt = Math.min((now - lastTime) / 16, 3);
-      lastTime = now;
-      ctx.clearRect(0, 0, W, H);
-
-      var b = getAppBounds();
-      for (var i = 0; i < particles.length; i++) {
-        var p = particles[i];
-        p.wobble += p.wobbleSpeed * dt;
-        p.x += (p.vx + Math.sin(p.wobble) * 0.09) * dt;
-        p.y += p.vy * dt;
-        p.life += p.lifeSpeed * dt;
-
-        if (p.life >= 1 || p.y < -20 || p.x < -30 || p.x > W + 30) {
-          var np;
-          if (p.type === 'firefly') np = makeFirefly(b);
-          else if (p.type === 'sparkle') np = makeSparkle(b);
-          else np = makeStar(b);
-          np.life = 0;
-          np.y    = p.life >= 1 ? H + 10 : Math.random() * H;
-          Object.assign(p, np);
-        }
-        draw(p);
-      }
-    }
-    requestAnimationFrame(animate);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectAtmosphere);
-  } else {
-    injectAtmosphere();
-  }
-})();
-
-  function initParticles() {
-    const canvas = document.getElementById('cc-particles');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    let W = canvas.width  = window.innerWidth;
-    let H = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    });
-
-    // Particle types: ember, dust, star
-    const PARTICLE_COUNT = 28;
-    const particles = [];
-
-    // App canvas boundaries — particles avoid the center zone
-    function getAppBounds() {
-      const appW = Math.min(430, W);
-      const left  = (W - appW) / 2;
-      const right = left + appW;
-      return { left, right, w: appW };
-    }
-
-    function randomEdge(bounds) {
-      // Particles only appear in the side zones
-      const side = Math.random() < 0.5 ? 'left' : 'right';
-      let x;
-      if (side === 'left' && bounds.left > 20) {
-        x = Math.random() * bounds.left;
-      } else if (side === 'right' && (W - bounds.right) > 20) {
-        x = bounds.right + Math.random() * (W - bounds.right);
-      } else {
-        // Fallback: edges of full screen
-        x = Math.random() < 0.5 ? Math.random() * 80 : W - Math.random() * 80;
-      }
-      return x;
-    }
-
-    function createParticle(bounds) {
-      const type = Math.random();
-      let p = {
-        x: randomEdge(bounds),
-        y: Math.random() * H,
-        vy: -(0.12 + Math.random() * 0.28),    // drift upward, slow
-        vx: (Math.random() - 0.5) * 0.15,       // gentle horizontal sway
-        life: Math.random(),                      // 0–1 lifecycle position
-        lifeSpeed: 0.0008 + Math.random() * 0.001,
-        size: 0,
-        maxSize: 0,
-        type: 'dust',
-        alpha: 0,
-        maxAlpha: 0,
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.008 + Math.random() * 0.012,
-      };
-
-      if (type < 0.2) {
-        // Ember — warm amber glow, slightly larger
-        p.type = 'ember';
-        p.maxSize  = 1.2 + Math.random() * 1.4;
-        p.maxAlpha = 0.18 + Math.random() * 0.2;
-        p.vy = -(0.18 + Math.random() * 0.35);
-        p.color = `hsl(${25 + Math.random() * 20}, 80%, ${55 + Math.random() * 20}%)`;
-      } else if (type < 0.55) {
-        // Dust mote — tiny, almost invisible
-        p.type = 'dust';
-        p.maxSize  = 0.6 + Math.random() * 0.8;
-        p.maxAlpha = 0.08 + Math.random() * 0.1;
-        p.vy = -(0.05 + Math.random() * 0.18);
-        p.color = `rgba(220, 200, 160, 1)`;
-      } else {
-        // Star — stationary twinkle, very small
-        p.type = 'star';
-        p.maxSize  = 0.5 + Math.random() * 0.7;
-        p.maxAlpha = 0.12 + Math.random() * 0.16;
-        p.vy = -0.02;
-        p.vx = 0;
-        p.lifeSpeed = 0.0005 + Math.random() * 0.0008;
-        p.color = `rgba(240, 225, 195, 1)`;
-      }
-
-      return p;
-    }
-
-    const bounds = getAppBounds();
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const p = createParticle(bounds);
-      p.life = Math.random(); // stagger start positions
-      particles.push(p);
-    }
-
-    function drawParticle(p) {
-      // Life cycle: fade in (0–0.2), full (0.2–0.8), fade out (0.8–1.0)
-      let alpha;
-      if (p.life < 0.2)       alpha = p.life / 0.2;
-      else if (p.life < 0.8)  alpha = 1;
-      else                    alpha = 1 - (p.life - 0.8) / 0.2;
-
-      const a = alpha * p.maxAlpha;
-      if (a < 0.005) return;
-
-      const size = p.maxSize * Math.min(1, alpha * 3);
-
-      ctx.save();
-      ctx.globalAlpha = a;
-
-      if (p.type === 'ember') {
-        // Soft glow
-        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 2.5);
-        grd.addColorStop(0,   p.color);
-        grd.addColorStop(0.5, p.color.replace('hsl', 'hsla').replace(')', ', 0.4)'));
-        grd.addColorStop(1,   'transparent');
-        ctx.fillStyle = grd;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    let lastTime = 0;
-    function animate(now) {
-      requestAnimationFrame(animate);
-
-      const dt = Math.min((now - lastTime) / 16, 3); // cap delta
-      lastTime = now;
-
-      ctx.clearRect(0, 0, W, H);
-
-      const bounds = getAppBounds();
-
-      particles.forEach((p, i) => {
-        // Wobble
-        p.wobble += p.wobbleSpeed * dt;
-        p.x += (p.vx + Math.sin(p.wobble) * 0.08) * dt;
-        p.y += p.vy * dt;
-        p.life += p.lifeSpeed * dt;
-
-        // Reset when life cycle complete or out of bounds
-        if (p.life >= 1 || p.y < -20 || p.x < -20 || p.x > W + 20) {
-          const newP = createParticle(bounds);
-          newP.life = 0;
-          newP.y = p.life >= 1 ? H + 10 : Math.random() * H;
-          Object.assign(p, newP);
-        }
-
-        drawParticle(p);
+    var patches = [];
+    for (var i = 0; i < 7; i++) {
+      patches.push({
+        x: Math.random() * 1.3 - 0.15, y: 0.45 + Math.random() * 0.7,
+        w: 0.32 + Math.random() * 0.38, h: 0.16 + Math.random() * 0.20,
+        a: 0.018 + Math.random() * 0.016,
+        vx: (Math.random() - 0.5) * 0.00006,
+        vy: -0.000035 - Math.random() * 0.000025,
+        hue: 215 + Math.random() * 38
       });
     }
 
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      patches.forEach(function(p) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.y + p.h < -0.1) { p.y = 1.1; p.x = Math.random() * 1.2 - 0.1; }
+        var cx = p.x * W, cy = p.y * H, rx = p.w * W * 0.5, ry = p.h * H * 0.5;
+        ctx.save();
+        ctx.globalAlpha = p.a;
+        var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rx, ry));
+        g.addColorStop(0,   'hsla(' + p.hue + ',35%,26%,0.85)');
+        g.addColorStop(0.5, 'hsla(' + p.hue + ',28%,20%,0.4)');
+        g.addColorStop(1,   'transparent');
+        ctx.fillStyle = g;
+        ctx.scale(1, ry / rx);
+        ctx.beginPath(); ctx.arc(cx, cy * (rx / ry), rx, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  // ── FAIRY LIGHTS ────────────────────────────────────────────
+  function initFairyLights(canvas) {
+    var ctx = canvas.getContext('2d');
+    var W, H, strands = [], t = 0;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      buildStrands();
+    }
+
+    function addStrand(x0, x1, y0, y1) {
+      var n = 4 + Math.floor(Math.random() * 3), s = [];
+      for (var i = 0; i <= n; i++) {
+        var tt = i / n, sag = Math.sin(Math.PI * tt) * (16 + Math.random() * 18);
+        s.push({ x: x0 + (x1-x0)*tt, y: y0 + (y1-y0)*tt + sag,
+          phase: Math.random()*Math.PI*2, speed: 0.22+Math.random()*0.38,
+          hue: 30+Math.random()*16, size: 1.6+Math.random()*1.4 });
+      }
+      strands.push(s);
+    }
+
+    function buildStrands() {
+      strands = [];
+      var b = getAppBounds();
+
+      if (b.left > 20) {
+        addStrand(b.left*0.12, b.left*0.72, H*0.06, H*0.28);
+        addStrand(b.left*0.28, b.left*0.82, H*0.40, H*0.62);
+        addStrand(b.left*0.08, b.left*0.58, H*0.70, H*0.88);
+        var hc = Math.max(3, Math.floor(b.left/30)), hs = [];
+        for (var i = 0; i <= hc; i++) {
+          var tt = i/hc, sg = Math.sin(Math.PI*tt)*16;
+          hs.push({ x: i*(b.left/hc), y: H*0.055+sg,
+            phase: Math.random()*Math.PI*2, speed: 0.18+Math.random()*0.30,
+            hue: 33+Math.random()*12, size: 1.8+Math.random()*1.2 });
+        }
+        strands.push(hs);
+      }
+
+      if (W - b.right > 20) {
+        var rw = W - b.right;
+        addStrand(b.right+rw*0.12, b.right+rw*0.72, H*0.06, H*0.28);
+        addStrand(b.right+rw*0.28, b.right+rw*0.82, H*0.40, H*0.62);
+        addStrand(b.right+rw*0.08, b.right+rw*0.58, H*0.70, H*0.88);
+        var hc2 = Math.max(3, Math.floor(rw/30)), hs2 = [];
+        for (var i = 0; i <= hc2; i++) {
+          var tt = i/hc2, sg = Math.sin(Math.PI*tt)*16;
+          hs2.push({ x: b.right+i*(rw/hc2), y: H*0.055+sg,
+            phase: Math.random()*Math.PI*2, speed: 0.18+Math.random()*0.30,
+            hue: 33+Math.random()*12, size: 1.8+Math.random()*1.2 });
+        }
+        strands.push(hs2);
+      }
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H); t += 0.007;
+      strands.forEach(function(strand) {
+        if (strand.length < 2) return;
+        ctx.beginPath(); ctx.moveTo(strand[0].x, strand[0].y);
+        for (var i = 1; i < strand.length; i++) ctx.lineTo(strand[i].x, strand[i].y);
+        ctx.strokeStyle = 'rgba(255,255,255,0.035)'; ctx.lineWidth = 0.4; ctx.stroke();
+
+        strand.forEach(function(b) {
+          var f  = 0.60 + 0.40 * Math.sin(t * b.speed + b.phase);
+          var al = 0.38 + 0.35 * f;
+          var gw = b.size * (1.6 + 0.9 * f);
+          ctx.save();
+          var g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, gw * 2.6);
+          g.addColorStop(0,    'hsla('+b.hue+',70%,66%,'+(al*0.45)+')');
+          g.addColorStop(0.35, 'hsla('+b.hue+',60%,55%,'+(al*0.18)+')');
+          g.addColorStop(0.7,  'hsla('+b.hue+',48%,42%,'+(al*0.055)+')');
+          g.addColorStop(1,    'transparent');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(b.x, b.y, gw*2.6, 0, Math.PI*2); ctx.fill();
+          var c = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.size*0.85);
+          c.addColorStop(0,    'hsla('+b.hue+',82%,82%,'+(al*0.70)+')');
+          c.addColorStop(0.55, 'hsla('+b.hue+',72%,62%,'+(al*0.35)+')');
+          c.addColorStop(1,    'transparent');
+          ctx.fillStyle = c;
+          ctx.beginPath(); ctx.arc(b.x, b.y, b.size*0.85, 0, Math.PI*2); ctx.fill();
+          ctx.restore();
+        });
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  // ── PARTICLES: bokeh · dust · ember ─────────────────────────
+  // No star arms. No sparkle shapes. Light suspended in air.
+  function initParticles(canvas) {
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H;
+
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    var tab = isTablet();
+
+    function makeBokeh(b) { return { type:'bk', x:sideX(b), y:Math.random()*H, vx:(Math.random()-0.5)*0.045, vy:-(0.012+Math.random()*0.032), life:Math.random(), lifeSpeed:0.00012+Math.random()*0.00018, size:14+Math.random()*30, maxAlpha:0.05+Math.random()*0.07, wobble:Math.random()*Math.PI*2, wobbleSpeed:0.002+Math.random()*0.003, hue:Math.random()<0.62?28+Math.random()*16:218+Math.random()*32, sat:30+Math.random()*28, lit:52+Math.random()*28 }; }
+    function makeDust(b)  { return { type:'du', x:sideX(b), y:Math.random()*H, vx:(Math.random()-0.5)*0.07,  vy:-(0.022+Math.random()*0.055), life:Math.random(), lifeSpeed:0.00035+Math.random()*0.00045, size:0.7+Math.random()*1.1, maxAlpha:0.16+Math.random()*0.16, wobble:Math.random()*Math.PI*2, wobbleSpeed:0.007+Math.random()*0.011, hue:30+Math.random()*18, sat:38+Math.random()*22, lit:68+Math.random()*20 }; }
+    function makeEmber(b) { return { type:'em', x:sideX(b), y:Math.random()*H, vx:(Math.random()-0.5)*0.10,  vy:-(0.04+Math.random()*0.10),  life:Math.random(), lifeSpeed:0.00028+Math.random()*0.00035, size:2.2+Math.random()*2.5, maxAlpha:0.25+Math.random()*0.20, wobble:Math.random()*Math.PI*2, wobbleSpeed:0.004+Math.random()*0.007, hue:24+Math.random()*16, sat:72+Math.random()*20, lit:56+Math.random()*18 }; }
+
+    var b = getAppBounds(), ps = [];
+    var bCount = tab ? 20 : 8;
+    var dCount = tab ? 24 : 12;
+    var eCount = tab ? 13 : 6;
+    for (var i=0; i<bCount; i++) ps.push(makeBokeh(b));
+    for (var i=0; i<dCount; i++) ps.push(makeDust(b));
+    for (var i=0; i<eCount; i++) ps.push(makeEmber(b));
+
+    function getAlpha(p) {
+      var a;
+      if      (p.life < 0.12) a = p.life / 0.12;
+      else if (p.life < 0.85) a = 1;
+      else                    a = 1 - (p.life - 0.85) / 0.15;
+      return a * p.maxAlpha;
+    }
+
+    function drawP(p) {
+      var a = getAlpha(p); if (a < 0.004) return;
+      ctx.save();
+      if (p.type === 'bk') {
+        ctx.globalAlpha = a;
+        var g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
+        g.addColorStop(0,    'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.85)');
+        g.addColorStop(0.3,  'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.50)');
+        g.addColorStop(0.65, 'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.15)');
+        g.addColorStop(1,    'transparent');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();
+      } else if (p.type === 'du') {
+        ctx.globalAlpha = a;
+        var g2 = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2.0);
+        g2.addColorStop(0,   'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.75)');
+        g2.addColorStop(0.55,'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.25)');
+        g2.addColorStop(1,   'transparent');
+        ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(p.x,p.y,p.size*2.0,0,Math.PI*2); ctx.fill();
+      } else {
+        var pulse = 0.65 + 0.35 * Math.sin(p.wobble * 1.8);
+        ctx.globalAlpha = a * pulse;
+        var r = p.size * 2.5;
+        var g3 = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r);
+        g3.addColorStop(0,    'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,1.0)');
+        g3.addColorStop(0.38, 'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.42)');
+        g3.addColorStop(0.72, 'hsla('+p.hue+','+p.sat+'%,'+p.lit+'%,0.10)');
+        g3.addColorStop(1,    'transparent');
+        ctx.fillStyle = g3; ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    var last = 0;
+    function animate(now) {
+      requestAnimationFrame(animate);
+      var dt = Math.min((now - last) / 16, 3); last = now;
+      ctx.clearRect(0, 0, W, H);
+      var b = getAppBounds();
+      ps.forEach(function(p) {
+        p.wobble += p.wobbleSpeed * dt;
+        p.x += (p.vx + Math.sin(p.wobble) * 0.05) * dt;
+        p.y += p.vy * dt;
+        p.life += p.lifeSpeed * dt;
+        if (p.life >= 1 || p.y < -40 || p.x < -40 || p.x > window.innerWidth + 40) {
+          var np = p.type==='bk' ? makeBokeh(b) : p.type==='du' ? makeDust(b) : makeEmber(b);
+          np.life = 0; np.y = p.life >= 1 ? H + 20 : Math.random() * H;
+          Object.assign(p, np);
+        }
+        drawP(p);
+      });
+    }
     requestAnimationFrame(animate);
   }
 
-  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAtmosphere);
   } else {
