@@ -148,6 +148,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .upgrade-nudge-icon{font-family:'Nunito',sans-serif;font-size:8.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:4px;}
 .upgrade-nudge-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(242,232,216,.3);line-height:1.5;margin-bottom:4px;}
 .upgrade-nudge-cta{font-family:'Nunito',sans-serif;font-size:9.5px;font-weight:700;color:rgba(201,125,58,.5);}
+.fc-locked-tier{font-family:'Nunito',sans-serif;font-size:7.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.4);}
+.fc-locked-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(242,232,216,.24);line-height:1.35;}
+.fc-locked-cta{font-family:'Nunito',sans-serif;font-size:8px;font-weight:700;color:rgba(201,125,58,.32);}
 /* CARD ACTIONS */
 .card-actions{display:flex;gap:8px;margin-top:14px;}
 .card-action{flex:1;padding:9px;border-radius:11px;font-family:'Nunito',sans-serif;font-size:10.5px;font-weight:700;cursor:pointer;text-align:center;}
@@ -299,6 +302,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   .thread-tier         { font-size: 11px !important; }
   .thread-text         { font-size: 17px !important; }
   .thread-waiting-label{ font-size: 11px !important; }
+  .fc-locked-tier      { font-size: 13px !important; }
+  .fc-locked-text      { font-size: 15px !important; }
+  .fc-locked-cta       { font-size: 13px !important; }
 
   /* ── CARD OVERLAY ── */
   .card-big-q       { font-size: 1.7rem !important; }
@@ -836,6 +842,16 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div class="qz-progress-label" id="qzLabel">1 of 5</div>
   </div>
   <div class="qz-scroll" id="qzScroll">
+
+    <!-- Intro screen -->
+    <div id="qzIntroScreen" style="display:none;text-align:center;padding:2rem 1.4rem 1rem;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,168,232,.5);margin-bottom:.8rem;">Discover You</div>
+      <div id="qzIntroTitle" style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:#f5ede2;line-height:1.1;margin-bottom:1rem;letter-spacing:.01em;"></div>
+      <div id="qzIntroSub" style="font-size:.9rem;color:rgba(240,228,252,.55);line-height:1.7;margin-bottom:.6rem;max-width:320px;margin-left:auto;margin-right:auto;"></div>
+      <div id="qzIntroCount" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;color:rgba(196,168,232,.35);margin-bottom:2rem;"></div>
+      <button onclick="startQuizQuestions()" style="width:100%;padding:1rem;background:linear-gradient(135deg,rgba(107,60,162,.5),rgba(60,20,100,.6));border:1px solid rgba(107,60,162,.4);border-radius:14px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#d4b8f0;cursor:pointer;">Begin →</button>
+    </div>
+
     <!-- Question screen -->
     <div id="qzQScreen">
       <div class="qz-quiz-title" id="qzTitle"></div>
@@ -1042,9 +1058,9 @@ function renderTonightCards(shelf, recs) {
     var prices = ['$4.99','$9.99','$19.99'];
     html += '<div class="fc-locked" onclick="openAccount(\'upgrade\')">';
     html += '<div style="font-size:18px;opacity:.2;">&#x1F512;</div>';
-    html += '<div style="font-family:\'Nunito\',sans-serif;font-size:7.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.4);">' + tiers[level] + '</div>';
-    html += '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:11px;color:rgba(242,232,216,.24);line-height:1.35;">More cards &amp; deeper questions</div>';
-    html += '<div style="font-family:\'Nunito\',sans-serif;font-size:8px;font-weight:700;color:rgba(201,125,58,.32);">' + prices[level] + '/mo &rarr;</div>';
+    html += '<div class="fc-locked-tier">' + tiers[level] + '</div>';
+    html += '<div class="fc-locked-text">More cards &amp; deeper questions</div>';
+    html += '<div class="fc-locked-cta">' + prices[level] + '/mo &rarr;</div>';
     html += '</div>';
   }
 
@@ -1817,21 +1833,98 @@ var qzState = {questions:[], results:{}, answers:[], current:0, title:''};
 var FALLBACK_QUIZZES = {
   'discover-connector': {
     title: 'What Kind of Connector Are You?',
+    subtitle: 'Five questions. No wrong answers. You might learn something true about how you show up for the people you love.',
     qj: JSON.stringify([
-      { q: 'When you walk into a party where you only know a few people, you…', opts: ['Work the room and meet everyone', 'Find the people you know and stay close', 'Find the most interesting corner and wait for good conversation', 'Help the host or find something useful to do'] },
-      { q: 'Your idea of a meaningful evening is…', opts: ['A big dinner with everyone you love', 'Deep conversation with one or two people', 'Something spontaneous that turns into a story', 'Quiet time at home followed by a late call with a close friend'] },
-      { q: 'When a friend is going through something hard, you tend to…', opts: ['Show up with food and stay', 'Listen for hours without offering advice', 'Send thoughtful messages over time', 'Jump into problem-solving mode'] },
-      { q: 'The relationship you most want to deepen right now is…', opts: ['A friendship that\'s drifted', 'A family member you never really talk to', 'A romantic partnership', 'Yourself'] },
-      { q: 'What do you wish people knew about how you show up in relationships?', opts: ['I care more than I say', 'I need more space than people think', 'I remember everything', 'I\'m better in small doses than I seem'] }
+      { q: 'When you walk into a party where you only know a few people, you\u2026', a: [
+        { v:'a', t:'Work the room and meet everyone' },
+        { v:'b', t:'Find the people you know and stay close' },
+        { v:'c', t:'Find the most interesting corner and wait for good conversation' },
+        { v:'d', t:'Help the host or find something useful to do' }
+      ]},
+      { q: 'Your idea of a meaningful evening is\u2026', a: [
+        { v:'a', t:'A big dinner with everyone you love' },
+        { v:'b', t:'Deep conversation with one or two people' },
+        { v:'c', t:'Something spontaneous that turns into a story' },
+        { v:'d', t:'Quiet time at home followed by a late call with a close friend' }
+      ]},
+      { q: 'When a friend is going through something hard, you tend to\u2026', a: [
+        { v:'a', t:'Show up with food and stay' },
+        { v:'b', t:'Listen for hours without offering advice' },
+        { v:'c', t:'Send thoughtful messages over time' },
+        { v:'d', t:'Jump into problem-solving mode' }
+      ]},
+      { q: 'The relationship you most want to deepen right now is\u2026', a: [
+        { v:'a', t:'A friendship that\u2019s drifted' },
+        { v:'b', t:'A family member you never really talk to' },
+        { v:'c', t:'A romantic partnership' },
+        { v:'d', t:'Yourself' }
+      ]},
+      { q: 'What do you wish people knew about how you show up?', a: [
+        { v:'a', t:'I care more than I say' },
+        { v:'b', t:'I need more space than people think' },
+        { v:'c', t:'I remember everything' },
+        { v:'d', t:'I\u2019m better in small doses than I seem' }
+      ]}
     ]),
     rj: JSON.stringify([
-      { title: 'The Warm Anchor', body: 'You are the person people come home to. Steady, present, and quietly essential — you hold space without asking for credit. Your superpower is making people feel like they matter, even when you say nothing at all.' },
-      { title: 'The Deep Diver', body: 'Surface conversation exhausts you. You want to know what someone actually thinks — about life, about love, about the thing that happened when they were twelve. You collect real moments like other people collect things.' },
-      { title: 'The Catalyst', body: 'Something shifts when you walk into a room. Not because you\'re loud — because you\'re real. People open up around you without knowing why. You have a rare gift: you make connection feel safe.' },
-      { title: 'The Quiet Keeper', body: 'Your relationships run deep and slow. You don\'t need everyone — you need the right ones. And for those people, you are unforgettable. The kind of friend someone mentions decades later.' }
+      { title: 'The Warm Anchor', body: 'You are the person people come home to. Steady, present, and quietly essential \u2014 you hold space without asking for credit. Your superpower is making people feel like they matter, even when you say nothing at all.' },
+      { title: 'The Deep Diver', body: 'Surface conversation exhausts you. You want to know what someone actually thinks \u2014 about life, about love, about the thing that happened when they were twelve. You collect real moments like other people collect things.' },
+      { title: 'The Catalyst', body: 'Something shifts when you walk into a room. Not because you\u2019re loud \u2014 because you\u2019re real. People open up around you without knowing why. You have a rare gift: you make connection feel safe.' },
+      { title: 'The Quiet Keeper', body: 'Your relationships run deep and slow. You don\u2019t need everyone \u2014 you need the right ones. And for those people, you are unforgettable. The kind of friend someone mentions decades later.' }
     ])
   }
 };
+
+async function openQuiz(recordId) {
+  var cached = QUIZ_CACHE[recordId];
+
+  if (!cached || !cached.qj || cached.qj === '') {
+    try {
+      var res = await fetch('/api/airtable', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({action:'get', table:'Gather Quizzes', recordId: recordId})});
+      var data = await res.json();
+      if (data.fields) {
+        cached = {
+          qj:       data.fields['Questions JSON'] || '',
+          rj:       data.fields['Results JSON']   || '',
+          title:    data.fields.Title    || '',
+          subtitle: data.fields.Subtitle || ''
+        };
+        QUIZ_CACHE[recordId] = cached;
+      }
+    } catch(e) {}
+  }
+
+  if (!cached || !cached.qj || cached.qj === '') {
+    var fb = FALLBACK_QUIZZES['discover-connector'];
+    cached = { qj: fb.qj, rj: fb.rj, title: fb.title, subtitle: fb.subtitle };
+  }
+
+  var questions, results;
+  try {
+    questions = JSON.parse(cached.qj);
+    results   = JSON.parse(cached.rj);
+  } catch(e) {
+    var fb = FALLBACK_QUIZZES['discover-connector'];
+    questions = JSON.parse(fb.qj);
+    results   = JSON.parse(fb.rj);
+    cached.title    = fb.title;
+    cached.subtitle = fb.subtitle;
+  }
+
+  qzState = { questions: questions, results: results, answers: [], current: 0, title: cached.title || '' };
+
+  // Show intro screen first
+  document.getElementById('qzIntroScreen').style.display = 'block';
+  document.getElementById('qzQScreen').style.display     = 'none';
+  document.getElementById('qzRScreen').style.display     = 'none';
+  document.getElementById('qzIntroTitle').textContent    = cached.title    || 'Discover You';
+  document.getElementById('qzIntroSub').textContent      = cached.subtitle || 'A few questions. Something true about you at the end.';
+  document.getElementById('qzIntroCount').textContent    = questions.length + ' questions \u00b7 about 2 minutes';
+  document.getElementById('quizOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
 async function openQuiz(recordId) {
   var cached = QUIZ_CACHE[recordId];
@@ -1883,6 +1976,13 @@ async function openQuiz(recordId) {
 function closeQuiz() {
   document.getElementById('quizOverlay').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+function startQuizQuestions() {
+  document.getElementById('qzIntroScreen').style.display = 'none';
+  document.getElementById('qzQScreen').style.display     = 'block';
+  document.getElementById('qzRScreen').style.display     = 'none';
+  renderQzQuestion();
 }
 
 function renderQzQuestion() {
