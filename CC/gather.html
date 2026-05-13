@@ -59,7 +59,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 /* LOCKED CARD */
 .fc-locked{flex-shrink:0;width:165px;border-radius:20px;padding:14px 12px;cursor:pointer;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px;}
 /* HERO CARD */
-.hero-card{margin:.8rem .9rem 0;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;min-height:220px;}
+.hero-card{margin:.8rem .9rem 0;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;min-height:220px;max-height:calc(100svh - 185px);}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(145deg,#0d2840,#1a1640,#0d2a1a);}
 .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28),transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22),transparent 50%);}
 @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.5)}}
@@ -77,11 +77,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .hero-eyebrow::before{content:'✦';font-size:.75rem;}
 .hero-question{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:var(--cream);line-height:1.42;margin-bottom:.9rem;}
 .hero-icon-bar{display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem;}
-.hib-btn{display:flex;flex-direction:column;align-items:center;gap:.25rem;background:none;border:none;cursor:pointer;padding:.3rem .4rem;}
-.hib-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:rgba(255,255,255,.85);}
-.hib-label{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.hib-btn{display:flex;flex-direction:column;align-items:center;gap:.18rem;background:none;border:none;cursor:pointer;padding:.2rem .3rem;}
+.hib-icon{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:.82rem;color:rgba(255,255,255,.85);}
+.hib-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);}
 /* ── UNIVERSAL RATING ROW ── */
-.cc-rate-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.55rem .5rem .3rem;border-top:1px solid rgba(255,255,255,.05);}
+.cc-rate-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.35rem .5rem .2rem;border-top:1px solid rgba(255,255,255,.05);}
 .cc-rate-btn{display:flex;flex-direction:column;align-items:center;gap:.18rem;background:none;border:none;cursor:pointer;padding:.3rem .6rem;border-radius:8px;transition:all .18s;opacity:.32;}
 .cc-rate-btn:hover{opacity:.65;background:rgba(255,255,255,.05);}
 .cc-rate-btn.selected{opacity:1;}
@@ -247,24 +247,94 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .qz-animate{animation:qzSlideIn .25s ease both;}
 
 @media (min-width: 768px) {
+  /* ── APP WIDTH ── */
   .app          { max-width: 660px !important; }
-  .shelf-row    { overflow-x: visible; flex-wrap: nowrap; }
   .bottom-nav   { max-width: 660px !important; }
-  .fc-brand      { font-size: 24px; }
-  .fc-q          { font-size: 19px; }
-  .fc-deck       { font-size: 16px; }
-  .fc-label      { font-size: 13px; }
-  .fc-tap        { font-size: 12px; }
-  .hero-back-brand { font-size: 30px; }
-  .hero-back-label { font-size: 16px; }
-  .card-big-q    { font-size: 1.5rem; }
-  .card-brand-small { font-size: 15px; }
-  .nav-label     { font-size: .85rem; }
-  .nav-icon      { font-size: 1.2rem; }
-  .shelf-title   { font-size: 1.4rem; }
-  .ww-q          { font-size: 1.2rem; }
-  .thread-text   { font-size: 16px; }
+  .shelf-row    { overflow-x: visible; flex-wrap: nowrap; }
+
+  /* ── FOOTER NAV ── */
+  .nav-label    { font-size: 1rem !important; }
+  .nav-icon     { font-size: 1.3rem !important; }
+  .nav-compose  { width: 50px !important; height: 50px !important; font-size: 1.1rem !important; }
+  .nav          { height: 70px !important; }
+
+  /* ── TOPBAR ── */
+  .topbar-name  { font-size: 1.6rem !important; }
+  .topbar-date  { font-size: .95rem !important; }
+
+  /* ── SHELF TITLES ── */
+  .shelf-title  { font-size: 1.5rem !important; }
+  .shelf-count  { font-size: .9rem !important; }
+
+  /* ── HERO CARD ── */
+  .hero-back-brand  { font-size: 32px !important; }
+  .hero-back-label  { font-size: 17px !important; }
+  .hero-back-tap    { font-size: 13px !important; }
+  .hero-eyebrow     { font-size: .95rem !important; }
+  .hero-question    { font-size: 1.55rem !important; }
+
+  /* ── SHELF CARDS ── */
+  .fc-brand     { font-size: 26px !important; }
+  .fc-deck      { font-size: 17px !important; }
+  .fc-tap       { font-size: 14px !important; }
+  .fc-label     { font-size: 14px !important; }
+  .fc-q         { font-size: 20px !important; }
+  .fc-open      { font-size: 14px !important; }
+  .fc-flip-back { font-size: 13px !important; }
+
+  /* ── WIT & WONDER ── */
+  .ww-type           { font-size: 1.1rem !important; }
+  .ww-q              { font-size: 1.35rem !important; }
+  .ww-tap            { font-size: .95rem !important; }
+  .ww-category-label { font-size: .9rem !important; }
+  .ww-q-big          { font-size: 1.9rem !important; }
+  .ww-reveal-label   { font-size: .88rem !important; }
+  .ww-reveal-text    { font-size: 1.3rem !important; }
+  .ww-reveal-btn     { font-size: 1rem !important; padding: .7rem 2rem !important; }
+
+  /* ── LOCK / UPGRADE FEATURES ── */
+  .upgrade-nudge-icon  { font-size: 12px !important; }
+  .upgrade-nudge-text  { font-size: 16px !important; }
+  .upgrade-nudge-cta   { font-size: 13px !important; }
+  .thread-tier         { font-size: 11px !important; }
+  .thread-text         { font-size: 17px !important; }
+  .thread-waiting-label{ font-size: 11px !important; }
+
+  /* ── CARD OVERLAY ── */
+  .card-big-q       { font-size: 1.7rem !important; }
+  .card-brand-small { font-size: 16px !important; }
+  .card-edition     { font-size: 11px !important; }
+  .card-action      { font-size: 14px !important; padding: 13px !important; }
+
+  /* ── QUIZ ── */
+  .quiz-label  { font-size: 1rem !important; }
+  .quiz-title  { font-size: 1.35rem !important; }
+  .quiz-sub    { font-size: 1rem !important; }
+  .quiz-start  { font-size: .95rem !important; padding: .4rem .9rem !important; }
+
+  /* ── RATING ROW ── */
+  .cc-rate-emoji { font-size: 1.3rem !important; }
+  .cc-rate-label { font-size: .75rem !important; }
+  .cc-share-link { font-size: .85rem !important; }
+
+  /* ── RESPONSE SCREEN ── */
+  .response-echo     { font-size: 1.1rem !important; }
+  .response-label    { font-size: .9rem !important; }
+  .response-textarea { font-size: 1.1rem !important; }
+  .resp-btn          { font-size: .95rem !important; padding: .9rem !important; }
 }
+
+/* ── STANDARD CC NAV ── */
+.cc-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,12,9,.96);border-top:1px solid rgba(201,125,58,.12);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
+.cc-ni{display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;transition:opacity .18s;}
+.cc-ni.active{opacity:1;}
+.cc-ni .cc-ni-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.3);}
+.cc-ni.active .cc-ni-icon{color:#c97d3a;}
+.cc-nl{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.3);}
+.cc-ni.active .cc-nl{color:#c97d3a;}
+.cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
+.cc-ni.active .cc-ni-dot{opacity:1;}
+@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:1rem !important;} .cc-ni-icon,.cc-ni svg{width:26px !important;height:26px !important;}}
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-firebase.js"></script>
@@ -539,36 +609,46 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div style="height:1.2rem;"></div>
   </div><!-- /scroll -->
 
-  <nav style="position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,12,9,.96);border-top:1px solid rgba(201,125,58,.12);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;">
-    <div onclick="window.location.href='gather.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:1;min-width:20%;cursor:pointer;">
-      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#c97d3a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#c97d3a;">Home</div>
-      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:1;"></div>
+  <nav class="cc-nav">
+    <div class="cc-ni active" onclick="window.location.href='gather.html'">
+      <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="cc-nl">Home</div>
+      <div class="cc-ni-dot"></div>
     </div>
-    <div onclick="window.location.href='circles.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
-      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg></div>
-      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.3);">Circles</div>
-      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
+    <div class="cc-ni" onclick="navSecond()">
+      <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg></div>
+      <div class="cc-nl" id="ccNavSecondLbl">Circles</div>
+      <div class="cc-ni-dot"></div>
     </div>
-    <div onclick="window.location.href='games.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
-      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg></div>
-      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.3);">Games</div>
-      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
+    <div class="cc-ni" onclick="window.location.href='games.html'">
+      <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/><circle cx="18" cy="10" r=".8" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r=".8" fill="currentColor" stroke="none"/></svg></div>
+      <div class="cc-nl">Games</div>
+      <div class="cc-ni-dot"></div>
     </div>
-    <div onclick="window.location.href='journal.html'" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
-      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.3);">Journal</div>
-      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
+    <div class="cc-ni" onclick="window.location.href='journal.html'">
+      <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div class="cc-nl">Journal</div>
+      <div class="cc-ni-dot"></div>
     </div>
-    <div onclick="typeof openAccount!=='undefined'&&openAccount('your profile')" style="display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;">
-      <div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.3);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.3);">Me</div>
-      <div style="width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;"></div>
+    <div class="cc-ni" onclick="navMe()">
+      <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="cc-nl" id="ccNavMeLbl">Me</div>
+      <div class="cc-ni-dot"></div>
     </div>
   </nav>
 
 
   <!-- PROFILE PANEL — shown when signed in and Me/avatar is tapped -->
+  <!-- ── SHARE PICKER ── -->
+  <div id="sharePickerOverlay" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);" onclick="closeSharePicker()">
+    <div onclick="event.stopPropagation()" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#080f0a);border-radius:20px 20px 0 0;padding:1.4rem 1.2rem 2rem;border-top:1px solid rgba(201,125,58,0.15);">
+      <div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);margin:0 auto 1.2rem;"></div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.9rem;">How do you want to share this?</div>
+      <div id="sharePickerOptions" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+      <button onclick="closeSharePicker()" style="width:100%;margin-top:.9rem;padding:.65rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;color:rgba(242,232,216,.3);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+
   <div id="profilePanel" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);" onclick="closeProfilePanel()">
     <div onclick="event.stopPropagation()" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#080f0a);border-radius:20px 20px 0 0;padding:1.6rem 1.4rem 2.4rem;border-top:1px solid rgba(201,125,58,0.15);">
       <div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.15);margin:0 auto 1.4rem;"></div>
@@ -597,8 +677,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- Legal links -->
       <div style="display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;">
-        <span onclick="closeProfilePanel();openLegal('tos')" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">Terms of Service</span>
-        <span onclick="closeProfilePanel();openLegal('privacy')" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">Privacy Policy</span>
+        <span onclick="closeProfilePanel();openLegal('tos')" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">Terms</span>
+        <span onclick="closeProfilePanel();openLegal('privacy')" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">Privacy</span>
+        <span onclick="window.location.href='index.html#pricing'" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">View Plans</span>
+        <span onclick="window.location.href='index.html'" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">About</span>
       </div>
     </div>
   </div>
@@ -772,7 +854,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div class="qz-journal-prompt" id="qzJPrompt"></div>
         <button class="qz-journal-btn" onclick="goToJournal()">Open Journal &rarr;</button>
       </div>
-      <button class="qz-done-btn" style="margin-bottom:.5rem;" onclick="shareQuizToCircle()">Share result to Circle →</button>
+      <button class="qz-done-btn" style="margin-bottom:.5rem;" onclick="shareQuizResult()">Share my result →</button>
       <button class="qz-done-btn" onclick="closeQuiz()">Done</button>
     </div>
   </div>
@@ -1359,30 +1441,78 @@ function openLegal(tab) {
   modal.addEventListener('click', function(e){ if(e.target===modal) modal.style.display='none'; });
 }
 
-// ── WEB SHARE API ─────────────────────────────────────────
-function ccShare(title, text, url) {
-  var shareUrl = url || window.location.href;
-  var shareTitle = title || 'Curated Connections';
-  var shareText = text || 'A question that actually makes you think. ✦ joincuratedconnections.com';
+// ── SHARE PICKER ─────────────────────────────────────────────
+var _sharePicker = null;
 
+function closeSharePicker() {
+  document.getElementById('sharePickerOverlay').style.display = 'none';
+  _sharePicker = null;
+}
+
+function showSharePicker(options) {
+  var c = document.getElementById('sharePickerOptions');
+  if (!c) return;
+  c.innerHTML = options.map(function(opt, i) {
+    return '<div onclick="fireShare(' + i + ')" style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;cursor:pointer;">'
+      + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;color:rgba(242,232,216,.9);margin-bottom:.15rem;">' + opt.label + '</div>'
+      + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.75rem;color:rgba(242,232,216,.35);">' + opt.sub + '</div>'
+      + '</div>';
+  }).join('');
+  _sharePicker = options;
+  document.getElementById('sharePickerOverlay').style.display = 'block';
+}
+
+function fireShare(i) {
+  if (!_sharePicker || !_sharePicker[i]) return;
+  var msg = _sharePicker[i].message;
+  closeSharePicker();
   if (navigator.share) {
-    navigator.share({ title: shareTitle, text: shareText, url: shareUrl })
-      .catch(function(e){ if (e.name !== 'AbortError') ccShareFallback(shareText + ' ' + shareUrl); });
-  } else {
-    ccShareFallback(shareText + ' ' + shareUrl);
-  }
+    navigator.share({ text: msg }).catch(function(e){ if (e.name !== 'AbortError') ccShareFallback(msg); });
+  } else { ccShareFallback(msg); }
+}
+
+// Card share — shows picker with 3 human options
+function ccShareCard(context) {
+  var q = '';
+  if (context === 'hero') q = (document.getElementById('heroQ') || {}).textContent || '';
+  else if (context === 'overlay') q = (document.getElementById('cardBigQ') || {}).textContent || '';
+  q = q.replace(/^"|"$/g, '').trim();
+  var u = 'https://joincuratedconnections.com';
+  var ql = q ? '\n\n"' + q + '"\n\n' : '\n\n';
+  showSharePicker([
+    { label: 'This question really got me.', sub: "I'm curious how you'd answer it.", message: 'This question really got me. I\'m curious how you\'d answer it.' + ql + u },
+    { label: 'Check this out — connect with me.', sub: 'Come do this with me.', message: 'Check this out — connect with me.' + ql + u },
+    { label: 'This one made me think of you.', sub: 'Specifically you.', message: 'This one made me think of you.' + ql + u }
+  ]);
+}
+
+// General share — no card context
+function ccShare() {
+  var u = 'https://joincuratedconnections.com';
+  showSharePicker([
+    { label: 'Look at this site I found.', sub: "Let's do this together.", message: 'Look at this site I found — let\'s do this together.\n\n' + u },
+    { label: 'Check this out — connect with me.', sub: 'Come do this with me.', message: 'Check this out — connect with me.\n\n' + u },
+    { label: 'This made me think of you.', sub: 'Come see why.', message: 'This made me think of you. Come see why.\n\n' + u }
+  ]);
+}
+
+// Quiz result share — auto-generates from actual result, no picker needed
+function shareQuizResult() {
+  var title   = (document.getElementById('qzRTitle') || {}).textContent || '';
+  var body    = (document.getElementById('qzRBody')  || {}).textContent || '';
+  var quiz    = qzState.title || 'the quiz';
+  var snippet = body.split('.')[0];
+  if (snippet.length > 90) snippet = snippet.substring(0, 87) + '\u2026';
+  var msg = 'I got "' + title + '" on ' + quiz + '. ' + snippet + '.\n\njoincuratedconnections.com';
+  if (navigator.share) {
+    navigator.share({ text: msg }).catch(function(e){ if (e.name !== 'AbortError') ccShareFallback(msg); });
+  } else { ccShareFallback(msg); }
 }
 
 function ccShareFallback(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function(){
-      showToast('Copied to clipboard ✦');
-    }).catch(function(){
-      showToast('Copy this link: joincuratedconnections.com');
-    });
-  } else {
-    showToast('Share: joincuratedconnections.com');
-  }
+    navigator.clipboard.writeText(text).then(function(){ showToast('Copied ✦'); }).catch(function(){ showToast('joincuratedconnections.com'); });
+  } else { showToast('joincuratedconnections.com'); }
 }
 
 // ── RESPONSE PHOTO + VOICE ────────────────────────────────────
@@ -1683,6 +1813,26 @@ async function signOut() {
 var QUIZ_CACHE = {};
 var qzState = {questions:[], results:{}, answers:[], current:0, title:''};
 
+// ── FALLBACK QUIZ DATA (works without Airtable content) ─────────
+var FALLBACK_QUIZZES = {
+  'discover-connector': {
+    title: 'What Kind of Connector Are You?',
+    qj: JSON.stringify([
+      { q: 'When you walk into a party where you only know a few people, you…', opts: ['Work the room and meet everyone', 'Find the people you know and stay close', 'Find the most interesting corner and wait for good conversation', 'Help the host or find something useful to do'] },
+      { q: 'Your idea of a meaningful evening is…', opts: ['A big dinner with everyone you love', 'Deep conversation with one or two people', 'Something spontaneous that turns into a story', 'Quiet time at home followed by a late call with a close friend'] },
+      { q: 'When a friend is going through something hard, you tend to…', opts: ['Show up with food and stay', 'Listen for hours without offering advice', 'Send thoughtful messages over time', 'Jump into problem-solving mode'] },
+      { q: 'The relationship you most want to deepen right now is…', opts: ['A friendship that\'s drifted', 'A family member you never really talk to', 'A romantic partnership', 'Yourself'] },
+      { q: 'What do you wish people knew about how you show up in relationships?', opts: ['I care more than I say', 'I need more space than people think', 'I remember everything', 'I\'m better in small doses than I seem'] }
+    ]),
+    rj: JSON.stringify([
+      { title: 'The Warm Anchor', body: 'You are the person people come home to. Steady, present, and quietly essential — you hold space without asking for credit. Your superpower is making people feel like they matter, even when you say nothing at all.' },
+      { title: 'The Deep Diver', body: 'Surface conversation exhausts you. You want to know what someone actually thinks — about life, about love, about the thing that happened when they were twelve. You collect real moments like other people collect things.' },
+      { title: 'The Catalyst', body: 'Something shifts when you walk into a room. Not because you\'re loud — because you\'re real. People open up around you without knowing why. You have a rare gift: you make connection feel safe.' },
+      { title: 'The Quiet Keeper', body: 'Your relationships run deep and slow. You don\'t need everyone — you need the right ones. And for those people, you are unforgettable. The kind of friend someone mentions decades later.' }
+    ])
+  }
+};
+
 async function openQuiz(recordId) {
   var cached = QUIZ_CACHE[recordId];
 
@@ -1701,20 +1851,28 @@ async function openQuiz(recordId) {
         };
         QUIZ_CACHE[recordId] = cached;
       }
-    } catch(e) { showToast('Quiz unavailable right now'); return; }
+    } catch(e) {}
   }
 
-  if (!cached || !cached.qj || cached.qj === '') { showToast('Quiz content still loading\u2026'); return; }
+  // If still empty after fetch — use fallback quiz
+  if (!cached || !cached.qj || cached.qj === '') {
+    var fb = FALLBACK_QUIZZES['discover-connector'];
+    cached = { qj: fb.qj, rj: fb.rj, title: fb.title };
+  }
 
   var questions, results;
   try {
     questions = JSON.parse(cached.qj);
-    results = JSON.parse(cached.rj);
-  } catch(e) { showToast('Quiz unavailable right now'); return; }
+    results   = JSON.parse(cached.rj);
+  } catch(e) {
+    var fb = FALLBACK_QUIZZES['discover-connector'];
+    questions = JSON.parse(fb.qj);
+    results   = JSON.parse(fb.rj);
+    cached.title = fb.title;
+  }
 
   qzState = {questions: questions, results: results, answers: [], current: 0, title: cached.title || ''};
 
-  // Reset UI
   document.getElementById('qzQScreen').style.display = 'block';
   document.getElementById('qzRScreen').style.display = 'none';
   document.getElementById('quizOverlay').classList.add('open');
@@ -2032,6 +2190,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var pages = { circles: 'circles.html', journal: 'journal.html', games: 'games.html', legacy: 'legacy.html' };
     if (pages[returnTo]) window.location.href = pages[returnTo];
   }
+  // Open profile panel if redirected here with ?profile=1
+  if (params.get('profile') === '1') {
+    setTimeout(function(){ if (CC.getUser()) openProfilePanel(); }, 800);
+  }
 });
 
 
@@ -2118,6 +2280,37 @@ async function loadQuizSection(){
 }
 
 </script>
+
+
+// ── STANDARD NAV FUNCTIONS ────────────────────────────────────
+function navMe() {
+  var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
+  if (u) {
+    if (typeof openProfilePanel === 'function') { openProfilePanel(); }
+    else { window.location.href = 'gather.html?profile=1'; }
+  } else {
+    if (typeof openAccount === 'function') {
+      openAccount('sign in');
+      if (typeof showSigninTab === 'function') showSigninTab();
+    } else { window.location.href = 'gather.html?signin=1'; }
+  }
+}
+function navSecond() {
+  var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
+  window.location.href = u ? 'circles.html' : 'gather.html';
+}
+function updateNavLabels() {
+  var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
+  var ml = document.getElementById('ccNavMeLbl');
+  var sl = document.getElementById('ccNavSecondLbl');
+  if (ml) ml.textContent = u ? 'Me' : 'Sign In';
+  if (sl) sl.textContent = u ? 'Circles' : 'Gather';
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateNavLabels);
+} else { updateNavLabels(); }
+// Re-run after auth loads
+setTimeout(updateNavLabels, 1200);
 
 </body>
 </html>
