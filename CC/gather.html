@@ -18,7 +18,7 @@ html{font-size:16px;-webkit-text-size-adjust:100%;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--ink);font-family:'DM Sans',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;}
 body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");background-size:160px;pointer-events:none;z-index:9999;opacity:.4;}
-.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;background:var(--ink);position:relative;overflow:hidden;}
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;background:var(--ink);position:relative;}
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem .7rem;position:sticky;top:0;z-index:50;background:rgba(6,12,9,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05);}
 .topbar-name{font-family:'Pacifico',cursive;font-size:1.2rem;color:var(--amber);}
@@ -37,10 +37,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;}
 .shelf-row::-webkit-scrollbar{display:none;}
 /* FLIP CARD SYSTEM */
-.fc-scene{flex-shrink:0;width:200px;}
-.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:195px;transition:transform 0.15s ease;}
+.fc-scene{flex-shrink:0;width:195px;}
+.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:215px;transition:transform 0.15s ease;}
 .fc-inner.squish{transform:scaleX(0);}
-.fc-back,.fc-front{position:absolute;inset:0;border-radius:20px;}
+.fc-back{position:absolute;inset:0;border-radius:20px;}.fc-front{position:relative;border-radius:20px;min-height:215px;}
 .fc-back{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 16px;}
 .fc-back-shine{position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(255,255,255,.12),transparent 50%);pointer-events:none;}
 .fc-back-hatch{position:absolute;inset:0;opacity:.05;pointer-events:none;}
@@ -59,7 +59,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 /* LOCKED CARD */
 .fc-locked{flex-shrink:0;width:165px;border-radius:20px;padding:14px 12px;cursor:pointer;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px;}
 /* HERO CARD */
-.hero-card{margin:.8rem .9rem 0;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;min-height:220px;max-height:calc(100svh - 185px);}
+.hero-card{margin:.8rem .9rem;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;min-height:220px;max-height:calc(100svh - 185px);}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(145deg,#0d2840,#1a1640,#0d2a1a);}
 .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28),transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22),transparent 50%);}
 @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.5)}}
@@ -120,9 +120,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .nav-item.active .nav-label{color:var(--amber2);}
 .nav-compose{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(201,125,58,.4);margin-top:-9px;border:2.5px solid var(--ink);}
 /* CARD OVERLAY */
-.card-overlay{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto;}
+.card-overlay{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto;background:#03060a;}
 .card-overlay.open{display:block;}
-.card-screen{min-height:100vh;padding:1.3rem 1.3rem 2.5rem;display:flex;flex-direction:column;}
+.card-screen{min-height:100%;max-width:430px;margin:0 auto;padding:1.3rem 1.3rem 2.5rem;display:flex;flex-direction:column;background:#03060a;}
 .card-close{background:none;border:none;color:rgba(255,255,255,.45);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;align-self:flex-start;margin-bottom:.5rem;padding:0;}
 .card-brand-small{font-family:'Pacifico',cursive;font-size:12px;color:var(--amber);opacity:.45;margin-top:1.6rem;margin-bottom:4px;}
 .card-edition{font-family:'Nunito',sans-serif;font-size:8px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;margin-bottom:11px;}
@@ -283,6 +283,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   .fc-tap       { font-size: 14px !important; }
   .fc-label     { font-size: 14px !important; }
   .fc-q         { font-size: 20px !important; }
+  .fc-front     { min-height:260px !important; padding: 16px 16px 14px !important; }
   .fc-open      { font-size: 14px !important; }
   .fc-flip-back { font-size: 13px !important; }
 
@@ -341,6 +342,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-ni.active .cc-nl{color:#c97d3a;}
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
+@media(min-width:431px){.card-screen{max-width:660px !important;}}
 @media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:.67rem !important;color:rgba(244,236,220,.6) !important;} .cc-ni-icon,.cc-ni svg{width:20px !important;height:20px !important;}}
 </style>
 <script src="/cc-auth.js"></script>
@@ -572,7 +574,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div id="myFeedShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header" style="padding:.5rem 1rem .4rem;display:flex;align-items:center;justify-content:space-between;">
         <div class="shelf-title">My Feed</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;color:rgba(201,125,58,.6);cursor:pointer;" onclick="window.location.href='profile.html'">See all →</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.55);cursor:pointer;" onclick="showToast('Full feed coming soon ✦')">My Feed</div>
       </div>
       <div id="myFeedList" style="padding:0 .8rem;"></div>
     </div>
@@ -1181,6 +1183,8 @@ function fcTap(inner) {
       front.style.display = 'block';
       inner.style.background = LIVE_CARDS[inner.dataset.key] ? LIVE_CARDS[inner.dataset.key].bg : '';
       inner.style.transform = 'scaleX(1)';
+      inner.style.overflow = 'visible';
+      inner.style.height = 'auto';
       inner.dataset.state = 'front';
     }, 150);
   } else {
@@ -1199,6 +1203,8 @@ function fcFlipBack(inner) {
     inner.querySelector('.fc-back').style.display = 'flex';
     inner.style.background = dk.backBg;
     inner.style.transform = 'scaleX(1)';
+    inner.style.overflow = 'hidden';
+    inner.style.height = '';
     inner.dataset.state = 'back';
   }, 150);
 }
@@ -1645,7 +1651,20 @@ function applyProfilePic(dataUrl) {
 function loadSavedProfilePic() {
   try {
     var saved = localStorage.getItem('cc_profile_pic');
-    if (saved) applyProfilePic(saved);
+    if (saved && saved.length > 100) {
+      applyProfilePic(saved);
+    } else {
+      // No photo — ensure initial is set from user name
+      var u = null;
+      try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e2) {}
+      if (u) {
+        var initial = (u.name || u.email || 'U').charAt(0).toUpperCase();
+        var tb = document.getElementById('topbarAvatar');
+        var pp = document.getElementById('ppAvatar');
+        if (tb && !tb.querySelector('img')) tb.textContent = initial;
+        if (pp && !pp.querySelector('img')) pp.innerHTML = initial;
+      }
+    }
   } catch(e) {}
 }
 
@@ -2332,11 +2351,7 @@ function showMyFeedSection() {
     if (!feed.length) { shelf.style.display = 'none'; return; }
     shelf.style.display = 'block';
 
-    var visIcon  = {
-      private: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
-      gift:    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
-      public:  '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-    };
+    var visIcon  = { private:'◉', gift:'◎', public:'◉' };
     var visColor = { private:'rgba(242,232,216,.25)', gift:'rgba(201,125,58,.55)', public:'rgba(58,173,144,.65)' };
     var visLabel = { private:'Private', gift:'In the gift', public:'Public' };
 
@@ -2363,10 +2378,7 @@ function showMyFeedSection() {
 
 function cycleFeedVisibility(id) {
   var order = ['private','public'];
-  var visIcon  = {
-    private: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
-    public:  '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-  };
+  var visIcon  = { private:'◉', public:'◎' };
   var visColor = { private:'rgba(242,232,216,.25)', public:'rgba(58,173,144,.65)' };
   var visLabel = { private:'Private', public:'Public' };
   try {

@@ -23,6 +23,7 @@ html{font-size:18px;-webkit-text-size-adjust:100%;}
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--ivory);font-family:'DM Sans',sans-serif;color:var(--bark);-webkit-font-smoothing:antialiased;}
+@media(min-width:431px){html,body{background:#f5ede0;} .app{max-width:660px !important;} .tree-screen,.story-screen,.leaf-screen,.import-screen,.seal-screen{max-width:660px !important;}}
 
 /* Parchment grain */
 body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
@@ -283,7 +284,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 .cc-ni.active .cc-nl{color:#c97d3a;}
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
-@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:1rem !important;} .cc-ni-icon,.cc-ni svg{width:26px !important;height:26px !important;}}
+@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:.67rem !important;color:rgba(244,236,220,.6) !important;} .cc-ni-icon,.cc-ni svg{width:20px !important;height:20px !important;}}
 /* ── VISIBILITY TOGGLE ── */
 .vis-opt{
   padding:.35rem .75rem;border-radius:999px;
@@ -340,8 +341,8 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     <!-- GREETING -->
     <div class="greeting" style="padding:2.2rem 1.4rem 1rem;">
       <div class="greeting-label">Living Legacy</div>
-      <div class="greeting-title" style="font-size:1.7rem;font-weight:300;margin-bottom:.5rem;line-height:1.25;">Every life deserves<br>to be remembered fully.</div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:.85rem;color:rgba(184,134,11,.55);line-height:1.6;">Start with the tree. Find a person. Begin their story.</div>
+      <div class="greeting-title" style="font-size:1.7rem;font-weight:300;margin-bottom:.5rem;line-height:1.25;">Every story deserves<br>to be told.</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:.85rem;color:rgba(184,134,11,.55);line-height:1.6;">Start a leaf for someone you love. Capture their story before the moment passes.</div>
     </div>
 
     <!-- ENTER THE TREE — primary CTA -->
