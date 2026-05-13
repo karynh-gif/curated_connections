@@ -461,6 +461,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   gtag("js", new Date());
   gtag("config", "G-CSCN4MBVZ0");
 </script>
+  <script src="/rate-experience.js" defer></script>
 </head>
 <body>
 <div class="app">
@@ -676,7 +677,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="cc-nl">Journal</div>
       <div class="cc-ni-dot"></div>
     </div>
-    <div class="cc-ni" onclick="(typeof CC!=='undefined'&&CC.getUser&&CC.getUser())?openProfilePanel():openAccount('create your free account')">
+    <div class="cc-ni" onclick="openProfilePanel()">
       <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div class="cc-nl" id="ccNavMeLbl">Me</div>
       <div class="cc-ni-dot"></div>
@@ -1482,7 +1483,18 @@ if (fbAuth) {
 
 function openProfilePanel() {
   var u = CC.getUser ? CC.getUser() : null;
-  if (!u) return;
+
+  if (!u) {
+    // Not logged in — show sign in / create account options
+    document.getElementById('ppAvatar').textContent = '?';
+    document.getElementById('ppName').textContent = 'Not signed in';
+    document.getElementById('ppTier').textContent = 'Free';
+    document.getElementById('ppUpgradeRow').style.display = 'none';
+    document.getElementById('ppBillingRow').style.display = 'none';
+    document.getElementById('profilePanel').style.display = 'block';
+    return;
+  }
+
   // Populate panel
   var initial = (u.name || 'U').charAt(0).toUpperCase();
   document.getElementById('ppAvatar').textContent = initial;
@@ -1490,11 +1502,9 @@ function openProfilePanel() {
   var tier = u.tier || 'free';
   var tierLabels = { free:'Free', connect:'Connect', insight:'Insight', legacy:'Legacy', founder:'Legacy' };
   document.getElementById('ppTier').textContent = (tierLabels[tier] || tier) + ' Member';
-  // Show/hide upgrade vs billing
   var isPaid = (tier !== 'free');
   document.getElementById('ppUpgradeRow').style.display = isPaid ? 'none' : 'block';
   document.getElementById('ppBillingRow').style.display = isPaid ? 'block' : 'none';
-  // Set upgrade link based on tier
   var links = { free: CC_CONFIG.stripe.connect.paymentLink, connect: CC_CONFIG.stripe.insight.paymentLink, insight: CC_CONFIG.stripe.legacy.paymentLink };
   var upgradeLabels = { free: 'Upgrade to Connect →', connect: 'Upgrade to Insight →', insight: 'Upgrade to Legacy →' };
   if (!isPaid || tier === 'connect' || tier === 'insight') {
@@ -3012,6 +3022,9 @@ document.addEventListener('DOMContentLoaded', function() {
   showMyFeedSection();
   showAddToHomePrompt();
   loadDailyUplift();
+  // Rate experience
+  setTimeout(function(){ injectRateExperience('scroll'); }, 5000);
+
   loadSavedProfilePic();
 
   // Auto-open signup modal if redirected from another page

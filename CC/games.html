@@ -285,6 +285,7 @@ body::before{content:"";position:fixed;inset:0;
 </script>
   <link rel="stylesheet" href="/atmosphere.css"/>
   <script src="/atmosphere.js" defer></script>
+  <script src="/rate-experience.js" defer></script>
 </head>
 <body style="background:#06060f;">
 <div class="app">
@@ -837,6 +838,9 @@ var TIER_RANK = { free: 0, connect: 1, insight: 2, legacy: 3 };
 
 // ── ON PAGE LOAD ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
+  // Rate experience
+  setTimeout(function(){ injectRateExperience('gameScroll'); }, 5000);
+
   loadDeckSection();
 });
 

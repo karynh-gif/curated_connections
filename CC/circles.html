@@ -253,6 +253,7 @@ body::before{content:"";position:fixed;inset:0;
 </script>
   <link rel="stylesheet" href="/atmosphere.css"/>
   <script src="/atmosphere.js" defer></script>
+  <script src="/rate-experience.js" defer></script>
 </head>
 <body>
 <div class="app">
@@ -338,6 +339,9 @@ body::before{content:"";position:fixed;inset:0;
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Rate experience
+  setTimeout(function(){ injectRateExperience('circles-scroll'); }, 5000);
+
   const user = CC.getUser ? CC.getUser() : null;
 
   // Initialize card actions

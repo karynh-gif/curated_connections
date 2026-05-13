@@ -307,6 +307,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
   gtag("js", new Date());
   gtag("config", "G-CSCN4MBVZ0");
 </script>
+  <script src="/rate-experience.js" defer></script>
 </head>
 <body>
 <div class="app">
@@ -1859,6 +1860,9 @@ function undoDelete() {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Rate experience
+  setTimeout(function(){ injectRateExperience('scroll'); }, 5000);
+
   loadRecentLeaves();
   if (!CC.hasFeature('living_legacy')) {
     // Show upgrade gate over the leaf creation
