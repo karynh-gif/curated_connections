@@ -1759,6 +1759,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
+<script>
 // ── STANDARD NAV FUNCTIONS ────────────────────────────────────
 function navMe() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
@@ -1786,8 +1787,7 @@ function updateNavLabels() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', updateNavLabels);
 } else { updateNavLabels(); }
-// Re-run after auth loads
 setTimeout(updateNavLabels, 1200);
-
+</script>
 </body>
 </html>
