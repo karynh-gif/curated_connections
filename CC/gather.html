@@ -622,10 +622,19 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     </div>
 
     <!-- MY CIRCLES -->
-    <!-- ── SOCIAL BLOCK: Circles · What's New · Reflect ── -->
+    <!-- ── SOCIAL BLOCK ── -->
     <div style="margin:.4rem 0 0;">
 
-      <!-- Header -->
+      <!-- What's new -->
+      <div id="myFeedShelf" style="display:none;margin:0 0 .2rem;">
+        <div style="padding:.5rem 1rem .2rem;display:flex;align-items:baseline;justify-content:space-between;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">✦ What's new</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(201,125,58,.5);cursor:pointer;" onclick="window.location.href='circles.html'">Full feed →</div>
+        </div>
+        <div id="myFeedList" style="padding:0 .9rem;"></div>
+      </div>
+
+      <!-- Circles header -->
       <div style="padding:.5rem 1rem .2rem;display:flex;align-items:baseline;justify-content:space-between;">
         <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--cream);">Circles</div>
         <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.6);cursor:pointer;" onclick="window.location.href='circles.html'">See all →</div>
@@ -644,7 +653,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.4rem;">
           <div id="reflectRetention" style="font-size:.62rem;color:rgba(242,232,216,.18);font-style:italic;font-family:'DM Sans',sans-serif;"></div>
           <div style="display:flex;align-items:center;gap:.6rem;">
-            <!-- Also save to journal toggle -->
             <div onclick="toggleJournalSave()" style="display:flex;align-items:center;gap:.3rem;cursor:pointer;" id="journalToggleRow">
               <div id="journalToggleBtn" style="width:24px;height:13px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);position:relative;transition:all .2s;flex-shrink:0;">
                 <div id="journalToggleKnob" style="position:absolute;top:1px;left:1px;width:9px;height:9px;border-radius:50%;background:rgba(242,232,216,.35);transition:all .2s;"></div>
@@ -656,14 +664,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         </div>
       </div>
 
-      <!-- What's new -->
-      <div id="myFeedShelf" style="display:none;border-top:1px solid rgba(255,255,255,.05);margin:.2rem .9rem 0;padding:.6rem 0 0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
-          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">✦ What's new</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(201,125,58,.5);cursor:pointer;" onclick="window.location.href='circles.html'">Full feed →</div>
-        </div>
-        <div id="myFeedList"></div>
-      </div>
+    </div><!-- /social block -->
+    <div style="margin:.4rem 0 0;">
 
     </div><!-- /social block -->
 
