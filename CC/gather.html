@@ -2377,8 +2377,7 @@ function saveToFeed(type) {
     post.title   = (document.getElementById('qzRTitle') || {}).textContent || '';
     post.body    = (document.getElementById('qzRBody')  || {}).textContent || '';
     post.quiz    = qzState.title || '';
-    post.snippet = post.body.split('.')[0];
-    if (post.snippet.length > 120) post.snippet = post.snippet.substring(0,117) + '\u2026';
+    post.snippet = post.body; // full body — no truncation for quiz results
   }
 
   // Save locally regardless of login
@@ -2442,7 +2441,7 @@ function showMyFeedSection() {
         + '</div></div>'
         + (p.title ? '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;color:rgba(242,232,216,.9);margin-bottom:.2rem;">' + p.title + '</div>' : '')
         + (p.question && p.type === 'card' ? '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:.82rem;color:rgba(242,232,216,.35);margin-bottom:.2rem;">' + p.question.substring(0,80) + (p.question.length>80?'\u2026':'') + '</div>' : '')
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.5;">' + (p.snippet || p.body || '').substring(0,120) + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.55;">' + (p.type === 'quiz' ? (p.body || p.snippet || '') : (p.snippet || p.body || '').substring(0,120)) + '</div>'
         + '</div>';
     }).join('');
     document.getElementById('myFeedList').innerHTML = html;
