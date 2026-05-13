@@ -1,232 +1,258 @@
 /**
  * CC Atmosphere — Particle Engine
- * Drifting embers, floating dust, quiet storytelling energy.
- * Only runs on screens ≥ 520px. Ultra-lightweight.
- * No dependencies. No impact on app performance.
- *
- * On tablet (768px+): deeper atmosphere, frame glow, fireflies.
- * Content container is NEVER touched — always 430px.
+ * Real sparkles. Real fireflies. Starlit nighttime space.
+ * Only runs on screens ≥ 520px.
  */
 (function() {
   'use strict';
 
   if (window.innerWidth < 520) return;
 
-  const isTablet = () => window.innerWidth >= 768;
+  var tablet  = function() { return window.innerWidth >= 768; };
+  var appW    = function() { return window.innerWidth >= 1024 ? 660 : window.innerWidth >= 768 ? 600 : 430; };
 
   function injectAtmosphere() {
     if (document.getElementById('cc-atmosphere')) return;
 
-    const atm = document.createElement('div');
+    var atm = document.createElement('div');
     atm.id = 'cc-atmosphere';
     atm.className = 'cc-atmosphere';
-    atm.innerHTML = `
-      <div class="cc-atm-glow-1"></div>
-      <div class="cc-atm-glow-2"></div>
-      <div class="cc-atm-glow-3"></div>
-      <div class="cc-atm-glow-4"></div>
-      <canvas id="cc-particles"></canvas>
-      <div class="cc-atm-vignette"></div>
-    `;
+    atm.innerHTML =
+      '<div class="cc-atm-glow-1"></div>' +
+      '<div class="cc-atm-glow-2"></div>' +
+      '<div class="cc-atm-glow-3"></div>' +
+      '<div class="cc-atm-glow-4"></div>' +
+      '<canvas id="cc-particles"></canvas>' +
+      '<div class="cc-atm-vignette"></div>';
     document.body.insertBefore(atm, document.body.firstChild);
 
-    const lp = document.createElement('div');
+    var lp = document.createElement('div');
     lp.className = 'cc-atm-left-panel';
     document.body.appendChild(lp);
 
-    const rp = document.createElement('div');
+    var rp = document.createElement('div');
     rp.className = 'cc-atm-right-panel';
     document.body.appendChild(rp);
 
-    // Tablet only: inject the frame glow behind the 430px container
-    if (isTablet()) {
-      const fg = document.createElement('div');
+    if (tablet()) {
+      // Frame glow
+      var fg = document.createElement('div');
       fg.id = 'cc-frame-glow';
       document.body.appendChild(fg);
+      // Edge fades — dissolve the hard line
+      var el = document.createElement('div');
+      el.id = 'cc-edge-fade-left';
+      document.body.appendChild(el);
+      var er = document.createElement('div');
+      er.id = 'cc-edge-fade-right';
+      document.body.appendChild(er);
     }
 
     initParticles();
   }
 
   function initParticles() {
-    const canvas = document.getElementById('cc-particles');
+    var canvas = document.getElementById('cc-particles');
     if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width  = window.innerWidth;
+    var H = canvas.height = window.innerHeight;
 
-    const ctx = canvas.getContext('2d');
-    let W = canvas.width  = window.innerWidth;
-    let H = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', function() {
       W = canvas.width  = window.innerWidth;
       H = canvas.height = window.innerHeight;
     });
 
-    // App canvas is ALWAYS 430px — content width never changes
-    const APP_W = 430;
+    // Particle counts — tablet gets real atmosphere
+    var COUNT_FIREFLY = tablet() ? 22 : 0;
+    var COUNT_SPARKLE = tablet() ? 35 : 14;
+    var COUNT_STAR    = tablet() ? 50 : 20;
+    var TOTAL = COUNT_FIREFLY + COUNT_SPARKLE + COUNT_STAR;
 
     function getAppBounds() {
-      const appW = Math.min(APP_W, W);
-      const left  = (W - appW) / 2;
-      const right = left + appW;
-      return { left, right, w: appW };
+      var aw   = Math.min(appW(), W);
+      var left = (W - aw) / 2;
+      return { left: left, right: left + aw, w: aw };
     }
 
-    // More particles on tablet — richer side-zone atmosphere
-    const PARTICLE_COUNT = isTablet() ? 46 : 28;
-    const particles = [];
-
-    function randomEdge(bounds) {
-      const side = Math.random() < 0.5 ? 'left' : 'right';
-      let x;
-      if (side === 'left' && bounds.left > 20) {
-        x = Math.random() * bounds.left;
-      } else if (side === 'right' && (W - bounds.right) > 20) {
-        x = bounds.right + Math.random() * (W - bounds.right);
-      } else {
-        x = Math.random() < 0.5 ? Math.random() * 80 : W - Math.random() * 80;
-      }
-      return x;
+    function sideX(bounds) {
+      var side = Math.random() < 0.5 ? 'left' : 'right';
+      if (side === 'left'  && bounds.left  > 10) return Math.random() * bounds.left;
+      if (side === 'right' && W - bounds.right > 10) return bounds.right + Math.random() * (W - bounds.right);
+      return Math.random() < 0.5 ? Math.random() * 60 : W - Math.random() * 60;
     }
 
-    function createParticle(bounds) {
-      const type = Math.random();
-      const tablet = isTablet();
+    var particles = [];
 
-      let p = {
-        x:          randomEdge(bounds),
-        y:          Math.random() * H,
-        vy:         -(0.12 + Math.random() * 0.28),
-        vx:         (Math.random() - 0.5) * 0.15,
-        life:       Math.random(),
-        lifeSpeed:  0.0008 + Math.random() * 0.001,
-        maxSize:    0,
-        type:       'dust',
-        maxAlpha:   0,
-        wobble:     Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.008 + Math.random() * 0.012,
-        color:      '',
+    function makeFirefly(bounds) {
+      return {
+        type: 'firefly',
+        x: sideX(bounds),
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: -(0.05 + Math.random() * 0.12),
+        life: Math.random(),
+        lifeSpeed: 0.0003 + Math.random() * 0.0004,
+        size: 2.2 + Math.random() * 2.0,
+        maxAlpha: 0.55 + Math.random() * 0.35,  // BRIGHT — actually visible
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.006 + Math.random() * 0.01,
+        hue: 140 + Math.random() * 50,           // cool green-teal
+        sat: 55 + Math.random() * 25,
+        lit: 62 + Math.random() * 22,
       };
-
-      if (type < 0.18) {
-        // Ember — warm amber
-        p.type     = 'ember';
-        p.maxSize  = 1.2 + Math.random() * 1.4;
-        p.maxAlpha = tablet ? 0.22 + Math.random() * 0.22 : 0.18 + Math.random() * 0.20;
-        p.vy       = -(0.18 + Math.random() * 0.35);
-        p.color    = `hsl(${25 + Math.random() * 20}, 80%, ${55 + Math.random() * 20}%)`;
-
-      } else if (type < 0.30 && tablet) {
-        // Firefly — tablet only. Cool blue-green, slow drift, gentle pulse
-        p.type     = 'firefly';
-        p.maxSize  = 0.9 + Math.random() * 1.1;
-        p.maxAlpha = 0.13 + Math.random() * 0.17;
-        p.vy       = -(0.03 + Math.random() * 0.09);
-        p.vx       = (Math.random() - 0.5) * 0.06;
-        p.lifeSpeed = 0.0003 + Math.random() * 0.0005;
-        p.color    = `hsl(${150 + Math.random() * 45}, 55%, ${62 + Math.random() * 22}%)`;
-
-      } else if (type < 0.58) {
-        // Dust mote
-        p.type     = 'dust';
-        p.maxSize  = 0.6 + Math.random() * 0.8;
-        p.maxAlpha = tablet ? 0.10 + Math.random() * 0.12 : 0.08 + Math.random() * 0.10;
-        p.vy       = -(0.05 + Math.random() * 0.18);
-        p.color    = `rgba(220, 200, 160, 1)`;
-
-      } else {
-        // Star — stationary twinkle
-        p.type     = 'star';
-        p.maxSize  = 0.5 + Math.random() * 0.7;
-        p.maxAlpha = tablet ? 0.16 + Math.random() * 0.18 : 0.12 + Math.random() * 0.16;
-        p.vy       = -0.02;
-        p.vx       = 0;
-        p.lifeSpeed = 0.0005 + Math.random() * 0.0008;
-        p.color    = `rgba(240, 225, 195, 1)`;
-      }
-
-      return p;
     }
 
-    const bounds = getAppBounds();
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const p = createParticle(bounds);
-      p.life = Math.random();
+    function makeSparkle(bounds) {
+      return {
+        type: 'sparkle',
+        x: sideX(bounds),
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -(0.08 + Math.random() * 0.22),
+        life: Math.random(),
+        lifeSpeed: 0.0006 + Math.random() * 0.0008,
+        size: 1.4 + Math.random() * 1.8,
+        maxAlpha: tablet() ? 0.45 + Math.random() * 0.40 : 0.18 + Math.random() * 0.20,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.01 + Math.random() * 0.015,
+        // Warm amber-gold sparkles
+        hue: 28 + Math.random() * 22,
+        sat: 75 + Math.random() * 20,
+        lit: 60 + Math.random() * 25,
+      };
+    }
+
+    function makeStar(bounds) {
+      return {
+        type: 'star',
+        x: sideX(bounds),
+        y: Math.random() * H,
+        vx: 0, vy: -0.015,
+        life: Math.random(),
+        lifeSpeed: 0.0004 + Math.random() * 0.0006,
+        size: 0.6 + Math.random() * 1.0,
+        maxAlpha: tablet() ? 0.30 + Math.random() * 0.35 : 0.12 + Math.random() * 0.16,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: 0.005 + Math.random() * 0.008,
+        hue: 38 + Math.random() * 20,
+        sat: 35 + Math.random() * 30,
+        lit: 80 + Math.random() * 15,
+      };
+    }
+
+    var bounds = getAppBounds();
+    for (var i = 0; i < TOTAL; i++) {
+      var p;
+      if (i < COUNT_FIREFLY) p = makeFirefly(bounds);
+      else if (i < COUNT_FIREFLY + COUNT_SPARKLE) p = makeSparkle(bounds);
+      else p = makeStar(bounds);
       particles.push(p);
     }
 
-    function drawParticle(p) {
-      let alpha;
-      if      (p.life < 0.2) alpha = p.life / 0.2;
-      else if (p.life < 0.8) alpha = 1;
-      else                   alpha = 1 - (p.life - 0.8) / 0.2;
+    function alpha(p) {
+      var a;
+      if      (p.life < 0.15) a = p.life / 0.15;
+      else if (p.life < 0.82) a = 1;
+      else                    a = 1 - (p.life - 0.82) / 0.18;
+      return a * p.maxAlpha;
+    }
 
-      const a = alpha * p.maxAlpha;
-      if (a < 0.005) return;
-
-      const size = p.maxSize * Math.min(1, alpha * 3);
-
+    function draw(p) {
+      var a = alpha(p);
+      if (a < 0.006) return;
+      var size = p.size * Math.min(1, (p.life < 0.15 ? p.life / 0.15 : 1) * 4);
       ctx.save();
       ctx.globalAlpha = a;
 
-      if (p.type === 'ember') {
-        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 2.5);
-        grd.addColorStop(0,   p.color);
-        grd.addColorStop(0.5, p.color.replace('hsl', 'hsla').replace(')', ', 0.4)'));
-        grd.addColorStop(1,   'transparent');
-        ctx.fillStyle = grd;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
-        ctx.fill();
-
-      } else if (p.type === 'firefly') {
-        // Slow pulse — breathes with its wobble phase
-        const pulse = 0.65 + 0.35 * Math.sin(p.wobble * 1.8);
-        const r = size * 3.2 * pulse;
-        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
-        grd.addColorStop(0,   p.color);
-        grd.addColorStop(0.45, p.color.replace('hsl', 'hsla').replace(')', ', 0.28)'));
-        grd.addColorStop(1,   'transparent');
-        ctx.fillStyle = grd;
+      if (p.type === 'firefly') {
+        // Pulse with wobble — living light
+        var pulse = 0.60 + 0.40 * Math.sin(p.wobble * 2.2);
+        var r = size * 3.8 * pulse;
+        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+        var col = 'hsl(' + p.hue + ',' + p.sat + '%,' + p.lit + '%)';
+        g.addColorStop(0,    col);
+        g.addColorStop(0.35, 'hsla(' + p.hue + ',' + p.sat + '%,' + p.lit + '%,0.35)');
+        g.addColorStop(1,    'transparent');
+        ctx.fillStyle = g;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fill();
 
-      } else {
-        ctx.fillStyle = p.color;
+      } else if (p.type === 'sparkle') {
+        // Bright amber glow + 4-point star cross
+        var r2 = size * 2.8;
+        var g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r2);
+        var c2 = 'hsl(' + p.hue + ',' + p.sat + '%,' + p.lit + '%)';
+        g2.addColorStop(0,    c2);
+        g2.addColorStop(0.4,  'hsla(' + p.hue + ',' + p.sat + '%,' + p.lit + '%,0.5)');
+        g2.addColorStop(1,    'transparent');
+        ctx.fillStyle = g2;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, r2, 0, Math.PI * 2);
+        ctx.fill();
+        // 4-point star sparkle arms
+        if (size > 1.8) {
+          ctx.globalAlpha = a * 0.7;
+          ctx.strokeStyle = c2;
+          ctx.lineWidth = size * 0.22;
+          ctx.lineCap = 'round';
+          var arm = size * 2.2;
+          ctx.beginPath(); ctx.moveTo(p.x - arm, p.y); ctx.lineTo(p.x + arm, p.y); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(p.x, p.y - arm); ctx.lineTo(p.x, p.y + arm); ctx.stroke();
+          // Diagonal shorter arms
+          ctx.globalAlpha = a * 0.35;
+          ctx.lineWidth = size * 0.14;
+          var arm2 = arm * 0.55;
+          ctx.beginPath(); ctx.moveTo(p.x-arm2, p.y-arm2); ctx.lineTo(p.x+arm2, p.y+arm2); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(p.x+arm2, p.y-arm2); ctx.lineTo(p.x-arm2, p.y+arm2); ctx.stroke();
+        }
+
+      } else {
+        // Star — soft glow dot, twinkles with wobble
+        var tw = 0.7 + 0.3 * Math.sin(p.wobble * 3);
+        ctx.globalAlpha = a * tw;
+        var r3 = size * 1.8;
+        var g3 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r3);
+        var c3 = 'hsl(' + p.hue + ',' + p.sat + '%,' + p.lit + '%)';
+        g3.addColorStop(0,   c3);
+        g3.addColorStop(0.5, 'hsla(' + p.hue + ',' + p.sat + '%,' + p.lit + '%,0.4)');
+        g3.addColorStop(1,   'transparent');
+        ctx.fillStyle = g3;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r3, 0, Math.PI * 2);
         ctx.fill();
       }
-
       ctx.restore();
     }
 
-    let lastTime = 0;
+    var lastTime = 0;
     function animate(now) {
       requestAnimationFrame(animate);
-      const dt = Math.min((now - lastTime) / 16, 3);
+      var dt = Math.min((now - lastTime) / 16, 3);
       lastTime = now;
-
       ctx.clearRect(0, 0, W, H);
-      const bounds = getAppBounds();
 
-      particles.forEach(p => {
+      var b = getAppBounds();
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
         p.wobble += p.wobbleSpeed * dt;
-        p.x += (p.vx + Math.sin(p.wobble) * 0.08) * dt;
+        p.x += (p.vx + Math.sin(p.wobble) * 0.09) * dt;
         p.y += p.vy * dt;
         p.life += p.lifeSpeed * dt;
 
-        if (p.life >= 1 || p.y < -20 || p.x < -20 || p.x > W + 20) {
-          const newP = createParticle(bounds);
-          newP.life = 0;
-          newP.y = p.life >= 1 ? H + 10 : Math.random() * H;
-          Object.assign(p, newP);
+        if (p.life >= 1 || p.y < -20 || p.x < -30 || p.x > W + 30) {
+          var np;
+          if (p.type === 'firefly') np = makeFirefly(b);
+          else if (p.type === 'sparkle') np = makeSparkle(b);
+          else np = makeStar(b);
+          np.life = 0;
+          np.y    = p.life >= 1 ? H + 10 : Math.random() * H;
+          Object.assign(p, np);
         }
-
-        drawParticle(p);
-      });
+        draw(p);
+      }
     }
-
     requestAnimationFrame(animate);
   }
 
@@ -235,7 +261,6 @@
   } else {
     injectAtmosphere();
   }
-
 })();
 
   function initParticles() {

@@ -395,7 +395,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
               <div class="hib-icon">✦</div>
               <div class="hib-label">Answer</div>
             </button>
-            <button class="hib-btn" onclick="event.stopPropagation();openAccount('share this card')">
+            <button class="hib-btn" onclick="event.stopPropagation();ccShare()">
               <div class="hib-icon">↗</div>
               <div class="hib-label">Share</div>
             </button>
@@ -403,6 +403,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
               <div class="hib-icon" style="font-size:.82rem;">◎◎</div>
               <div class="hib-label">Together</div>
             </button>
+          </div>
+          <!-- Thumbs feedback row -->
+          <div class="card-feedback-row" style="display:flex;justify-content:center;gap:1.5rem;padding:.5rem 0 .2rem;border-top:1px solid rgba(255,255,255,0.05);margin-top:.3rem;">
+            <button class="thumb-btn" onclick="event.stopPropagation();cardFeedback('hero',1,this)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;opacity:0.35;transition:all .2s;" title="I like this">👍</button>
+            <button class="thumb-btn" onclick="event.stopPropagation();cardFeedback('hero',-1,this)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;opacity:0.35;transition:all .2s;" title="Not for me">👎</button>
           </div>
         </div>
       </div>
@@ -529,6 +534,41 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   </nav>
 
 
+  <!-- PROFILE PANEL — shown when signed in and Me/avatar is tapped -->
+  <div id="profilePanel" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);" onclick="closeProfilePanel()">
+    <div onclick="event.stopPropagation()" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#080f0a);border-radius:20px 20px 0 0;padding:1.6rem 1.4rem 2.4rem;border-top:1px solid rgba(201,125,58,0.15);">
+      <div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.15);margin:0 auto 1.4rem;"></div>
+
+      <!-- Name + tier badge -->
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.6rem;">
+        <div id="ppAvatar" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#c97d3a,#e8a045);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:#fff;flex-shrink:0;">K</div>
+        <div>
+          <div id="ppName" style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:rgba(242,232,216,0.95);margin-bottom:.2rem;">Your Name</div>
+          <div id="ppTier" style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#c97d3a;">Free</div>
+        </div>
+      </div>
+
+      <!-- Upgrade nudge — hidden for paid tiers -->
+      <div id="ppUpgradeRow" style="margin-bottom:1rem;">
+        <a id="ppUpgradeBtn" href="#" style="display:block;text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,0.15),rgba(201,125,58,0.08));border:1px solid rgba(201,125,58,0.25);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;text-decoration:none;">Upgrade to Connect →</a>
+      </div>
+
+      <!-- Manage billing — shown for paid tiers -->
+      <div id="ppBillingRow" style="display:none;margin-bottom:1rem;">
+        <a href="https://billing.stripe.com/p/login/cNi9AN0nz2mR8fKeHZ7EQ00" target="_blank" style="display:block;text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.6);text-decoration:none;">Manage Billing ↗</a>
+      </div>
+
+      <!-- Sign out -->
+      <div onclick="signOutUser()" style="text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.35);">Sign Out</div>
+
+      <!-- Legal links -->
+      <div style="display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;">
+        <span onclick="closeProfilePanel();openLegal('tos')" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">Terms of Service</span>
+        <span onclick="closeProfilePanel();openLegal('privacy')" style="font-family:'Nunito',sans-serif;font-size:.68rem;color:rgba(242,232,216,0.25);cursor:pointer;text-decoration:underline;">Privacy Policy</span>
+      </div>
+    </div>
+  </div>
+
   <!-- CARD OVERLAY -->
   <div class="card-overlay" id="cardOverlay">
     <div class="card-screen" id="cardScreen">
@@ -563,7 +603,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       </div>
       <div class="card-actions">
         <div class="card-action card-action-primary" onclick="openResponse()">Answer this →</div>
-        <div class="card-action card-action-sec" onclick="openAccount('share this card')">Share ↗</div>
+        <div class="card-action card-action-sec" onclick="ccShare()">Share ↗</div>
       </div>
     </div>
   </div>
@@ -617,6 +657,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <input class="sheet-input" type="text" placeholder="Your first name" id="acctName" autocomplete="given-name"/>
         <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail" autocomplete="email"/>
         <input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password"/>
+        <!-- Legal agreement -->
+        <div style="display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.75rem;padding:.65rem .75rem;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.07);">
+          <input type="checkbox" id="acctLegalCheck" style="margin-top:.15rem;accent-color:#c97d3a;cursor:pointer;flex-shrink:0;"/>
+          <label for="acctLegalCheck" style="font-family:'DM Sans',sans-serif;font-size:.75rem;color:rgba(242,232,216,.45);line-height:1.5;cursor:pointer;">I agree to the <span onclick="event.preventDefault();openLegal('tos')" style="color:#c97d3a;text-decoration:underline;cursor:pointer;">Terms of Service</span> and <span onclick="event.preventDefault();openLegal('privacy')" style="color:#c97d3a;text-decoration:underline;cursor:pointer;">Privacy Policy</span>. Curated Connections is for personal reflection &amp; entertainment — not clinical advice.</label>
+        </div>
         <button class="sheet-btn" onclick="createAcct()">Create Free Account →</button>
       </div>
 
@@ -1194,16 +1239,112 @@ if (fbAuth) {
   });
 }
 
+function openProfilePanel() {
+  var u = CC.getUser ? CC.getUser() : null;
+  if (!u) return;
+  // Populate panel
+  var initial = (u.name || 'U').charAt(0).toUpperCase();
+  document.getElementById('ppAvatar').textContent = initial;
+  document.getElementById('ppName').textContent = u.name || 'Your Name';
+  var tier = u.tier || 'free';
+  var tierLabels = { free:'Free', connect:'Connect', insight:'Insight', legacy:'Legacy', founder:'Legacy' };
+  document.getElementById('ppTier').textContent = (tierLabels[tier] || tier) + ' Member';
+  // Show/hide upgrade vs billing
+  var isPaid = (tier !== 'free');
+  document.getElementById('ppUpgradeRow').style.display = isPaid ? 'none' : 'block';
+  document.getElementById('ppBillingRow').style.display = isPaid ? 'block' : 'none';
+  // Set upgrade link based on tier
+  var links = { free: CC_CONFIG.stripe.connect.paymentLink, connect: CC_CONFIG.stripe.insight.paymentLink, insight: CC_CONFIG.stripe.legacy.paymentLink };
+  var upgradeLabels = { free: 'Upgrade to Connect →', connect: 'Upgrade to Insight →', insight: 'Upgrade to Legacy →' };
+  if (!isPaid || tier === 'connect' || tier === 'insight') {
+    var btn = document.getElementById('ppUpgradeBtn');
+    if (links[tier]) { btn.href = links[tier]; btn.textContent = upgradeLabels[tier] || 'Upgrade →'; }
+    document.getElementById('ppUpgradeRow').style.display = (tier === 'legacy' || tier === 'founder') ? 'none' : 'block';
+  }
+  document.getElementById('profilePanel').style.display = 'block';
+}
+
+function closeProfilePanel() {
+  document.getElementById('profilePanel').style.display = 'none';
+}
+
+// ── LEGAL MODAL ──────────────────────────────────────────
+function openLegal(tab) {
+  var existing = document.getElementById('legalModal');
+  if (existing) {
+    existing.style.display = 'flex';
+    existing.querySelector('iframe').src = 'legal.html#' + (tab || 'tos');
+    return;
+  }
+  var modal = document.createElement('div');
+  modal.id = 'legalModal';
+  modal.style.cssText = 'display:flex;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.82);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;';
+  modal.innerHTML = `
+    <div style="position:relative;width:100%;max-width:430px;height:88vh;background:#0d1810;border-radius:20px 20px 0 0;overflow:hidden;border-top:1px solid rgba(255,255,255,0.08);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem .7rem;border-bottom:1px solid rgba(255,255,255,0.07);">
+        <span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,0.5);">Legal</span>
+        <button onclick="document.getElementById('legalModal').style.display='none'" style="background:none;border:none;color:rgba(242,232,216,0.4);font-size:1.1rem;cursor:pointer;padding:.2rem .4rem;">✕</button>
+      </div>
+      <iframe src="legal.html" style="width:100%;height:calc(100% - 46px);border:none;" loading="lazy"></iframe>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', function(e){ if(e.target===modal) modal.style.display='none'; });
+}
+
+// ── WEB SHARE API ─────────────────────────────────────────
+function ccShare(title, text, url) {
+  var shareUrl = url || window.location.href;
+  var shareTitle = title || 'Curated Connections';
+  var shareText = text || 'A question that actually makes you think. ✦ joincuratedconnections.com';
+
+  if (navigator.share) {
+    navigator.share({ title: shareTitle, text: shareText, url: shareUrl })
+      .catch(function(e){ if (e.name !== 'AbortError') ccShareFallback(shareText + ' ' + shareUrl); });
+  } else {
+    ccShareFallback(shareText + ' ' + shareUrl);
+  }
+}
+
+function ccShareFallback(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function(){
+      showToast('Copied to clipboard ✦');
+    }).catch(function(){
+      showToast('Copy this link: joincuratedconnections.com');
+    });
+  } else {
+    showToast('Share: joincuratedconnections.com');
+  }
+}
+
+// ── CARD FEEDBACK (thumbs) ────────────────────────────────
+function cardFeedback(cardId, value, el) {
+  // Visual feedback
+  var parent = el.closest('.card-feedback-row');
+  if (parent) {
+    parent.querySelectorAll('.thumb-btn').forEach(function(b){ b.style.opacity = '0.3'; });
+    el.style.opacity = '1';
+    el.style.transform = 'scale(1.3)';
+    setTimeout(function(){ el.style.transform = 'scale(1)'; }, 300);
+  }
+  showToast(value > 0 ? 'Glad you liked it ✦' : 'Thanks for the feedback');
+  // Log to Airtable if available (non-blocking)
+  try {
+    var u = CC.getUser ? CC.getUser() : null;
+    if (u && typeof AirtableAPI !== 'undefined' && AirtableAPI.logFeedback) {
+      AirtableAPI.logFeedback(cardId, u.user_id, value);
+    }
+  } catch(e) {}
+}
+
 function openAccount(context) {
   var u = CC.getUser ? CC.getUser() : null;
   if (u) {
-    // Signed in — show profile toast
-    showToast('Signed in as ' + u.name.split(' ')[0]);
+    openProfilePanel();
     return;
   }
   document.getElementById('acctKicker').textContent = context || 'Create your free profile';
   document.getElementById('acctModal').classList.add('open');
-  // Switch to appropriate tab
   showSignupTab();
 }
 
@@ -1236,6 +1377,12 @@ async function createAcct() {
   if (!name)  { errEl.textContent = 'What should we call you?'; return; }
   if (!email) { errEl.textContent = 'Email address is required.'; return; }
   if (!pass || pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+
+  var legalCheck = document.getElementById('acctLegalCheck');
+  if (legalCheck && !legalCheck.checked) {
+    errEl.textContent = 'Please agree to the Terms of Service to continue.';
+    return;
+  }
 
   if (!fbAuth) {
     // Firebase not available — save to localStorage only

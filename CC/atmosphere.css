@@ -178,191 +178,145 @@
 
 }
 
-/* ── MOBILE: atmosphere off, just the dark background ── */
+/* ── MOBILE: atmosphere off ── */
 @media (max-width: 519px) {
-  .cc-atmosphere,
-  .cc-atm-left-panel,
-  .cc-atm-right-panel,
-  #cc-particles { display: none; }
+  .cc-atmosphere, .cc-atm-left-panel, .cc-atm-right-panel, #cc-particles { display: none; }
 }
-
 
 /*
   ══════════════════════════════════════════════════════════
-  TABLET CINEMATIC ENVIRONMENT — 768px and above
-  ──────────────────────────────────────────────────────────
-  The content container is NOT touched. 430px stays 430px.
-  All work happens in the space AROUND the container.
-
-  The app is a lantern. This deepens the darkness around it.
-  The app is a memory window. This adds the nighttime outside.
-  The app is a conversation table. This sets the room.
-
-  Effect: illuminated object inside a cinematic nighttime space.
-  Not: a larger responsive webpage.
+  TABLET ENVIRONMENT — 768px+
+  Wider content. Soft edge blending. Real visible sparkles.
+  Sitting under fireflies at night. Starlit. Not a webpage.
   ══════════════════════════════════════════════════════════
 */
 @media (min-width: 768px) {
 
-  /* ── FRAME GLOW ───────────────────────────────────────── */
-  /* Soft bloom that bleeds outward from the app container's  */
-  /* edges. The lantern glows. The content is unchanged.      */
-  #cc-frame-glow {
-    position:       fixed;
-    top:            0;
-    bottom:         0;
-    left:           calc(50% - 215px);   /* centered on the 430px container */
-    width:          430px;
-    z-index:        0;
+  /* ── WIDEN THE CONTENT STAGE ── */
+  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right) {
+    max-width: 600px !important;
+  }
+
+  .cc-atm-left-panel, .cc-atm-right-panel {
+    width: calc((100vw - 600px) / 2);
+  }
+
+  /* ── EDGE FADE — dissolves the hard line ── */
+  /* Gradient overlays that sit on top of the content edges */
+  #cc-edge-fade-left {
+    position: fixed;
+    top: 0; bottom: 0;
+    left: calc((100vw - 600px) / 2);
+    width: 32px;
+    z-index: 2;
     pointer-events: none;
+    background: linear-gradient(to right,
+      rgba(4, 8, 6, 0.55) 0%,
+      rgba(4, 8, 6, 0.20) 40%,
+      transparent 100%
+    );
+  }
 
-    /* Multi-layer amber bloom — warm, directional, candle-like */
+  #cc-edge-fade-right {
+    position: fixed;
+    top: 0; bottom: 0;
+    right: calc((100vw - 600px) / 2);
+    width: 32px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to left,
+      rgba(4, 8, 6, 0.55) 0%,
+      rgba(4, 8, 6, 0.20) 40%,
+      transparent 100%
+    );
+  }
+
+  /* ── FRAME GLOW ── warm amber bloom around the content stage */
+  #cc-frame-glow {
+    position: fixed;
+    top: 0; bottom: 0;
+    left: calc((100vw - 600px) / 2);
+    width: 600px;
+    z-index: 0;
+    pointer-events: none;
     box-shadow:
-      0   0   28px   3px rgba(190, 110, 35, 0.06),
-      0   0   60px  10px rgba(165,  85, 22, 0.04),
-      0   0  110px  20px rgba(130,  60, 15, 0.025),
-      0   0  190px  38px rgba( 95,  40, 10, 0.014),
-      0   0  320px  70px rgba( 70,  28,  8, 0.008);
-
-    /* Hairline edge — the frame of the window */
-    border-left:  1px solid rgba(190, 110, 35, 0.045);
-    border-right: 1px solid rgba(190, 110, 35, 0.045);
+      0 0 40px  6px  rgba(200, 120, 40, 0.10),
+      0 0 90px  18px rgba(170,  90, 25, 0.07),
+      0 0 160px 36px rgba(130,  60, 15, 0.04),
+      0 0 280px 70px rgba( 90,  35, 10, 0.022);
   }
 
-  /* ── DEEPER, RICHER AMBIENT GLOWS ────────────────────── */
-  /* More warmth, more indigo depth, more atmospheric weight */
-
-  /* Firelight — lower left, warmer and wider */
+  /* ── MUCH STRONGER AMBIENT GLOWS ── */
   .cc-atm-glow-1 {
-    width:  72vw;
-    height: 65vh;
-    bottom: -8%;
-    left:   -8%;
-    background: radial-gradient(
-      ellipse at 22% 78%,
-      rgba(195, 100, 25, 0.10)  0%,
-      rgba(155,  70, 14, 0.060) 30%,
-      rgba(115,  45,  8, 0.025) 55%,
-      transparent               78%
-    );
+    width: 70vw; height: 70vh;
+    bottom: -10%; left: -8%;
+    background: radial-gradient(ellipse at 22% 78%,
+      rgba(200, 105, 28, 0.16) 0%,
+      rgba(160,  72, 16, 0.09) 30%,
+      rgba(120,  48,  8, 0.04) 55%,
+      transparent 78%);
   }
 
-  /* Moonlight — upper right, cooler and more present */
   .cc-atm-glow-2 {
-    width:  62vw;
-    height: 58vh;
-    top:    -8%;
-    right:  -8%;
-    background: radial-gradient(
-      ellipse at 78% 18%,
-      rgba( 58,  78, 128, 0.072) 0%,
-      rgba( 40,  56,  96, 0.038) 38%,
-      transparent                68%
-    );
+    width: 60vw; height: 60vh;
+    top: -8%; right: -8%;
+    background: radial-gradient(ellipse at 78% 18%,
+      rgba(62, 85, 140, 0.12) 0%,
+      rgba(42, 60, 105, 0.06) 40%,
+      transparent 68%);
   }
 
-  /* Deep indigo — mid right, moody atmospheric depth */
   .cc-atm-glow-3 {
-    width:  52vw;
-    height: 52vh;
-    top:    30%;
-    right:  4%;
-    background: radial-gradient(
-      ellipse at 62% 48%,
-      rgba( 88,  45, 118, 0.055) 0%,
-      rgba( 58,  30,  82, 0.026) 44%,
-      transparent                70%
-    );
+    width: 50vw; height: 55vh;
+    top: 28%; right: 2%;
+    background: radial-gradient(ellipse at 62% 48%,
+      rgba(92, 48, 125, 0.09) 0%,
+      rgba(62, 32,  88, 0.04) 44%,
+      transparent 70%);
   }
 
-  /* Fourth glow — deep indigo pool below, like reflected water or night sky */
   .cc-atm-glow-4 {
-    position:  absolute;
-    width:     58vw;
-    height:    48vh;
-    bottom:    -8%;
-    right:     8%;
-    background: radial-gradient(
-      ellipse at 58% 88%,
-      rgba( 38,  48, 108, 0.052) 0%,
-      rgba( 24,  30,  78, 0.024) 50%,
-      transparent                76%
-    );
-    animation: atmBreath2 20s ease-in-out infinite;
-    animation-delay: -8s;
+    position: absolute;
+    width: 55vw; height: 50vh;
+    bottom: -8%; right: 6%;
+    background: radial-gradient(ellipse at 58% 88%,
+      rgba(42, 52, 118, 0.10) 0%,
+      rgba(28, 34,  85, 0.05) 50%,
+      transparent 76%);
+    animation: atmBreath2 18s ease-in-out infinite;
+    animation-delay: -6s;
   }
 
-  /* ── DEEPER VIGNETTE ──────────────────────────────────── */
-  /* Pulls strongly to center. The lantern is the only light. */
+  /* ── DEEPER VIGNETTE ── */
   .cc-atm-vignette {
-    background: radial-gradient(
-      ellipse 52% 65% at 50% 50%,
-      transparent                    38%,
-      rgba(2,  4,  10, 0.22)         60%,
-      rgba(1,  2,   8, 0.52)         76%,
-      rgba(0,  1,   6, 0.82)        100%
-    );
+    background: radial-gradient(ellipse 55% 68% at 50% 50%,
+      transparent 35%,
+      rgba(2, 4, 10, 0.28) 58%,
+      rgba(1, 2,  8, 0.60) 75%,
+      rgba(0, 1,  6, 0.86) 100%);
   }
 
-  /* ── PARTICLES: more visible in the deeper darkness ────── */
-  #cc-particles { opacity: 0.80; }
+  /* ── PARTICLES: actually visible ── */
+  #cc-particles { opacity: 1.0; }
 
-  /* ── SIDE PANELS: richer grain, warmer edge ────────────── */
-  .cc-atm-left-panel,
-  .cc-atm-right-panel {
-    width: calc((100vw - 430px) / 2);   /* unchanged — still flanks 430px app */
-  }
-
-  .cc-atm-left-panel::after,
-  .cc-atm-right-panel::after {
-    background: linear-gradient(
-      to bottom,
+  /* Side panel edge glow — warmer */
+  .cc-atm-left-panel::after, .cc-atm-right-panel::after {
+    background: linear-gradient(to bottom,
       transparent,
-      rgba(185, 105, 32, 0.08) 22%,
-      rgba(185, 105, 32, 0.12) 50%,
-      rgba(185, 105, 32, 0.08) 78%,
-      transparent
-    );
-  }
-
-  /* Subtle top and bottom ambient washes on the panels */
-  .cc-atm-left-panel,
-  .cc-atm-right-panel {
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(38, 48, 108, 0.03) 0%,
-        transparent 25%,
-        transparent 75%,
-        rgba(28, 18, 8, 0.04) 100%
-      );
+      rgba(185, 105, 32, 0.12) 22%,
+      rgba(185, 105, 32, 0.18) 50%,
+      rgba(185, 105, 32, 0.12) 78%,
+      transparent);
   }
 }
 
-
-/* ── LARGE TABLET (1024px+): deepen further, still 430px content ── */
+/* ── LARGE TABLET / LANDSCAPE ── */
 @media (min-width: 1024px) {
-
-  /* More expansive bloom as side space grows */
-  #cc-frame-glow {
-    box-shadow:
-      0   0   35px   4px rgba(190, 110, 35, 0.07),
-      0   0   75px  14px rgba(165,  85, 22, 0.046),
-      0   0  140px  28px rgba(130,  60, 15, 0.028),
-      0   0  250px  55px rgba( 95,  40, 10, 0.016),
-      0   0  420px 100px rgba( 70,  28,  8, 0.009);
+  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right) {
+    max-width: 660px !important;
   }
-
-  /* Vignette contracts slightly more — more dramatic at large sizes */
-  .cc-atm-vignette {
-    background: radial-gradient(
-      ellipse 44% 58% at 50% 50%,
-      transparent                    35%,
-      rgba(2,  4,  10, 0.25)         58%,
-      rgba(1,  2,   8, 0.58)         74%,
-      rgba(0,  1,   6, 0.88)        100%
-    );
-  }
-
-  #cc-particles { opacity: 0.88; }
+  .cc-atm-left-panel, .cc-atm-right-panel { width: calc((100vw - 660px) / 2); }
+  #cc-frame-glow { left: calc((100vw - 660px) / 2); width: 660px; }
+  #cc-edge-fade-left  { left:  calc((100vw - 660px) / 2); }
+  #cc-edge-fade-right { right: calc((100vw - 660px) / 2); }
 }
