@@ -234,6 +234,12 @@ var FIRST_PROMPTS = {
 var presetOccasion = params.get('occasion') ? OCCASION_MAP[params.get('occasion')] : null;
 if (presetOccasion) C.occasion = presetOccasion;
 
+// Store promo code in session so upgrade buttons pick it up
+var _presetPromo = presetOccasion && PROMOS[presetOccasion] ? PROMOS[presetOccasion].code : null;
+if (_presetPromo) {
+  try { sessionStorage.setItem('cc_promo', _presetPromo); } catch(e) {}
+}
+
 window.addEventListener('DOMContentLoaded', function() {
   if (presetOccasion) {
     // Hide occasion section — we already know

@@ -341,7 +341,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
 @media(min-width:431px){.card-screen{max-width:660px !important;}.ww-overlay.open{max-width:660px !important;}.response-screen{max-width:660px !important;}}
-@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:.67rem !important;color:rgba(244,236,220,.6) !important;} .cc-ni-icon,.cc-ni svg{width:20px !important;height:20px !important;}}
+@media(min-width:768px){.hero-card{height:240px !important;min-height:240px !important;max-height:240px !important;}.cc-nav{max-width:660px !important;} .cc-nl{font-size:.67rem !important;color:rgba(244,236,220,.6) !important;} .cc-ni-icon,.cc-ni svg{width:20px !important;height:20px !important;}}
 </style>
 <script src="/cc-auth.js"></script>
 <script src="/cc-firebase.js"></script>
@@ -753,7 +753,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- Upgrade nudge — hidden for paid tiers -->
       <div id="ppUpgradeRow" style="margin-bottom:1rem;">
-        <a id="ppUpgradeBtn" href="https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00" target="_blank" style="display:block;text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,0.15),rgba(201,125,58,0.08));border:1px solid rgba(201,125,58,0.25);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;text-decoration:none;">Upgrade to Connect →</a>
+        <a id="ppUpgradeBtn" href="https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00" target="_blank" onclick="event.preventDefault();openUpgrade()" style="display:block;text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,0.15),rgba(201,125,58,0.08));border:1px solid rgba(201,125,58,0.25);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;text-decoration:none;">Upgrade to Connect →</a>
       </div>
 
       <!-- Manage billing — shown for paid tiers -->
@@ -1531,12 +1531,31 @@ if (fbAuth) {
   });
 }
 
-function openUpgrade() {
+function openUpgrade(promoCode) {
   var u = null;
   try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
   var tier = u ? (u.tier || 'free') : 'free';
-  var links = { free: 'https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00', connect: 'https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01', insight: 'https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02' };
-  window.open(links[tier] || links.free, '_blank');
+  var links = {
+    free:    'https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00',
+    connect: 'https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01',
+    insight: 'https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02'
+  };
+  var url = links[tier] || links.free;
+  // Append promo code if one is active
+  var code = promoCode || window._activePromoCode || null;
+  if (code) url += '?prefilled_promo_code=' + encodeURIComponent(code);
+  window.open(url, '_blank');
+}
+
+// Store active promo code session-wide
+function setActivePromoCode(code) {
+  window._activePromoCode = code;
+  try { sessionStorage.setItem('cc_promo', code); } catch(e) {}
+}
+
+function getActivePromoCode() {
+  if (window._activePromoCode) return window._activePromoCode;
+  try { return sessionStorage.getItem('cc_promo') || null; } catch(e) { return null; }
 }
 
 function closeProfilePanel() {
@@ -3333,6 +3352,11 @@ document.addEventListener('DOMContentLoaded', function() {
   loadSavedProfilePic();
   showRetentionNotice();
   showFirstVisitOrientation();
+
+  // Check for promo code in URL params
+  var _urlParams = new URLSearchParams(window.location.search);
+  var _urlPromo = _urlParams.get('promo') || _urlParams.get('code');
+  if (_urlPromo) setActivePromoCode(_urlPromo);
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);

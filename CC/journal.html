@@ -155,7 +155,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="gate-icon">✦</div>
       <div class="gate-title">Journal is a Connect feature</div>
       <div class="gate-text">Upgrade to Connect to unlock your personal journal, quiz prompts, and more.</div>
-      <span class="gate-btn" onclick="window.open('https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00','_blank')">See Plans →</span>
+      <span class="gate-btn" onclick="var u='https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00';var p=sessionStorage.getItem('cc_promo');if(p)u+='?prefilled_promo_code='+p;window.open(u,'_blank')">See Plans →</span>
     </div>
 
     <!-- JOURNAL CONTENT (hidden until tier check) -->
