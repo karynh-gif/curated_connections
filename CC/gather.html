@@ -59,7 +59,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 /* LOCKED CARD */
 .fc-locked{flex-shrink:0;width:165px;border-radius:20px;padding:14px 12px;cursor:pointer;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px;}
 /* HERO CARD */
-.hero-card{margin:.8rem .9rem;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;min-height:220px;max-height:calc(100svh - 185px);}
+.hero-card{margin:.8rem .9rem;border-radius:var(--r-xl);overflow:hidden;position:relative;cursor:pointer;height:calc(100svh - 290px);height:calc(100vh - 290px);min-height:300px;max-height:520px;}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(145deg,#0d2840,#1a1640,#0d2a1a);}
 .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,125,58,.28),transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(107,60,162,.22),transparent 50%);}
 @keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.5)}}
