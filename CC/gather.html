@@ -37,10 +37,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;}
 .shelf-row::-webkit-scrollbar{display:none;}
 /* FLIP CARD SYSTEM */
-.fc-scene{flex-shrink:0;width:195px;}
-.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:215px;transition:transform 0.15s ease;}
+.fc-scene{flex-shrink:0;width:190px;}
+.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:240px;transition:transform 0.15s ease;}
 .fc-inner.squish{transform:scaleX(0);}
-.fc-back{position:absolute;inset:0;border-radius:20px;}.fc-front{position:relative;border-radius:20px;min-height:215px;}
+.fc-back,.fc-front{position:absolute;inset:0;border-radius:20px;}
 .fc-back{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 16px;}
 .fc-back-shine{position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(255,255,255,.12),transparent 50%);pointer-events:none;}
 .fc-back-hatch{position:absolute;inset:0;opacity:.05;pointer-events:none;}
@@ -49,11 +49,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .fc-tap{font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;position:relative;z-index:1;color:rgba(242,232,216,.75);}
 @keyframes breathe{0%,100%{opacity:.22}50%{opacity:.62}}
 .fc-tap{animation:breathe 2.2s ease-in-out infinite;}
-.fc-front{display:none;padding:13px 13px 11px;}
+.fc-front{display:none;flex-direction:column;justify-content:space-between;padding:13px 13px 11px;}
 .fc-front-shine{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 15%,rgba(255,255,255,.1),transparent 40%);pointer-events:none;border-radius:20px;}
 .fc-label{font-family:'Nunito',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px;opacity:1;position:relative;z-index:1;}
-.fc-q{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--cream);line-height:1.5;position:relative;z-index:1;}
-.fc-actions{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.1);padding-top:8px;margin-top:8px;position:relative;z-index:1;}
+.fc-q{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--cream);line-height:1.5;position:relative;z-index:1;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;}
+.fc-actions{display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.1);padding-top:8px;margin-top:8px;position:relative;z-index:1;flex-shrink:0;}
 .fc-open{font-family:'Nunito',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);opacity:.9;}
 .fc-flip-back{font-family:'Nunito',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
 /* LOCKED CARD */
@@ -281,9 +281,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   .fc-brand     { font-size: 26px !important; }
   .fc-deck      { font-size: 17px !important; }
   .fc-tap       { font-size: 14px !important; }
-  .fc-label     { font-size: 14px !important; }
-  .fc-q         { font-size: 20px !important; }
-  .fc-front     { min-height:260px !important; padding: 16px 16px 14px !important; }
+  .fc-label     { font-size: 13px !important; }
+  .fc-q         { font-size: 17px !important; -webkit-line-clamp: 4 !important; }
   .fc-open      { font-size: 14px !important; }
   .fc-flip-back { font-size: 13px !important; }
 
@@ -571,10 +570,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
     <!-- LEGACY FEATURES — only for Legacy tier -->
     <!-- MY FEED -->
+    <!-- WHAT'S NEW SNAPSHOT -->
     <div id="myFeedShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header" style="padding:.5rem 1rem .4rem;display:flex;align-items:center;justify-content:space-between;">
-        <div class="shelf-title">My Feed</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.55);cursor:pointer;" onclick="showToast('Full feed coming soon ✦')">My Feed</div>
+        <div class="shelf-title">What's new</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.55);cursor:pointer;" onclick="window.location.href='circles.html'">See feed →</div>
       </div>
       <div id="myFeedList" style="padding:0 .8rem;"></div>
     </div>
@@ -1180,11 +1180,9 @@ function fcTap(inner) {
     setTimeout(function() {
       inner.querySelector('.fc-back').style.display = 'none';
       var front = inner.querySelector('.fc-front');
-      front.style.display = 'block';
+      front.style.display = 'flex';
       inner.style.background = LIVE_CARDS[inner.dataset.key] ? LIVE_CARDS[inner.dataset.key].bg : '';
       inner.style.transform = 'scaleX(1)';
-      inner.style.overflow = 'visible';
-      inner.style.height = 'auto';
       inner.dataset.state = 'front';
     }, 150);
   } else {
@@ -1203,8 +1201,6 @@ function fcFlipBack(inner) {
     inner.querySelector('.fc-back').style.display = 'flex';
     inner.style.background = dk.backBg;
     inner.style.transform = 'scaleX(1)';
-    inner.style.overflow = 'hidden';
-    inner.style.height = '';
     inner.dataset.state = 'back';
   }, 150);
 }
@@ -2355,7 +2351,7 @@ function showMyFeedSection() {
     var visColor = { private:'rgba(242,232,216,.25)', gift:'rgba(201,125,58,.55)', public:'rgba(58,173,144,.65)' };
     var visLabel = { private:'Private', gift:'In the gift', public:'Public' };
 
-    var html = feed.slice(0,5).map(function(p) {
+    var html = feed.slice(0,2).map(function(p) {
       var icon  = p.type === 'quiz' ? '🧠' : p.type === 'card' ? '✦' : '◎';
       var label = p.type === 'quiz' ? (p.quiz || 'Quiz result') : p.type === 'card' ? 'Card response' : 'Update';
       var vis   = p.visibility || 'private';

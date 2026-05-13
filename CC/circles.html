@@ -271,31 +271,77 @@ body::before{content:"";position:fixed;inset:0;
 
   <!-- ══ CIRCLES HOME ══ -->
   <div class="screen active" id="homeScreen">
-    <div class="circles-scroll">
-      <div class="circles-greeting" style="animation-delay:.0s">
-        <div class="cg-title">Your Circles.</div>
-        <div class="cg-sub">The people you come back to.</div>
-      </div>
 
-      <div style="padding:0 .9rem;margin-bottom:.6rem;margin-top:.4rem;" class="sec-lbl" style="padding-left:0;">Your Circles</div>
+    <!-- HOME TABS -->
+    <div style="display:flex;padding:0 1rem;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;background:var(--bg);">
+      <div class="ctab active" id="tabFeed"    onclick="switchHomeTab('feed')"   >My Feed</div>
+      <div class="ctab"        id="tabFriends" onclick="switchHomeTab('friends')">Friends</div>
+      <div class="ctab"        id="tabCircles" onclick="switchHomeTab('circles')">Circles</div>
+    </div>
 
-      <!-- Circle 1 — Family -->
-            <!-- Empty state — no circles yet -->
-      <div id="circlesEmptyState" style="padding:2.2rem 1rem 1.4rem;text-align:center;">
-        <div style="font-size:1.8rem;margin-bottom:.9rem;opacity:.3;">◎</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(242,232,216,.5);line-height:1.6;margin-bottom:.6rem;">Your circles will live here.</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:.75rem;color:rgba(242,232,216,.26);line-height:1.65;margin-bottom:1.5rem;">A circle is a small trusted group — family, friends,<br>a partner, a team. You share. They share back.</div>
-      </div>
+    <div class="circles-scroll" id="homeScrollArea">
 
-      <!-- Create new -->
-      <div class="create-circle-btn" onclick="openCreate()">
-        <div class="ccb-icon">✦</div>
-        <div>
-          <div class="ccb-text">Start a new Circle</div>
-          <div class="ccb-sub">Friends, family, couples, teams — anyone who matters</div>
+      <!-- ── MY FEED PANEL ── -->
+      <div id="panelFeed">
+        <div style="padding:1rem 1rem .4rem;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--cream);">Your Feed</div>
+          <div id="feedVisToggle" style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,140,32,.5);cursor:pointer;" onclick="cycleHomeFeedFilter()">All posts</div>
+        </div>
+        <div id="homeFeedList" style="padding:0 .9rem 1rem;"></div>
+        <div id="homeFeedEmpty" style="padding:2.5rem 1.4rem;text-align:center;display:none;">
+          <div style="font-size:1.6rem;margin-bottom:.6rem;opacity:.3;">✦</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(244,236,220,.4);line-height:1.65;">Nothing saved yet.<br>Answer a card or take a quiz — it'll show up here.</div>
         </div>
       </div>
-    </div>
+
+      <!-- ── FRIENDS PANEL ── -->
+      <div id="panelFriends" style="display:none;">
+        <div style="padding:1rem 1rem .4rem;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--cream);margin-bottom:.2rem;">Friends</div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(244,236,220,.35);line-height:1.6;">Individual connections. Not a group — just people you want to stay close to.</div>
+        </div>
+
+        <!-- Friends list -->
+        <div id="friendsList" style="padding:0 .9rem;"></div>
+
+        <!-- Add friend -->
+        <div style="margin:.6rem .9rem 0;display:flex;align-items:center;gap:.6rem;background:rgba(255,140,32,.04);border:1px dashed rgba(255,140,32,.2);border-radius:20px;padding:.85rem 1rem;cursor:pointer;" onclick="openAddFriend()">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,140,32,.1);border:1px solid rgba(255,140,32,.2);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;">+</div>
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(255,140,32,.6);">Add a friend</div>
+            <div style="font-size:.7rem;color:rgba(255,255,255,.2);margin-top:.05rem;">Send them an invite link — they don't need an account</div>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="friendsEmpty" style="padding:2.5rem 1.4rem;text-align:center;display:none;">
+          <div style="font-size:1.6rem;margin-bottom:.6rem;opacity:.3;">◎</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(244,236,220,.4);line-height:1.65;">Your friends will appear here.<br>Invite someone — they'll see your public posts.</div>
+        </div>
+      </div>
+
+      <!-- ── CIRCLES PANEL ── -->
+      <div id="panelCircles" style="display:none;">
+        <div class="circles-greeting" style="animation-delay:.0s;">
+          <div class="cg-title">Your Circles.</div>
+          <div class="cg-sub">Groups where everyone shares.</div>
+        </div>
+        <div style="padding:0 .9rem;margin-bottom:.6rem;margin-top:.4rem;" class="sec-lbl">Your Circles</div>
+        <div id="circlesEmptyState" style="padding:2.2rem 1rem 1.4rem;text-align:center;">
+          <div style="font-size:1.8rem;margin-bottom:.9rem;opacity:.3;">◎</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(242,232,216,.5);line-height:1.6;margin-bottom:.6rem;">Your circles will live here.</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.75rem;color:rgba(242,232,216,.26);line-height:1.65;margin-bottom:1.5rem;">A circle is a small trusted group — family, friends,<br>a partner, a team. You share. They share back.</div>
+        </div>
+        <div class="create-circle-btn" onclick="openCreate()">
+          <div class="ccb-icon">✦</div>
+          <div>
+            <div class="ccb-text">Start a new Circle</div>
+            <div class="ccb-sub">Friends, family, couples, teams — anyone who matters</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /circles-scroll -->
   </div>
 
   <!-- ══ CIRCLE DETAIL ══ -->
@@ -338,39 +384,138 @@ body::before{content:"";position:fixed;inset:0;
       </div>
 
 <script>
+// ── HOME TABS ─────────────────────────────────────────────────
+var _homeFeedFilter = 'all';
+
+function switchHomeTab(tab) {
+  ['feed','friends','circles'].forEach(function(t) {
+    document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = t === tab ? '' : 'none';
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+  });
+  if (tab === 'feed')    renderHomeFeed();
+  if (tab === 'friends') renderFriends();
+}
+
+// ── MY FEED ───────────────────────────────────────────────────
+function cycleHomeFeedFilter() {
+  var filters = ['all','private','public'];
+  var cur = filters.indexOf(_homeFeedFilter);
+  _homeFeedFilter = filters[(cur+1) % filters.length];
+  var labels = { all:'All posts', private:'🔒 Private only', public:'🌐 Public only' };
+  document.getElementById('feedVisToggle').textContent = labels[_homeFeedFilter];
+  renderHomeFeed();
+}
+
+function renderHomeFeed() {
+  var list = document.getElementById('homeFeedList');
+  var empty = document.getElementById('homeFeedEmpty');
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    if (_homeFeedFilter !== 'all') feed = feed.filter(function(p){ return (p.visibility||'private') === _homeFeedFilter; });
+    if (!feed.length) { list.innerHTML=''; empty.style.display='block'; return; }
+    empty.style.display='none';
+
+    var visIcon  = { private:'🔒', public:'🌐', gift:'🎁' };
+    var visColor = { private:'rgba(244,236,220,.2)', public:'rgba(0,196,154,.65)', gift:'rgba(255,140,32,.55)' };
+    var visLabel = { private:'Private', public:'Public', gift:'In the gift' };
+    var typeIcon  = { quiz:'🧠', card:'✦', reflection:'◎', update:'◎' };
+    var typeLabel = { quiz:'Quiz result', card:'Card response', reflection:'Reflection', update:'Update' };
+
+    list.innerHTML = feed.slice(0,20).map(function(p) {
+      var vis = p.visibility || 'private';
+      var icon = typeIcon[p.type] || '✦';
+      var lbl  = typeLabel[p.type] || 'Post';
+      return '<div style="background:var(--surface);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:.9rem .95rem;margin-bottom:.5rem;">'
+        + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">'
+        + '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,140,32,.5);">' + icon + ' ' + lbl + '</div>'
+        + '<div style="display:flex;align-items:center;gap:.4rem;">'
+        + '<div onclick="cycleFeedVis(\'' + p.id + '\')" id="hfvis_' + p.id + '" style="font-family:\'Nunito\',sans-serif;font-size:.6rem;font-weight:700;color:' + visColor[vis] + ';border:1px solid ' + visColor[vis] + ';border-radius:999px;padding:.1rem .45rem;cursor:pointer;">' + visIcon[vis] + ' ' + visLabel[vis] + '</div>'
+        + '<div onclick="deleteFeedItemCircles(\'' + p.id + '\')" style="color:rgba(244,236,220,.18);font-size:.8rem;cursor:pointer;padding:.1rem .2rem;">✕</div>'
+        + '</div></div>'
+        + (p.question ? '<div style="font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:.82rem;color:rgba(244,236,220,.35);margin-bottom:.25rem;">' + p.question.substring(0,80) + '</div>' : '')
+        + (p.title ? '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;color:rgba(244,236,220,.9);margin-bottom:.15rem;">' + p.title + '</div>' : '')
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.8rem;color:rgba(244,236,220,.5);line-height:1.55;">' + (p.snippet || p.body || '').substring(0,140) + '</div>'
+        + '</div>';
+    }).join('');
+  } catch(e) { list.innerHTML=''; }
+}
+
+function cycleFeedVis(id) {
+  var order = ['private','public'];
+  var visIcon  = { private:'🔒', public:'🌐' };
+  var visColor = { private:'rgba(244,236,220,.2)', public:'rgba(0,196,154,.65)' };
+  var visLabel = { private:'Private', public:'Public' };
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed = feed.map(function(p) {
+      if (p.id === id) {
+        p.visibility = order[(order.indexOf(p.visibility||'private')+1) % order.length];
+        var el = document.getElementById('hfvis_' + id);
+        if (el) {
+          el.textContent = visIcon[p.visibility] + ' ' + visLabel[p.visibility];
+          el.style.color = visColor[p.visibility];
+          el.style.borderColor = visColor[p.visibility];
+        }
+      }
+      return p;
+    });
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
+  } catch(e) {}
+}
+
+function deleteFeedItemCircles(id) {
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed = feed.filter(function(p){ return p.id !== id; });
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
+    renderHomeFeed();
+  } catch(e) {}
+}
+
+// ── FRIENDS ───────────────────────────────────────────────────
+function renderFriends() {
+  var list   = document.getElementById('friendsList');
+  var empty  = document.getElementById('friendsEmpty');
+  var friends = [];
+  try { friends = JSON.parse(localStorage.getItem('cc_friends') || '[]'); } catch(e) {}
+  if (!friends.length) { list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML = friends.map(function(f) {
+    return '<div style="display:flex;align-items:center;gap:.65rem;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.05);">'
+      + '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(255,140,32,.3),rgba(255,170,68,.2));display:flex;align-items:center;justify-content:center;font-family:\'Nunito\',sans-serif;font-size:.9rem;font-weight:800;color:#fff;flex-shrink:0;">' + (f.name||'?').charAt(0).toUpperCase() + '</div>'
+      + '<div style="flex:1;">'
+      + '<div style="font-family:\'Nunito\',sans-serif;font-size:.85rem;font-weight:800;color:var(--cream);">' + (f.name||'Friend') + '</div>'
+      + '<div style="font-size:.72rem;color:rgba(244,236,220,.3);">' + (f.added ? 'Added ' + new Date(f.added).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Pending') + '</div>'
+      + '</div></div>';
+  }).join('');
+}
+
+function openAddFriend() {
+  var name = prompt('Their name (just for you):');
+  if (!name || !name.trim()) return;
+  var link = 'https://joincuratedconnections.com/join?ref=' + btoa(name.trim()).replace(/=/g,'');
+  var friends = [];
+  try { friends = JSON.parse(localStorage.getItem('cc_friends') || '[]'); } catch(e) {}
+  friends.unshift({ name: name.trim(), added: new Date().toISOString(), link: link });
+  try { localStorage.setItem('cc_friends', JSON.stringify(friends)); } catch(e) {}
+  if (navigator.share) {
+    navigator.share({ text: 'Join me on Curated Connections — ' + link });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(function(){ t('Invite link copied ✦'); });
+  }
+  renderFriends();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Rate experience
-  setTimeout(function(){ injectRateExperience('circles-scroll'); }, 2000);
+  setTimeout(function(){ injectRateExperience('homeScrollArea'); }, 2000);
+
+  // Load feed on start
+  renderHomeFeed();
 
   const user = CC.getUser ? CC.getUser() : null;
-
-  // Initialize card actions
   if (CC.initCardActions) CC.initCardActions();
-
-  // Wire invite button
-  const inviteBtn = document.querySelector('[onclick*="invite"], .invite-btn');
-  if (inviteBtn) {
-    inviteBtn.onclick = function() {
-      const circleId = new URLSearchParams(window.location.search).get('circle') || 'default';
-      const circleName = document.title || 'Our Circle';
-      if (CC.copyInviteLink) CC.copyInviteLink(circleId, circleName);
-    };
-  }
-
-  // Check for birthdays
-  const circleId = new URLSearchParams(window.location.search).get('circle');
-  if (circleId && CC.checkBirthdays) {
-    CC.checkBirthdays(circleId).then(cards => {
-      if (cards.length > 0) {
-        CC.showBirthdayDeck('someone in your circle', cards);
-      }
-    });
-  }
-
-  // Inject seasonal shelf
-  if (CC.injectSeasonalShelf) {
-    CC.injectSeasonalShelf(document.querySelector('.scroll, .feed'));
-  }
+  if (CC.injectSeasonalShelf) CC.injectSeasonalShelf(document.querySelector('.circles-scroll'));
 });
 </script>
 
