@@ -2,7 +2,6 @@
 const AIRTABLE_BASE = "https://api.airtable.com/v0";
 
 const ALLOWED_TABLES = new Set([
-  "Users",
   "Conversation Cards",
   "Wit and Wonder",
   "Curated Moments",
@@ -29,8 +28,6 @@ const ALLOWED_TABLES = new Set([
   "Tiers",
   "Game Sessions",
   "Game Plays",
-  "User Decks",
-  "Special Decks",
 ]);
 
 const ALLOWED_ACTIONS = new Set(["list", "get", "create", "update", "delete"]);

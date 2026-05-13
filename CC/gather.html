@@ -34,11 +34,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .shelf-header{display:flex;align-items:baseline;justify-content:space-between;padding:0 .9rem;margin-bottom:.65rem;}
 .shelf-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--cream);}
 .shelf-count{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;}
-.shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;}
+.shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;align-items:stretch;}
 .shelf-row::-webkit-scrollbar{display:none;}
 /* FLIP CARD SYSTEM */
-.fc-scene{flex-shrink:0;width:190px;}
-.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:240px;transition:transform 0.15s ease;}
+.fc-scene{flex-shrink:0;width:190px;display:flex;flex-direction:column;}
+.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:240px;flex:1;transition:transform 0.15s ease;}
 .fc-inner.squish{transform:scaleX(0);}
 .fc-back,.fc-front{position:absolute;inset:0;border-radius:20px;}
 .fc-back{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 16px;}
@@ -101,11 +101,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ww-q{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--cream);line-height:1.45;}
 .ww-tap{padding:.45rem .85rem .6rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
 /* QUIZ CARDS */
-.quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;}
+.quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;}
 .quiz-label{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.45rem;opacity:1;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);margin-bottom:.35rem;}
 .quiz-sub{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.6);line-height:1.5;margin-bottom:.55rem;}
-.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:.65rem;}
+.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:auto;align-self:flex-start;}
 /* CIRCLES */
 .circles-section{position:relative;background:linear-gradient(180deg,#08101e,#0a0e1c);margin-top:2rem;overflow:hidden;padding:1.8rem 0 1.4rem;}
 /* WRITE EXP */
@@ -912,7 +912,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div id="acctSignupForm">
         <input class="sheet-input" type="text" placeholder="Your first name" id="acctName" autocomplete="given-name"/>
         <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail" autocomplete="email"/>
-        <input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password"/>
+        <div style="position:relative;"><input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password" style="padding-right:2.5rem;"/><button type="button" onclick="togglePw('acctPassword')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(242,232,216,.35);padding:.2rem;" id="acctPassword_eye"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
         <!-- Legal agreement -->
         <div style="display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.75rem;padding:.65rem .75rem;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.07);">
           <input type="checkbox" id="acctLegalCheck" style="margin-top:.15rem;accent-color:#c97d3a;cursor:pointer;flex-shrink:0;"/>
@@ -929,7 +929,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <!-- Sign-in form -->
       <div id="acctSigninForm" style="display:none;">
         <input class="sheet-input" type="email" placeholder="Email address" id="signinEmail" autocomplete="email"/>
-        <input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password"/>
+        <div style="position:relative;"><input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password" style="padding-right:2.5rem;"/><button type="button" onclick="togglePw('signinPassword')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(242,232,216,.35);padding:.2rem;" id="signinPassword_eye"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
         <button class="sheet-btn" onclick="signIn()">Sign In →</button>
         <div style="text-align:center;margin-top:.5rem;">
           <span onclick="forgotPassword()" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(201,125,58,.55);cursor:pointer;text-decoration:underline;">Forgot password?</span>
@@ -1544,9 +1544,13 @@ function openUpgrade(promoCode) {
     insight: 'https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02'
   };
   var url = links[tier] || links.free;
+  var params = [];
   // Append promo code if one is active
   var code = promoCode || window._activePromoCode || null;
-  if (code) url += '?prefilled_promo_code=' + encodeURIComponent(code);
+  if (code) params.push('prefilled_promo_code=' + encodeURIComponent(code));
+  // Append success URL so Stripe redirects back to the app
+  params.push('success_url=' + encodeURIComponent('https://joincuratedconnections.com/gather.html?upgraded=1'));
+  if (params.length) url += '?' + params.join('&');
   window.open(url, '_blank');
 }
 
@@ -2913,6 +2917,17 @@ function syncAccountTier() {
       }
     })
     .catch(function(){ showToast('Could not reach Stripe — check env vars'); });
+}
+
+function togglePw(id) {
+  var input = document.getElementById(id);
+  var eye   = document.getElementById(id + '_eye');
+  if (!input || !eye) return;
+  var showing = input.type === 'text';
+  input.type  = showing ? 'password' : 'text';
+  eye.innerHTML = showing
+    ?  + EYE_CLOSE + 
+    :  + EYE_OPEN  + ;
 }
 
 async function forgotPassword() {

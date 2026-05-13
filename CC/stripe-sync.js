@@ -1,6 +1,5 @@
 // netlify/functions/stripe-sync.js
-// Called after successful Stripe checkout to sync tier into the session
-// Usage: fetch('/.netlify/functions/stripe-sync?email=user@email.com')
+// Uses Stripe REST API directly — no npm dependency needed
 
 exports.handler = async (event) => {
   const headers = {
@@ -8,59 +7,69 @@ exports.handler = async (event) => {
     'Content-Type': 'application/json'
   };
 
-  const email = event.queryStringParameters?.email;
+  const email = event.queryStringParameters && event.queryStringParameters.email;
   if (!email) return { statusCode: 400, headers, body: JSON.stringify({ error: 'email required' }) };
 
-  try {
-    // Check Stripe for active subscription by email
-    const Stripe = require('stripe');
-    const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) return { statusCode: 500, headers, body: JSON.stringify({ error: 'Stripe not configured' }) };
 
+  const stripeHeaders = {
+    'Authorization': 'Bearer ' + key,
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+
+  try {
     // Find customer by email
-    const customers = await stripe.customers.list({ email, limit: 1 });
-    if (!customers.data.length) {
-      return { statusCode: 200, headers, body: JSON.stringify({ tier: 'free' }) };
+    const custRes = await fetch('https://api.stripe.com/v1/customers?email=' + encodeURIComponent(email) + '&limit=1', {
+      headers: stripeHeaders
+    });
+    const custData = await custRes.json();
+
+    if (!custData.data || !custData.data.length) {
+      return { statusCode: 200, headers, body: JSON.stringify({ tier: 'free', reason: 'no customer found' }) };
     }
 
-    const customer = customers.data[0];
+    const customerId = custData.data[0].id;
 
     // Get active subscriptions
-    const subs = await stripe.subscriptions.list({
-      customer: customer.id,
-      status: 'active',
-      limit: 5
+    const subRes = await fetch('https://api.stripe.com/v1/subscriptions?customer=' + customerId + '&status=active&limit=5', {
+      headers: stripeHeaders
     });
+    const subData = await subRes.json();
 
-    if (!subs.data.length) {
-      return { statusCode: 200, headers, body: JSON.stringify({ tier: 'free' }) };
+    if (!subData.data || !subData.data.length) {
+      return { statusCode: 200, headers, body: JSON.stringify({ tier: 'free', reason: 'no active subscription' }) };
     }
 
-    // Map price ID to tier
-    const PRICE_TO_TIER = {
-      [process.env.STRIPE_PRICE_CONNECT]:        'connect',
-      [process.env.STRIPE_PRICE_INSIGHT]:        'insight',
-      [process.env.STRIPE_PRICE_LEGACY]:         'legacy',
-      [process.env.STRIPE_PRICE_CONNECT_ANNUAL]: 'connect',
-      [process.env.STRIPE_PRICE_INSIGHT_ANNUAL]: 'insight',
-      [process.env.STRIPE_PRICE_LEGACY_ANNUAL]:  'legacy',
-      // Hardcoded fallbacks from config.js
-      'price_1RQx8mKp6U2lFHVnconnect': 'connect',
-      'price_1RQx8mKp6U2lFHVninsight': 'insight',
-      'price_1RQx8mKp6U2lFHVnlegacy':  'legacy',
+    // Map price ID to tier using known price IDs from config.js
+    const PRICE_MAP = {
+      // Monthly
+      'price_connect':  'connect',
+      'price_insight':  'insight',
+      'price_legacy':   'legacy',
     };
 
-    let tier = 'free';
-    for (const sub of subs.data) {
-      const priceId = sub.items.data[0]?.price?.id;
-      if (PRICE_TO_TIER[priceId]) {
-        tier = PRICE_TO_TIER[priceId];
-        break;
-      }
-      // If we can't map price ID, default to connect for any active sub
-      tier = 'connect';
+    // Also map by payment link — check product name as fallback
+    let tier = 'connect'; // Default to connect for any active sub
+    const sub = subData.data[0];
+    const priceId = sub.items && sub.items.data[0] && sub.items.data[0].price && sub.items.data[0].price.id;
+    const productId = sub.items && sub.items.data[0] && sub.items.data[0].price && sub.items.data[0].price.product;
+
+    // Try to get product name to determine tier
+    if (productId) {
+      const prodRes = await fetch('https://api.stripe.com/v1/products/' + productId, { headers: stripeHeaders });
+      const prodData = await prodRes.json();
+      const name = (prodData.name || '').toLowerCase();
+      if (name.includes('legacy'))       tier = 'legacy';
+      else if (name.includes('insight')) tier = 'insight';
+      else if (name.includes('connect')) tier = 'connect';
     }
 
-    return { statusCode: 200, headers, body: JSON.stringify({ tier, customerId: customer.id }) };
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ tier, customerId, priceId, subscriptionId: sub.id })
+    };
 
   } catch (err) {
     console.error('stripe-sync error:', err.message);
