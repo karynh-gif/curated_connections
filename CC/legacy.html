@@ -288,6 +288,14 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
   <script src="/cc-auth.js"></script>
   <link rel="stylesheet" href="/atmosphere.css"/>
   <script src="/atmosphere.js" defer></script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CSCN4MBVZ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-CSCN4MBVZ0");
+</script>
 </head>
 <body>
 <div class="app">
@@ -318,58 +326,41 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
   <div class="scroll" style="padding-bottom:5rem;">
 
     <!-- GREETING -->
-    <div class="greeting" style="padding:2.8rem 1.4rem 1.4rem;">
+    <div class="greeting" style="padding:2.2rem 1.4rem 1rem;">
       <div class="greeting-label">Living Legacy</div>
-      <div class="greeting-title" style="font-size:2rem;font-weight:300;margin-bottom:.8rem;">Every life deserves<br>to be remembered fully.</div>
+      <div class="greeting-title" style="font-size:1.7rem;font-weight:300;margin-bottom:.5rem;line-height:1.25;">Every life deserves<br>to be remembered fully.</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:.85rem;color:rgba(184,134,11,.55);line-height:1.6;">Start with the tree. Find a person. Begin their story.</div>
     </div>
 
-    <!-- TODAY'S INVITATION -->
-    <div class="invitation" onclick="openLeafScreen()">
-      <div class="inv-label" style="font-size:.78rem;">Today's Prompt · Your Leaf</div>
-      <div class="inv-prompt">"What is a belief you hold that your family helped shape — and have you ever told them?"</div>
-      <div class="inv-person">
-        <div class="inv-person-av">🌿</div>
-        <span>This is yours to answer · Life Chapter: Values</span>
+    <!-- ENTER THE TREE — primary CTA -->
+    <div onclick="openTreeScreen()" style="margin:0 1.2rem 1.4rem;background:linear-gradient(135deg,rgba(184,134,11,.1),rgba(100,65,5,.15));border:1px solid rgba(184,134,11,.25);border-radius:16px;padding:1.4rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:1rem;">
+      <div style="font-size:2.2rem;flex-shrink:0;">🌳</div>
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:rgba(242,232,216,.9);margin-bottom:.25rem;">Open the Family Tree</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(184,134,11,.6);">Tap a person to work on their leaf · Tap + to add someone new</div>
       </div>
-      <div class="inv-action">
-        <button class="inv-btn inv-btn-write" style="font-size:.82rem;">Begin writing →</button>
-        <button class="inv-btn inv-btn-voice" style="font-size:.82rem;" onclick="event.stopPropagation();openVoiceFromInvitation()">🎙 Speak instead</button>
-      </div>
+      <div style="margin-left:auto;color:rgba(184,134,11,.5);font-size:1.1rem;">→</div>
     </div>
 
     <div class="gold-line"></div>
 
-    <!-- FOUR PATHS -->
-    <div class="section-lbl" style="padding:0 1.4rem;margin-bottom:1.1rem;">Choose your path</div>
-    <div class="paths" style="margin-bottom:2.8rem;">
+    <!-- RECENT LEAVES (from localStorage) -->
+    <div style="padding:0 1.4rem;margin-bottom:.6rem;">
+      <div class="section-lbl">Recent leaves</div>
+    </div>
+    <div id="recentLeavesList" style="padding:0 1.2rem 1rem;">
+      <div style="font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(184,134,11,.35);font-style:italic;padding:.6rem 0;">No leaves yet — open the tree to begin.</div>
+    </div>
 
-      <div class="path path-tree" onclick="openTreeScreen()">
-        <div class="path-icon">🌳</div>
-        <div class="path-title">The Family Tree</div>
-        <div class="path-desc">See everyone. Navigate by person. Explore the branches.</div>
-        <div class="path-arrow">Enter the tree →</div>
-      </div>
+    <div class="gold-line"></div>
 
-      <div class="path path-leaf" onclick="openLeafScreen()">
-        <div class="path-icon">🍃</div>
-        <div class="path-title">My Leaf</div>
-        <div class="path-desc">Your story. Your voice. Your answers. One prompt at a time.</div>
-        <div class="path-arrow">Tell your story →</div>
-      </div>
-
-      <div class="path path-archive" onclick="t('Archive opening...')">
-        <div class="path-icon">📖</div>
-        <div class="path-title">The Archive</div>
-        <div class="path-desc">Browse all stories by person, chapter, or time.</div>
-        <div class="path-arrow">Browse stories →</div>
-      </div>
-
-      <div class="path path-contribute" onclick="t('Contribute to a story...')">
-        <div class="path-icon">✦</div>
-        <div class="path-title">Contribute</div>
-        <div class="path-desc">Add your memory of someone. Answer questions about them.</div>
-        <div class="path-arrow">Share a memory →</div>
-      </div>
+    <!-- MY OWN LEAF -->
+    <div class="path path-leaf" onclick="openLeafScreen()" style="margin:0 1.2rem 2.8rem;">
+      <div class="path-icon">🍃</div>
+      <div class="path-title">My Own Leaf</div>
+      <div class="path-desc">Your story. Your voice. One prompt at a time.</div>
+      <div class="path-arrow">Tell your story →</div>
+    </div>
 
     </div>
 
@@ -616,21 +607,20 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 
     <div class="import-divider">
       <div class="import-divider-line"></div>
-      <div class="import-divider-text">or import their history</div>
+      <div class="import-divider-text">FamilySearch (optional)</div>
       <div class="import-divider-line"></div>
     </div>
 
-    <!-- IMPORT OPTIONS -->
-    <div class="import-option" onclick="showFSImport()">
-      <span class="import-option-icon">🔍</span>
-      <div class="import-option-title">Import from FamilySearch</div>
-      <div class="import-option-desc">Free genealogy database with billions of records. Paste their FamilySearch Person ID and we'll fill in their history automatically.</div>
+    <div style="margin-bottom:.6rem;">
+      <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--bark-soft);margin-bottom:.4rem;line-height:1.5;">Found them on <strong style="color:var(--bark-mid);">familysearch.org</strong>? Copy the URL from your browser and paste it here. We'll pull their info automatically.</div>
+      <input class="leaf-field" id="newLeafFSUrl" type="url" placeholder="https://www.familysearch.org/tree/person/details/XXXX-1234" oninput="extractFSId(this.value)" autocomplete="off" autocorrect="off" spellcheck="false"/>
+      <div id="fsUrlStatus" style="font-size:.72rem;color:rgba(184,134,11,.6);margin-top:.3rem;min-height:1rem;font-family:'DM Sans',sans-serif;"></div>
     </div>
 
-    <div class="import-option" onclick="showGEDCOMImport()">
+    <div class="import-option" onclick="showGEDCOMImport()" style="margin-bottom:.8rem;">
       <span class="import-option-icon">🌳</span>
-      <div class="import-option-title">Upload a Family Tree File</div>
-      <div class="import-option-desc">Exported from Ancestry, MyHeritage, or any genealogy app? Upload a .ged file and we'll import your whole family at once.</div>
+      <div class="import-option-title">Upload a Family Tree File (.ged)</div>
+      <div class="import-option-desc">Exported from Ancestry or MyHeritage? Import your whole family at once.</div>
     </div>
 
     <button class="import-btn" onclick="createLeafManual()">Start Their Leaf →</button>
@@ -928,10 +918,100 @@ function openLeafScreen(){openNewLeaf();}
 // ── NEW LEAF / FAMILYSEARCH / GEDCOM ──
 
 function openNewLeaf() {
+  // Restore any auto-saved draft
+  try {
+    var draft = JSON.parse(localStorage.getItem('cc_leaf_draft') || 'null');
+    if (draft) {
+      if (draft.name)     document.getElementById('newLeafName').value     = draft.name;
+      if (draft.knownAs)  document.getElementById('newLeafKnownAs').value  = draft.knownAs;
+      if (draft.relation) document.getElementById('newLeafRelation').value = draft.relation;
+      if (draft.birth)    document.getElementById('newLeafBirth').value    = draft.birth;
+      if (draft.death)    document.getElementById('newLeafDeath').value    = draft.death;
+      if (draft.place)    document.getElementById('newLeafPlace').value    = draft.place;
+      if (draft.fsUrl)    document.getElementById('newLeafFSUrl').value    = draft.fsUrl;
+    }
+  } catch(e) {}
   document.getElementById('newLeafScreen').classList.add('open');
+  ['newLeafName','newLeafKnownAs','newLeafRelation','newLeafBirth','newLeafDeath','newLeafPlace','newLeafFSUrl'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.oninput = saveDraft;
+  });
 }
+
+function saveDraft() {
+  try {
+    localStorage.setItem('cc_leaf_draft', JSON.stringify({
+      name:     (document.getElementById('newLeafName')    ||{}).value||'',
+      knownAs:  (document.getElementById('newLeafKnownAs') ||{}).value||'',
+      relation: (document.getElementById('newLeafRelation')||{}).value||'',
+      birth:    (document.getElementById('newLeafBirth')   ||{}).value||'',
+      death:    (document.getElementById('newLeafDeath')   ||{}).value||'',
+      place:    (document.getElementById('newLeafPlace')   ||{}).value||'',
+      fsUrl:    (document.getElementById('newLeafFSUrl')   ||{}).value||''
+    }));
+  } catch(e) {}
+}
+
 function closeNewLeaf() {
   document.getElementById('newLeafScreen').classList.remove('open');
+  fsPersonData = null;
+  // Keep draft — backing out preserves work
+}
+
+function extractFSId(url) {
+  var status = document.getElementById('fsUrlStatus');
+  if (!url || !url.includes('familysearch')) { if(status) status.textContent=''; return; }
+  var match = url.match(/\/person\/(?:details\/)?([A-Z0-9]{4}-[A-Z0-9]{1,4})/i);
+  if (match) {
+    var personId = match[1].toUpperCase();
+    if (status) status.textContent = '✦ Person ID: ' + personId + ' — will import when you save';
+    fetchFSPerson(personId);
+  } else {
+    if (status) status.textContent = 'Paste the full URL — e.g. familysearch.org/tree/person/details/XXXX-1234';
+  }
+}
+
+function fetchFSPerson(personId) {
+  fetch('https://api.familysearch.org/platform/tree/persons/' + personId, {
+    headers: { 'Accept': 'application/x-fs-v1+json' }
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    var p = data && data.persons && data.persons[0];
+    if (!p) return;
+    var name = '';
+    if (p.names && p.names[0] && p.names[0].nameForms && p.names[0].nameForms[0]) {
+      name = p.names[0].nameForms[0].fullText || '';
+    }
+    if (name && !document.getElementById('newLeafName').value) {
+      document.getElementById('newLeafName').value = name; saveDraft();
+    }
+    (p.facts || []).forEach(function(f) {
+      if (f.type && f.type.includes('Birth') && f.date && f.date.formal && !document.getElementById('newLeafBirth').value) {
+        document.getElementById('newLeafBirth').value = f.date.formal.replace(/^\+/,'').substring(0,4); saveDraft();
+      }
+      if (f.type && f.type.includes('Death') && f.date && f.date.formal && !document.getElementById('newLeafDeath').value) {
+        document.getElementById('newLeafDeath').value = f.date.formal.replace(/^\+/,'').substring(0,4); saveDraft();
+      }
+    });
+    document.getElementById('fsUrlStatus').textContent = '✦ Info imported — review and save';
+  }).catch(function() {
+    document.getElementById('fsUrlStatus').textContent = '✦ Person ID saved — full import after saving';
+  });
+}
+
+function loadRecentLeaves() {
+  var el = document.getElementById('recentLeavesList');
+  if (!el) return;
+  try {
+    var leaves = JSON.parse(localStorage.getItem('cc_legacy_leaves') || '[]');
+    if (!leaves.length) return;
+    el.innerHTML = leaves.slice(0,4).map(function(l) {
+      return '<div onclick="openPersonStory(\'' + (l.name||'').replace(/\'/g,'') + '\')" style="display:flex;align-items:center;gap:.8rem;padding:.7rem .8rem;background:rgba(184,134,11,.05);border:1px solid rgba(184,134,11,.1);border-radius:12px;margin-bottom:.5rem;cursor:pointer;">'
+        + '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(184,134,11,.2),rgba(100,65,5,.3));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🍃</div>'
+        + '<div><div style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;color:rgba(242,232,216,.85);">' + (l.name||'Unknown') + '</div>'
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.72rem;color:rgba(184,134,11,.5);">' + (l.relation||'') + (l.birth?' · b.'+l.birth:'') + '</div></div>'
+        + '<div style="margin-left:auto;color:rgba(184,134,11,.4);">→</div></div>';
+    }).join('');
+  } catch(e) {}
 }
 
 function showFSImport() {
@@ -1520,16 +1600,18 @@ async function saveLeafToAirtable(name, relation, birthYear, fsId) {
       t('Leaf started for ' + name + ' ✦');
       closeNewLeaf(); fsPersonData = null;
     } else {
-      t('Leaf saved locally ✦'); closeNewLeaf();
+      localStorage.removeItem('cc_leaf_draft');
+      t('Leaf saved locally ✦'); closeNewLeaf(); loadRecentLeaves();
     }
   } catch(e) {
     // Save locally as fallback
     try {
       var leaves = JSON.parse(localStorage.getItem('cc_legacy_leaves') || '[]');
-      leaves.unshift({ name, knownAs, relation, birthYear, death, place, fsId, created: new Date().toISOString() });
+      leaves.unshift({ name: name, knownAs: knownAs, relation: relation, birth: birthYear, death: death, place: place, fsId: fsId, created: new Date().toISOString() });
       localStorage.setItem('cc_legacy_leaves', JSON.stringify(leaves));
+      localStorage.removeItem('cc_leaf_draft');
     } catch(le){}
-    t('Leaf saved — ' + name); closeNewLeaf();
+    t('Leaf started for ' + name + ' ✦'); closeNewLeaf(); loadRecentLeaves();
   }
 }
 
@@ -1652,6 +1734,7 @@ function undoDelete() {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  loadRecentLeaves();
   if (!CC.hasFeature('living_legacy')) {
     // Show upgrade gate over the leaf creation
     const inv = document.querySelector('.invitation');

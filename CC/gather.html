@@ -453,6 +453,14 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   }
 }
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CSCN4MBVZ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-CSCN4MBVZ0");
+</script>
 </head>
 <body>
 <div class="app">
@@ -1106,8 +1114,21 @@ async function loadTonightCards() {
   var shelf = document.getElementById('tonightShelf');
   if (!shelf) return;
   shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Loading cards...</div>';
+
+  var level = getTierLevel();
+
+  // Each tier gets its own pool — higher tiers include all lower tier decks
+  var filterFormulas = [
+    'AND({Active}=1,{Gather Pool}=1)',  // Free — basic pool only
+    'AND({Active}=1,OR({Gather Pool}=1,{Tier Access}="Connect"))',  // Connect
+    'AND({Active}=1,OR({Gather Pool}=1,{Tier Access}="Connect",{Tier Access}="Insight"))',  // Insight
+    '{Active}=1'  // Legacy — all active cards, no restrictions
+  ];
+
+  var formula = filterFormulas[level] || filterFormulas[0];
+
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula:'AND({Active}=1,{Gather Pool}=1)', maxRecords:50})});
+    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula: formula, maxRecords:100})});
     if (!res.ok) {
       shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Error ' + res.status + ' — tap to retry</div>';
       shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
