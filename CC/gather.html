@@ -1913,12 +1913,12 @@ function saveToFeed(type) {
   var user = CC.getUser ? CC.getUser() : null;
 
   var post = {
-    id:       'post_' + Date.now(),
-    type:     type,
-    userId:   user ? user.user_id : 'local',
-    userName: user ? (user.name || 'You') : 'You',
-    date:     new Date().toISOString(),
-    public:   false
+    id:         'post_' + Date.now(),
+    type:       type,
+    userId:     user ? user.user_id : 'local',
+    userName:   user ? (user.name || 'You') : 'You',
+    date:       new Date().toISOString(),
+    visibility: 'private'
   };
 
   if (type === 'quiz') {
@@ -1971,20 +1971,59 @@ function showMyFeedSection() {
     var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
     if (!feed.length) { shelf.style.display = 'none'; return; }
     shelf.style.display = 'block';
-    var html = feed.slice(0,5).map(function(p, i) {
+
+    var visIcon  = {
+      private: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+      gift:    '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      public:  '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    };
+    var visColor = { private:'rgba(242,232,216,.25)', gift:'rgba(201,125,58,.55)', public:'rgba(58,173,144,.65)' };
+    var visLabel = { private:'Private', gift:'In the gift', public:'Public' };
+
+    var html = feed.slice(0,5).map(function(p) {
       var icon  = p.type === 'quiz' ? '🧠' : '✦';
       var label = p.type === 'quiz' ? (p.quiz || 'Quiz result') : 'Reflection';
-      return '<div id="feedItem_' + i + '" style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:.5rem;position:relative;">'
-        + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;">'
-        + '<div style="flex:1;">'
-        + '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.3rem;">' + icon + ' ' + label + '</div>'
+      var vis   = p.visibility || 'private';
+
+      return '<div style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:.5rem;">'
+        + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.3rem;">'
+        + '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.5);">' + icon + ' ' + label + '</div>'
+        + '<div style="display:flex;align-items:center;gap:.4rem;">'
+        + '<div onclick="cycleFeedVisibility(\'' + p.id + '\')" id="fvis_' + p.id + '" style="font-size:.65rem;cursor:pointer;color:' + visColor[vis] + ';border:1px solid ' + visColor[vis] + ';border-radius:999px;padding:.1rem .45rem;font-family:\'Nunito\',sans-serif;font-weight:700;" title="Tap to change">' + visIcon[vis] + ' ' + visLabel[vis] + '</div>'
+        + '<button onclick="deleteFeedItem(\'' + p.id + '\')" style="background:none;border:none;color:rgba(242,232,216,.18);font-size:.85rem;cursor:pointer;padding:.1rem .2rem;line-height:1;">✕</button>'
+        + '</div></div>'
         + (p.title ? '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;color:rgba(242,232,216,.9);margin-bottom:.2rem;">' + p.title + '</div>' : '')
-        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.5;">' + (p.snippet || p.body || '').substring(0,100) + '</div>'
-        + '</div>'
-        + '<button onclick="deleteFeedItem(\'' + p.id + '\')" style="flex-shrink:0;background:none;border:none;color:rgba(242,232,216,.2);font-size:.85rem;cursor:pointer;padding:.1rem .3rem;line-height:1;" title="Remove">✕</button>'
-        + '</div></div>';
+        + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.5;">' + (p.snippet || p.body || '').substring(0,120) + '</div>'
+        + '</div>';
     }).join('');
     document.getElementById('myFeedList').innerHTML = html;
+  } catch(e) {}
+}
+
+function cycleFeedVisibility(id) {
+  var order = ['private','public'];
+  var visIcon  = {
+    private: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+    public:  '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+  };
+  var visColor = { private:'rgba(242,232,216,.25)', public:'rgba(58,173,144,.65)' };
+  var visLabel = { private:'Private', public:'Public' };
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed = feed.map(function(p) {
+      if (p.id === id) {
+        var cur = order.indexOf(p.visibility || 'private');
+        p.visibility = order[(cur + 1) % order.length];
+        var el = document.getElementById('fvis_' + id);
+        if (el) {
+          el.textContent = visIcon[p.visibility] + ' ' + visLabel[p.visibility];
+          el.style.color = visColor[p.visibility];
+          el.style.borderColor = visColor[p.visibility];
+        }
+      }
+      return p;
+    });
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
   } catch(e) {}
 }
 
