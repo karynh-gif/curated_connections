@@ -472,8 +472,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="topbar-date" id="topDate">Monday · May 12</div>
     </div>
     <div class="topbar-right">
-      <div class="topbar-btn" onclick="showToast('Notifications coming soon')">🔔</div>
-      <div class="topbar-avatar" onclick="openAccount('your profile')">G</div>
+      <div class="topbar-btn" onclick="openNotifications()">🔔</div>
+      <div class="topbar-avatar" id="topbarAvatar" onclick="if(typeof openProfilePanel==='function'&&(typeof CC!=='undefined'&&CC.getUser&&CC.getUser())){openProfilePanel();}else if(typeof openAccount==='function'){openAccount('sign in');}">G</div>
     </div>
   </div>
 
@@ -629,7 +629,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="cc-nl">Home</div>
       <div class="cc-ni-dot"></div>
     </div>
-    <div class="cc-ni" onclick="navSecond()">
+    <div class="cc-ni" onclick="window.location.href='circles.html'">
       <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg></div>
       <div class="cc-nl" id="ccNavSecondLbl">Circles</div>
       <div class="cc-ni-dot"></div>
@@ -644,7 +644,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="cc-nl">Journal</div>
       <div class="cc-ni-dot"></div>
     </div>
-    <div class="cc-ni" onclick="navMe()">
+    <div class="cc-ni" onclick="if(typeof openProfilePanel==='function'&&(typeof CC!=='undefined'&&CC.getUser&&CC.getUser())){openProfilePanel();}else if(typeof openAccount==='function'){openAccount('sign in');}else{window.location.href='gather.html?signin=1';}">
       <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div class="cc-nl" id="ccNavMeLbl">Me</div>
       <div class="cc-ni-dot"></div>
@@ -660,6 +660,18 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.9rem;">How do you want to share this?</div>
       <div id="sharePickerOptions" style="display:flex;flex-direction:column;gap:.6rem;"></div>
       <button onclick="closeSharePicker()" style="width:100%;margin-top:.9rem;padding:.65rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;color:rgba(242,232,216,.3);cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATIONS PANEL ── -->
+  <div id="notifPanel" style="display:none;position:fixed;inset:0;z-index:350;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);" onclick="closeNotifications()">
+    <div onclick="event.stopPropagation()" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:linear-gradient(180deg,#0e1a14,#080f0a);border-radius:20px 20px 0 0;padding:1.4rem 1.2rem 2.4rem;border-top:1px solid rgba(201,125,58,0.15);max-height:80vh;overflow-y:auto;">
+      <div style="width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);margin:0 auto 1.2rem;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;">
+        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.7);">Notifications</div>
+        <div id="notifUnreadBadge" style="display:none;font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;background:rgba(201,125,58,.25);color:#c97d3a;padding:.15rem .5rem;border-radius:999px;"></div>
+      </div>
+      <div id="notifList"></div>
     </div>
   </div>
 
@@ -1453,6 +1465,143 @@ function openProfilePanel() {
 
 function closeProfilePanel() {
   document.getElementById('profilePanel').style.display = 'none';
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────
+function openNotifications() {
+  renderNotifications();
+  document.getElementById('notifPanel').style.display = 'block';
+  // Mark all as read
+  try { localStorage.setItem('cc_notif_read', Date.now()); } catch(e) {}
+  document.getElementById('notifUnreadBadge').style.display = 'none';
+}
+
+function closeNotifications() {
+  document.getElementById('notifPanel').style.display = 'none';
+}
+
+function renderNotifications() {
+  var list = document.getElementById('notifList');
+  var user = CC.getUser ? CC.getUser() : null;
+  var tier = getTier ? getTier() : 'free';
+  var now = new Date();
+  var dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][now.getDay()];
+
+  // Build notifications based on real app state
+  var notifs = [];
+
+  // Daily card notification
+  notifs.push({
+    icon: '✦',
+    color: 'rgba(201,125,58,.8)',
+    bg: 'rgba(201,125,58,.06)',
+    border: 'rgba(201,125,58,.15)',
+    title: dayName + '\'s card is ready',
+    body: 'A new question is waiting for you in Gather.',
+    action: function() { closeNotifications(); },
+    time: 'Today'
+  });
+
+  // Quiz notification (weekly)
+  notifs.push({
+    icon: '🧠',
+    color: 'rgba(155,109,212,.8)',
+    bg: 'rgba(155,109,212,.06)',
+    border: 'rgba(155,109,212,.15)',
+    title: 'New quiz this week',
+    body: 'What Kind of Connector Are You? — take it in Discover You.',
+    action: function() { closeNotifications(); document.querySelector('.quiz-card') && document.querySelector('.quiz-card').click(); },
+    time: 'This week'
+  });
+
+  // Tier-specific
+  if (tier === 'connect' || tier === 'insight' || tier === 'legacy' || tier === 'founder') {
+    notifs.push({
+      icon: '◎',
+      color: 'rgba(58,173,144,.8)',
+      bg: 'rgba(58,173,144,.06)',
+      border: 'rgba(58,173,144,.15)',
+      title: 'Create your first Circle',
+      body: 'Invite the people you love to share, reflect, and play together.',
+      action: function() { closeNotifications(); window.location.href='circles.html'; },
+      time: 'New'
+    });
+  }
+
+  if (tier === 'insight' || tier === 'legacy' || tier === 'founder') {
+    notifs.push({
+      icon: '🍃',
+      color: 'rgba(184,134,11,.7)',
+      bg: 'rgba(184,134,11,.06)',
+      border: 'rgba(184,134,11,.15)',
+      title: 'Living Legacy is unlocked',
+      body: 'Start preserving a story. Add someone to your family tree.',
+      action: function() { closeNotifications(); window.location.href='legacy.html'; },
+      time: 'New'
+    });
+  }
+
+  // Free upgrade nudge
+  if (tier === 'free') {
+    notifs.push({
+      icon: '🔓',
+      color: 'rgba(201,125,58,.6)',
+      bg: 'rgba(201,125,58,.04)',
+      border: 'rgba(201,125,58,.12)',
+      title: 'Unlock more with Connect',
+      body: '5 cards a day, Circles, and deeper questions. $4.99/mo.',
+      action: function() { closeNotifications(); openAccount('upgrade'); },
+      time: ''
+    });
+  }
+
+  if (!notifs.length) {
+    list.innerHTML = '<div style="text-align:center;padding:2rem 0;font-family:\'DM Sans\',sans-serif;font-size:.88rem;color:rgba(242,232,216,.3);font-style:italic;">You\'re all caught up.</div>';
+    return;
+  }
+
+  list.innerHTML = notifs.map(function(n, i) {
+    return '<div onclick="notifAction(' + i + ')" style="display:flex;gap:.9rem;padding:.9rem .8rem;background:' + n.bg + ';border:1px solid ' + n.border + ';border-radius:12px;margin-bottom:.55rem;cursor:pointer;">'
+      + '<div style="width:36px;height:36px;border-radius:50%;background:' + n.bg + ';border:1px solid ' + n.border + ';display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">' + n.icon + '</div>'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="font-family:\'Nunito\',sans-serif;font-size:.78rem;font-weight:800;color:rgba(242,232,216,.9);margin-bottom:.18rem;">' + n.title + '</div>'
+      + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.75rem;color:rgba(242,232,216,.45);line-height:1.45;">' + n.body + '</div>'
+      + '</div>'
+      + (n.time ? '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;color:rgba(242,232,216,.25);white-space:nowrap;padding-top:.1rem;">' + n.time + '</div>' : '')
+      + '</div>';
+  }).join('');
+
+  // Store actions for onclick
+  window._notifActions = notifs.map(function(n){ return n.action; });
+
+  // Update badge
+  var lastRead = parseInt(localStorage.getItem('cc_notif_read') || '0');
+  var unread = notifs.length; // simplified — could track per-notif
+  if (unread > 0 && lastRead === 0) {
+    var badge = document.getElementById('notifUnreadBadge');
+    badge.textContent = unread;
+    badge.style.display = 'block';
+  }
+}
+
+function notifAction(i) {
+  if (window._notifActions && window._notifActions[i]) {
+    window._notifActions[i]();
+  }
+}
+
+// Show notification badge on load if unread
+function checkNotifBadge() {
+  try {
+    var lastRead = parseInt(localStorage.getItem('cc_notif_read') || '0');
+    if (lastRead === 0) {
+      var badge = document.getElementById('notifUnreadBadge');
+      if (badge) { badge.textContent = '3'; badge.style.display = 'block'; }
+      // Also show a small dot on the bell
+      var bell = document.querySelector('.topbar-btn');
+      if (bell) bell.style.background = 'rgba(201,125,58,.2)';
+    }
+  } catch(e) {}
 }
 
 // ── LEGAL MODAL ──────────────────────────────────────────
@@ -2320,6 +2469,7 @@ document.addEventListener('DOMContentLoaded', function() {
   loadCircles();
   var ls = document.getElementById('legacyShelf');
   if (ls) ls.style.display = 'block';
+  checkNotifBadge();
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);
@@ -2448,8 +2598,7 @@ function navMe() {
   }
 }
 function navSecond() {
-  var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
-  window.location.href = u ? 'circles.html' : 'gather.html';
+  window.location.href = 'circles.html';
 }
 function updateNavLabels() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;

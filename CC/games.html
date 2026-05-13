@@ -458,7 +458,7 @@ body::before{content:"";position:fixed;inset:0;
       <div class="cc-nl">Home</div>
       <div class="cc-ni-dot"></div>
     </div>
-    <div class="cc-ni" onclick="navSecond()">
+    <div class="cc-ni" onclick="window.location.href='circles.html'">
       <div class="cc-ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/></svg></div>
       <div class="cc-nl" id="ccNavSecondLbl">Circles</div>
       <div class="cc-ni-dot"></div>
@@ -1521,8 +1521,7 @@ function navMe() {
   }
 }
 function navSecond() {
-  var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
-  window.location.href = u ? 'circles.html' : 'gather.html';
+  window.location.href = 'circles.html';
 }
 function updateNavLabels() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
