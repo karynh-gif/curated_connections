@@ -196,19 +196,19 @@
   /* App stays at 430px — the atmosphere frames it */
 
   .cc-atm-left-panel, .cc-atm-right-panel {
-    width: calc((100vw - 524px) / 2);
+    width: calc((100vw - 660px) / 2);
   }
 
   /* ── EDGE DISSOLVE — no hard line ── */
   #cc-edge-fade-left {
     position: fixed; top: 0; bottom: 0;
-    left: calc((100vw - 524px) / 2);
+    left: calc((100vw - 660px) / 2);
     width: 36px; z-index: 12; pointer-events: none;
     background: linear-gradient(to right, rgba(2,5,8,0.72) 0%, transparent 100%);
   }
   #cc-edge-fade-right {
     position: fixed; top: 0; bottom: 0;
-    right: calc((100vw - 524px) / 2);
+    right: calc((100vw - 660px) / 2);
     width: 36px; z-index: 12; pointer-events: none;
     background: linear-gradient(to left, rgba(2,5,8,0.72) 0%, transparent 100%);
   }
@@ -217,8 +217,8 @@
   /* Sized to zoomed visual footprint: 430px × 1.22 ≈ 524px */
   #cc-frame-glow {
     position: fixed; top: 0; bottom: 0;
-    left: calc((100vw - 524px) / 2);
-    width: 524px; z-index: 3; pointer-events: none;
+    left: calc((100vw - 660px) / 2);
+    width: 660px; z-index: 3; pointer-events: none;
     box-shadow:
       -30px 0  60px  8px rgba(195,115,38,0.09),
        30px 0  60px  8px rgba(195,115,38,0.09),
@@ -273,8 +273,8 @@
 
 /* ── LARGE TABLET / LANDSCAPE ── */
 @media (min-width: 1024px) {
-  .cc-atm-left-panel, .cc-atm-right-panel { width: calc((100vw - 524px) / 2); }
-  #cc-frame-glow { left: calc((100vw - 524px) / 2); width: 524px; }
-  #cc-edge-fade-left  { left:  calc((100vw - 524px) / 2); }
-  #cc-edge-fade-right { right: calc((100vw - 524px) / 2); }
+  .cc-atm-left-panel, .cc-atm-right-panel { width: calc((100vw - 660px) / 2); }
+  #cc-frame-glow { left: calc((100vw - 660px) / 2); width: 660px; }
+  #cc-edge-fade-left  { left:  calc((100vw - 660px) / 2); }
+  #cc-edge-fade-right { right: calc((100vw - 660px) / 2); }
 }

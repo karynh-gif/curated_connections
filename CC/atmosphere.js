@@ -12,8 +12,8 @@
   var isTablet = function() { return window.innerWidth >= 768; };
   var appW = function() {
     // zoom: 1.22 at 768px, 1.32 at 1024px — particles avoid the zoomed visual footprint
-    if (window.innerWidth >= 1024) return Math.round(430 * 1.32); // ~568px
-    if (window.innerWidth >= 768)  return Math.round(430 * 1.22); // ~524px
+    if (window.innerWidth >= 1024) return 660;
+    if (window.innerWidth >= 768)  return 660; // matches .app max-width on tablet
     return 430;
   };
 
