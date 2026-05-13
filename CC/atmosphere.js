@@ -10,7 +10,12 @@
   if (window.innerWidth < 520) return;
 
   var isTablet = function() { return window.innerWidth >= 768; };
-  var appW     = function() { return window.innerWidth >= 1024 ? 660 : window.innerWidth >= 768 ? 600 : 430; };
+  var appW = function() {
+    // zoom: 1.22 at 768px, 1.32 at 1024px — particles avoid the zoomed visual footprint
+    if (window.innerWidth >= 1024) return Math.round(430 * 1.32); // ~568px
+    if (window.innerWidth >= 768)  return Math.round(430 * 1.22); // ~524px
+    return 430;
+  };
 
   function getAppBounds() {
     var aw = Math.min(appW(), window.innerWidth);

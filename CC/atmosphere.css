@@ -193,35 +193,38 @@
 */
 @media (min-width: 768px) {
 
-  /* ── WIDER CONTENT STAGE ── */
-  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right):not(#cc-fog):not(#cc-fairy-lights) {
-    max-width: 600px !important;
+  /* ── SCALE THE APP STAGE ── */
+  /* zoom scales everything proportionally: fonts, cards, spacing, icons.
+     430px × 1.22 = ~524px — fits comfortably in the 600px atmosphere frame. */
+  .app {
+    zoom: 1.22;
+    max-width: 430px !important; /* zoom handles the visual size — keep layout at 430px */
   }
 
   .cc-atm-left-panel, .cc-atm-right-panel {
-    width: calc((100vw - 600px) / 2);
+    width: calc((100vw - 524px) / 2);
   }
 
   /* ── EDGE DISSOLVE — no hard line ── */
   #cc-edge-fade-left {
     position: fixed; top: 0; bottom: 0;
-    left: calc((100vw - 600px) / 2);
+    left: calc((100vw - 524px) / 2);
     width: 36px; z-index: 12; pointer-events: none;
     background: linear-gradient(to right, rgba(2,5,8,0.72) 0%, transparent 100%);
   }
   #cc-edge-fade-right {
     position: fixed; top: 0; bottom: 0;
-    right: calc((100vw - 600px) / 2);
+    right: calc((100vw - 524px) / 2);
     width: 36px; z-index: 12; pointer-events: none;
     background: linear-gradient(to left, rgba(2,5,8,0.72) 0%, transparent 100%);
   }
 
   /* ── CONTAINER WARMTH BLEED ── */
-  /* The app is the light source. Warmth radiates outward from it. */
+  /* Sized to zoomed visual footprint: 430px × 1.22 ≈ 524px */
   #cc-frame-glow {
     position: fixed; top: 0; bottom: 0;
-    left: calc((100vw - 600px) / 2);
-    width: 600px; z-index: 3; pointer-events: none;
+    left: calc((100vw - 524px) / 2);
+    width: 524px; z-index: 3; pointer-events: none;
     box-shadow:
       -30px 0  60px  8px rgba(195,115,38,0.09),
        30px 0  60px  8px rgba(195,115,38,0.09),
@@ -276,11 +279,12 @@
 
 /* ── LARGE TABLET / LANDSCAPE ── */
 @media (min-width: 1024px) {
-  body > *:not(.cc-atmosphere):not(.cc-atm-left-panel):not(.cc-atm-right-panel):not(#cc-frame-glow):not(#cc-edge-fade-left):not(#cc-edge-fade-right):not(#cc-fog):not(#cc-fairy-lights) {
-    max-width: 660px !important;
+  .app {
+    zoom: 1.32; /* 430px × 1.32 = ~568px */
+    max-width: 430px !important;
   }
-  .cc-atm-left-panel, .cc-atm-right-panel { width: calc((100vw - 660px) / 2); }
-  #cc-frame-glow { left: calc((100vw - 660px) / 2); width: 660px; }
-  #cc-edge-fade-left  { left:  calc((100vw - 660px) / 2); }
-  #cc-edge-fade-right { right: calc((100vw - 660px) / 2); }
+  .cc-atm-left-panel, .cc-atm-right-panel { width: calc((100vw - 524px) / 2); }
+  #cc-frame-glow { left: calc((100vw - 524px) / 2); width: 600px; }
+  #cc-edge-fade-left  { left:  calc((100vw - 524px) / 2); }
+  #cc-edge-fade-right { right: calc((100vw - 524px) / 2); }
 }
