@@ -1969,18 +1969,32 @@ function showMyFeedSection() {
   if (!shelf) return;
   try {
     var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
-    if (!feed.length) return;
+    if (!feed.length) { shelf.style.display = 'none'; return; }
     shelf.style.display = 'block';
-    var html = feed.slice(0,3).map(function(p) {
-      var icon = p.type === 'quiz' ? '🧠' : '✦';
+    var html = feed.slice(0,5).map(function(p, i) {
+      var icon  = p.type === 'quiz' ? '🧠' : '✦';
       var label = p.type === 'quiz' ? (p.quiz || 'Quiz result') : 'Reflection';
-      return '<div style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:.5rem;">'
+      return '<div id="feedItem_' + i + '" style="padding:.85rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:.5rem;position:relative;">'
+        + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;">'
+        + '<div style="flex:1;">'
         + '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.3rem;">' + icon + ' ' + label + '</div>'
         + (p.title ? '<div style="font-family:\'Cormorant Garamond\',serif;font-size:1.05rem;color:rgba(242,232,216,.9);margin-bottom:.2rem;">' + p.title + '</div>' : '')
         + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.78rem;color:rgba(242,232,216,.45);line-height:1.5;">' + (p.snippet || p.body || '').substring(0,100) + '</div>'
-        + '</div>';
+        + '</div>'
+        + '<button onclick="deleteFeedItem(\'' + p.id + '\')" style="flex-shrink:0;background:none;border:none;color:rgba(242,232,216,.2);font-size:.85rem;cursor:pointer;padding:.1rem .3rem;line-height:1;" title="Remove">✕</button>'
+        + '</div></div>';
     }).join('');
     document.getElementById('myFeedList').innerHTML = html;
+  } catch(e) {}
+}
+
+function deleteFeedItem(id) {
+  try {
+    var feed = JSON.parse(localStorage.getItem('cc_my_feed') || '[]');
+    feed = feed.filter(function(p){ return p.id !== id; });
+    localStorage.setItem('cc_my_feed', JSON.stringify(feed));
+    showMyFeedSection();
+    showToast('Removed ✦');
   } catch(e) {}
 }
 
@@ -2780,8 +2794,6 @@ document.addEventListener('DOMContentLoaded', function() {
   showMyFeedSection();
   showAddToHomePrompt();
   loadDailyUplift();
-  showMyFeedSection();
-  showAddToHomePrompt();
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);
