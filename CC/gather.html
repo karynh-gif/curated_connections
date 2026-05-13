@@ -609,7 +609,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div onclick="window.location.href='gift-leaf.html?occasion=mothersday'" style="padding:.85rem 1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.8rem;">
           <div style="flex:1;">
             <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,100,140,.7);margin-bottom:.18rem;">🌸 Mother's Day</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.82);line-height:1.35;">Tell her what she means — before the day passes.</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.82);line-height:1.35;">Tell her what she means. Any day is the right day.</div>
             <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:700;color:rgba(200,100,140,.45);margin-top:.2rem;">Code: MOTHERS2026 · Free through Dec 31</div>
           </div>
           <div style="text-align:right;flex-shrink:0;">
@@ -763,8 +763,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- Sign out -->
       <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
-        <div onclick="resetPassword()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.3);">Reset Password</div>
-        <div onclick="signOutUser()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.35);">Sign Out</div>
+        <div onclick="syncAccountTier()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(201,125,58,.5);">Sync Account</div>
+        <div onclick="resetPassword()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,0.28);">Reset Password</div>
+        <div onclick="signOutUser()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,0.32);">Sign Out</div>
       </div>
 
       <!-- Sign in / Create account — shown when not logged in -->
@@ -1442,7 +1443,7 @@ function wwTap(inner) {
     inner.style.transition = 'transform 0.15s ease';
     setTimeout(function() {
       inner.querySelector('.fc-back').style.display = 'none';
-      inner.querySelector('.fc-front').style.display = 'block';
+      inner.querySelector('.fc-front').style.display = 'flex';
       inner.style.background = WW_TYPES[WW_DATA[inner.dataset.key] ? WW_DATA[inner.dataset.key].type : 'Riddle'] ? WW_TYPES[WW_DATA[inner.dataset.key].type].frontBg : '';
       inner.style.transform = 'scaleX(1)';
       inner.dataset.state = 'front';
@@ -2861,6 +2862,30 @@ async function signOut() {
 
 function signOutUser() { signOut(); }
 
+function syncAccountTier() {
+  var u = null;
+  try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+  if (!u || !u.email) { showToast('Sign in first'); return; }
+  showToast('Checking your subscription…');
+  fetch('/.netlify/functions/stripe-sync?email=' + encodeURIComponent(u.email))
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      if (data.tier && data.tier !== 'free') {
+        try {
+          var stored = JSON.parse(localStorage.getItem('cc_user') || '{}');
+          stored.tier = data.tier;
+          localStorage.setItem('cc_user', JSON.stringify(stored));
+        } catch(e) {}
+        closeProfilePanel();
+        showToast('Synced! You are on ' + data.tier.charAt(0).toUpperCase() + data.tier.slice(1) + ' ✦');
+        setTimeout(function(){ window.location.reload(); }, 1200);
+      } else {
+        showToast('No active subscription found');
+      }
+    })
+    .catch(function(){ showToast('Could not reach Stripe — try again'); });
+}
+
 async function resetPassword() {
   var u = null;
   try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
@@ -3356,6 +3381,30 @@ document.addEventListener('DOMContentLoaded', function() {
   var _urlParams = new URLSearchParams(window.location.search);
   var _urlPromo = _urlParams.get('promo') || _urlParams.get('code');
   if (_urlPromo) setActivePromoCode(_urlPromo);
+
+  // Sync tier after Stripe payment
+  if (params.get('upgraded') === '1') {
+    var u = null;
+    try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+    if (u && u.email) {
+      fetch('/.netlify/functions/stripe-sync?email=' + encodeURIComponent(u.email))
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          if (data.tier && data.tier !== 'free') {
+            // Update stored user tier
+            try {
+              var stored = JSON.parse(localStorage.getItem('cc_user') || '{}');
+              stored.tier = data.tier;
+              localStorage.setItem('cc_user', JSON.stringify(stored));
+            } catch(e) {}
+            showToast('Welcome to ' + data.tier.charAt(0).toUpperCase() + data.tier.slice(1) + '! ✦');
+            // Reload to apply new tier
+            setTimeout(function(){ window.location.href = 'gather.html'; }, 1500);
+          }
+        })
+        .catch(function(){});
+    }
+  }
 
   // Auto-open signup modal if redirected from another page
   var params = new URLSearchParams(window.location.search);
