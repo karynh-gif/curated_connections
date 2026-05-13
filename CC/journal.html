@@ -426,6 +426,8 @@ function openAccount() {
 
 <script>
 // ── STANDARD NAV FUNCTIONS ────────────────────────────────────
+function closeProfilePanel(){ /* panel lives on gather.html */ }
+function openProfilePanel(){ window.location.href="gather.html?profile=1"; }
 function navMe() {
   var u = (typeof CC !== 'undefined' && CC.getUser) ? CC.getUser() : null;
   window.location.href = u ? 'gather.html?profile=1' : 'gather.html?signin=1';

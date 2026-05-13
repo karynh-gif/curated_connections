@@ -1519,6 +1519,15 @@ if (fbAuth) {
   });
 }
 
+function closeProfilePanel() {
+  var panel = document.getElementById('profilePanel');
+  if (panel) panel.style.display = 'none';
+  var picPanel = document.getElementById('picChoicePanel');
+  if (picPanel) picPanel.remove();
+  var updatePanel = document.getElementById('shareUpdatePanel');
+  if (updatePanel) updatePanel.remove();
+}
+
 function openProfilePanel() {
   var panel = document.getElementById('profilePanel');
   if (!panel) return;
