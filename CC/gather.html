@@ -71,25 +71,25 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .hero-back-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(242,232,216,.38);letter-spacing:.06em;margin-bottom:28px;position:relative;z-index:1;}
 .hero-back-tap{font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.38);position:relative;z-index:1;animation:breathe 2.2s ease-in-out infinite;}
 /* HERO FRONT */
-.hero-front{position:absolute;inset:0;display:none;z-index:2;}
-.hero-inner{position:relative;z-index:1;padding:1.4rem 1.4rem 1.2rem;}
+.hero-front{position:absolute;inset:0;display:none;flex-direction:column;z-index:2;}
+.hero-inner{position:relative;z-index:1;padding:1.4rem 1.4rem 0;display:flex;flex-direction:column;flex:1;}
 .hero-eyebrow{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.85);margin-bottom:.6rem;display:flex;align-items:center;gap:.3rem;}
 .hero-eyebrow::before{content:'✦';font-size:.75rem;}
 .hero-question{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:var(--cream);line-height:1.42;margin-bottom:.9rem;}
 .hero-icon-bar{display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(255,255,255,.1);padding:.7rem .4rem 1rem;}
 .hib-btn{display:flex;flex-direction:column;align-items:center;gap:.15rem;background:none;border:none;cursor:pointer;padding:.2rem .35rem;}
-.hib-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--card-accent, rgba(255,255,255,.85));transition:all .15s;}
+.hib-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:rgba(242,232,216,.75);transition:all .15s;}
 .hib-icon:hover{background:rgba(255,255,255,.18);}
-.hib-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--card-accent-dim, rgba(255,255,255,.35));}
+.hib-label{font-family:'Nunito',sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(242,232,216,.38);}
 /* ── UNIVERSAL RATING ROW ── */
-.cc-rate-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.35rem .5rem .2rem;border-top:1px solid rgba(255,255,255,.05);}
+.cc-rate-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.35rem .5rem 1.1rem;border-top:1px solid rgba(255,255,255,.05);margin-top:auto;}
 .cc-rate-btn{display:flex;flex-direction:column;align-items:center;gap:.18rem;background:none;border:none;cursor:pointer;padding:.3rem .6rem;border-radius:8px;transition:all .18s;opacity:.32;}
 .cc-rate-btn:hover{opacity:.65;background:rgba(255,255,255,.05);}
 .cc-rate-btn.selected{opacity:1;}
 .cc-rate-btn.selected.up{background:rgba(58,173,144,.12);border:1px solid rgba(58,173,144,.25);}
 .cc-rate-btn.selected.mid{background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.22);}
 .cc-rate-btn.selected.dn{background:rgba(192,80,56,.09);border:1px solid rgba(192,80,56,.2);}
-.cc-rate-emoji{font-size:.88rem;line-height:1;}
+.cc-rate-emoji{font-size:.88rem;line-height:1;display:flex;align-items:center;justify-content:center;}
 .cc-rate-label{font-family:'Nunito',sans-serif;font-size:.52rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(242,232,216,.4);}
 .cc-share-row{display:flex;justify-content:flex-end;padding:.1rem .5rem .4rem;}
 .cc-share-link{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.2rem .4rem;border:none;background:none;}
@@ -159,8 +159,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .card-action-sec{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(242,232,216,.6);}
 /* WW OVERLAY */
 /* ── WIT & WONDER overlay — whimsical, collectible, progressive reveal ── */
-.ww-overlay{display:none;position:fixed;inset:0;z-index:200;flex-direction:column;padding:1.4rem 1.3rem 2.8rem;overflow-y:auto;}
-.ww-overlay.open{display:flex;}
+.ww-overlay{display:none;position:fixed;inset:0;z-index:200;flex-direction:column;overflow-y:auto;background:#03060a;}.ww-overlay.open{display:flex;flex-direction:column;max-width:430px;margin:0 auto;padding:1.4rem 1.3rem 2.8rem;left:50%;transform:translateX(-50%);width:100%;}
 /* Vignette to make it feel like holding a physical card */
 .ww-overlay::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 40%,rgba(0,0,0,.55) 100%);pointer-events:none;z-index:0;}
 .ww-overlay > *{position:relative;z-index:1;}
@@ -182,7 +181,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ww-reveal-btn:active::before{opacity:1;}
 @keyframes revealDrop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 /* RESPONSE SCREEN */
-.response-screen{display:none;position:fixed;inset:0;z-index:200;background:var(--ink);flex-direction:column;padding:1.3rem;}
+.response-screen{display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:100%;z-index:200;background:#03060a;flex-direction:column;padding:1.3rem;}
 .response-screen.open{display:flex;}
 .response-echo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:rgba(242,232,216,.45);margin-top:2rem;margin-bottom:.9rem;padding:.7rem .9rem;background:rgba(255,255,255,.04);border-radius:12px;border-left:2px solid var(--amber);}
 .response-label{font-family:'Nunito',sans-serif;font-size:.70rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.38);margin-bottom:.45rem;}
@@ -341,7 +340,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-ni.active .cc-nl{color:#c97d3a;}
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
-@media(min-width:431px){.card-screen{max-width:660px !important;}}
+@media(min-width:431px){.card-screen{max-width:660px !important;}.ww-overlay.open{max-width:660px !important;}.response-screen{max-width:660px !important;}}
 @media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:.67rem !important;color:rgba(244,236,220,.6) !important;} .cc-ni-icon,.cc-ni svg{width:20px !important;height:20px !important;}}
 </style>
 <script src="/cc-auth.js"></script>
@@ -526,9 +525,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
             </button>
           </div>
           <div class="cc-rate-row" id="heroRateRow">
-            <button class="cc-rate-btn up"  onclick="event.stopPropagation();ccRate('hero',1,this)"><span class="cc-rate-emoji">👍</span><span class="cc-rate-label">Felt that</span></button>
+            <button class="cc-rate-btn up"  onclick="event.stopPropagation();ccRate('hero',1,this)"><span class="cc-rate-emoji"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></span><span class="cc-rate-label">Felt that</span></button>
             <button class="cc-rate-btn mid" onclick="event.stopPropagation();ccRate('hero',0,this)"><span class="cc-rate-emoji">✦</span><span class="cc-rate-label">Interesting</span></button>
-            <button class="cc-rate-btn dn"  onclick="event.stopPropagation();ccRate('hero',-1,this)"><span class="cc-rate-emoji">👎</span><span class="cc-rate-label">Pass</span></button>
+            <button class="cc-rate-btn dn"  onclick="event.stopPropagation();ccRate('hero',-1,this)"><span class="cc-rate-emoji"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="cc-rate-label">Pass</span></button>
             <button class="cc-share-link"   onclick="event.stopPropagation();ccShareCard('hero')" style="margin-left:.5rem;">Share ↗</button>
           </div>
         </div>
@@ -570,13 +569,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
 
 
-    <div id="myFeedShelf" style="display:none;margin:.4rem 0;">
-      <div class="shelf-header" style="padding:.5rem 1rem .4rem;display:flex;align-items:center;justify-content:space-between;">
-        <div class="shelf-title">What's new</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.55);cursor:pointer;" onclick="window.location.href='circles.html'">See feed →</div>
-      </div>
-      <div id="myFeedList" style="padding:0 .8rem;"></div>
-    </div>
+
 
     <div id="legacyShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header">
@@ -644,26 +637,32 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <button onclick="window.location.href='circles.html'" style="padding:.55rem 1.2rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.25);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
       </div>
 
-      <!-- What's new strip -->
+      <!-- Reflect on today -->
+      <div style="border-top:1px solid rgba(255,255,255,.05);margin:.4rem .9rem 0;padding:.7rem 0 .5rem;">
+        <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);margin-bottom:.45rem;">Reflect on today</div>
+        <textarea id="quickReflectText" placeholder="What came up for you? A moment, a feeling, something that stuck..." style="width:100%;min-height:62px;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:rgba(242,232,216,.8);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.3)'" onblur="this.style.borderColor='rgba(255,255,255,.07)'"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.4rem;">
+          <div id="reflectRetention" style="font-size:.62rem;color:rgba(242,232,216,.18);font-style:italic;font-family:'DM Sans',sans-serif;"></div>
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <!-- Also save to journal toggle -->
+            <div onclick="toggleJournalSave()" style="display:flex;align-items:center;gap:.3rem;cursor:pointer;" id="journalToggleRow">
+              <div id="journalToggleBtn" style="width:24px;height:13px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);position:relative;transition:all .2s;flex-shrink:0;">
+                <div id="journalToggleKnob" style="position:absolute;top:1px;left:1px;width:9px;height:9px;border-radius:50%;background:rgba(242,232,216,.35);transition:all .2s;"></div>
+              </div>
+              <span style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:700;color:rgba(242,232,216,.28);" id="journalToggleLabel">Journal</span>
+            </div>
+            <button onclick="saveQuickReflect()" style="padding:.35rem .85rem;background:linear-gradient(135deg,rgba(201,125,58,.55),rgba(232,160,69,.55));border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save ✦</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- What's new -->
       <div id="myFeedShelf" style="display:none;border-top:1px solid rgba(255,255,255,.05);margin:.2rem .9rem 0;padding:.6rem 0 0;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
           <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">✦ What's new</div>
           <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(201,125,58,.5);cursor:pointer;" onclick="window.location.href='circles.html'">Full feed →</div>
         </div>
         <div id="myFeedList"></div>
-      </div>
-
-      <!-- Reflect -->
-      <div style="border-top:1px solid rgba(255,255,255,.05);margin:.4rem .9rem 0;padding:.7rem 0 .5rem;">
-        <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);margin-bottom:.45rem;">Reflect on today</div>
-        <textarea id="quickReflectText" placeholder="What came up for you? A moment, a feeling, something that stuck..." style="width:100%;min-height:62px;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:rgba(242,232,216,.8);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.3)'" onblur="this.style.borderColor='rgba(255,255,255,.07)'"></textarea>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.4rem;">
-          <div id="reflectRetention" style="font-size:.62rem;color:rgba(242,232,216,.18);font-style:italic;font-family:'DM Sans',sans-serif;"></div>
-          <div style="display:flex;gap:.5rem;align-items:center;">
-            <a href="journal.html" style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(201,125,58,.4);text-decoration:none;">Journal →</a>
-            <button onclick="saveQuickReflect()" style="padding:.35rem .85rem;background:linear-gradient(135deg,rgba(201,125,58,.55),rgba(232,160,69,.55));border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save ✦</button>
-          </div>
-        </div>
       </div>
 
     </div><!-- /social block -->
@@ -832,9 +831,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div class="card-action card-action-sec" onclick="ccShareCard('overlay')">Share ↗</div>
       </div>
       <div class="cc-rate-row" id="overlayRateRow">
-        <button class="cc-rate-btn up"  onclick="ccRate('overlay',1,this)"><span class="cc-rate-emoji">👍</span><span class="cc-rate-label">Felt that</span></button>
+        <button class="cc-rate-btn up"  onclick="ccRate('overlay',1,this)"><span class="cc-rate-emoji"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></span><span class="cc-rate-label">Felt that</span></button>
         <button class="cc-rate-btn mid" onclick="ccRate('overlay',0,this)"><span class="cc-rate-emoji">✦</span><span class="cc-rate-label">Interesting</span></button>
-        <button class="cc-rate-btn dn"  onclick="ccRate('overlay',-1,this)"><span class="cc-rate-emoji">👎</span><span class="cc-rate-label">Pass</span></button>
+        <button class="cc-rate-btn dn"  onclick="ccRate('overlay',-1,this)"><span class="cc-rate-emoji"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="cc-rate-label">Pass</span></button>
       </div>
     </div>
   </div>
@@ -2076,6 +2075,28 @@ function ccShareFallback(text) {
 }
 
 // ── QUICK REFLECT ─────────────────────────────────────────────
+var _saveToJournal = false;
+
+function toggleJournalSave() {
+  _saveToJournal = !_saveToJournal;
+  var btn   = document.getElementById('journalToggleBtn');
+  var knob  = document.getElementById('journalToggleKnob');
+  var label = document.getElementById('journalToggleLabel');
+  if (_saveToJournal) {
+    btn.style.background   = 'rgba(201,125,58,.5)';
+    btn.style.borderColor  = 'rgba(201,125,58,.6)';
+    knob.style.left        = '12px';
+    knob.style.background  = '#fff';
+    label.style.color      = 'rgba(201,125,58,.7)';
+  } else {
+    btn.style.background   = 'rgba(255,255,255,.1)';
+    btn.style.borderColor  = 'rgba(255,255,255,.12)';
+    knob.style.left        = '1px';
+    knob.style.background  = 'rgba(242,232,216,.35)';
+    label.style.color      = 'rgba(242,232,216,.28)';
+  }
+}
+
 function saveQuickReflect() {
   var text = document.getElementById('quickReflectText').value.trim();
   if (!text) { showToast('Write something first'); return; }
@@ -2095,8 +2116,26 @@ function saveQuickReflect() {
     if (feed.length > 50) feed = feed.slice(0,50);
     localStorage.setItem('cc_my_feed', JSON.stringify(feed));
   } catch(e) {}
+
+  // Also save to journal if toggled
+  if (_saveToJournal) {
+    try {
+      var entries = JSON.parse(localStorage.getItem('cc_journal') || '[]');
+      entries.unshift({
+        id:      'j_' + Date.now(),
+        text:    text,
+        date:    new Date().toISOString(),
+        source:  'reflect'
+      });
+      if (entries.length > 200) entries = entries.slice(0,200);
+      localStorage.setItem('cc_journal', JSON.stringify(entries));
+    } catch(e) {}
+  }
+
   document.getElementById('quickReflectText').value = '';
-  showToast('Saved to your feed ✦');
+  // Reset journal toggle
+  if (_saveToJournal) { toggleJournalSave(); }
+  showToast(_saveToJournal ? 'Saved to feed + journal ✦' : 'Saved to your feed ✦');
   showMyFeedSection();
 }
 
