@@ -105,13 +105,15 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,12,9,.96);border-top:1px solid rgba(201,125,58,.12);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-around;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));z-index:100;}
 .cc-ni{display:flex;flex-direction:column;align-items:center;gap:.16rem;opacity:.32;min-width:20%;cursor:pointer;transition:opacity .18s;}
 .cc-ni.active{opacity:1;}
-.cc-ni .cc-ni-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.3);}
+.cc-ni .cc-ni-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:rgba(244,236,220,.55);}
 .cc-ni.active .cc-ni-icon{color:#c97d3a;}
-.cc-nl{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.3);}
+.cc-nl{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(244,236,220,.55);}
 .cc-ni.active .cc-nl{color:#c97d3a;}
 .cc-ni-dot{width:4px;height:4px;border-radius:50%;background:#c97d3a;margin:0 auto;opacity:0;}
 .cc-ni.active .cc-ni-dot{opacity:1;}
-@media(min-width:768px){.cc-nav{max-width:660px !important;} .cc-nl{font-size:.72rem !important;} .cc-ni-icon,.cc-ni svg{width:22px !important;height:22px !important;}}
+@media(min-width:768px){
+  html,body{background-color:#06060f !important;}
+  .app{max-width:660px !important;width:100% !important;}.cc-nav{max-width:660px !important;} .cc-nl{font-size:.67rem !important;color:rgba(244,236,220,.6) !important;} .cc-ni-icon,.cc-ni svg{width:20px !important;height:20px !important;}}
 </style>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -128,7 +130,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <link rel="stylesheet" href="/atmosphere.css"/>
   <script src="/atmosphere.js" defer></script>
 </head>
-<body>
+<body style="background:#06060f;">
 <div class="app">
 
   <!-- TOPBAR -->
@@ -282,7 +284,7 @@ function initGreeting() {
   if (user && user.name) {
     var first = user.name.split(' ')[0];
     document.getElementById('greetingName').textContent = first + '.';
-    document.getElementById('greetingSub').textContent = 'This is your space. No one else sees this.';
+    document.getElementById('greetingSub').textContent = 'This is your space. Share only what you choose.';
   }
 }
 
@@ -299,11 +301,7 @@ function checkTierAndLoad() {
     return;
   }
 
-  // Tier check — journal requires 'connect' or above
-  if (!CC.hasFeature('journal')) {
-    document.getElementById('tierGate').style.display = 'block';
-    return;
-  }
+  // Journal is available to all tiers
 
   document.getElementById('journalContent').style.display = 'block';
   loadPrompt(user);
