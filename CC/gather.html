@@ -18,7 +18,7 @@ html{font-size:16px;-webkit-text-size-adjust:100%;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;background:var(--ink);font-family:'DM Sans',sans-serif;color:var(--cream);-webkit-font-smoothing:antialiased;}
 body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");background-size:160px;pointer-events:none;z-index:9999;opacity:.4;}
-.app{max-width:430px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;background:var(--ink);position:relative;}
+.app{max-width:430px;margin:0 auto;height:100svh;height:100vh;display:flex;flex-direction:column;background:var(--ink);position:relative;overflow:hidden;}
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1rem .7rem;position:sticky;top:0;z-index:50;background:rgba(6,12,9,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05);}
 .topbar-name{font-family:'Pacifico',cursive;font-size:1.2rem;color:var(--amber);}
@@ -27,7 +27,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .topbar-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.82rem;cursor:pointer;}
 .topbar-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;cursor:pointer;}
 /* SCROLL */
-.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;}
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;-webkit-overflow-scrolling:touch;}
 .scroll::-webkit-scrollbar{display:none;}
 /* SHELF */
 .shelf{margin-top:1.5rem;}
@@ -745,12 +745,15 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       </div>
 
       <!-- Sign out -->
-      <div onclick="signOutUser()" style="text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.35);">Sign Out</div>
+      <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
+        <div onclick="resetPassword()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.3);">Reset Password</div>
+        <div onclick="signOutUser()" style="flex:1;text-align:center;padding:.65rem;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,0.35);">Sign Out</div>
+      </div>
 
       <!-- Sign in / Create account — shown when not logged in -->
       <div id="ppSignInRow" style="display:none;">
         <div onclick="closeProfilePanel();openAccount('create your free account')" style="text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,.15),rgba(201,125,58,.08));border:1px solid rgba(201,125,58,.25);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;margin-bottom:.5rem;">Create Free Account →</div>
-        <div onclick="closeProfilePanel();openAccount('sign in')" style="text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.35);">Sign In</div>
+        <div onclick="closeProfilePanel();openSignIn()" style="text-align:center;padding:.75rem;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.35);">Sign In to Existing Account</div>
       </div>
 
       <!-- Rate experience -->
@@ -1512,40 +1515,48 @@ if (fbAuth) {
 }
 
 function openProfilePanel() {
-  var u = CC.getUser ? CC.getUser() : null;
+  var panel = document.getElementById('profilePanel');
+  if (!panel) return;
+
+  // Always show the panel — populate based on auth state
+  var u = null;
+  try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+
+  var signOutBtn = document.querySelector('[onclick="signOutUser()"]');
+  var signInRow  = document.getElementById('ppSignInRow');
 
   if (!u) {
-    document.getElementById('ppAvatar').textContent = '✦';
-    document.getElementById('ppName').textContent = 'Welcome';
-    document.getElementById('ppTier').textContent = 'Not signed in';
+    // Not logged in
+    document.getElementById('ppAvatar').innerHTML = '✦';
+    document.getElementById('ppName').textContent  = 'Welcome';
+    document.getElementById('ppTier').textContent  = 'Create a free account';
     document.getElementById('ppUpgradeRow').style.display = 'none';
-    document.getElementById('ppBillingRow').style.display = 'none';
-    document.getElementById('ppSignInRow').style.display = 'block';
-    document.querySelector('[onclick="signOutUser()"]').style.display = 'none';
-    document.getElementById('profilePanel').style.display = 'block';
-    return;
+    document.getElementById('ppBillingRow').style.display  = 'none';
+    if (signInRow)  signInRow.style.display  = 'block';
+    if (signOutBtn) signOutBtn.style.display = 'none';
+  } else {
+    // Logged in
+    var initial = (u.name || u.email || 'U').charAt(0).toUpperCase();
+    document.getElementById('ppAvatar').innerHTML = initial;
+    document.getElementById('ppName').textContent  = u.name  || u.email || 'Your Name';
+    var tier = u.tier || 'free';
+    var tierLabels = { free:'Free', connect:'Connect', insight:'Insight', legacy:'Legacy', founder:'Legacy Founder' };
+    document.getElementById('ppTier').textContent = (tierLabels[tier] || tier) + ' Member';
+    var isPaid = (tier !== 'free');
+    document.getElementById('ppUpgradeRow').style.display = (isPaid || tier === 'legacy' || tier === 'founder') ? 'none' : 'block';
+    document.getElementById('ppBillingRow').style.display  = isPaid ? 'block' : 'none';
+    if (signInRow)  signInRow.style.display  = 'none';
+    if (signOutBtn) signOutBtn.style.display = '';
+    // Upgrade button
+    try {
+      var links = { free: CC_CONFIG.stripe.connect.paymentLink, connect: CC_CONFIG.stripe.insight.paymentLink, insight: CC_CONFIG.stripe.legacy.paymentLink };
+      var upgradeLabels = { free:'Upgrade to Connect →', connect:'Upgrade to Insight →', insight:'Upgrade to Legacy →' };
+      var btn = document.getElementById('ppUpgradeBtn');
+      if (btn && links[tier]) { btn.href = links[tier]; btn.textContent = upgradeLabels[tier] || 'Upgrade →'; }
+    } catch(e) {}
   }
-  document.getElementById('ppSignInRow').style.display = 'none';
-  document.querySelector('[onclick="signOutUser()"]').style.display = '';
 
-  // Populate panel
-  var initial = (u.name || 'U').charAt(0).toUpperCase();
-  document.getElementById('ppAvatar').textContent = initial;
-  document.getElementById('ppName').textContent = u.name || 'Your Name';
-  var tier = u.tier || 'free';
-  var tierLabels = { free:'Free', connect:'Connect', insight:'Insight', legacy:'Legacy', founder:'Legacy' };
-  document.getElementById('ppTier').textContent = (tierLabels[tier] || tier) + ' Member';
-  var isPaid = (tier !== 'free');
-  document.getElementById('ppUpgradeRow').style.display = isPaid ? 'none' : 'block';
-  document.getElementById('ppBillingRow').style.display = isPaid ? 'block' : 'none';
-  var links = { free: CC_CONFIG.stripe.connect.paymentLink, connect: CC_CONFIG.stripe.insight.paymentLink, insight: CC_CONFIG.stripe.legacy.paymentLink };
-  var upgradeLabels = { free: 'Upgrade to Connect →', connect: 'Upgrade to Insight →', insight: 'Upgrade to Legacy →' };
-  if (!isPaid || tier === 'connect' || tier === 'insight') {
-    var btn = document.getElementById('ppUpgradeBtn');
-    if (links[tier]) { btn.href = links[tier]; btn.textContent = upgradeLabels[tier] || 'Upgrade →'; }
-    document.getElementById('ppUpgradeRow').style.display = (tier === 'legacy' || tier === 'founder') ? 'none' : 'block';
-  }
-  document.getElementById('profilePanel').style.display = 'block';
+  panel.style.display = 'block';
   loadSavedProfilePic();
 }
 
@@ -2470,14 +2481,26 @@ function cardFeedback(cardId, value, el) {
 }
 
 function openAccount(context) {
-  var u = CC.getUser ? CC.getUser() : null;
-  if (u) {
-    openProfilePanel();
-    return;
-  }
+  var u = null;
+  try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+  if (u) { openProfilePanel(); return; }
   document.getElementById('acctKicker').textContent = context || 'Create your free profile';
   document.getElementById('acctModal').classList.add('open');
-  showSignupTab();
+  // If context suggests signing in, go to sign-in tab
+  if (context && (context.toLowerCase().includes('sign in') || context.toLowerCase().includes('signin') || context.toLowerCase().includes('log in'))) {
+    showSigninTab();
+  } else {
+    showSignupTab();
+  }
+}
+
+function openSignIn() {
+  var u = null;
+  try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+  if (u) { openProfilePanel(); return; }
+  document.getElementById('acctKicker').textContent = 'Welcome back';
+  document.getElementById('acctModal').classList.add('open');
+  showSigninTab();
 }
 
 function closeAccount() {
@@ -2649,6 +2672,31 @@ async function signOut() {
   if (fbAuth) await fbAuth.signOut();
   localStorage.removeItem('cc_user');
   showToast('Signed out.');
+  closeProfilePanel();
+  setTimeout(function(){ window.location.reload(); }, 800);
+}
+
+function signOutUser() { signOut(); }
+
+async function resetPassword() {
+  var u = null;
+  try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+  var email = u ? u.email : null;
+  if (!email) {
+    showToast('Sign in first to reset your password');
+    return;
+  }
+  try {
+    if (fbAuth && firebase && firebase.auth) {
+      await firebase.auth().sendPasswordResetEmail(email);
+      showToast('Reset email sent to ' + email + ' ✦');
+      closeProfilePanel();
+    } else {
+      showToast('Check your email for a reset link');
+    }
+  } catch(e) {
+    showToast('Could not send reset email. Try again.');
+  }
 }
 // ─────────────────────────────────────────────────────
 
@@ -3128,11 +3176,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 600);
   }
   // Auto-open signin if redirected
-  if (params.get('signin') === '1' && !CC.getUser()) {
-    setTimeout(function() {
-      openAccount('sign in');
-      showSigninTab();
-    }, 600);
+  if (params.get('signin') === '1') {
+    setTimeout(function() { openSignIn(); }, 600);
   }
   // After auth, return to originating page if specified
   var returnTo = params.get('returnTo');
