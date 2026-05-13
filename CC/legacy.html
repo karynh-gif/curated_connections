@@ -1643,50 +1643,7 @@ function openInviteSheet() {
 }
 
 // ── SAVE LEAF with new fields ─────────────────────────────────
-async function saveLeafToAirtable(name, relation, birthYear, fsId) {
-  var knownAs = (document.getElementById('newLeafKnownAs') || {}).value || '';
-  var death   = (document.getElementById('newLeafDeath')   || {}).value || '';
-  var place   = (document.getElementById('newLeafPlace')   || {}).value || '';
-  try {
-    var res = await fetch('/api/airtable', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        action: 'create',
-        table: 'Living Legacy Leaves',
-        fields: {
-          'Full Name':       name,
-          'Known As':        knownAs || name.split(' ')[0],
-          'Relationship':    relation || '',
-          'Birth Year':      birthYear ? parseInt(birthYear) : null,
-          'Passing Year':    death ? parseInt(death) : null,
-          'Birth Location':  place || '',
-          'FamilySearch ID': fsId || '',
-          'Keeper User ID':  (CC.getUser ? (CC.getUser()||{}).user_id : '') || ('guest-' + Date.now()),
-          'Leaf Status':     'Active',
-          'Subject Living':  !death
-        }
-      })
-    });
-    var data = await res.json();
-    if (data.id) {
-      t('Leaf started for ' + name + ' ✦');
-      closeNewLeaf(); fsPersonData = null;
-    } else {
-      localStorage.removeItem('cc_leaf_draft');
-      t('Leaf saved locally ✦'); closeNewLeaf(); loadRecentLeaves();
-    }
-  } catch(e) {
-    // Save locally as fallback
-    try {
-      var leaves = JSON.parse(localStorage.getItem('cc_legacy_leaves') || '[]');
-      leaves.unshift({ name: name, knownAs: knownAs, relation: relation, birth: birthYear, death: death, place: place, fsId: fsId, created: new Date().toISOString() });
-      localStorage.setItem('cc_legacy_leaves', JSON.stringify(leaves));
-      localStorage.removeItem('cc_leaf_draft');
-    } catch(le){}
-    t('Leaf started for ' + name + ' ✦'); closeNewLeaf(); loadRecentLeaves();
-  }
-}
+async 
 
 var PEOPLE={
   self:{name:'Maren \u2014 Your Leaf',years:'Living \u00b7 Your story',s1l:'Life Chapter \u00b7 Values',s1t:'"What is a belief you hold that your family helped shape \u2014 and have you ever told them?"',s2l:"Today\u2019s unanswered prompt",s2t:'"What\u2019s a memory from your childhood home that lives in your body \u2014 not just your mind?"',vt:'Voice reflection \u00b7 May 8',vd:'2:14',pt:'"What would you want your children to know about who you were at their age?"'},
@@ -1891,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', function() {
       banner.style.cssText = 'background:linear-gradient(135deg,rgba(184,134,11,.15),rgba(184,134,11,.08));border:1.5px solid rgba(184,134,11,.3);border-radius:18px;padding:1.2rem 1.1rem;margin:1rem 1.1rem;text-align:center;';
       banner.innerHTML = `
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(42,24,0,.6);margin-bottom:.6rem;">Living Legacy is part of Legacy.</div>
-        <a href="onboarding.html?tier=legacy" style="display:inline-block;padding:.65rem 1.6rem;background:linear-gradient(135deg,#b8860b,#d4a017);border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:#fff;text-decoration:none;">Unlock Legacy — $19.99/mo →</a>
+        <a href="https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02" style="display:inline-block;padding:.65rem 1.6rem;background:linear-gradient(135deg,#b8860b,#d4a017);border-radius:999px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:#fff;text-decoration:none;">Unlock Legacy — $19.99/mo →</a>
       `;
       const scroll = document.querySelector('.scroll');
       if (scroll) scroll.prepend(banner);
@@ -1900,7 +1857,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<script>
 <script>
 // ── STANDARD NAV FUNCTIONS ────────────────────────────────────
 function closeProfilePanel(){ /* panel lives on gather.html */ }
