@@ -780,7 +780,8 @@ function showGameUpgradeModal(tier) {
   var btn = document.createElement('button');
   btn.style.cssText = 'width:100%;padding:.85rem;background:#c97d3a;border:none;border-radius:999px;font-family:Nunito,sans-serif;font-size:.88rem;font-weight:800;letter-spacing:.06em;color:#fff;cursor:pointer;margin-bottom:.5rem;';
   btn.textContent = 'Upgrade to Connect — $4.99/mo →';
-  btn.onclick = function() { window.open('https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00','_blank'); };
+  var upgradeLinks = { connect:'https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00', insight:'https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01', legacy:'https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02' };
+  btn.onclick = function() { window.open(upgradeLinks[tier] || upgradeLinks.connect,'_blank'); };
 
   var cancel = document.createElement('button');
   cancel.style.cssText = 'width:100%;padding:.5rem;background:none;border:none;font-size:.85rem;color:rgba(242,232,216,.3);cursor:pointer;font-style:italic;';

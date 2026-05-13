@@ -568,9 +568,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div class="shelf-row" id="quizShelf"><div style="padding:1.2rem;font-size:.80rem;color:rgba(242,232,216,.3);font-style:italic;">Loading…</div></div>
     </div>
 
-    <!-- LEGACY FEATURES — only for Legacy tier -->
-    <!-- MY FEED -->
-    <!-- WHAT'S NEW SNAPSHOT -->
+
+
     <div id="myFeedShelf" style="display:none;margin:.4rem 0;">
       <div class="shelf-header" style="padding:.5rem 1rem .4rem;display:flex;align-items:center;justify-content:space-between;">
         <div class="shelf-title">What's new</div>
@@ -630,34 +629,44 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     </div>
 
     <!-- MY CIRCLES -->
-    <div class="circles-section">
-      <div style="position:relative;z-index:2;padding:0 1rem;margin-bottom:.9rem;display:flex;align-items:baseline;justify-content:space-between;">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--cream);">My Circles</div>
-        <div style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;opacity:.75;" onclick="window.location.href='circles.html'">See All</div>
-      </div>
-      <div id="circlesRow" style="display:flex;gap:.7rem;overflow-x:auto;scrollbar-width:none;padding:0 1rem .35rem;"></div>
-      <div id="circlesEmpty" style="display:none;padding:1.2rem 1rem;text-align:center;">
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.38);margin-bottom:.9rem;">Your circles will live here.</div>
-        <button onclick="window.location.href='circles.html'" style="padding:.6rem 1.3rem;background:rgba(201,125,58,.15);border:1.5px solid rgba(201,125,58,.3);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.80rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
-      </div>
-    </div>
+    <!-- ── SOCIAL BLOCK: Circles · What's New · Reflect ── -->
+    <div style="margin:.4rem 0 0;">
 
-    <!-- WRITE YOUR EXPERIENCE -->
-    <!-- QUICK REFLECTION -->
-    <div class="write-exp">
-      <div class="shelf-header" style="padding:0;margin-bottom:.65rem;">
-        <div class="shelf-title">Reflect on today</div>
-        <a href="journal.html" style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.6);text-decoration:none;">Open journal →</a>
+      <!-- Header -->
+      <div style="padding:.5rem 1rem .2rem;display:flex;align-items:baseline;justify-content:space-between;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--cream);">Circles</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(201,125,58,.6);cursor:pointer;" onclick="window.location.href='circles.html'">See all →</div>
       </div>
-      <div class="write-exp-inner" style="cursor:default;" onclick="event.stopPropagation()">
-        <div id="quickReflectPrompt" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:rgba(242,232,216,.55);line-height:1.65;margin-bottom:.6rem;">What came up for you today? A moment, a feeling, something that stuck.</div>
-        <textarea id="quickReflectText" placeholder="Write a few words..." style="width:100%;min-height:72px;padding:.65rem .8rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(242,232,216,.8);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.3)'" onblur="this.style.borderColor='rgba(255,255,255,.08)'"></textarea>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;">
-          <div id="reflectRetention" style="font-family:'DM Sans',sans-serif;font-size:.65rem;color:rgba(242,232,216,.2);font-style:italic;"></div>
-          <button onclick="saveQuickReflect()" style="padding:.4rem .9rem;background:linear-gradient(135deg,rgba(201,125,58,.6),rgba(232,160,69,.6));border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save ✦</button>
+
+      <!-- Circles row -->
+      <div id="circlesRow" style="display:flex;gap:.7rem;overflow-x:auto;scrollbar-width:none;padding:.3rem 1rem .5rem;"></div>
+      <div id="circlesEmpty" style="display:none;padding:.6rem 1rem .8rem;">
+        <button onclick="window.location.href='circles.html'" style="padding:.55rem 1.2rem;background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.25);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);cursor:pointer;">Create a Circle →</button>
+      </div>
+
+      <!-- What's new strip -->
+      <div id="myFeedShelf" style="display:none;border-top:1px solid rgba(255,255,255,.05);margin:.2rem .9rem 0;padding:.6rem 0 0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);">✦ What's new</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(201,125,58,.5);cursor:pointer;" onclick="window.location.href='circles.html'">Full feed →</div>
+        </div>
+        <div id="myFeedList"></div>
+      </div>
+
+      <!-- Reflect -->
+      <div style="border-top:1px solid rgba(255,255,255,.05);margin:.4rem .9rem 0;padding:.7rem 0 .5rem;">
+        <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.45);margin-bottom:.45rem;">Reflect on today</div>
+        <textarea id="quickReflectText" placeholder="What came up for you? A moment, a feeling, something that stuck..." style="width:100%;min-height:62px;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:rgba(242,232,216,.8);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.3)'" onblur="this.style.borderColor='rgba(255,255,255,.07)'"></textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.4rem;">
+          <div id="reflectRetention" style="font-size:.62rem;color:rgba(242,232,216,.18);font-style:italic;font-family:'DM Sans',sans-serif;"></div>
+          <div style="display:flex;gap:.5rem;align-items:center;">
+            <a href="journal.html" style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:700;color:rgba(201,125,58,.4);text-decoration:none;">Journal →</a>
+            <button onclick="saveQuickReflect()" style="padding:.35rem .85rem;background:linear-gradient(135deg,rgba(201,125,58,.55),rgba(232,160,69,.55));border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save ✦</button>
+          </div>
         </div>
       </div>
-    </div>
+
+    </div><!-- /social block -->
 
     <div style="height:1.2rem;"></div>
   </div><!-- /scroll -->
@@ -743,7 +752,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- Upgrade nudge — hidden for paid tiers -->
       <div id="ppUpgradeRow" style="margin-bottom:1rem;">
-        <a id="ppUpgradeBtn" href="#" style="display:block;text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,0.15),rgba(201,125,58,0.08));border:1px solid rgba(201,125,58,0.25);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;text-decoration:none;">Upgrade to Connect →</a>
+        <a id="ppUpgradeBtn" href="https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00" target="_blank" style="display:block;text-align:center;padding:.75rem;border-radius:10px;background:linear-gradient(135deg,rgba(201,125,58,0.15),rgba(201,125,58,0.08));border:1px solid rgba(201,125,58,0.25);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c97d3a;text-decoration:none;">Upgrade to Connect →</a>
       </div>
 
       <!-- Manage billing — shown for paid tiers -->
@@ -1159,7 +1168,7 @@ function renderTonightCards(shelf, recs) {
   if (level < 3) {
     var tiers = ['Connect','Insight','Legacy'];
     var prices = ['$4.99','$9.99','$19.99'];
-    html += '<div class="fc-locked" onclick="openAccount(\'upgrade\')">';
+    html += '<div class="fc-locked" onclick="openUpgrade()">';
     html += '<div style="font-size:18px;opacity:.2;">&#x1F512;</div>';
     html += '<div class="fc-locked-tier">' + tiers[level] + '</div>';
     html += '<div class="fc-locked-text">More cards &amp; deeper questions</div>';
@@ -1521,6 +1530,14 @@ if (fbAuth) {
   });
 }
 
+function openUpgrade() {
+  var u = null;
+  try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
+  var tier = u ? (u.tier || 'free') : 'free';
+  var links = { free: 'https://buy.stripe.com/cNi9AN0nz2mR8fKeHZ7EQ00', connect: 'https://buy.stripe.com/5kQdR39Y9bXr7bG57p7EQ01', insight: 'https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02' };
+  window.open(links[tier] || links.free, '_blank');
+}
+
 function closeProfilePanel() {
   var panel = document.getElementById('profilePanel');
   if (panel) panel.style.display = 'none';
@@ -1841,7 +1858,7 @@ function renderNotifications() {
       border: 'rgba(201,125,58,.12)',
       title: 'Unlock more with Connect',
       body: '5 cards a day, Circles, and deeper questions. $4.99/mo.',
-      action: function() { closeNotifications(); openAccount('upgrade'); },
+      action: function() { closeNotifications(); openUpgrade(); },
       time: ''
     });
   }
