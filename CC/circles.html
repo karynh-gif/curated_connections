@@ -385,7 +385,12 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="is-lbl">Email</div>
         <input class="is-input" id="acctEmail" type="email" placeholder="your@email.com" autocomplete="email"/>
       </div>
-      <button class="is-cta" onclick="submitAcct()">Create Account →</button>
+      <div class="is-field-wrap">
+        <div class="is-lbl">Password</div>
+        <input class="is-input" id="acctPassword" type="password" placeholder="6+ characters" autocomplete="new-password"/>
+      </div>
+      <div id="acctError" style="font-size:.78rem;color:#e07060;min-height:1rem;margin-bottom:.3rem;"></div>
+      <button class="is-cta" id="acctSubmitBtn" onclick="submitAcct()">Create Account →</button>
       <button class="is-cancel" onclick="closeAcct()">Maybe later</button>
     </div>
   </div>
@@ -478,20 +483,8 @@ function selectType(el) {
 }
 
 function submitAcct() {
-  var name = document.getElementById('acctName').value.trim();
-  var email = document.getElementById('acctEmail').value.trim();
-  if (!name) { showCircleToast('What should we call you?'); return; }
-  if (!email || !email.includes('@')) { showCircleToast('A valid email is needed'); return; }
-
-  // Save to localStorage as provisional user
-  var user = { name: name, email: email, tier: 'free', user_id: 'u_' + Date.now() };
-  localStorage.setItem('cc_user', JSON.stringify(user));
-
-  document.getElementById('acctOverlay').style.display = 'none';
-  showCircleToast('Welcome, ' + name.split(' ')[0] + ' ✦');
-
-  // Now open circle creation
-  setTimeout(openCreate, 600);
+  // All account creation goes through gather.html — one Firebase auth flow
+  window.location.href = 'gather.html?signup=1&returnTo=circles';
 }
 
 async function submitCreate() {

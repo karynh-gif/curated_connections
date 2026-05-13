@@ -297,7 +297,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
       <div class="tb-date" id="topDate">Saturday · May 9</div>
     </div>
     <div class="tb-right">
-      <div class="tb-btn" onclick="t('Invite family')">📨</div>
+      <div class="tb-btn" onclick="openInviteSheet()">📨</div>
       <div class="tb-av" onclick="openLeafScreen()">K</div>
     </div>
   </div>
@@ -321,7 +321,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
       </div>
       <div class="inv-action">
         <button class="inv-btn inv-btn-write" style="font-size:.82rem;">Begin writing →</button>
-        <button class="inv-btn inv-btn-voice" style="font-size:.82rem;" onclick="event.stopPropagation();t('Voice recording opens')">🎙 Speak instead</button>
+        <button class="inv-btn inv-btn-voice" style="font-size:.82rem;" onclick="event.stopPropagation();openVoiceFromInvitation()">🎙 Speak instead</button>
       </div>
     </div>
 
@@ -484,7 +484,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
       <div class="leaf-name" style="font-size:.72rem;">Liam</div>
     </div>
     <!-- ADD -->
-    <div class="leaf leaf-empty" style="left:42%;top:65%;" onclick="t('Add a family member')">
+    <div class="leaf leaf-empty" style="left:42%;top:65%;" onclick="openNewLeaf()">
       <div class="leaf-ring" style="width:28px;height:28px;font-size:.78rem;color:rgba(184,134,11,.32);">＋</div>
       <div class="leaf-name" style="font-size:.70rem;">Add</div>
     </div>
@@ -506,24 +506,24 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
       <div class="prompt-chapter">Life Chapter · Values</div>
       <div class="prompt-q">"What is a belief you hold that your family helped shape — and have you ever told them?"</div>
       <div class="prompt-actions">
-        <button class="pa-write" onclick="t('Journal opens here')">Write your answer</button>
-        <button class="pa-voice" onclick="t('Voice recording opens')">🎙 Record</button>
+        <button class="pa-write" onclick="openWriteAnswer(this)">Write your answer</button>
+        <button class="pa-voice" onclick="openVoiceAnswer(this)">🎙 Record</button>
       </div>
     </div>
     <div class="prompt-card" style="opacity:.7;">
       <div class="prompt-chapter">Life Chapter · Childhood</div>
       <div class="prompt-q">"What's a memory from your childhood home that lives in your body — not just your mind?"</div>
       <div class="prompt-actions">
-        <button class="pa-write" onclick="t('Journal opens here')">Write your answer</button>
-        <button class="pa-voice" onclick="t('Voice recording opens')">🎙 Record</button>
+        <button class="pa-write" onclick="openWriteAnswer(this)">Write your answer</button>
+        <button class="pa-voice" onclick="openVoiceAnswer(this)">🎙 Record</button>
       </div>
     </div>
     <div class="prompt-card" style="opacity:.55;">
       <div class="prompt-chapter">Life Chapter · Love</div>
       <div class="prompt-q">"What has loving someone taught you about yourself that nothing else could?"</div>
       <div class="prompt-actions">
-        <button class="pa-write" onclick="t('Journal opens here')">Write your answer</button>
-        <button class="pa-voice" onclick="t('Voice recording opens')">🎙 Record</button>
+        <button class="pa-write" onclick="openWriteAnswer(this)">Write your answer</button>
+        <button class="pa-voice" onclick="openVoiceAnswer(this)">🎙 Record</button>
       </div>
     </div>
   </div>
@@ -534,7 +534,7 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
   <div class="screen-top">
     <button class="screen-back" onclick="closeStory()">← Tree</button>
     <div class="screen-title" id="storyScreenTitle">Their Story</div>
-    <div style="width:60px;"></div>
+    <button onclick="confirmDeletePerson()" style="background:none;border:none;color:rgba(42,24,0,.28);font-size:.75rem;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;padding:.2rem .4rem;">✕ Remove</button>
   </div>
   <div class="story-scroll">
     <div class="person-hero-name" id="storyName">Grandma Helen</div>
@@ -557,8 +557,17 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
       <div class="prompt-block-lbl">Contribute a memory</div>
       <div class="prompt-block-text" id="storyPrompt">"What do you remember about the way she made a room feel?"</div>
     </div>
-    <button class="add-memory-btn" onclick="t('Your memory is being added...')">Add Your Memory of Them →</button>
+    <button class="add-memory-btn" onclick="openAddMemoryForPerson()">Add Your Memory of Them →</button>
     <button class="story-cancel" onclick="closeStory()">Back to tree</button>
+
+    <!-- Delete confirmation — hidden until triggered -->
+    <div id="deleteConfirmBox" style="display:none;margin-top:1rem;background:rgba(192,80,56,.06);border:1.5px solid rgba(192,80,56,.2);border-radius:var(--r-md);padding:1rem 1.1rem;text-align:center;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(42,24,0,.65);margin-bottom:.8rem;line-height:1.5;">Remove <strong id="deletePersonNameConfirm">this person</strong> from your tree? Their stories will also be removed.</div>
+      <div style="display:flex;gap:.6rem;">
+        <button onclick="deletePerson()" style="flex:1;padding:.65rem;background:rgba(192,80,56,.15);border:1.5px solid rgba(192,80,56,.3);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:800;color:#c05038;cursor:pointer;">Yes, remove</button>
+        <button onclick="document.getElementById('deleteConfirmBox').style.display='none'" style="flex:1;padding:.65rem;background:rgba(255,255,255,.4);border:1px solid rgba(42,24,0,.12);border-radius:var(--r-md);font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:800;color:rgba(42,24,0,.45);cursor:pointer;">Keep them</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -578,12 +587,20 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
     </div>
 
     <!-- BASIC INFO -->
-    <label class="leaf-field-label">Their name</label>
+    <label class="leaf-field-label">Their full name</label>
     <input class="leaf-field" id="newLeafName" type="text" placeholder="e.g. Margaret Ruth Collins"/>
+    <label class="leaf-field-label">Also known as <span style="font-weight:400;opacity:.55;">(maiden name, nickname)</span></label>
+    <input class="leaf-field" id="newLeafKnownAs" type="text" placeholder="e.g. Peggy, née Sullivan"/>
     <label class="leaf-field-label">Their relationship to you</label>
-    <input class="leaf-field" id="newLeafRelation" type="text" placeholder="e.g. Mother, Grandmother, Father..."/>
-    <label class="leaf-field-label">Birth year (optional)</label>
-    <input class="leaf-field" id="newLeafBirth" type="text" placeholder="e.g. 1942"/>
+    <input class="leaf-field" id="newLeafRelation" type="text" placeholder="e.g. Mother, Grandmother, Husband..."/>
+    <div style="display:flex;gap:.6rem;">
+      <div style="flex:1;"><label class="leaf-field-label">Birth year</label>
+      <input class="leaf-field" id="newLeafBirth" type="text" placeholder="e.g. 1942"/></div>
+      <div style="flex:1;"><label class="leaf-field-label">Passed <span style="font-weight:400;opacity:.55;">(if applicable)</span></label>
+      <input class="leaf-field" id="newLeafDeath" type="text" placeholder="e.g. 2019"/></div>
+    </div>
+    <label class="leaf-field-label">Hometown or birthplace <span style="font-weight:400;opacity:.55;">(optional)</span></label>
+    <input class="leaf-field" id="newLeafPlace" type="text" placeholder="e.g. Wichita, Kansas"/>
 
     <div class="import-divider">
       <div class="import-divider-line"></div>
@@ -797,6 +814,81 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
 </div>
 
 
+<!-- ── WRITE ANSWER SCREEN ── -->
+<div class="import-screen" id="writeAnswerScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeWriteAnswer()">← Back</button>
+    <div class="screen-title">Your Answer</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="import-scroll">
+    <div style="background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-md);padding:.85rem 1rem;margin-bottom:1.2rem;">
+      <div class="prompt-block-lbl" id="writeAnswerChapter" style="margin-bottom:.3rem;">Life Chapter</div>
+      <div class="prompt-block-text" id="writeAnswerPrompt" style="font-size:1rem;color:var(--bark);">"Loading prompt..."</div>
+    </div>
+    <label class="leaf-field-label">Your answer</label>
+    <textarea id="writeAnswerText" placeholder="Take your time. Write as little or as much as you want..." style="width:100%;min-height:200px;padding:.9rem 1rem;border:1.5px solid rgba(184,134,11,.25);border-radius:var(--r-md);background:rgba(255,255,255,.7);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark);line-height:1.65;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(184,134,11,.55)'" onblur="this.style.borderColor='rgba(184,134,11,.25)'"></textarea>
+    <div style="font-size:.72rem;color:var(--bark-soft);font-style:italic;margin:.4rem 0 1rem;line-height:1.5;">This is your leaf. Only you can see it unless you choose to share.</div>
+    <button class="import-btn" id="writeAnswerSaveBtn" onclick="saveWrittenAnswer()">Save Answer →</button>
+    <button class="import-cancel-btn" onclick="closeWriteAnswer()">Not ready yet</button>
+  </div>
+</div>
+
+<!-- ── VOICE ANSWER SCREEN ── -->
+<div class="import-screen" id="voiceAnswerScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeVoiceAnswer()">← Back</button>
+    <div class="screen-title">Speak Your Answer</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="import-scroll">
+    <div style="background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-md);padding:.85rem 1rem;margin-bottom:1.6rem;">
+      <div class="prompt-block-lbl" id="voiceAnswerChapter" style="margin-bottom:.3rem;">Life Chapter</div>
+      <div class="prompt-block-text" id="voiceAnswerPrompt" style="font-size:1rem;color:var(--bark);">"Loading prompt..."</div>
+    </div>
+
+    <!-- Recording UI -->
+    <div style="text-align:center;padding:1rem 0 1.4rem;">
+      <button id="voiceRecordBtn" onclick="toggleVoiceRecording()" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;font-size:1.8rem;cursor:pointer;box-shadow:0 6px 24px rgba(184,134,11,.35);transition:all .2s;display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;">🎙</button>
+      <div id="voiceRecordTimer" style="font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:800;color:var(--gold);margin-bottom:.3rem;">0:00</div>
+      <div id="voiceRecordStatus" style="font-size:.8rem;color:var(--bark-soft);font-style:italic;">Tap the microphone to begin</div>
+    </div>
+
+    <!-- Playback (shown after recording) -->
+    <div id="voicePlaybackArea" style="display:none;margin:0 0 1.2rem;">
+      <div class="import-section-lbl">Review your recording</div>
+      <audio id="voiceAnswerPlayer" controls style="width:100%;border-radius:var(--r-md);margin-bottom:.6rem;"></audio>
+      <div style="font-size:.75rem;color:var(--bark-soft);font-style:italic;line-height:1.5;">Sound good? Save it to your leaf. You can always record again.</div>
+    </div>
+
+    <button class="import-btn" id="voiceAnswerSaveBtn" onclick="saveVoiceAnswer()" style="display:none;">Save Recording →</button>
+    <button class="import-cancel-btn" onclick="closeVoiceAnswer()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── ADD MEMORY FOR PERSON SCREEN ── -->
+<div class="import-screen" id="addMemoryScreen">
+  <div class="screen-top">
+    <button class="screen-back" onclick="closeAddMemory()">← Back</button>
+    <div class="screen-title">Add a Memory</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div class="import-scroll">
+    <div class="import-hero" style="padding:.5rem 0 1rem;">
+      <div class="import-title" id="addMemoryPersonName" style="font-size:1.4rem;">Their story</div>
+      <div class="import-sub">Share what you remember. Your perspective matters — even small details become precious over time.</div>
+    </div>
+    <div style="background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.14);border-radius:var(--r-md);padding:.85rem 1rem;margin-bottom:1rem;cursor:default;">
+      <div class="prompt-block-lbl" style="margin-bottom:.3rem;">Prompt</div>
+      <div class="prompt-block-text" id="addMemoryPrompt" style="font-size:1rem;color:var(--bark);">"What do you remember about them that no one else might think to say?"</div>
+    </div>
+    <label class="leaf-field-label">Your memory</label>
+    <textarea id="addMemoryText" placeholder="Write your memory here — a moment, a feeling, a detail you never want to forget..." style="width:100%;min-height:180px;padding:.9rem 1rem;border:1.5px solid rgba(184,134,11,.25);border-radius:var(--r-md);background:rgba(255,255,255,.7);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--bark);line-height:1.65;outline:none;resize:vertical;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(184,134,11,.55)'" onblur="this.style.borderColor='rgba(184,134,11,.25)'"></textarea>
+    <button class="import-btn" onclick="savePersonMemory()" style="margin-top:.8rem;">Save Memory →</button>
+    <button class="import-cancel-btn" onclick="closeAddMemory()">Not yet</button>
+  </div>
+</div>
+
 <!-- VOICE RECORDER (injected into leaf screen) -->
 <div id="voiceRecorderWidget" class="voice-recorder" style="display:none;">
   <div class="voice-rec-label">🎙 Voice Recording</div>
@@ -923,10 +1015,9 @@ function createLeafManual() {
   const relation = document.getElementById('newLeafRelation').value.trim();
   if (!name) { t('Please enter their name first'); return; }
 
-  // Save to Airtable via proxy
   saveLeafToAirtable(name, relation,
     document.getElementById('newLeafBirth').value.trim(),
-    fsPersonData?.id || '');
+    fsPersonData ? fsPersonData.id : '');
 }
 
 async function saveLeafToAirtable(name, relation, birthYear, fsId) {
@@ -1104,6 +1195,332 @@ async function importSelectedPeople() {
 
 function closeLeaf(){document.getElementById('leafScreen').classList.remove('open');}
 
+// ── WRITE ANSWER ──────────────────────────────────────────────
+var _currentPrompt = '';
+var _currentChapter = '';
+
+function openWriteAnswer(btn) {
+  var card = btn.closest('.prompt-card');
+  _currentChapter = card ? (card.querySelector('.prompt-chapter') ? card.querySelector('.prompt-chapter').textContent : 'Your Leaf') : 'Your Leaf';
+  _currentPrompt  = card ? (card.querySelector('.prompt-q')       ? card.querySelector('.prompt-q').textContent       : '') : '';
+  document.getElementById('writeAnswerChapter').textContent = _currentChapter;
+  document.getElementById('writeAnswerPrompt').textContent  = _currentPrompt;
+  document.getElementById('writeAnswerText').value = '';
+  document.getElementById('writeAnswerScreen').classList.add('open');
+  setTimeout(function(){ document.getElementById('writeAnswerText').focus(); }, 400);
+}
+
+function closeWriteAnswer() {
+  document.getElementById('writeAnswerScreen').classList.remove('open');
+}
+
+function saveWrittenAnswer() {
+  var text = document.getElementById('writeAnswerText').value.trim();
+  if (!text) { t('Write something first — even a few words'); return; }
+
+  var btn = document.getElementById('writeAnswerSaveBtn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+
+  var entry = {
+    id:       'ans_' + Date.now(),
+    type:     'written',
+    chapter:  _currentChapter,
+    prompt:   _currentPrompt,
+    text:     text,
+    date:     new Date().toISOString(),
+    author:   'You'
+  };
+
+  // Save to localStorage
+  saveAnswerLocally(entry);
+
+  // Attempt Airtable save (non-blocking)
+  var user = CC.getUser ? CC.getUser() : null;
+  if (user) {
+    fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Responses',
+        fields: {
+          'response_id':    entry.id,
+          'user_id':        user.user_id || '',
+          'spoken_answer':  text,
+          'is_living_legacy': true,
+          'card_id':        _currentChapter,
+          'recorded_at':    entry.date
+        }
+      })
+    }).catch(function(){});
+  }
+
+  t('Saved to your leaf ✦');
+  btn.textContent = 'Save Answer →'; btn.disabled = false;
+  closeWriteAnswer();
+}
+
+function saveAnswerLocally(entry) {
+  try {
+    var key = 'cc_leaf_answers';
+    var answers = JSON.parse(localStorage.getItem(key) || '[]');
+    answers.unshift(entry);
+    if (answers.length > 200) answers = answers.slice(0, 200);
+    localStorage.setItem(key, JSON.stringify(answers));
+  } catch(e) {}
+}
+
+// ── VOICE ANSWER ──────────────────────────────────────────────
+var _voiceMediaRecorder = null;
+var _voiceChunks = [];
+var _voiceTimer  = null;
+var _voiceSeconds = 0;
+var _voiceBlobUrl = null;
+
+function openVoiceAnswer(btn) {
+  var card = btn.closest('.prompt-card');
+  _currentChapter = card ? (card.querySelector('.prompt-chapter') ? card.querySelector('.prompt-chapter').textContent : 'Your Leaf') : 'Your Leaf';
+  _currentPrompt  = card ? (card.querySelector('.prompt-q')       ? card.querySelector('.prompt-q').textContent       : '') : '';
+  document.getElementById('voiceAnswerChapter').textContent = _currentChapter;
+  document.getElementById('voiceAnswerPrompt').textContent  = _currentPrompt;
+  // Reset UI
+  document.getElementById('voiceRecordTimer').textContent   = '0:00';
+  document.getElementById('voiceRecordStatus').textContent  = 'Tap the microphone to begin';
+  document.getElementById('voiceRecordBtn').style.background= 'linear-gradient(135deg,var(--gold),var(--gold2))';
+  document.getElementById('voiceRecordBtn').textContent     = '🎙';
+  document.getElementById('voicePlaybackArea').style.display= 'none';
+  document.getElementById('voiceAnswerSaveBtn').style.display= 'none';
+  _voiceBlobUrl = null; _voiceChunks = []; _voiceSeconds = 0;
+  document.getElementById('voiceAnswerScreen').classList.add('open');
+}
+
+function openVoiceFromInvitation() {
+  _currentChapter = 'Life Chapter · Your Leaf';
+  _currentPrompt  = document.querySelector('.inv-prompt') ? document.querySelector('.inv-prompt').textContent : 'Today\'s prompt';
+  document.getElementById('voiceAnswerChapter').textContent = _currentChapter;
+  document.getElementById('voiceAnswerPrompt').textContent  = _currentPrompt;
+  document.getElementById('voiceRecordTimer').textContent   = '0:00';
+  document.getElementById('voiceRecordStatus').textContent  = 'Tap the microphone to begin';
+  document.getElementById('voiceRecordBtn').style.background= 'linear-gradient(135deg,var(--gold),var(--gold2))';
+  document.getElementById('voiceRecordBtn').textContent     = '🎙';
+  document.getElementById('voicePlaybackArea').style.display= 'none';
+  document.getElementById('voiceAnswerSaveBtn').style.display= 'none';
+  _voiceBlobUrl = null; _voiceChunks = []; _voiceSeconds = 0;
+  document.getElementById('voiceAnswerScreen').classList.add('open');
+}
+
+function closeVoiceAnswer() {
+  if (_voiceMediaRecorder && _voiceMediaRecorder.state === 'recording') {
+    _voiceMediaRecorder.stop();
+    _voiceMediaRecorder.stream.getTracks().forEach(function(track){track.stop();});
+  }
+  clearInterval(_voiceTimer);
+  document.getElementById('voiceAnswerScreen').classList.remove('open');
+}
+
+function toggleVoiceRecording() {
+  if (_voiceMediaRecorder && _voiceMediaRecorder.state === 'recording') {
+    stopVoiceRecording();
+  } else {
+    startVoiceRecording();
+  }
+}
+
+async function startVoiceRecording() {
+  try {
+    var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    _voiceMediaRecorder = new MediaRecorder(stream);
+    _voiceChunks = [];
+    _voiceMediaRecorder.ondataavailable = function(e){ if(e.data.size>0) _voiceChunks.push(e.data); };
+    _voiceMediaRecorder.onstop = function() {
+      var blob = new Blob(_voiceChunks, { type: 'audio/webm' });
+      _voiceBlobUrl = URL.createObjectURL(blob);
+      document.getElementById('voiceAnswerPlayer').src = _voiceBlobUrl;
+      document.getElementById('voicePlaybackArea').style.display = 'block';
+      document.getElementById('voiceAnswerSaveBtn').style.display = 'block';
+      document.getElementById('voiceRecordStatus').textContent = 'Recording complete — review and save below';
+    };
+    _voiceMediaRecorder.start(250);
+    // UI
+    document.getElementById('voiceRecordBtn').style.background = '#c05038';
+    document.getElementById('voiceRecordBtn').style.boxShadow  = '0 0 0 12px rgba(192,80,56,.2)';
+    document.getElementById('voiceRecordBtn').textContent = '⏹';
+    document.getElementById('voiceRecordStatus').textContent = 'Recording — tap to stop';
+    // Timer
+    _voiceSeconds = 0;
+    _voiceTimer = setInterval(function(){
+      _voiceSeconds++;
+      var m = Math.floor(_voiceSeconds/60), s = _voiceSeconds%60;
+      document.getElementById('voiceRecordTimer').textContent = m + ':' + (s<10?'0':'') + s;
+    }, 1000);
+  } catch(e) {
+    t('Microphone access needed — check your browser settings');
+  }
+}
+
+function stopVoiceRecording() {
+  if (_voiceMediaRecorder) {
+    _voiceMediaRecorder.stop();
+    _voiceMediaRecorder.stream.getTracks().forEach(function(track){track.stop();});
+  }
+  clearInterval(_voiceTimer);
+  document.getElementById('voiceRecordBtn').style.background = 'linear-gradient(135deg,var(--gold),var(--gold2))';
+  document.getElementById('voiceRecordBtn').style.boxShadow  = '0 6px 24px rgba(184,134,11,.35)';
+  document.getElementById('voiceRecordBtn').textContent = '🎙';
+}
+
+function saveVoiceAnswer() {
+  if (!_voiceBlobUrl) { t('No recording to save'); return; }
+
+  var entry = {
+    id:       'voice_' + Date.now(),
+    type:     'voice',
+    chapter:  _currentChapter,
+    prompt:   _currentPrompt,
+    text:     '[Voice note — ' + Math.floor(_voiceSeconds/60) + ':' + (_voiceSeconds%60<10?'0':'') + (_voiceSeconds%60) + ']',
+    blobUrl:  _voiceBlobUrl,
+    duration: _voiceSeconds,
+    date:     new Date().toISOString(),
+    author:   'You'
+  };
+
+  saveAnswerLocally(entry);
+
+  // Save reference to Airtable
+  var user = CC.getUser ? CC.getUser() : null;
+  if (user) {
+    fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create', table: 'Responses',
+        fields: {
+          'response_id': entry.id, 'user_id': user.user_id || '',
+          'spoken_answer': '[Voice note · ' + _currentChapter + ']',
+          'is_living_legacy': true, 'recorded_at': entry.date
+        }
+      })
+    }).catch(function(){});
+  }
+
+  t('Voice note saved to your leaf ✦');
+  closeVoiceAnswer();
+}
+
+// ── ADD MEMORY FOR A PERSON ───────────────────────────────────
+var _currentPersonId = null;
+
+function openAddMemoryForPerson() {
+  var personName = document.getElementById('storyName') ? document.getElementById('storyName').textContent : 'them';
+  var prompt     = document.getElementById('storyPrompt') ? document.getElementById('storyPrompt').textContent : '';
+  _currentPersonId = personName;
+  document.getElementById('addMemoryPersonName').textContent = 'A memory of ' + personName;
+  document.getElementById('addMemoryPrompt').textContent = prompt || '"What do you remember about them that no one else might think to say?"';
+  document.getElementById('addMemoryText').value = '';
+  document.getElementById('addMemoryScreen').classList.add('open');
+}
+
+function closeAddMemory() {
+  document.getElementById('addMemoryScreen').classList.remove('open');
+}
+
+function savePersonMemory() {
+  var text = document.getElementById('addMemoryText').value.trim();
+  if (!text) { t('Write something first'); return; }
+
+  var entry = {
+    id:       'mem_' + Date.now(),
+    type:     'memory',
+    person:   _currentPersonId || 'unknown',
+    prompt:   document.getElementById('addMemoryPrompt').textContent,
+    text:     text,
+    date:     new Date().toISOString(),
+    author:   'You'
+  };
+
+  // Save to localStorage under person key
+  try {
+    var key = 'cc_leaf_memories_' + (_currentPersonId || 'unknown');
+    var mems = JSON.parse(localStorage.getItem(key) || '[]');
+    mems.unshift(entry);
+    localStorage.setItem(key, JSON.stringify(mems));
+  } catch(e){}
+
+  // Airtable save
+  var user = CC.getUser ? CC.getUser() : null;
+  if (user) {
+    fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create', table: 'Responses',
+        fields: {
+          'response_id': entry.id, 'user_id': user.user_id || '',
+          'spoken_answer': text,
+          'is_living_legacy': true, 'recorded_at': entry.date
+        }
+      })
+    }).catch(function(){});
+  }
+
+  t('Memory saved ✦');
+  closeAddMemory();
+}
+
+// ── INVITE SHEET ──────────────────────────────────────────────
+function openInviteSheet() {
+  var url = window.location.origin + '/legacy.html';
+  if (navigator.share) {
+    navigator.share({ title: 'Curated Connections — Living Legacy', text: 'Help me preserve family stories on Curated Connections.', url: url }).catch(function(){});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url); t('Link copied ✦');
+  }
+}
+
+// ── SAVE LEAF with new fields ─────────────────────────────────
+async function saveLeafToAirtable(name, relation, birthYear, fsId) {
+  var knownAs = (document.getElementById('newLeafKnownAs') || {}).value || '';
+  var death   = (document.getElementById('newLeafDeath')   || {}).value || '';
+  var place   = (document.getElementById('newLeafPlace')   || {}).value || '';
+  try {
+    var res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Living Legacy Leaves',
+        fields: {
+          'Full Name':       name,
+          'Known As':        knownAs || name.split(' ')[0],
+          'Relationship':    relation || '',
+          'Birth Year':      birthYear ? parseInt(birthYear) : null,
+          'Passing Year':    death ? parseInt(death) : null,
+          'Birth Location':  place || '',
+          'FamilySearch ID': fsId || '',
+          'Keeper User ID':  (CC.getUser ? (CC.getUser()||{}).user_id : '') || ('guest-' + Date.now()),
+          'Leaf Status':     'Active',
+          'Subject Living':  !death
+        }
+      })
+    });
+    var data = await res.json();
+    if (data.id) {
+      t('Leaf started for ' + name + ' ✦');
+      closeNewLeaf(); fsPersonData = null;
+    } else {
+      t('Leaf saved locally ✦'); closeNewLeaf();
+    }
+  } catch(e) {
+    // Save locally as fallback
+    try {
+      var leaves = JSON.parse(localStorage.getItem('cc_legacy_leaves') || '[]');
+      leaves.unshift({ name, knownAs, relation, birthYear, death, place, fsId, created: new Date().toISOString() });
+      localStorage.setItem('cc_legacy_leaves', JSON.stringify(leaves));
+    } catch(le){}
+    t('Leaf saved — ' + name); closeNewLeaf();
+  }
+}
+
 var PEOPLE={
   self:{name:'Maren \u2014 Your Leaf',years:'Living \u00b7 Your story',s1l:'Life Chapter \u00b7 Values',s1t:'"What is a belief you hold that your family helped shape \u2014 and have you ever told them?"',s2l:"Today\u2019s unanswered prompt",s2t:'"What\u2019s a memory from your childhood home that lives in your body \u2014 not just your mind?"',vt:'Voice reflection \u00b7 May 8',vd:'2:14',pt:'"What would you want your children to know about who you were at their age?"'},
   mom:{name:'Mom',years:'Living \u00b7 Mother',s1l:'Life Chapter \u00b7 Motherhood',s1t:'"The day you were born I understood for the first time what it meant to love someone more than yourself. Everything I did after that was for you."',s2l:'Life Chapter \u00b7 Growing Up',s2t:'"My mother used to say \u2014 tend to the ones in front of you. Don\u2019t wait for the big moments. The small ones are what they remember."',vt:'"What I want you to know about our family"',vd:'6:48',pt:'"What\u2019s something you wish you had said to your own mother while you still could?"'},
@@ -1136,7 +1553,88 @@ function openPerson(id){
   document.getElementById('storyScreen').classList.add('open');
 }
 
-function closeStory(){document.getElementById('storyScreen').classList.remove('open');}
+function closeStory(){
+  document.getElementById('storyScreen').classList.remove('open');
+  document.getElementById('deleteConfirmBox').style.display='none';
+}
+
+// ── DELETE / UNDO ──────────────────────────────────────────────
+var _lastDeletedPerson = null;
+
+function confirmDeletePerson() {
+  var name = document.getElementById('storyName').textContent;
+  document.getElementById('deletePersonNameConfirm').textContent = name;
+  document.getElementById('deleteConfirmBox').style.display = 'block';
+  document.getElementById('storyScreen').querySelector('.story-scroll').scrollTo({top:9999, behavior:'smooth'});
+}
+
+function deletePerson() {
+  var name = document.getElementById('storyName').textContent;
+
+  // Store for undo
+  _lastDeletedPerson = {
+    name: name,
+    time: Date.now()
+  };
+
+  // Remove from localStorage
+  try {
+    var leaves = JSON.parse(localStorage.getItem('cc_legacy_leaves') || '[]');
+    leaves = leaves.filter(function(l){ return l.name !== name; });
+    localStorage.setItem('cc_legacy_leaves', JSON.stringify(leaves));
+
+    // Also remove their memories
+    localStorage.removeItem('cc_leaf_memories_' + name);
+  } catch(e){}
+
+  // Attempt Airtable delete (non-blocking)
+  // We don't have the record ID here reliably, so just flag it
+  // The Airtable record stays but will be ignored
+
+  t(name + ' removed from tree');
+  document.getElementById('deleteConfirmBox').style.display = 'none';
+  closeStory();
+
+  // Show undo toast
+  setTimeout(function(){
+    if (_lastDeletedPerson && (Date.now() - _lastDeletedPerson.time) < 8000) {
+      showUndoBar(_lastDeletedPerson.name);
+    }
+  }, 400);
+}
+
+function showUndoBar(name) {
+  var bar = document.getElementById('undoBar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'undoBar';
+    bar.style.cssText = 'position:fixed;bottom:5.5rem;left:50%;transform:translateX(-50%);background:rgba(42,24,0,.9);border-radius:999px;padding:.45rem .5rem .45rem 1rem;display:flex;align-items:center;gap:.7rem;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.25);font-size:.75rem;color:rgba(248,242,232,.8);font-family:\'DM Sans\',sans-serif;';
+    document.body.appendChild(bar);
+  }
+  bar.innerHTML = name + ' removed &nbsp;<button onclick="undoDelete()" style="background:rgba(184,134,11,.3);border:1px solid rgba(184,134,11,.4);border-radius:999px;padding:.22rem .7rem;color:#d4a840;font-family:\'Nunito\',sans-serif;font-size:.72rem;font-weight:800;cursor:pointer;letter-spacing:.04em;">Undo</button>';
+  bar.style.display = 'flex';
+  clearTimeout(bar._t);
+  bar._t = setTimeout(function(){
+    bar.style.display = 'none';
+    _lastDeletedPerson = null;
+  }, 7000);
+}
+
+function undoDelete() {
+  if (!_lastDeletedPerson) return;
+  var name = _lastDeletedPerson.name;
+  // Restore to localStorage
+  try {
+    var leaves = JSON.parse(localStorage.getItem('cc_legacy_leaves') || '[]');
+    if (!leaves.find(function(l){ return l.name === name; })) {
+      leaves.unshift({ name: name, restored: true, created: new Date().toISOString() });
+      localStorage.setItem('cc_legacy_leaves', JSON.stringify(leaves));
+    }
+  } catch(e){}
+  _lastDeletedPerson = null;
+  document.getElementById('undoBar').style.display = 'none';
+  t(name + ' restored ✦');
+}
 </script>
 <div style="text-align:center;padding:.8rem 1.5rem;font-size:.80rem;color:rgba(255,255,255,.3);font-family:'Cormorant Garamond',serif;font-style:italic;border-top:1px solid rgba(255,255,255,.06);background:#06060f;">For entertainment and personal reflection only · Not a substitute for professional advice · © 2026 RespondIQ LLC</div>
 

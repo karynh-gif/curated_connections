@@ -80,6 +80,19 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .hib-btn{display:flex;flex-direction:column;align-items:center;gap:.25rem;background:none;border:none;cursor:pointer;padding:.3rem .4rem;}
 .hib-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:rgba(255,255,255,.85);}
 .hib-label{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+/* ── UNIVERSAL RATING ROW ── */
+.cc-rate-row{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.55rem .5rem .3rem;border-top:1px solid rgba(255,255,255,.05);}
+.cc-rate-btn{display:flex;flex-direction:column;align-items:center;gap:.18rem;background:none;border:none;cursor:pointer;padding:.3rem .6rem;border-radius:8px;transition:all .18s;opacity:.32;}
+.cc-rate-btn:hover{opacity:.65;background:rgba(255,255,255,.05);}
+.cc-rate-btn.selected{opacity:1;}
+.cc-rate-btn.selected.up{background:rgba(58,173,144,.12);border:1px solid rgba(58,173,144,.25);}
+.cc-rate-btn.selected.mid{background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.22);}
+.cc-rate-btn.selected.dn{background:rgba(192,80,56,.09);border:1px solid rgba(192,80,56,.2);}
+.cc-rate-emoji{font-size:1.05rem;line-height:1;}
+.cc-rate-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.4);}
+.cc-share-row{display:flex;justify-content:flex-end;padding:.1rem .5rem .4rem;}
+.cc-share-link{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.2rem .4rem;border:none;background:none;}
+.cc-share-link:hover{color:rgba(201,125,58,.7);}
 /* WW CARDS */
 .ww-card{flex-shrink:0;width:158px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;overflow:hidden;}
 .ww-card-top{padding:.85rem .85rem .5rem;}
@@ -424,10 +437,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
               <div class="hib-label">Together</div>
             </button>
           </div>
-          <!-- Thumbs feedback row -->
-          <div class="card-feedback-row" style="display:flex;justify-content:center;gap:1.5rem;padding:.5rem 0 .2rem;border-top:1px solid rgba(255,255,255,0.05);margin-top:.3rem;">
-            <button class="thumb-btn" onclick="event.stopPropagation();cardFeedback('hero',1,this)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;opacity:0.35;transition:all .2s;" title="I like this">👍</button>
-            <button class="thumb-btn" onclick="event.stopPropagation();cardFeedback('hero',-1,this)" style="background:none;border:none;cursor:pointer;font-size:1.1rem;opacity:0.35;transition:all .2s;" title="Not for me">👎</button>
+          <div class="cc-rate-row" id="heroRateRow">
+            <button class="cc-rate-btn up"  onclick="event.stopPropagation();ccRate('hero',1,this)"><span class="cc-rate-emoji">👍</span><span class="cc-rate-label">Felt that</span></button>
+            <button class="cc-rate-btn mid" onclick="event.stopPropagation();ccRate('hero',0,this)"><span class="cc-rate-emoji">✦</span><span class="cc-rate-label">Interesting</span></button>
+            <button class="cc-rate-btn dn"  onclick="event.stopPropagation();ccRate('hero',-1,this)"><span class="cc-rate-emoji">👎</span><span class="cc-rate-label">Pass</span></button>
+            <button class="cc-share-link"   onclick="event.stopPropagation();ccShareCard('hero')" style="margin-left:.5rem;">Share ↗</button>
           </div>
         </div>
       </div>
@@ -623,7 +637,12 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       </div>
       <div class="card-actions">
         <div class="card-action card-action-primary" onclick="openResponse()">Answer this →</div>
-        <div class="card-action card-action-sec" onclick="ccShare()">Share ↗</div>
+        <div class="card-action card-action-sec" onclick="ccShareCard('overlay')">Share ↗</div>
+      </div>
+      <div class="cc-rate-row" id="overlayRateRow">
+        <button class="cc-rate-btn up"  onclick="ccRate('overlay',1,this)"><span class="cc-rate-emoji">👍</span><span class="cc-rate-label">Felt that</span></button>
+        <button class="cc-rate-btn mid" onclick="ccRate('overlay',0,this)"><span class="cc-rate-emoji">✦</span><span class="cc-rate-label">Interesting</span></button>
+        <button class="cc-rate-btn dn"  onclick="ccRate('overlay',-1,this)"><span class="cc-rate-emoji">👎</span><span class="cc-rate-label">Pass</span></button>
       </div>
     </div>
   </div>
@@ -651,9 +670,33 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div class="response-echo" id="responseEcho"></div>
     <div class="response-label">Your answer</div>
     <textarea class="response-textarea" id="responseText" placeholder="What comes to mind..."></textarea>
+
+    <!-- Photo + Voice — visible to all, gated by tier -->
+    <div style="display:flex;gap:.6rem;margin-bottom:.8rem;">
+      <div id="respPhotoBtn" onclick="handleRespPhoto()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem;border-radius:11px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);transition:all .2s;">
+        <span style="font-size:1rem;">📷</span>
+        <span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(242,232,216,.5);">Photo</span>
+      </div>
+      <div id="respVoiceBtn" onclick="handleRespVoice()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem;border-radius:11px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);transition:all .2s;">
+        <span style="font-size:1rem;">🎙</span>
+        <span style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(242,232,216,.5);">Voice</span>
+      </div>
+    </div>
+    <!-- Photo preview -->
+    <div id="respPhotoPreview" style="display:none;margin-bottom:.8rem;border-radius:12px;overflow:hidden;"><img id="respPhotoImg" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;" src=""/></div>
+    <!-- Voice recording UI -->
+    <div id="respVoiceUI" style="display:none;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.9rem;margin-bottom:.8rem;text-align:center;">
+      <div id="respVoiceTimer" style="font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;color:var(--amber);margin-bottom:.3rem;">0:00</div>
+      <div id="respVoiceStatus" style="font-size:.72rem;color:rgba(242,232,216,.45);font-style:italic;margin-bottom:.6rem;">Tap record to begin</div>
+      <button id="respVoiceRecBtn" onclick="toggleRespRecording()" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber2));border:none;font-size:1.1rem;cursor:pointer;margin:0 auto .5rem;display:block;">🎙</button>
+      <audio id="respVoicePlayer" controls style="width:100%;display:none;margin-top:.4rem;border-radius:8px;"></audio>
+    </div>
+    <!-- Hidden file input for photo -->
+    <input type="file" id="respPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleRespPhotoFile(this)"/>
+
     <div class="response-bar">
-      <button class="resp-btn resp-btn-keep" onclick="openAccount('save answer privately')">Keep privately</button>
-      <button class="resp-btn resp-btn-share" onclick="openAccount('share answer with circle')">Share with circle</button>
+      <button class="resp-btn resp-btn-keep" onclick="saveResponse('private')">Keep privately</button>
+      <button class="resp-btn resp-btn-share" onclick="saveResponse('circle')">Share with circle</button>
     </div>
   </div>
 
@@ -683,6 +726,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
           <label for="acctLegalCheck" style="font-family:'DM Sans',sans-serif;font-size:.75rem;color:rgba(242,232,216,.45);line-height:1.5;cursor:pointer;">I agree to the <span onclick="event.preventDefault();openLegal('tos')" style="color:#c97d3a;text-decoration:underline;cursor:pointer;">Terms of Service</span> and <span onclick="event.preventDefault();openLegal('privacy')" style="color:#c97d3a;text-decoration:underline;cursor:pointer;">Privacy Policy</span>. Curated Connections is for personal reflection &amp; entertainment — for personal reflection and entertainment only.</label>
         </div>
         <button class="sheet-btn" onclick="createAcct()">Create Free Account →</button>
+        <!-- Daily prompt opt-in — checked by default, easy to uncheck -->
+        <div style="display:flex;align-items:flex-start;gap:.6rem;margin-top:.4rem;padding:.5rem .75rem;background:rgba(201,125,58,.06);border-radius:10px;border:1px solid rgba(201,125,58,.12);">
+          <input type="checkbox" id="acctEmailOptIn" checked style="margin-top:.15rem;accent-color:#c97d3a;cursor:pointer;flex-shrink:0;"/>
+          <label for="acctEmailOptIn" style="font-family:'DM Sans',sans-serif;font-size:.75rem;color:rgba(242,232,216,.5);line-height:1.5;cursor:pointer;">Send me a daily reflection prompt by email — I can unsubscribe anytime.</label>
+        </div>
       </div>
 
       <!-- Sign-in form -->
@@ -1337,7 +1385,114 @@ function ccShareFallback(text) {
   }
 }
 
-// ── CARD FEEDBACK (thumbs) ────────────────────────────────
+// ── RESPONSE PHOTO + VOICE ────────────────────────────────────
+function handleRespPhoto() {
+  var tier = getTier ? getTier() : 'free';
+  if (tier === 'free') {
+    showToast('📷 Photo responses unlock with Connect — $4.99/mo');
+    setTimeout(function(){ openAccount('photo response'); }, 1200);
+    return;
+  }
+  document.getElementById('respPhotoInput').click();
+}
+
+function handleRespPhotoFile(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('respPhotoImg').src = e.target.result;
+    document.getElementById('respPhotoPreview').style.display = 'block';
+    document.getElementById('respPhotoBtn').style.borderColor = 'rgba(201,125,58,.4)';
+    document.getElementById('respPhotoBtn').style.background  = 'rgba(201,125,58,.08)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleRespVoice() {
+  var tier = getTier ? getTier() : 'free';
+  if (tier === 'free') {
+    showToast('🎙 Voice responses unlock with Connect — $4.99/mo');
+    setTimeout(function(){ openAccount('voice response'); }, 1200);
+    return;
+  }
+  var ui = document.getElementById('respVoiceUI');
+  ui.style.display = ui.style.display === 'none' ? 'block' : 'none';
+}
+
+var _respRecorder = null, _respChunks = [], _respTimer = null, _respSecs = 0, _respBlobUrl = null;
+
+function toggleRespRecording() {
+  if (_respRecorder && _respRecorder.state === 'recording') {
+    _respRecorder.stop();
+    _respRecorder.stream.getTracks().forEach(function(t){t.stop();});
+    clearInterval(_respTimer);
+    document.getElementById('respVoiceRecBtn').textContent = '🎙';
+    document.getElementById('respVoiceRecBtn').style.background = 'linear-gradient(135deg,var(--amber),var(--amber2))';
+    document.getElementById('respVoiceStatus').textContent = 'Recording saved';
+  } else {
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      _respRecorder = new MediaRecorder(stream);
+      _respChunks = [];
+      _respRecorder.ondataavailable = function(e){ if(e.data.size>0) _respChunks.push(e.data); };
+      _respRecorder.onstop = function(){
+        var blob = new Blob(_respChunks, {type:'audio/webm'});
+        _respBlobUrl = URL.createObjectURL(blob);
+        var player = document.getElementById('respVoicePlayer');
+        player.src = _respBlobUrl; player.style.display = 'block';
+      };
+      _respRecorder.start(250);
+      _respSecs = 0;
+      _respTimer = setInterval(function(){
+        _respSecs++;
+        var m=Math.floor(_respSecs/60), s=_respSecs%60;
+        document.getElementById('respVoiceTimer').textContent = m+':'+(s<10?'0':'')+s;
+      },1000);
+      document.getElementById('respVoiceRecBtn').textContent = '⏹';
+      document.getElementById('respVoiceRecBtn').style.background = '#c05038';
+      document.getElementById('respVoiceStatus').textContent = 'Recording — tap to stop';
+    }).catch(function(){ showToast('Microphone access needed'); });
+  }
+}
+
+function saveResponse(visibility) {
+  var user = CC.getUser ? CC.getUser() : null;
+  if (!user) { openAccount('save your answer'); return; }
+
+  var text = document.getElementById('responseText').value.trim();
+  var hasPhoto = document.getElementById('respPhotoPreview').style.display !== 'none';
+  var hasVoice = !!_respBlobUrl;
+
+  if (!text && !hasPhoto && !hasVoice) {
+    showToast('Add your answer first');
+    return;
+  }
+
+  // Save locally
+  try {
+    var entry = {
+      id: 'resp_'+Date.now(), text, hasPhoto, hasVoice,
+      visibility, date: new Date().toISOString(),
+      question: document.getElementById('responseEcho').textContent
+    };
+    var saved = JSON.parse(localStorage.getItem('cc_responses')||'[]');
+    saved.unshift(entry); if(saved.length>100) saved=saved.slice(0,100);
+    localStorage.setItem('cc_responses', JSON.stringify(saved));
+  } catch(e){}
+
+  showToast(visibility === 'circle' ? 'Shared with your circle ✦' : 'Saved privately ✦');
+  closeResponse();
+}
+
+function closeResponse() {
+  document.getElementById('responseScreen').style.display = 'none';
+  document.getElementById('respPhotoPreview').style.display = 'none';
+  document.getElementById('respVoiceUI').style.display = 'none';
+  document.getElementById('respVoicePlayer').style.display = 'none';
+  document.getElementById('responseText').value = '';
+  _respBlobUrl = null; _respChunks = [];
+  clearInterval(_respTimer);
+}
 function cardFeedback(cardId, value, el) {
   // Visual feedback
   var parent = el.closest('.card-feedback-row');
@@ -1429,15 +1584,39 @@ async function createAcct() {
       email: email,
       displayName: name,
       tier: 'free',
+      email_opt_in: document.getElementById('acctEmailOptIn') ? document.getElementById('acctEmailOptIn').checked : true,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     // Save to localStorage for CC.getUser()
-    var ccUser = { user_id: uid, email: email, name: name, tier: 'free' };
+    var ccUser = { user_id: uid, email: email, name: name, tier: 'free', email_opt_in: document.getElementById('acctEmailOptIn') ? document.getElementById('acctEmailOptIn').checked : true };
     localStorage.setItem('cc_user', JSON.stringify(ccUser));
+
+    // Save to Airtable Users table (non-blocking)
+    fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        action: 'create',
+        table: 'Users',
+        fields: {
+          'user_id':          uid,
+          'email':            email,
+          'display_name':     name,
+          'subscription_tier':'free',
+          'email_opt_in':     ccUser.email_opt_in,
+          'onboarding_complete': false
+        }
+      })
+    }).catch(function(){});
 
     showToast('Welcome, ' + name.split(' ')[0] + ' ✦');
     closeAccount();
+
+    // Return to originating page if redirected here
+    var rp = new URLSearchParams(window.location.search).get('returnTo');
+    var rpMap = { circles:'circles.html', journal:'journal.html', games:'games.html', legacy:'legacy.html' };
+    if (rp && rpMap[rp]) { setTimeout(function(){ window.location.href = rpMap[rp]; }, 800); }
   } catch(e) {
     errEl.textContent =
       e.code === 'auth/email-already-in-use' ? 'An account with that email already exists. Sign in instead.' :
@@ -1830,9 +2009,29 @@ document.addEventListener('DOMContentLoaded', function() {
   loadWitWonder();
   loadQuizSection();
   loadCircles();
-  // Living Legacy is free to start — show to everyone
   var ls = document.getElementById('legacyShelf');
   if (ls) ls.style.display = 'block';
+
+  // Auto-open signup modal if redirected from another page
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('signup') === '1' && !CC.getUser()) {
+    setTimeout(function() {
+      openAccount('create your free account');
+    }, 600);
+  }
+  // Auto-open signin if redirected
+  if (params.get('signin') === '1' && !CC.getUser()) {
+    setTimeout(function() {
+      openAccount('sign in');
+      showSigninTab();
+    }, 600);
+  }
+  // After auth, return to originating page if specified
+  var returnTo = params.get('returnTo');
+  if (returnTo && CC.getUser()) {
+    var pages = { circles: 'circles.html', journal: 'journal.html', games: 'games.html', legacy: 'legacy.html' };
+    if (pages[returnTo]) window.location.href = pages[returnTo];
+  }
 });
 
 
