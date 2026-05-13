@@ -580,36 +580,47 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <span class="shelf-title">Living Legacy</span>
         <a href="legacy.html" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;text-decoration:none;">See All</a>
       </div>
-      <div class="shelf-row">
 
-        <!-- My Leaves -->
-        <div onclick="window.location.href='legacy.html'" style="flex-shrink:0;width:150px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#0a2010,#1a0a08);border:1px solid rgba(42,138,80,.28);cursor:pointer;">
-          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(58,173,144,.8);margin-bottom:.5rem;">🍃 My Leaves</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.6rem;">Preserve a life. Start a story. Keep it forever.</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(58,173,144,.6);">Open →</div>
+      <!-- My Leaves button -->
+      <div onclick="window.location.href='legacy.html'" style="margin:0 .9rem .6rem;padding:1rem 1.1rem;background:linear-gradient(135deg,rgba(42,138,80,.1),rgba(10,40,20,.2));border:1px solid rgba(42,138,80,.22);border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(58,173,144,.75);margin-bottom:.2rem;">🍃 My Leaves</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.8);">Preserve a life. Start a story.</div>
         </div>
-
-        <!-- Grad 2026 -->
-        <div onclick="window.location.href='gift-leaf.html?occasion=graduation2026'" style="flex-shrink:0;width:150px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#1a1006,#201408);border:1px solid rgba(201,125,58,.28);cursor:pointer;">
-          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,125,58,.75);margin-bottom:.5rem;">🎓 Grad 2026</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.6rem;">Capture this moment before it's gone.</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.6);">$4.99 →</div>
-        </div>
-
-        <!-- Mother's Day -->
-        <div onclick="window.location.href='gift-leaf.html?occasion=mothersday'" style="flex-shrink:0;width:150px;border-radius:20px;padding:1rem;background:linear-gradient(145deg,#1a0810,#200810);border:1px solid rgba(180,80,120,.25);cursor:pointer;">
-          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,100,140,.75);margin-bottom:.5rem;">🌸 Mother's Day</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:.92rem;color:rgba(242,232,216,.85);line-height:1.4;margin-bottom:.6rem;">Tell her what she means — before the day passes.</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,100,140,.6);">$4.99 →</div>
-        </div>
-
-        <!-- Invite contributors -->
-        <div onclick="showToast('Share your capsule link to invite contributors')" style="flex-shrink:0;width:120px;border-radius:20px;padding:1rem;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.08);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-align:center;">
-          <div style="font-size:1.2rem;opacity:.3;">✦</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.22);line-height:1.4;">Invite contributors</div>
-        </div>
-
+        <div style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;color:rgba(58,173,144,.5);">Open →</div>
       </div>
+
+      <!-- Special Promotions — one rectangle, both offers inside -->
+      <div style="margin:0 .9rem .8rem;border:1px solid rgba(201,125,58,.2);border-radius:16px;overflow:hidden;background:linear-gradient(145deg,rgba(201,125,58,.06),rgba(80,40,5,.1));">
+        <!-- Header -->
+        <div style="padding:.65rem 1rem .5rem;border-bottom:1px solid rgba(201,125,58,.12);display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.65);">✦ Special Promotions</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.35);">Limited time</div>
+        </div>
+        <!-- Grad 2026 row -->
+        <div onclick="window.location.href='gift-leaf.html?occasion=graduation2026'" style="padding:.85rem 1rem;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.8rem;">
+          <div style="flex:1;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.7);margin-bottom:.18rem;">🎓 Class of 2026</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.82);line-height:1.35;">Capture this moment before it's gone.</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:rgba(201,125,58,.8);">$4.99</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.6rem;color:rgba(201,125,58,.4);">one-time</div>
+          </div>
+        </div>
+        <!-- Mother's Day row -->
+        <div onclick="window.location.href='gift-leaf.html?occasion=mothersday'" style="padding:.85rem 1rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.8rem;">
+          <div style="flex:1;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,100,140,.7);margin-bottom:.18rem;">🌸 Mother's Day</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(242,232,216,.82);line-height:1.35;">Tell her what she means — before the day passes.</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;color:rgba(200,100,140,.8);">$4.99</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:.6rem;color:rgba(200,100,140,.4);">one-time</div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- MY CIRCLES -->
