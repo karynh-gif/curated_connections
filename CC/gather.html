@@ -235,9 +235,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .qz-ans:disabled{cursor:default;}
 /* Result — transition back to amber warmth (discovery arrived) */
 .qz-result-tag{font-family:'Nunito',sans-serif;font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(196,168,232,.55);margin-bottom:.5rem;}
-.qz-result-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:#f5ede2;line-height:1.08;margin-bottom:.9rem;letter-spacing:.01em;}
-.qz-result-body{font-size:.9rem;color:rgba(240,228,252,.68);line-height:1.75;margin-bottom:.9rem;}
-.qz-result-note{font-size:.82rem;color:rgba(196,168,232,.4);line-height:1.65;font-style:italic;padding:.85rem 0;border-top:1px solid rgba(155,109,212,.12);margin-bottom:.9rem;}
+.qz-result-title{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;color:#f5ede2;line-height:1.08;margin-bottom:1.2rem;letter-spacing:.01em;}
+.qz-result-body{font-size:1.05rem;color:rgba(240,228,252,.82);line-height:1.8;margin-bottom:1rem;}
+.qz-result-note{font-size:.9rem;color:rgba(196,168,232,.5);line-height:1.7;font-style:italic;padding:.85rem 0;border-top:1px solid rgba(155,109,212,.12);margin-bottom:.9rem;}
 .qz-disclaimer{font-size:.68rem;color:rgba(196,168,232,.18);line-height:1.55;margin-bottom:1.5rem;}
 /* Journal block — shift to amber warmth as transition point */
 .qz-journal-block{background:linear-gradient(135deg,rgba(201,125,58,.1),rgba(155,109,212,.06),rgba(201,125,58,.04));border:1px solid rgba(201,125,58,.2);border-radius:var(--r-xl);padding:1.25rem;margin-bottom:1.4rem;}
@@ -1674,6 +1674,21 @@ function closeAccount() {
   document.getElementById('acctError').textContent = '';
 }
 
+function showWelcomeBanner(firstName) {
+  var existing = document.getElementById('welcomeBanner');
+  if (existing) existing.remove();
+  var banner = document.createElement('div');
+  banner.id = 'welcomeBanner';
+  banner.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(6,12,9,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;';
+  banner.innerHTML = '<div style="font-size:2.5rem;margin-bottom:1rem;">✦</div>'
+    + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:2rem;color:#f2e8d8;margin-bottom:.8rem;font-weight:300;">Welcome, ' + firstName + '.</div>'
+    + '<div style="font-family:\'DM Sans\',sans-serif;font-size:.95rem;color:rgba(242,232,216,.5);line-height:1.7;max-width:280px;margin-bottom:2rem;">Your space to reflect, connect, and play is ready.</div>'
+    + '<button onclick="document.getElementById(\'welcomeBanner\').remove()" style="padding:.85rem 2.5rem;background:linear-gradient(135deg,var(--amber),var(--amber2));border:none;border-radius:12px;font-family:\'Nunito\',sans-serif;font-size:.9rem;font-weight:800;color:#fff;cursor:pointer;letter-spacing:.04em;">Let\'s go →</button>';
+  document.body.appendChild(banner);
+  // Auto-dismiss after 5s
+  setTimeout(function(){ if(document.getElementById('welcomeBanner')) banner.remove(); }, 5000);
+}
+
 function showSignupTab() {
   document.getElementById('acctSignupForm').style.display = 'block';
   document.getElementById('acctSigninForm').style.display = 'none';
@@ -1756,13 +1771,14 @@ async function createAcct() {
       })
     }).catch(function(){});
 
-    showToast('Welcome, ' + name.split(' ')[0] + ' ✦');
+    // Close modal and show clear welcome
     closeAccount();
+    showWelcomeBanner(name.split(' ')[0]);
 
     // Return to originating page if redirected here
     var rp = new URLSearchParams(window.location.search).get('returnTo');
     var rpMap = { circles:'circles.html', journal:'journal.html', games:'games.html', legacy:'legacy.html' };
-    if (rp && rpMap[rp]) { setTimeout(function(){ window.location.href = rpMap[rp]; }, 800); }
+    if (rp && rpMap[rp]) { setTimeout(function(){ window.location.href = rpMap[rp]; }, 1500); }
   } catch(e) {
     errEl.textContent =
       e.code === 'auth/email-already-in-use' ? 'An account with that email already exists. Sign in instead.' :
@@ -2030,47 +2046,61 @@ function selectQzAnswer(btn, v) {
 }
 
 function showQzResult() {
-  // Tally answers
+  // Tally answers — normalize to lowercase
   var tally = {};
-  qzState.answers.forEach(function(v) { tally[v] = (tally[v] || 0) + 1; });
+  qzState.answers.forEach(function(v) {
+    var k = (v || '').toLowerCase();
+    tally[k] = (tally[k] || 0) + 1;
+  });
 
-  // Find winner (highest count; ties go to first in A/B/C/D order)
-  var winner = 'A';
-  ['A','B','C','D'].forEach(function(k) {
+  // Find the most common answer
+  var winner = 'a';
+  ['a','b','c','d'].forEach(function(k) {
     if ((tally[k] || 0) > (tally[winner] || 0)) winner = k;
   });
 
-  var resultsObj = qzState.results.results || qzState.results;
-  var result = resultsObj[winner] || {};
-  var journalObj = qzState.results.journal || {};
-  var journalPrompt = journalObj[winner] || '';
+  // Handle both array results and object results
+  var result = {};
+  var results = qzState.results;
 
-  document.getElementById('qzRTitle').textContent = result.title || 'Your result';
-  document.getElementById('qzRBody').textContent = result.body || '';
-  document.getElementById('qzRNote').textContent = result.note || '';
+  if (Array.isArray(results)) {
+    // Array format: a→0, b→1, c→2, d→3
+    var idx = {a:0, b:1, c:2, d:3}[winner] || 0;
+    result = results[idx] || results[0] || {};
+  } else {
+    // Object format: {A: {...}, B: {...}} or {results: {A: {...}}}
+    var obj = results.results || results;
+    result = obj[winner.toUpperCase()] || obj[winner] || Object.values(obj)[0] || {};
+  }
+
+  var title = result.title || result.name || 'Your result';
+  var body  = result.body  || result.description || result.text || '';
+  var note  = result.note  || '';
+
+  document.getElementById('qzRTitle').textContent = title;
+  document.getElementById('qzRBody').textContent  = body;
+  document.getElementById('qzRNote').textContent  = note;
 
   // Journal block
+  var journalObj = (Array.isArray(results) ? {} : (results.journal || {}));
+  var journalPrompt = journalObj[winner.toUpperCase()] || journalObj[winner] || '';
   if (journalPrompt) {
     document.getElementById('qzJPrompt').textContent = journalPrompt;
     document.getElementById('qzJBlock').style.display = 'block';
-    // Save prompt for journal page
     try {
       localStorage.setItem('cc_quiz_journal_prompt', JSON.stringify({
-        prompt: journalPrompt,
-        resultTitle: result.title,
-        quizTitle: qzState.title
+        prompt: journalPrompt, resultTitle: title, quizTitle: qzState.title
       }));
     } catch(e) {}
   } else {
     document.getElementById('qzJBlock').style.display = 'none';
   }
 
-  // Progress bar to 100%
-  document.getElementById('qzFill').style.width = '100%';
-  document.getElementById('qzLabel').textContent = 'Done';
-
+  document.getElementById('qzFill').style.width      = '100%';
+  document.getElementById('qzLabel').textContent     = 'Done';
   document.getElementById('qzQScreen').style.display = 'none';
   document.getElementById('qzRScreen').style.display = 'block';
+  document.getElementById('qzIntroScreen').style.display = 'none';
   document.getElementById('qzScroll').scrollTop = 0;
 }
 
