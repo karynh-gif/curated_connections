@@ -50,7 +50,7 @@ const PRICE_TO_TIER = {
   // Fill in your real price IDs here or set as env vars:
   [process.env.STRIPE_PRICE_CONNECT]:      "connect",
   [process.env.STRIPE_PRICE_INSIGHT]:      "insight",
-  [process.env.STRIPE_PRICE_DEEP_CONNECT]: "legacy",
+  [process.env.STRIPE_PRICE_DEEP_CONNECT]: "deep_connect",
 };
 
 function verifyStripeSignature(rawBody, sig, secret) {
@@ -152,16 +152,106 @@ exports.handler = async (event) => {
         break;
       }
 
-      // ── Checkout completed — link customer ID to user ─────
+      // ── Checkout completed — link customer ID + handle leaf seal/reopen ──
       case "checkout.session.completed": {
-        const email      = obj.customer_details?.email;
-        const customerId = obj.customer;
+        const email           = obj.customer_details?.email;
+        const customerId      = obj.customer;
+        const clientRef       = obj.client_reference_id || "";
+        const amountTotal     = obj.amount_total || 0;
+
+        // Link Stripe customer ID to user record
         if (email && customerId) {
           const users = await atFind("Users", `{email}="${email}"`);
           if (users.length) {
             await atUpdate("Users", users[0].id, { stripe_customer_id: customerId });
           }
         }
+
+        // Handle leaf seal payment: client_reference_id = "seal_LEAFID"
+        if (clientRef.startsWith("seal_")) {
+          const leafId = clientRef.replace("seal_", "");
+          const today  = new Date().toISOString().split("T")[0];
+
+          // Find the leaf record in Living Legacy Leaves
+          const leaves = await atFind("Living Legacy Leaves", `{Leaf ID}="${leafId}"`);
+          if (leaves.length) {
+            await atUpdate("Living Legacy Leaves", leaves[0].id, {
+              "Leaf Status":   "Sealed",
+              "Sealed Date":   today,
+              "Seal Payment Amount": amountTotal / 100
+            });
+          }
+
+          // Create a Leaf Payment record
+          await atCreate("Leaf Payments", {
+            "Payment ID":       "lp_" + leafId + "_" + Date.now(),
+            "Leaf ID":          leafId,
+            "Payment Type":     amountTotal >= 9000 ? "seal_large" : "seal_standard",
+            "Amount":           amountTotal / 100,
+            "Stripe Session ID": obj.id,
+            "Status":           "completed",
+            "Leaf Status Before": "Active",
+            "Leaf Status After":  "Sealed",
+            "Payment Date":     today
+          });
+        }
+
+        // Handle leaf reopen payment: client_reference_id = "reopen_LEAFID"
+        if (clientRef.startsWith("reopen_")) {
+          const leafId = clientRef.replace("reopen_", "");
+          const today  = new Date().toISOString().split("T")[0];
+          const expiry = new Date();
+          expiry.setDate(expiry.getDate() + 30);
+          const expiryDate = expiry.toISOString().split("T")[0];
+
+          const leaves = await atFind("Living Legacy Leaves", `{Leaf ID}="${leafId}"`);
+          if (leaves.length) {
+            const currentReopens = leaves[0].fields["Reopen Count"] || 0;
+            await atUpdate("Living Legacy Leaves", leaves[0].id, {
+              "Leaf Status":          "Active",
+              "Reopen Count":         currentReopens + 1,
+              "Reopen Window Expires": expiryDate
+            });
+          }
+
+          await atCreate("Leaf Payments", {
+            "Payment ID":       "lp_" + leafId + "_" + Date.now(),
+            "Leaf ID":          leafId,
+            "Payment Type":     "reopen_30day",
+            "Amount":           4.99,
+            "Stripe Session ID": obj.id,
+            "Status":           "completed",
+            "Leaf Status Before": "Sealed",
+            "Leaf Status After":  "Active",
+            "Reopen Expires":   expiryDate,
+            "Payment Date":     today
+          });
+        }
+
+        // Handle single leaf monthly subscription
+        if (clientRef.startsWith("monthly_")) {
+          const leafId = clientRef.replace("monthly_", "");
+          const today  = new Date().toISOString().split("T")[0];
+          const leaves = await atFind("Living Legacy Leaves", `{Leaf ID}="${leafId}"`);
+          if (leaves.length) {
+            await atUpdate("Living Legacy Leaves", leaves[0].id, {
+              "Leaf Status":         "Active",
+              "Subscription Status": "Active"
+            });
+          }
+          await atCreate("Leaf Payments", {
+            "Payment ID":        "lp_" + leafId + "_" + Date.now(),
+            "Leaf ID":           leafId,
+            "Payment Type":      "reopen_30day",
+            "Amount":            obj.amount_total ? obj.amount_total / 100 : 0,
+            "Stripe Session ID": obj.id,
+            "Status":            "completed",
+            "Leaf Status Before":"Read Only",
+            "Leaf Status After": "Active",
+            "Payment Date":      today
+          });
+        }
+
         break;
       }
 
