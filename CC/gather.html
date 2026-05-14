@@ -1167,7 +1167,7 @@ function renderTonightCards(shelf, recs) {
     html += '<div class="fc-back"><div class="fc-back-shine"></div><div class="fc-back-hatch" style="background-image:repeating-linear-gradient(45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px),repeating-linear-gradient(-45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px);"></div>';
     html += '<div class="fc-brand" style="color:' + dk.accent + ';text-shadow:0 0 20px ' + dk.accent + '55;">Curated Connections</div>';
     html += '<div class="fc-deck">' + edition + ' Edition</div>';
-    html += '<div class="fc-tap" style="color:' + dk.accent + '66;">✦ tap to reveal ✦</div></div>';
+    html += '<div class="fc-tap" style="color:' + dk.accent + '66;">✦ tap ✦</div></div>';
     // FRONT
     html += '<div class="fc-front" style="background:' + dk.frontBg + ';"><div class="fc-front-shine"></div>';
     html += '<div class="fc-label" style="color:' + dk.accent + ';">' + edition + '</div>';
@@ -1503,7 +1503,7 @@ async function loadWitWonder() {
       html += '<div class="fc-back"><div class="fc-back-shine"></div>';
       html += '<div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">' + backIcon + '</div>';
       html += '<div class="fc-label" style="color:' + dk.accent + '99;font-size:8px;letter-spacing:0.22em;text-transform:uppercase;position:relative;z-index:1;margin-top:4px;">' + (type==='Riddle'?'R I D D L E':type==='Joke'?'J O K E':'BRAIN TEASER') + '</div>';
-      html += '<div class="fc-tap" style="color:' + dk.accent + '44;margin-top:14px;position:relative;z-index:1;">&#x2736; tap to reveal &#x2736;</div></div>';
+      html += '<div class="fc-tap" style="color:' + dk.accent + '44;margin-top:14px;position:relative;z-index:1;">&#x2736; tap &#x2736;</div></div>';
       // FRONT
       html += '<div class="fc-front" style="background:' + dk.frontBg + ';"><div class="fc-front-shine"></div>';
       html += '<div class="fc-label" style="color:' + dk.accent + ';">' + type + '</div>';
