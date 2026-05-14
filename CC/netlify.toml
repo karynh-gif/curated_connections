@@ -1,6 +1,12 @@
 [build]
   functions = "netlify/functions"
 
+[functions]
+  node_bundler = "esbuild"
+
+[functions.stripe-sync]
+  node_bundler = "zisi"
+
 [[redirects]]
   from = "/api/airtable"
   to = "/.netlify/functions/airtable-proxy"
