@@ -470,7 +470,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <!-- TOPBAR -->
   <div class="topbar">
     <div>
-      <div class="topbar-name">Gather</div>
+      <div class="topbar-name">Gather<span id="topbarTier" style="font-weight:400;opacity:0.45;font-size:.7em;letter-spacing:.04em;"></span></div>
       <div class="topbar-date" id="topDate">Monday · May 12</div>
     </div>
     <div class="topbar-right">
@@ -483,9 +483,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <div class="scroll">
 
     <!-- DAILY UPLIFT -->
-    <div style="padding:1.4rem 1.4rem .5rem;text-align:center;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,125,58,.4);margin-bottom:.5rem;">Today</div>
-      <div id="dailyUplift" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.08rem;color:rgba(242,232,216,.62);line-height:1.7;max-width:320px;margin:0 auto;"></div>
+    <div style="padding:1.6rem 1.4rem .6rem;text-align:center;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.6rem;">✦ Starting the Day</div>
+      <div id="dailyUplift" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.32rem;color:rgba(242,232,216,.82);line-height:1.65;max-width:320px;margin:0 auto;"></div>
     </div>
 
     <!-- HERO CARD -->
@@ -3420,6 +3420,15 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
+  // Show tier in topbar
+  var tierLabel = document.getElementById('topbarTier');
+  if (tierLabel) {
+    var t = getTier();
+    if (t && t !== 'free') {
+      tierLabel.textContent = ' · ' + t.charAt(0).toUpperCase() + t.slice(1);
+    }
+  }
+
   loadTonightCards();
   loadWitWonder();
   loadQuizSection();
