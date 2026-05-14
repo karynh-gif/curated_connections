@@ -101,11 +101,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ww-q{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--cream);line-height:1.45;}
 .ww-tap{padding:.45rem .85rem .6rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
 /* QUIZ CARDS */
-.quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;}
+.quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;}
 .quiz-label{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.45rem;opacity:1;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);margin-bottom:.35rem;}
-.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.6);line-height:1.5;margin-bottom:.55rem;}
-.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:.65rem;}
+.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.6);line-height:1.5;margin-bottom:.55rem;flex:1;}
+.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:auto;}
 /* CIRCLES */
 .circles-section{position:relative;background:linear-gradient(180deg,#08101e,#0a0e1c);margin-top:2rem;overflow:hidden;padding:1.8rem 0 1.4rem;}
 /* WRITE EXP */
@@ -801,6 +801,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
     <div class="card-screen" id="cardScreen">
       <button class="card-close" onclick="closeCardOverlay()">← Back</button>
       <div class="card-brand-small">Curated Connections</div>
+      <!-- ASK MODE TOGGLE -->
+      <div style="display:flex;justify-content:center;margin:.6rem 0 .9rem;gap:0;">
+        <button id="askSomeoneBtn" onclick="setAskMode('someone')" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .85rem;border-radius:999px 0 0 999px;border:1px solid rgba(242,232,216,.2);background:rgba(201,125,58,.25);color:rgba(242,232,216,.9);cursor:pointer;">Ask Someone</button>
+        <button id="askMyselfBtn" onclick="setAskMode('myself')" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.35rem .85rem;border-radius:0 999px 999px 0;border:1px solid rgba(242,232,216,.2);background:transparent;color:rgba(242,232,216,.4);cursor:pointer;">Ask Myself</button>
+      </div>
       <div class="card-edition" id="cardEdition">Family Edition</div>
       <div class="card-big-q" id="cardQ">"What would you tell your 20-year-old self?"</div>
       <!-- FREE: upgrade nudge -->
@@ -812,7 +817,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <!-- PAID: timed threads -->
       <div id="cardThreadsWrap">
         <div class="thread-waiting" id="threadWaiting">
-          <div class="thread-waiting-label">threads arriving…</div>
+          <div class="thread-waiting-label" id="threadWaitingLabel">Going deeper…</div>
           <div class="thread-dots"><div class="thread-dot"></div><div class="thread-dot"></div><div class="thread-dot"></div></div>
         </div>
         <div class="thread-item" id="thread1" style="border-left:3px solid var(--amber);">
@@ -1173,15 +1178,22 @@ function renderTonightCards(shelf, recs) {
     html += '</div></div>';
   });
 
-  // Locked upgrade card
-  if (level < 3) {
-    var tiers = ['Connect','Insight','Legacy'];
-    var prices = ['$4.99','$9.99','$19.99'];
+  // End of shelf card — upgrade for free, play deck for paid
+  if (level === 0) {
+    // Free user — upgrade nudge
     html += '<div class="fc-locked" onclick="openUpgrade()">';
     html += '<div style="font-size:18px;opacity:.2;">&#x1F512;</div>';
-    html += '<div class="fc-locked-tier">' + tiers[level] + '</div>';
+    html += '<div class="fc-locked-tier">Connect</div>';
     html += '<div class="fc-locked-text">More cards &amp; deeper questions</div>';
-    html += '<div class="fc-locked-cta">' + prices[level] + '/mo &rarr;</div>';
+    html += '<div class="fc-locked-cta">$4.99/mo &rarr;</div>';
+    html += '</div>';
+  } else {
+    // Paid user — play deck prompt
+    html += '<div class="fc-locked" onclick="window.location.href=\'games.html\'" style="cursor:pointer;">';
+    html += '<div style="font-size:18px;opacity:.4;">&#x1F3B4;</div>';
+    html += '<div class="fc-locked-tier" style="font-size:.75rem;">Your Deck</div>';
+    html += '<div class="fc-locked-text">Play your full weekly deck</div>';
+    html += '<div class="fc-locked-cta">Play Now &rarr;</div>';
     html += '</div>';
   }
 
@@ -1264,6 +1276,41 @@ async function loadTonightCards() {
 }
 
 // ── CARD OVERLAY ──
+var _currentAskMode = 'someone';
+var _originalPrompt = '';
+
+function setAskMode(mode) {
+  _currentAskMode = mode;
+  var someoneBtn = document.getElementById('askSomeoneBtn');
+  var myselfBtn = document.getElementById('askMyselfBtn');
+  var qEl = document.getElementById('cardQ');
+
+  if (someoneBtn && myselfBtn) {
+    someoneBtn.style.background = mode === 'someone' ? 'rgba(201,125,58,.25)' : 'transparent';
+    someoneBtn.style.color = mode === 'someone' ? 'rgba(242,232,216,.9)' : 'rgba(242,232,216,.4)';
+    myselfBtn.style.background = mode === 'myself' ? 'rgba(201,125,58,.25)' : 'transparent';
+    myselfBtn.style.color = mode === 'myself' ? 'rgba(242,232,216,.9)' : 'rgba(242,232,216,.4)';
+  }
+
+  if (!qEl) return;
+  if (mode === 'someone') {
+    qEl.textContent = _originalPrompt;
+  } else {
+    // Convert to first person
+    var p = _originalPrompt;
+    p = p.replace(/\bwould you\b/gi, 'would I');
+    p = p.replace(/\bhave you\b/gi, 'have I');
+    p = p.replace(/\bdo you\b/gi, 'do I');
+    p = p.replace(/\bare you\b/gi, 'am I');
+    p = p.replace(/\byou feel\b/gi, 'I feel');
+    p = p.replace(/\byour\b/gi, 'my');
+    p = p.replace(/\byou've\b/gi, "I've");
+    p = p.replace(/\byou're\b/gi, "I'm");
+    p = p.replace(/\byou\b/gi, 'I');
+    qEl.textContent = p;
+  }
+}
+
 function openCardOverlay(key) {
   var c = LIVE_CARDS[key] || CARDS[key] || CARDS.tonight;
   var level = getTierLevel();
@@ -1272,6 +1319,9 @@ function openCardOverlay(key) {
   document.getElementById('cardEdition').textContent = c.edition;
   document.getElementById('cardEdition').style.color = c.accent || '#e89448';
   document.getElementById('cardQ').textContent = c.q;
+  _originalPrompt = c.q;
+  _currentAskMode = 'someone';
+  setAskMode('someone');
   document.getElementById('cardScreen').style.background = c.bg;
 
   // Reset threads
@@ -2375,10 +2425,37 @@ var UPLIFTS = [
   "The version of yourself that shows up anyway is your best one."
 ];
 
-function loadDailyUplift() {
+async function loadDailyUplift() {
   var el = document.getElementById('dailyUplift');
   if (!el) return;
-  var day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+
+  // Day seed — same observation all day for everyone
+  var today = new Date();
+  var dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+
+  try {
+    var res = await fetch('/api/airtable', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action:'list', table:'Daily Observations', filterFormula:'{Active}=1', maxRecords:200})
+    });
+    var data = await res.json();
+    var records = data.records || [];
+    if (records.length) {
+      var obs = records[dayOfYear % records.length];
+      var text = obs.fields && obs.fields.Observation ? obs.fields.Observation : '';
+      if (text) {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.8s ease';
+        el.textContent = '\u201c' + text + '\u201d';
+        setTimeout(function(){ el.style.opacity = '1'; }, 50);
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // Fallback to hardcoded observations if Airtable fails
+  var day = dayOfYear;
   var uplift = UPLIFTS[day % UPLIFTS.length];
   el.textContent = '\u201c' + uplift + '\u201d';
 }
@@ -3536,23 +3613,24 @@ async function loadQuizSection(){
     {bg:'linear-gradient(145deg,#1a0820,#2a1040)',border:'rgba(140,60,180,.3)',accent:'#b06ad4',label:'Legacy Pick'}
   ];
 
+  // Build server-side formula — cumulative tier access
+  var tierFormulas = [
+    'AND({Active}=1,{Tier Access}="Gather")',
+    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}="Connect"))',
+    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}="Connect",{Tier Access}="Insight"))',
+    '{Active}=1'
+  ];
+  var formula = tierFormulas[level] || tierFormulas[0];
+
   try {
     var res=await fetch('/api/airtable',{method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'list',table:'Gather Quizzes',maxRecords:150})});
+      body:JSON.stringify({action:'list',table:'Gather Quizzes',filterFormula:formula,maxRecords:150})});
     if(!res.ok)return;
     var data=await res.json();
 
     var eligible=(data.records||[]).filter(function(r){
-      if(!r.fields.Active)return false;
-      var t=r.fields['Tier Access'];
-      var tierName=(t&&typeof t==='object'?t.name:(t||'')).trim().toLowerCase();
-      // Cumulative: each tier includes all lower tiers
-      var tierOrder=['gather','connect','insight','legacy'];
-      var maxLevel=tierOrder.indexOf(['gather','connect','insight','legacy'][level]||'gather');
-      var quizLevel=tierOrder.indexOf(tierName);
-      if(quizLevel===-1)return false; // unknown tier — skip
-      return quizLevel<=maxLevel;
+      return r.fields.Active && r.fields['Questions JSON'];
     });
 
     if(!eligible.length){
