@@ -3370,6 +3370,8 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
+  var params = new URLSearchParams(window.location.search);
+
   loadTonightCards();
   loadWitWonder();
   loadQuizSection();
@@ -3417,7 +3419,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Auto-open signup modal if redirected from another page
-  var params = new URLSearchParams(window.location.search);
   if (params.get('signup') === '1' && !CC.getUser()) {
     setTimeout(function() {
       openAccount('create your free account');
