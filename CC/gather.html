@@ -1221,38 +1221,49 @@ function fcFlipBack(inner) {
 async function loadTonightCards() {
   var shelf = document.getElementById('tonightShelf');
   if (!shelf) return;
+
   shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Loading cards...</div>';
 
-  var level = getTierLevel();
-
-  // Each tier gets its own pool — higher tiers include all lower tier decks
-  var filterFormulas = [
-    'AND({Active}=1,{Gather Pool}=1)',  // Free — basic pool only
-    'AND({Active}=1,OR({Gather Pool}=1,{Tier Access}="Connect"))',  // Connect
-    'AND({Active}=1,OR({Gather Pool}=1,{Tier Access}="Connect",{Tier Access}="Insight"))',  // Insight
-    '{Active}=1'  // Legacy — all active cards, no restrictions
-  ];
-
-  var formula = filterFormulas[level] || filterFormulas[0];
-
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula: formula, maxRecords:100})});
+    var level = 0;
+    try { level = getTierLevel(); } catch(e) { level = 0; }
+
+    var filterFormulas = [
+      'AND({Active}=1,{Gather Pool}=1)',
+      'AND({Active}=1,OR({Gather Pool}=1,{Tier Access}="Connect"))',
+      'AND({Active}=1,OR({Gather Pool}=1,{Tier Access}="Connect",{Tier Access}="Insight"))',
+      '{Active}=1'
+    ];
+
+    var formula = filterFormulas[level] || filterFormulas[0];
+
+    var res = await fetch('/api/airtable', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula: formula, maxRecords:100})
+    });
+
     if (!res.ok) {
       shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Error ' + res.status + ' — tap to retry</div>';
       shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
       return;
     }
+
     var data = await res.json();
+
     if (data.error) {
       shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">' + data.error + '</div>';
       return;
     }
+
     if (data.records && data.records.length) {
       renderTonightCards(shelf, data.records);
     } else {
       shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">No active cards found</div>';
     }
+
   } catch(e) {
+    console.error('loadTonightCards failed:', e);
     shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Connection error — tap to retry</div>';
     shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
   }
@@ -3394,29 +3405,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var _urlPromo = _urlParams.get('promo') || _urlParams.get('code');
   if (_urlPromo) setActivePromoCode(_urlPromo);
 
-  // Sync tier after Stripe payment
-  if (params.get('upgraded') === '1') {
-    var u = null;
-    try { u = CC && CC.getUser ? CC.getUser() : null; } catch(e) {}
-    if (u && u.email) {
-      fetch('/.netlify/functions/stripe-sync?email=' + encodeURIComponent(u.email))
-        .then(function(r){ return r.json(); })
-        .then(function(data) {
-          if (data.tier && data.tier !== 'free') {
-            // Update stored user tier
-            try {
-              var stored = JSON.parse(localStorage.getItem('cc_user') || '{}');
-              stored.tier = data.tier;
-              localStorage.setItem('cc_user', JSON.stringify(stored));
-            } catch(e) {}
-            showToast('Welcome to ' + data.tier.charAt(0).toUpperCase() + data.tier.slice(1) + '! ✦');
-            // Reload to apply new tier
-            setTimeout(function(){ window.location.href = 'gather.html'; }, 1500);
-          }
-        })
-        .catch(function(){});
-    }
-  }
+  // Stripe sync temporarily disabled — re-enable after cards are stable
+  // if (params.get('upgraded') === '1') { ... }
 
   // Auto-open signup modal if redirected from another page
   if (params.get('signup') === '1' && !CC.getUser()) {
