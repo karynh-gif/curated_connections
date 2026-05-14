@@ -2858,10 +2858,12 @@ async function signIn() {
     closeAccount();
   } catch(e) {
     errEl.textContent =
-      e.code === 'auth/user-not-found'  ? 'No account found with that email.' :
-      e.code === 'auth/wrong-password'  ? 'Incorrect password.' :
-      e.code === 'auth/invalid-email'   ? 'Please enter a valid email address.' :
-      'Sign in failed. Please try again.';
+      (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-login-credentials') ? 'Email or password is incorrect.' :
+      e.code === 'auth/wrong-password'    ? 'Incorrect password.' :
+      e.code === 'auth/invalid-email'     ? 'Please enter a valid email address.' :
+      e.code === 'auth/too-many-requests' ? 'Too many attempts. Please wait a few minutes.' :
+      e.code === 'auth/user-disabled'     ? 'This account has been disabled.' :
+      'Sign in failed: ' + (e.code || e.message || 'unknown error');
     document.querySelector('[onclick="signIn()"]').disabled = false;
     document.querySelector('[onclick="signIn()"]').textContent = 'Sign In →';
   }
