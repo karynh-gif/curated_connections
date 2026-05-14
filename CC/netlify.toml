@@ -1,9 +1,6 @@
 [build]
   functions = "netlify/functions"
 
-[functions]
-  node_bundler = "esbuild"
-
 [[redirects]]
   from = "/api/airtable"
   to = "/.netlify/functions/airtable-proxy"
@@ -12,6 +9,11 @@
 [[redirects]]
   from = "/api/stripe-webhook"
   to = "/.netlify/functions/stripe-webhook"
+  status = 200
+
+[[redirects]]
+  from = "/api/stripe-sync"
+  to = "/.netlify/functions/stripe-sync"
   status = 200
 
 [[redirects]]
