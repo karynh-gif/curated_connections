@@ -354,10 +354,18 @@ body::after{content:"";position:fixed;top:0;left:0;right:0;bottom:0;
       <div class="section-lbl">Recent leaves</div>
     </div>
     <div id="recentLeavesList" style="padding:0 1.2rem 1rem;">
-      <div style="font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(184,134,11,.35);font-style:italic;padding:.6rem 0;">No leaves yet — open the tree to begin.</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(184,134,11,.35);font-style:italic;padding:.6rem 0;">No leaves yet — start one below.</div>
     </div>
 
     <div class="gold-line"></div>
+
+    <!-- START A LEAF FOR SOMEONE -->
+    <div class="path path-leaf" onclick="openNewLeaf()" style="margin:0 1.2rem .8rem;background:linear-gradient(135deg,rgba(42,138,80,.12),rgba(10,40,20,.18));border-color:rgba(42,138,80,.25);">
+      <div class="path-icon">🍃</div>
+      <div class="path-title">Start a Leaf for Someone</div>
+      <div class="path-desc">Preserve someone else's story. Capture memories, invite contributors, present it as a gift.</div>
+      <div class="path-arrow" style="color:rgba(42,138,80,.8);">Begin their story →</div>
+    </div>
 
     <!-- MY OWN LEAF -->
     <div class="path path-leaf" onclick="openLeafScreen()" style="margin:0 1.2rem 2.8rem;">

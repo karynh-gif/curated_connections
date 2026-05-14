@@ -1296,17 +1296,34 @@ function setAskMode(mode) {
   if (mode === 'someone') {
     qEl.textContent = _originalPrompt;
   } else {
-    // Convert to first person
     var p = _originalPrompt;
+    // Subject positions — you → I
     p = p.replace(/\bwould you\b/gi, 'would I');
     p = p.replace(/\bhave you\b/gi, 'have I');
     p = p.replace(/\bdo you\b/gi, 'do I');
     p = p.replace(/\bare you\b/gi, 'am I');
-    p = p.replace(/\byou feel\b/gi, 'I feel');
-    p = p.replace(/\byour\b/gi, 'my');
+    p = p.replace(/\bcan you\b/gi, 'can I');
+    p = p.replace(/\bwill you\b/gi, 'will I');
+    p = p.replace(/\bdid you\b/gi, 'did I');
+    p = p.replace(/\bif you\b/gi, 'if I');
     p = p.replace(/\byou've\b/gi, "I've");
     p = p.replace(/\byou're\b/gi, "I'm");
-    p = p.replace(/\byou\b/gi, 'I');
+    p = p.replace(/\byou'll\b/gi, "I'll");
+    p = p.replace(/\byou'd\b/gi, "I'd");
+    // Possessive — your → my
+    p = p.replace(/\byour\b/gi, 'my');
+    // Object positions — about you, for you, with you → about me, for me, with me
+    p = p.replace(/\babout you\b/gi, 'about me');
+    p = p.replace(/\bfor you\b/gi, 'for me');
+    p = p.replace(/\bwith you\b/gi, 'with me');
+    p = p.replace(/\bto you\b/gi, 'to me');
+    p = p.replace(/\bat you\b/gi, 'at me');
+    p = p.replace(/\bof you\b/gi, 'of me');
+    p = p.replace(/\baround you\b/gi, 'around me');
+    p = p.replace(/\binside you\b/gi, 'inside me');
+    p = p.replace(/\bbehind you\b/gi, 'behind me');
+    // Remaining subject you → I (only at start of clause or after comma/question mark)
+    p = p.replace(/\byou\b/gi, 'you'); // leave remaining as-is — safer than bad grammar
     qEl.textContent = p;
   }
 }
@@ -1451,11 +1468,19 @@ async function loadWitWonder() {
     var recs = data.records;
     // Filter active records in JS (formula may vary by table)
     var active = recs.filter(function(r){ return r.fields.Active !== false; });
+    var level = getTierLevel();
     var riddles = seededShuffle(active.filter(function(r){ return r.fields.Type === 'Riddle'; }));
     var jokes   = seededShuffle(active.filter(function(r){ return r.fields.Type === 'Joke'; }));
     var brains  = seededShuffle(active.filter(function(r){ return r.fields.Type === 'Brain Teaser'; }));
-    // One of each type — skip missing types gracefully
-    var picks = [riddles[0], jokes[0], brains[0]].filter(Boolean);
+    // Tier-based picks: Gather=1 each, Connect=2 each, Insight=3 each, Legacy=4 each
+    var perType = [1, 2, 3, 4][level] || 1;
+    var picks = [];
+    for(var pi=0; pi<perType; pi++) {
+      if(riddles[pi]) picks.push(riddles[pi]);
+      if(jokes[pi])   picks.push(jokes[pi]);
+      if(brains[pi])  picks.push(brains[pi]);
+    }
+    picks = picks.filter(Boolean);
     if (!picks.length) { countEl.textContent = 'none'; return; }
     var html = '';
     picks.forEach(function(rec, i) {
@@ -3615,9 +3640,9 @@ async function loadQuizSection(){
 
   // Build server-side formula — cumulative tier access
   var tierFormulas = [
-    'AND({Active}=1,{Tier Access}="Gather")',
-    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}="Connect"))',
-    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}="Connect",{Tier Access}="Insight"))',
+    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}=""))',
+    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}="Connect",{Tier Access}=""))',
+    'AND({Active}=1,OR({Tier Access}="Gather",{Tier Access}="Connect",{Tier Access}="Insight",{Tier Access}=""))',
     '{Active}=1'
   ];
   var formula = tierFormulas[level] || tierFormulas[0];
