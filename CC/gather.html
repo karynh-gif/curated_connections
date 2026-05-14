@@ -95,8 +95,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-share-link{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.2rem .4rem;border:none;background:none;}
 .cc-share-link:hover{color:rgba(201,125,58,.7);}
 /* WW CARDS */
-.ww-card{flex-shrink:0;width:158px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;overflow:hidden;}
-.ww-card-top{padding:.85rem .85rem .5rem;}
+.ww-card{flex-shrink:0;width:158px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;overflow:hidden;display:flex;flex-direction:column;}
+.ww-card-top{padding:.85rem .85rem .5rem;flex:1;}
 .ww-type{font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber2);margin-bottom:.4rem;}
 .ww-q{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--cream);line-height:1.45;}
 .ww-tap{padding:.45rem .85rem .6rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
@@ -253,7 +253,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   /* ── APP WIDTH ── */
   .app          { max-width: 660px !important; }
   .bottom-nav   { max-width: 660px !important; }
-  .shelf-row    { overflow-x: visible; flex-wrap: nowrap; }
+  .shelf-row    { overflow-x: auto; flex-wrap: nowrap; }
 
   /* ── FOOTER NAV ── */
   .nav-label    { font-size: .78rem !important; }
@@ -484,7 +484,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
     <!-- DAILY UPLIFT -->
     <div style="padding:1.6rem 1.4rem .6rem;text-align:center;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.6rem;">✦ Starting the Day</div>
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.6rem;">✦ Thought for the Day</div>
       <div id="dailyUplift" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.32rem;color:rgba(242,232,216,.82);line-height:1.65;max-width:320px;margin:0 auto;"></div>
     </div>
 
@@ -3420,6 +3420,8 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
+  var params = new URLSearchParams(window.location.search);
+
   // Show tier in topbar
   var tierLabel = document.getElementById('topbarTier');
   if (tierLabel) {
@@ -3476,7 +3478,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Auto-open signup modal if redirected from another page
-  var params = new URLSearchParams(window.location.search);
   if (params.get('signup') === '1' && !CC.getUser()) {
     setTimeout(function() {
       openAccount('create your free account');
@@ -3545,8 +3546,13 @@ async function loadQuizSection(){
     var eligible=(data.records||[]).filter(function(r){
       if(!r.fields.Active)return false;
       var t=r.fields['Tier Access'];
-      var tierName=t&&typeof t==='object'?t.name:t;
-      return allowed.indexOf(tierName)>-1;
+      var tierName=(t&&typeof t==='object'?t.name:(t||'')).trim().toLowerCase();
+      // Cumulative: each tier includes all lower tiers
+      var tierOrder=['gather','connect','insight','legacy'];
+      var maxLevel=tierOrder.indexOf(['gather','connect','insight','legacy'][level]||'gather');
+      var quizLevel=tierOrder.indexOf(tierName);
+      if(quizLevel===-1)return false; // unknown tier — skip
+      return quizLevel<=maxLevel;
     });
 
     if(!eligible.length){
