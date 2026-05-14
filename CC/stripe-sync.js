@@ -1,69 +1,44 @@
 // netlify/functions/stripe-sync.js
-// Called after successful Stripe checkout to sync tier into the session
-// Usage: fetch('/.netlify/functions/stripe-sync?email=user@email.com')
+// Uses Node built-in https — no npm packages required
+var https = require('https');
 
-exports.handler = async (event) => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json'
+function stripeGet(path, key, cb) {
+  var opts = {
+    hostname: 'api.stripe.com',
+    path: path,
+    method: 'GET',
+    headers: { 'Authorization': 'Bearer ' + key }
   };
+  var data = '';
+  var req = https.request(opts, function(res) {
+    res.on('data', function(c){ data += c; });
+    res.on('end', function(){ cb(null, JSON.parse(data)); });
+  });
+  req.on('error', cb);
+  req.end();
+}
 
-  const email = event.queryStringParameters?.email;
-  if (!email) return { statusCode: 400, headers, body: JSON.stringify({ error: 'email required' }) };
+exports.handler = function(event, context, cb) {
+  var headers = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
+  var email = event.queryStringParameters && event.queryStringParameters.email;
+  if (!email) return cb(null, { statusCode:400, headers:headers, body:JSON.stringify({error:'email required'}) });
+  var key = process.env.STRIPE_SECRET_KEY;
+  if (!key) return cb(null, { statusCode:500, headers:headers, body:JSON.stringify({error:'not configured'}) });
 
-  try {
-    // Check Stripe for active subscription by email
-    const Stripe = require('stripe');
-    const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  stripeGet('/v1/customers?email=' + encodeURIComponent(email) + '&limit=1', key, function(err, cust) {
+    if (err || !cust.data || !cust.data.length) return cb(null, { statusCode:200, headers:headers, body:JSON.stringify({tier:'free'}) });
+    var customerId = cust.data[0].id;
 
-    // Find customer by email
-    const customers = await stripe.customers.list({ email, limit: 1 });
-    if (!customers.data.length) {
-      return { statusCode: 200, headers, body: JSON.stringify({ tier: 'free' }) };
-    }
+    stripeGet('/v1/subscriptions?customer=' + customerId + '&status=active&limit=1', key, function(err, subs) {
+      if (err || !subs.data || !subs.data.length) return cb(null, { statusCode:200, headers:headers, body:JSON.stringify({tier:'free'}) });
+      var productId = subs.data[0].items && subs.data[0].items.data[0] && subs.data[0].items.data[0].price && subs.data[0].items.data[0].price.product;
+      if (!productId) return cb(null, { statusCode:200, headers:headers, body:JSON.stringify({tier:'connect'}) });
 
-    const customer = customers.data[0];
-
-    // Get active subscriptions
-    const subs = await stripe.subscriptions.list({
-      customer: customer.id,
-      status: 'active',
-      limit: 5
+      stripeGet('/v1/products/' + productId, key, function(err, prod) {
+        var name = prod && prod.name ? prod.name.toLowerCase() : '';
+        var tier = name.includes('legacy') ? 'legacy' : name.includes('insight') ? 'insight' : 'connect';
+        cb(null, { statusCode:200, headers:headers, body:JSON.stringify({tier:tier, customerId:customerId}) });
+      });
     });
-
-    if (!subs.data.length) {
-      return { statusCode: 200, headers, body: JSON.stringify({ tier: 'free' }) };
-    }
-
-    // Map price ID to tier
-    const PRICE_TO_TIER = {
-      [process.env.STRIPE_PRICE_CONNECT]:        'connect',
-      [process.env.STRIPE_PRICE_INSIGHT]:        'insight',
-      [process.env.STRIPE_PRICE_LEGACY]:         'legacy',
-      [process.env.STRIPE_PRICE_CONNECT_ANNUAL]: 'connect',
-      [process.env.STRIPE_PRICE_INSIGHT_ANNUAL]: 'insight',
-      [process.env.STRIPE_PRICE_LEGACY_ANNUAL]:  'legacy',
-      // Hardcoded fallbacks from config.js
-      'price_1RQx8mKp6U2lFHVnconnect': 'connect',
-      'price_1RQx8mKp6U2lFHVninsight': 'insight',
-      'price_1RQx8mKp6U2lFHVnlegacy':  'legacy',
-    };
-
-    let tier = 'free';
-    for (const sub of subs.data) {
-      const priceId = sub.items.data[0]?.price?.id;
-      if (PRICE_TO_TIER[priceId]) {
-        tier = PRICE_TO_TIER[priceId];
-        break;
-      }
-      // If we can't map price ID, default to connect for any active sub
-      tier = 'connect';
-    }
-
-    return { statusCode: 200, headers, body: JSON.stringify({ tier, customerId: customer.id }) };
-
-  } catch (err) {
-    console.error('stripe-sync error:', err.message);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
-  }
+  });
 };
