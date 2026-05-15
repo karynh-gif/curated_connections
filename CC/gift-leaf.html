@@ -192,8 +192,8 @@ textarea.field-input{min-height:110px;resize:none;line-height:1.6;}
     <div class="chip-row" id="occasionChips">
       <div class="chip" onclick="selectOccasion(this,'Graduation')">Graduation</div>
       <div class="chip" onclick="selectOccasion(this,'Retirement')">Retirement</div>
-      <div class="chip" onclick="selectOccasion(this,"Mother's Day")">Mother's Day</div>
-      <div class="chip" onclick="selectOccasion(this,'Father\'s Day')">Father's Day</div>
+      <div class="chip" onclick="selectOccasion(this,'Mothers Day')">Mother's Day</div>
+      <div class="chip" onclick="selectOccasion(this,'Fathers Day')">Father's Day</div>
       <div class="chip" onclick="selectOccasion(this,'Birthday')">Birthday</div>
       <div class="chip" onclick="selectOccasion(this,'Anniversary')">Anniversary</div>
       <div class="chip" onclick="selectOccasion(this,'End of Life')">End of Life</div>
@@ -344,8 +344,8 @@ var C = {
 var FIRST_PROMPTS = {
   'Graduation':   '"What do you want them to remember about who they are right now — before everything changes?"',
   'Retirement':   '"What did this season of your life teach you that had nothing to do with the work itself?"',
-  "Mother's Day": '"What did she teach you that she probably doesn\'t know she taught you?"',
-  "Father's Day": '"What did he teach you that he probably doesn\'t know he taught you?"',
+  "Mothers Day": '"What did she teach you that she probably doesn\'t know she taught you?"',
+  "Fathers Day": '"What did he teach you that he probably doesn\'t know he taught you?"',
   'Birthday':     '"What do you see in them that they probably can\'t see in themselves?"',
   'Anniversary':  '"What does watching them love each other teach you about love?"',
   'End of Life':  '"What do you hope they know — without question — about what they meant to you?"',
@@ -519,7 +519,7 @@ function shareNative() {
 (function(){
   var params = new URLSearchParams(window.location.search);
   var occ = params.get('occasion');
-  var MAP = { 'graduation2026':'Graduation', 'mothersday':"Mother's Day", 'retirement':'Retirement', 'birthday':'Birthday' };
+  var MAP = { 'graduation2026':'Graduation', 'mothersday':'Mothers Day', 'retirement':'Retirement', 'birthday':'Birthday' };
   if (occ && MAP[occ]) {
     C.occasion = MAP[occ];
     var chips = document.querySelectorAll('.chip');
