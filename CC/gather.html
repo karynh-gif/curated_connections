@@ -95,8 +95,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .cc-share-link{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.2rem .4rem;border:none;background:none;}
 .cc-share-link:hover{color:rgba(201,125,58,.7);}
 /* WW CARDS */
-.ww-card{flex-shrink:0;width:158px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;overflow:hidden;display:flex;flex-direction:column;}
-.ww-card-top{padding:.85rem .85rem .5rem;flex:1;}
+.ww-card{flex-shrink:0;width:158px;border-radius:var(--r-lg);background:var(--card);border:1px solid rgba(255,255,255,.08);cursor:pointer;overflow:hidden;}
+.ww-card-top{padding:.85rem .85rem .5rem;}
 .ww-type{font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber2);margin-bottom:.4rem;}
 .ww-q{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-style:italic;color:var(--cream);line-height:1.45;}
 .ww-tap{padding:.45rem .85rem .6rem;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);}
@@ -104,7 +104,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .quiz-card{flex-shrink:0;width:210px;border-radius:var(--r-lg);padding:1.1rem 1rem;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;}
 .quiz-label{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.45rem;opacity:1;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);margin-bottom:.35rem;}
-.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.6);line-height:1.5;margin-bottom:.55rem;flex:1;}
+.quiz-sub{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.6);line-height:1.5;margin-bottom:.55rem;}
 .quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:auto;align-self:flex-start;}
 /* CIRCLES */
 .circles-section{position:relative;background:linear-gradient(180deg,#08101e,#0a0e1c);margin-top:2rem;overflow:hidden;padding:1.8rem 0 1.4rem;}
@@ -253,7 +253,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   /* ── APP WIDTH ── */
   .app          { max-width: 660px !important; }
   .bottom-nav   { max-width: 660px !important; }
-  .shelf-row    { overflow-x: auto; flex-wrap: nowrap; }
+  .shelf-row    { overflow-x: visible; flex-wrap: nowrap; }
 
   /* ── FOOTER NAV ── */
   .nav-label    { font-size: .78rem !important; }
@@ -499,7 +499,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
         <div class="hero-back-hatch"></div>
         <div class="hero-back-brand">Curated Connections</div>
         <div class="hero-back-label">This Week's Experience</div>
-        <div class="hero-back-tap">✦ tap ✦</div>
+        <div class="hero-back-tap">✦ tap to reveal ✦</div>
       </div>
       <!-- FRONT -->
       <div class="hero-front" id="heroFt">
@@ -1157,7 +1157,7 @@ function renderTonightCards(shelf, recs) {
     html += '<div class="fc-back"><div class="fc-back-shine"></div><div class="fc-back-hatch" style="background-image:repeating-linear-gradient(45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px),repeating-linear-gradient(-45deg,' + dk.accent + ' 0,' + dk.accent + ' 1px,transparent 1px,transparent 16px);"></div>';
     html += '<div class="fc-brand" style="color:' + dk.accent + ';text-shadow:0 0 20px ' + dk.accent + '55;">Curated Connections</div>';
     html += '<div class="fc-deck">' + edition + ' Edition</div>';
-    html += '<div class="fc-tap" style="color:' + dk.accent + '66;">✦ tap ✦</div></div>';
+    html += '<div class="fc-tap" style="color:' + dk.accent + '66;">✦ tap to reveal ✦</div></div>';
     // FRONT
     html += '<div class="fc-front" style="background:' + dk.frontBg + ';"><div class="fc-front-shine"></div>';
     html += '<div class="fc-label" style="color:' + dk.accent + ';">' + edition + '</div>';
@@ -3371,10 +3371,22 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
   var params = new URLSearchParams(window.location.search);
-  loadTonightCards();
-  loadWitWonder();
-  loadQuizSection();
-  loadCircles();
+
+  var _dbg = document.createElement('div');
+  _dbg.id = 'debugBar';
+  _dbg.style.cssText = 'position:fixed;bottom:60px;left:0;right:0;z-index:9999;padding:.5rem;font-size:.65rem;font-family:monospace;background:rgba(0,0,0,.85);color:#0f0;max-height:120px;overflow-y:auto;';
+  document.body.appendChild(_dbg);
+  function dbg(msg, err) {
+    var line = document.createElement('div');
+    line.style.color = err ? '#f55' : '#0f0';
+    line.textContent = (err ? '✗ ' : '✓ ') + msg + (err ? ': ' + err.message : '');
+    _dbg.appendChild(line);
+  }
+
+  try { loadTonightCards(); dbg('loadTonightCards'); } catch(e) { dbg('loadTonightCards FAILED', e); }
+  try { loadWitWonder(); dbg('loadWitWonder'); } catch(e) { dbg('loadWitWonder FAILED', e); }
+  try { loadQuizSection(); dbg('loadQuizSection'); } catch(e) { dbg('loadQuizSection FAILED', e); }
+  try { loadCircles(); dbg('loadCircles'); } catch(e) { dbg('loadCircles FAILED', e); }
   var ls = document.getElementById('legacyShelf');
   if (ls) ls.style.display = 'block';
   checkNotifBadge();
@@ -3418,6 +3430,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Auto-open signup modal if redirected from another page
+  var params = new URLSearchParams(window.location.search);
   if (params.get('signup') === '1' && !CC.getUser()) {
     setTimeout(function() {
       openAccount('create your free account');
