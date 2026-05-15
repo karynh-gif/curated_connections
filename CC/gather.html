@@ -546,14 +546,13 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 
       <!-- REFLECTION PROMPT -->
       <div id="todReflect" style="display:none;animation:fadeUp .5s ease both;">
-        <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.38);line-height:1.6;margin-bottom:1rem;max-width:280px;margin-left:auto;margin-right:auto;">Does this land for you? Think of a specific moment —</div>
+        <div style="font-family:sans-serif;font-size:.78rem;color:rgba(242,232,216,.38);line-height:1.6;margin-bottom:1rem;max-width:280px;margin-left:auto;margin-right:auto;">Does this land for you? Think of a specific moment —</div>
         <div style="display:flex;gap:.6rem;justify-content:center;margin-bottom:1rem;">
-          <button onclick="openTodJournal('change')" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(242,232,216,.15);background:rgba(255,255,255,.04);color:rgba(242,232,216,.55);cursor:pointer;transition:all .2s;">A moment I'd change</button>
-          <button onclick="openTodJournal('grateful')" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(201,125,58,.25);background:rgba(201,125,58,.07);color:rgba(201,125,58,.7);cursor:pointer;transition:all .2s;">A moment I'm grateful for</button>
+          <button id="todBtnChange" style="font-size:.7rem;font-weight:800;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(242,232,216,.15);background:rgba(255,255,255,.04);color:rgba(242,232,216,.55);cursor:pointer;">A moment I'd change</button>
+          <button id="todBtnGrateful" style="font-size:.7rem;font-weight:800;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(201,125,58,.25);background:rgba(201,125,58,.07);color:rgba(201,125,58,.7);cursor:pointer;">A moment I'm grateful for</button>
         </div>
       </div>
-
-      <!-- JOURNAL OVERLAY FOR TOD -->
+            <!-- JOURNAL OVERLAY FOR TOD -->
       <div id="todJournalOverlay" style="display:none;position:fixed;inset:0;background:#03060a;z-index:300;overflow-y:auto;animation:fadeUp .3s ease both;">
         <div style="max-width:480px;margin:0 auto;padding:1.4rem 1.4rem 6rem;">
           <button onclick="closeTodJournal()" style="background:none;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.5rem 0;margin-bottom:1.4rem;">← Back</button>
@@ -561,7 +560,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
           <div id="todJournalObs" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:rgba(242,232,216,.55);line-height:1.6;margin-bottom:.5rem;"></div>
           <div id="todJournalPrompt" style="font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(242,232,216,.35);margin-bottom:1.4rem;"></div>
           <textarea id="todJournalText" placeholder="Write whatever comes. There's no right length." style="width:100%;min-height:180px;padding:.9rem 1rem;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--cream);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.4)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"></textarea>
-          <button onclick="saveTodJournal()" style="width:100%;margin-top:.8rem;padding:1rem;background:linear-gradient(135deg,#c97d3a,#e8a045);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save to Journal →</button>
+          <button id="todSaveBtn"  style="width:100%;margin-top:.8rem;padding:1rem;background:linear-gradient(135deg,#c97d3a,#e8a045);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save to Journal →</button>
           <div id="todJournalConfirm" style="display:none;text-align:center;padding:1.4rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(201,125,58,.6);">Saved to your journal. ✦</div>
         </div>
       </div>
@@ -3551,6 +3550,14 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 // ── INIT ──
 
 var _todMode = '';
+document.addEventListener('DOMContentLoaded', function() {
+  var b1 = document.getElementById('todBtnChange');
+  var b2 = document.getElementById('todBtnGrateful');
+  var bs = document.getElementById('todSaveBtn');
+  if (b1) b1.addEventListener('click', function(){ openTodJournal('change'); });
+  if (b2) b2.addEventListener('click', function(){ openTodJournal('grateful'); });
+  if (bs) bs.addEventListener('click', saveTodJournal);
+});
 
 function openTodJournal(mode) {
   _todMode = mode;
