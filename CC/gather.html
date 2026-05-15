@@ -34,11 +34,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .shelf-header{display:flex;align-items:baseline;justify-content:space-between;padding:0 .9rem;margin-bottom:.65rem;}
 .shelf-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--cream);}
 .shelf-count{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);opacity:.75;}
-.shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;}
+.shelf-row{display:flex;gap:.65rem;padding:0 .9rem .2rem;overflow-x:auto;scrollbar-width:none;align-items:stretch;}
 .shelf-row::-webkit-scrollbar{display:none;}
 /* FLIP CARD SYSTEM */
-.fc-scene{flex-shrink:0;width:190px;}
-.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:240px;transition:transform 0.15s ease;}
+.fc-scene{flex-shrink:0;width:190px;display:flex;flex-direction:column;}
+.fc-inner{border-radius:20px;overflow:hidden;position:relative;cursor:pointer;min-height:240px;flex:1;transition:transform 0.15s ease;}
 .fc-inner.squish{transform:scaleX(0);}
 .fc-back,.fc-front{position:absolute;inset:0;border-radius:20px;}
 .fc-back{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 16px;}
@@ -105,7 +105,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .quiz-label{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.45rem;opacity:1;}
 .quiz-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--cream);margin-bottom:.35rem;}
 .quiz-sub{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.6);line-height:1.5;margin-bottom:.55rem;flex:1;}
-.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:auto;}
+.quiz-start{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.26rem .65rem;border-radius:999px;border:1px solid currentColor;display:inline-block;margin-top:auto;align-self:flex-start;}
 /* CIRCLES */
 .circles-section{position:relative;background:linear-gradient(180deg,#08101e,#0a0e1c);margin-top:2rem;overflow:hidden;padding:1.8rem 0 1.4rem;}
 /* WRITE EXP */
@@ -470,7 +470,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <!-- TOPBAR -->
   <div class="topbar">
     <div>
-      <div class="topbar-name">Gather<span id="topbarTier" style="font-weight:400;opacity:0.45;font-size:.7em;letter-spacing:.04em;"></span></div>
+      <div class="topbar-name">Gather</div>
       <div class="topbar-date" id="topDate">Monday · May 12</div>
     </div>
     <div class="topbar-right">
@@ -812,7 +812,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <!-- PAID: timed threads -->
       <div id="cardThreadsWrap">
         <div class="thread-waiting" id="threadWaiting">
-          <div class="thread-waiting-label">Going deeper…</div>
+          <div class="thread-waiting-label">threads arriving…</div>
           <div class="thread-dots"><div class="thread-dot"></div><div class="thread-dot"></div><div class="thread-dot"></div></div>
         </div>
         <div class="thread-item" id="thread1" style="border-left:3px solid var(--amber);">
@@ -912,7 +912,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <div id="acctSignupForm">
         <input class="sheet-input" type="text" placeholder="Your first name" id="acctName" autocomplete="given-name"/>
         <input class="sheet-input" type="email" placeholder="Email address" id="acctEmail" autocomplete="email"/>
-        <input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password"/>
+        <div style="position:relative;"><input class="sheet-input" type="password" placeholder="Password (6+ characters)" id="acctPassword" autocomplete="new-password" style="padding-right:2.5rem;"/><button type="button" onclick="togglePw('acctPassword')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(242,232,216,.35);padding:.2rem;" id="acctPassword_eye"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
         <!-- Legal agreement -->
         <div style="display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.75rem;padding:.65rem .75rem;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.07);">
           <input type="checkbox" id="acctLegalCheck" style="margin-top:.15rem;accent-color:#c97d3a;cursor:pointer;flex-shrink:0;"/>
@@ -929,7 +929,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       <!-- Sign-in form -->
       <div id="acctSigninForm" style="display:none;">
         <input class="sheet-input" type="email" placeholder="Email address" id="signinEmail" autocomplete="email"/>
-        <input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password"/>
+        <div style="position:relative;"><input class="sheet-input" type="password" placeholder="Password" id="signinPassword" autocomplete="current-password" style="padding-right:2.5rem;"/><button type="button" onclick="togglePw('signinPassword')" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(242,232,216,.35);padding:.2rem;" id="signinPassword_eye"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div>
         <button class="sheet-btn" onclick="signIn()">Sign In →</button>
         <div style="text-align:center;margin-top:.5rem;">
           <span onclick="forgotPassword()" style="font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(201,125,58,.55);cursor:pointer;text-decoration:underline;">Forgot password?</span>
@@ -985,7 +985,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   </div>
 </div>
 
-  <div class="toast-wrap" id="toastWrap" style="display:none;"><div class="toast" id="toastMsg"></div></div>
 </div><!-- /app -->
 
 <script src="/airtable.js"></script>
@@ -1169,19 +1168,15 @@ function renderTonightCards(shelf, recs) {
     html += '</div></div>';
   });
 
-  if (level === 0) {
+  // Locked upgrade card
+  if (level < 3) {
+    var tiers = ['Connect','Insight','Legacy'];
+    var prices = ['$4.99','$9.99','$19.99'];
     html += '<div class="fc-locked" onclick="openUpgrade()">';
     html += '<div style="font-size:18px;opacity:.2;">&#x1F512;</div>';
-    html += '<div class="fc-locked-tier">Connect</div>';
+    html += '<div class="fc-locked-tier">' + tiers[level] + '</div>';
     html += '<div class="fc-locked-text">More cards &amp; deeper questions</div>';
-    html += '<div class="fc-locked-cta">$4.99/mo &rarr;</div>';
-    html += '</div>';
-  } else {
-    html += '<div class="fc-locked" onclick="window.location.href='games.html'" style="cursor:pointer;">';
-    html += '<div style="font-size:18px;opacity:.4;">&#x1F3B4;</div>';
-    html += '<div class="fc-locked-tier" style="font-size:.75rem;">Your Deck</div>';
-    html += '<div class="fc-locked-text">Play your full weekly deck</div>';
-    html += '<div class="fc-locked-cta">Play Now &rarr;</div>';
+    html += '<div class="fc-locked-cta">' + prices[level] + '/mo &rarr;</div>';
     html += '</div>';
   }
 
@@ -1405,11 +1400,7 @@ async function loadWitWonder() {
     var jokes   = seededShuffle(active.filter(function(r){ return r.fields.Type === 'Joke'; }));
     var brains  = seededShuffle(active.filter(function(r){ return r.fields.Type === 'Brain Teaser'; }));
     // One of each type — skip missing types gracefully
-    var wwLevel = getTierLevel();
-    var perType = [1,2,3,4][wwLevel]||1;
-    var picks = [];
-    for(var pi=0;pi<perType;pi++){if(riddles[pi])picks.push(riddles[pi]);if(jokes[pi])picks.push(jokes[pi]);if(brains[pi])picks.push(brains[pi]);}
-    picks = picks.filter(Boolean);
+    var picks = [riddles[0], jokes[0], brains[0]].filter(Boolean);
     if (!picks.length) { countEl.textContent = 'none'; return; }
     var html = '';
     picks.forEach(function(rec, i) {
@@ -1553,9 +1544,13 @@ function openUpgrade(promoCode) {
     insight: 'https://buy.stripe.com/28E00dc6h4uZ2VqarJ7EQ02'
   };
   var url = links[tier] || links.free;
+  var params = [];
   // Append promo code if one is active
   var code = promoCode || window._activePromoCode || null;
-  if (code) url += '?prefilled_promo_code=' + encodeURIComponent(code);
+  if (code) params.push('prefilled_promo_code=' + encodeURIComponent(code));
+  // Append success URL so Stripe redirects back to the app
+  params.push('success_url=' + encodeURIComponent('https://joincuratedconnections.com/gather.html?upgraded=1'));
+  if (params.length) url += '?' + params.join('&');
   window.open(url, '_blank');
 }
 
@@ -2379,24 +2374,12 @@ var UPLIFTS = [
   "The version of yourself that shows up anyway is your best one."
 ];
 
-async function loadDailyUplift() {
+function loadDailyUplift() {
   var el = document.getElementById('dailyUplift');
   if (!el) return;
-  var today = new Date();
-  var dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0)) / 86400000);
-  try {
-    var res = await fetch('/api/airtable',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'list',table:'Daily Observations',filterFormula:'{Active}=1',maxRecords:200})});
-    var data = await res.json();
-    var records = data.records||[];
-    if(records.length){
-      var obs=records[dayOfYear%records.length];
-      var text=obs.fields&&obs.fields.Observation?obs.fields.Observation:'';
-      if(text){el.style.opacity='0';el.style.transition='opacity 0.8s ease';el.textContent='\u201c'+text+'\u201d';setTimeout(function(){el.style.opacity='1';},50);return;}
-    }
-  } catch(e){}
-  var day=dayOfYear;
-  var uplift=UPLIFTS[day%UPLIFTS.length];
-  el.textContent='\u201c'+uplift+'\u201d';
+  var day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  var uplift = UPLIFTS[day % UPLIFTS.length];
+  el.textContent = '\u201c' + uplift + '\u201d';
 }
 function saveToFeed(type) {
   var user = CC.getUser ? CC.getUser() : null;
@@ -2672,15 +2655,7 @@ function saveResponse(visibility) {
   showMyFeedSection();
 }
 
-function closeResponse() {
-  document.getElementById('responseScreen').style.display = 'none';
-  document.getElementById('respPhotoPreview').style.display = 'none';
-  document.getElementById('respVoiceUI').style.display = 'none';
-  document.getElementById('respVoicePlayer').style.display = 'none';
-  document.getElementById('responseText').value = '';
-  _respBlobUrl = null; _respChunks = [];
-  clearInterval(_respTimer);
-}
+
 function cardFeedback(cardId, value, el) {
   // Visual feedback
   var parent = el.closest('.card-feedback-row');
@@ -2848,7 +2823,6 @@ async function signIn() {
   var email = document.getElementById('signinEmail').value.trim();
   var pass  = document.getElementById('signinPassword').value;
   var errEl = document.getElementById('acctError');
-  if (!errEl) { errEl = document.createElement('div'); errEl.id='acctError'; errEl.style.cssText='font-size:.78rem;color:#e07060;margin-bottom:.5rem;'; var sh=document.querySelector('.acct-sheet'); if(sh) sh.insertBefore(errEl,sh.firstChild); }
   errEl.textContent = '';
 
   if (!email || !pass) { errEl.textContent = 'Email and password required.'; return; }
@@ -2881,10 +2855,12 @@ async function signIn() {
   } catch(e) {
     errEl.textContent =
       (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-login-credentials') ? 'Email or password is incorrect.' :
-      e.code === 'auth/wrong-password'    ? 'Incorrect password.' :
-      e.code === 'auth/invalid-email'     ? 'Please enter a valid email address.' :
-      e.code === 'auth/too-many-requests' ? 'Too many attempts. Please wait a few minutes.' :
-      'Sign in failed: ' + (e.code || e.message || 'unknown error');
+      e.code === 'auth/wrong-password'  ? 'Incorrect password.' :
+      e.code === 'auth/invalid-email'   ? 'Please enter a valid email address.' :
+      e.code === 'auth/too-many-requests' ? 'Too many attempts. Please wait a few minutes and try again.' :
+      e.code === 'auth/network-request-failed' ? 'Network error. Check your connection and try again.' :
+      e.code === 'auth/user-disabled'   ? 'This account has been disabled.' :
+      'Sign in failed (' + (e.code || 'unknown') + '). Please try again.';
     document.querySelector('[onclick="signIn()"]').disabled = false;
     document.querySelector('[onclick="signIn()"]').textContent = 'Sign In →';
   }
@@ -2936,6 +2912,17 @@ function syncAccountTier() {
       }
     })
     .catch(function(){ showToast('Could not reach Stripe — check env vars'); });
+}
+
+function togglePw(id) {
+  var input = document.getElementById(id);
+  var eye   = document.getElementById(id + '_eye');
+  if (!input || !eye) return;
+  var showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  eye.innerHTML = showing
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 }
 
 async function forgotPassword() {
@@ -3077,52 +3064,7 @@ async function openQuiz(recordId) {
   document.body.style.overflow = 'hidden';
 }
 
-async function openQuiz(recordId) {
-  var cached = QUIZ_CACHE[recordId];
-
-  // If data not cached or empty, fetch fresh
-  if (!cached || !cached.qj || cached.qj === '') {
-    try {
-      var res = await fetch('/api/airtable', {method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({action:'get', table:'Gather Quizzes', recordId: recordId})});
-      var data = await res.json();
-      if (data.fields) {
-        cached = {
-          qj: data.fields['Questions JSON'] || '',
-          rj: data.fields['Results JSON'] || '',
-          title: data.fields.Title || ''
-        };
-        QUIZ_CACHE[recordId] = cached;
-      }
-    } catch(e) {}
-  }
-
-  // If still empty after fetch — use fallback quiz
-  if (!cached || !cached.qj || cached.qj === '') {
-    var fb = FALLBACK_QUIZZES['discover-connector'];
-    cached = { qj: fb.qj, rj: fb.rj, title: fb.title };
-  }
-
-  var questions, results;
-  try {
-    questions = JSON.parse(cached.qj);
-    results   = JSON.parse(cached.rj);
-  } catch(e) {
-    var fb = FALLBACK_QUIZZES['discover-connector'];
-    questions = JSON.parse(fb.qj);
-    results   = JSON.parse(fb.rj);
-    cached.title = fb.title;
-  }
-
-  qzState = {questions: questions, results: results, answers: [], current: 0, title: cached.title || ''};
-
-  document.getElementById('qzQScreen').style.display = 'block';
-  document.getElementById('qzRScreen').style.display = 'none';
-  document.getElementById('quizOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  renderQzQuestion();
-}
+async 
 
 function closeQuiz() {
   document.getElementById('quizOverlay').classList.remove('open');
@@ -3428,12 +3370,6 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
-  var params = new URLSearchParams(window.location.search);
-
-  // Show tier in topbar
-  var tierLabel = document.getElementById('topbarTier');
-  if (tierLabel) { var t=getTier(); if(t&&t!=='free') tierLabel.textContent=' · '+t.charAt(0).toUpperCase()+t.slice(1); }
-
   loadTonightCards();
   loadWitWonder();
   loadQuizSection();
@@ -3481,6 +3417,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Auto-open signup modal if redirected from another page
+  var params = new URLSearchParams(window.location.search);
   if (params.get('signup') === '1' && !CC.getUser()) {
     setTimeout(function() {
       openAccount('create your free account');
@@ -3506,8 +3443,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── QUIZ SECTION — weekly rotation with tier filtering ──────────
 function seededShuffleByWeek(arr,wk){
   var a=arr.slice(),seed=(wk*1000+new Date().getFullYear())|0;
-  function rand(){seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}
-  for(var i=a.length-1;i>0;i--){var j=Math.floor(rand()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+    for(var i=a.length-1;i>0;i--){var j=Math.floor(rand()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
   return a;
 }
 
@@ -3525,7 +3461,7 @@ async function loadQuizSection(){
     : 'New quiz '+(du===1?'tomorrow':'in '+du+' days')+' \u00b7 '+ns;
 
   var wk=Math.floor((now-new Date(now.getFullYear(),0,1))/(7*24*60*60*1000));
-  var level=getTierLevel(), ql=[2,4,6,99][level]||2;
+  var level=getTierLevel(), ql=[1,2,3,5][level]||1;
 
   // Each tier sees its pool + all lower tiers
   var ALLOWED=[['Gather'],['Gather','Connect'],['Gather','Connect','Insight'],['Gather','Connect','Insight','Legacy']];
