@@ -3624,7 +3624,7 @@ async function loadQuizSection(){
     : 'New quiz '+(du===1?'tomorrow':'in '+du+' days')+' \u00b7 '+ns;
 
   var wk=Math.floor((now-new Date(now.getFullYear(),0,1))/(7*24*60*60*1000));
-  var level=getTierLevel(), ql=[1,2,3,5][level]||1;
+  var level=getTierLevel();
 
   // Each tier sees its pool + all lower tiers
   var ALLOWED=[['Gather'],['Gather','Connect'],['Gather','Connect','Insight'],['Gather','Connect','Insight','Legacy']];
@@ -3663,7 +3663,7 @@ async function loadQuizSection(){
       return;
     }
 
-    var picks=seededShuffleByWeek(eligible,wk).slice(0,ql);
+    var picks=seededShuffleByWeek(eligible,wk);
     var html='';
     picks.forEach(function(rec,i){
       var f=rec.fields,st=QS[i%QS.length];

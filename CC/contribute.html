@@ -5,285 +5,368 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Add Your Memory — Curated Connections</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CSCN4MBVZ0"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CSCN4MBVZ0');</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--ink:#03060a;--gold:#c97d3a;--gold2:#e8a045;--cream:#f2e8d8;}
-html,body{min-height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;}
-body{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2rem 1.2rem 5rem;}
-
-.page{width:100%;max-width:480px;}
-
-.brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.5);margin-bottom:2rem;text-align:center;}
-
-/* HERO CARD */
-.capsule-hero{
-  padding:1.6rem;
-  background:linear-gradient(145deg,rgba(201,125,58,.08),rgba(100,65,5,.12));
-  border:1px solid rgba(201,125,58,.2);
-  border-radius:18px;margin-bottom:2rem;text-align:center;
-}
-.capsule-occasion{
-  font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;
-  letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(201,125,58,.55);margin-bottom:.5rem;
-}
-.capsule-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:.3rem;
-}
-.capsule-sub{font-size:.8rem;color:rgba(242,232,216,.38);line-height:1.6;}
-
-/* FORM */
-.section-label{
-  font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;
-  letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(242,232,216,.35);margin-bottom:.8rem;
-}
-
-.prompt-card{
-  padding:1rem 1.1rem;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;margin-bottom:1.4rem;
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;font-size:1.05rem;
-  color:rgba(242,232,216,.75);line-height:1.5;
-}
-
-.field-label{
-  font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(242,232,216,.4);margin-bottom:.4rem;display:block;
-}
-.field-input{
-  width:100%;padding:.78rem .9rem;
-  background:rgba(255,255,255,.05);
-  border:1.5px solid rgba(255,255,255,.09);
-  border-radius:12px;font-family:'DM Sans',sans-serif;
-  font-size:.92rem;color:var(--cream);outline:none;
-  transition:border-color .2s;margin-bottom:1rem;
-}
-.field-input:focus{border-color:rgba(201,125,58,.4);}
+:root{--ink:#03060a;--gold:#c97d3a;--gold2:#e8a045;--gold-dim:rgba(201,125,58,.55);--cream:#f2e8d8;--cream-dim:rgba(242,232,216,.6);--cream-faint:rgba(242,232,216,.25);--green:#3aad90;}
+html,body{min-height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,125,58,.06) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 6rem;}
+.brand-bar{width:100%;max-width:480px;padding:1.4rem 1.4rem .6rem;text-align:center;}
+.brand-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(201,125,58,.4);}
+.screen{width:100%;max-width:480px;padding:0 1.4rem;display:none;animation:fadeUp .4s ease both;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.welcome-card{padding:2rem 1.4rem;background:linear-gradient(145deg,rgba(201,125,58,.07),rgba(80,40,5,.1));border:1px solid rgba(201,125,58,.18);border-radius:20px;margin-bottom:1.6rem;text-align:center;}
+.wc-icon{font-size:2.4rem;margin-bottom:.8rem;display:block;animation:breathe 3s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+.wc-occasion{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.4rem;}
+.wc-name{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--cream);margin-bottom:.4rem;}
+.wc-sub{font-size:.83rem;color:var(--cream-dim);line-height:1.7;}
+.deadline-banner{padding:.75rem 1.1rem;background:rgba(201,125,58,.07);border:1px solid rgba(201,125,58,.2);border-radius:12px;margin-bottom:1.2rem;display:flex;align-items:flex-start;gap:.7rem;}
+.db-icon{font-size:1.1rem;}
+.db-text{font-size:.78rem;color:rgba(242,232,216,.6);line-height:1.4;}
+.db-text strong{color:var(--gold-dim);font-weight:600;}
+.keeper-note{padding:1rem 1.2rem;background:rgba(255,255,255,.025);border-left:2px solid rgba(201,125,58,.3);border-radius:0 12px 12px 0;margin-bottom:1.4rem;}
+.kn-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.4rem;}
+.kn-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.65);line-height:1.6;}
+.kn-from{font-size:.72rem;color:rgba(242,232,216,.3);margin-top:.4rem;}
+.what-happens{padding:1rem 1.1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px;margin-bottom:1.6rem;}
+.wh-title{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.7rem;}
+.wh-item{display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.5rem;}
+.wh-item:last-child{margin-bottom:0;}
+.wh-dot{width:5px;height:5px;border-radius:50%;background:var(--gold-dim);flex-shrink:0;margin-top:.45rem;}
+.wh-text{font-size:.78rem;color:var(--cream-dim);line-height:1.5;}
+.btn-primary{width:100%;padding:1rem;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 6px 24px rgba(201,125,58,.2);transition:all .2s;margin-bottom:.8rem;}
+.btn-back{background:none;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.5rem 0;margin-bottom:1.4rem;display:inline-flex;align-items:center;gap:.4rem;}
+.btn-add-more{width:100%;padding:.85rem;background:rgba(58,173,144,.08);border:1px solid rgba(58,173,144,.2);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:rgba(58,173,144,.8);cursor:pointer;margin-bottom:.8rem;}
+.section-eyebrow{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.5rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;line-height:1.3;color:var(--cream);margin-bottom:.5rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+.section-body{font-size:.83rem;color:var(--cream-dim);line-height:1.7;margin-bottom:1.4rem;}
+.prompt-card{padding:1.1rem 1.2rem;border:1.5px solid rgba(255,255,255,.07);border-radius:14px;cursor:pointer;transition:all .2s;margin-bottom:.55rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.6);line-height:1.5;background:rgba(255,255,255,.02);}
+.prompt-card:hover{border-color:rgba(201,125,58,.25);color:rgba(242,232,216,.82);}
+.prompt-card.selected{border-color:var(--gold);background:rgba(201,125,58,.07);color:var(--cream);}
+.prompt-card.multi.selected{border-color:var(--green);background:rgba(58,173,144,.07);}
+.prompt-check{display:none;float:right;color:var(--gold);font-size:.8rem;font-style:normal;font-family:'Nunito',sans-serif;font-weight:800;}
+.prompt-card.selected .prompt-check{display:inline;}
+.prompt-card.multi.selected .prompt-check{color:var(--green);}
+.field-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.38);margin-bottom:.4rem;display:block;}
+.field-input{width:100%;padding:.82rem 1rem;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--cream);outline:none;transition:border-color .2s;margin-bottom:1.1rem;}
+.field-input:focus{border-color:rgba(201,125,58,.4);background:rgba(255,255,255,.055);}
 .field-input::placeholder{color:rgba(242,232,216,.2);}
-textarea.field-input{min-height:140px;resize:vertical;line-height:1.6;}
-
-.btn-submit{
-  width:100%;padding:.95rem;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none;border-radius:12px;
-  font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;
-  letter-spacing:.06em;text-transform:uppercase;
-  color:#fff;cursor:pointer;
-  box-shadow:0 6px 24px rgba(201,125,58,.25);
-  transition:all .2s;
-}
-.btn-submit:disabled{opacity:.4;cursor:not-allowed;}
-
-/* PROMPTS PICKER */
-.prompt-options{display:grid;gap:.5rem;margin-bottom:1.2rem;}
-.prompt-opt{
-  padding:.75rem .9rem;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:10px;cursor:pointer;
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;font-size:.9rem;
-  color:rgba(242,232,216,.55);
-  background:rgba(255,255,255,.025);
-  transition:all .16s;line-height:1.4;
-}
-.prompt-opt:hover{border-color:rgba(201,125,58,.25);color:rgba(242,232,216,.8);}
-.prompt-opt.selected{border-color:rgba(201,125,58,.4);background:rgba(201,125,58,.06);color:var(--cream);}
-
-/* SUCCESS */
-.success{display:none;text-align:center;padding:3rem 1rem;}
-.success-icon{font-size:3rem;margin-bottom:1rem;}
-.success-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:.6rem;}
-.success-body{font-size:.88rem;color:rgba(242,232,216,.45);line-height:1.8;max-width:320px;margin:0 auto 2rem;}
-.success-cta{font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.5);}
-.success-cta a{color:inherit;text-decoration:underline;}
+textarea.field-input{min-height:160px;resize:none;line-height:1.6;}
+.char-count{font-size:.68rem;color:rgba(242,232,216,.2);text-align:right;margin-top:-.7rem;margin-bottom:.7rem;}
+.success-card{padding:2.4rem 1.6rem;text-align:center;background:linear-gradient(145deg,rgba(58,173,144,.07),rgba(10,40,30,.1));border:1px solid rgba(58,173,144,.18);border-radius:20px;margin-bottom:1.6rem;}
+.success-icon{font-size:3rem;margin-bottom:.8rem;display:block;}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:var(--cream);margin-bottom:.5rem;}
+.success-body{font-size:.84rem;color:var(--cream-dim);line-height:1.8;max-width:320px;margin:0 auto;}
+.gold-line{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,125,58,.2),transparent);margin:1.2rem 0;}
+.field-error{font-size:.72rem;color:#e07060;margin-bottom:.6rem;min-height:.9rem;}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(42,28,8,.95);border:1px solid rgba(201,125,58,.3);border-radius:999px;padding:.5rem 1.2rem;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;color:var(--cream);z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
-<div class="page">
+<div class="app">
+  <div class="brand-bar"><div class="brand-logo">Curated Connections · Living Legacy</div></div>
 
-  <div class="brand">Curated Connections</div>
-
-  <!-- CAPSULE HEADER — populated by JS -->
-  <div class="capsule-hero">
-    <div class="capsule-occasion" id="capsuleOccasion">Graduation 2026 · Time Capsule</div>
-    <div class="capsule-name" id="capsuleName">Loading…</div>
-    <div class="capsule-sub" id="capsuleSub">Someone who loves them is building something special.<br>Your memory is part of it.</div>
-  </div>
-
-  <!-- FORM -->
-  <div id="formArea">
-    <div class="section-label">Choose a prompt to answer</div>
-    <div class="prompt-options" id="promptOptions">
-      <!-- populated by JS based on occasion -->
+  <!-- SCREEN 0: WELCOME -->
+  <div class="screen active" id="screen0" style="padding-top:.6rem;">
+    <div class="welcome-card">
+      <span class="wc-icon" id="welcomeIcon">🍃</span>
+      <div class="wc-occasion" id="welcomeOccasion">Living Legacy</div>
+      <div class="wc-name" id="welcomeName">Loading…</div>
+      <div class="wc-sub" id="welcomeSub">Someone who loves them is building something special. Your memory is part of it.</div>
     </div>
 
+    <div id="deadlineBanner" style="display:none;" class="deadline-banner">
+      <div class="db-icon">⏳</div>
+      <div class="db-text"><strong id="deadlineText">Responses needed soon</strong><br>You can answer all questions at once on the next screen.</div>
+    </div>
+
+    <div id="keeperNoteWrap" style="display:none;" class="keeper-note">
+      <div class="kn-label">A note from the keeper</div>
+      <div class="kn-text" id="keeperNoteText"></div>
+      <div class="kn-from" id="keeperNoteFrom"></div>
+    </div>
+
+    <div class="what-happens">
+      <div class="wh-title">What happens with your memory</div>
+      <div class="wh-item"><div class="wh-dot"></div><div class="wh-text">Your response goes directly into their time capsule — preserved exactly as you write it.</div></div>
+      <div class="wh-item"><div class="wh-dot"></div><div class="wh-text">The keeper holds it privately until the right moment to present it.</div></div>
+      <div class="wh-item"><div class="wh-dot"></div><div class="wh-text">This takes about 5 minutes. Write as much or as little as you want.</div></div>
+    </div>
+
+    <button class="btn-primary" onclick="goTo(1)" id="startBtn">I'd love to contribute →</button>
+
+    <div id="sealedState" style="display:none;text-align:center;padding:1.4rem 0;">
+      <div style="font-size:1.6rem;margin-bottom:.6rem;">✦</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--cream);margin-bottom:.4rem;">This capsule has been presented.</div>
+      <div style="font-size:.82rem;color:var(--cream-dim);line-height:1.8;">Thank you for being part of it.<br>Your memory is in there.</div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: CHOOSE PROMPT -->
+  <div class="screen" id="screen1">
+    <button class="btn-back" onclick="goTo(0)">← Back</button>
+    <div class="section-eyebrow" id="promptEyebrow">Choose a prompt</div>
+    <h2 class="section-title" id="promptTitle">What do you want<br>to <em>share?</em></h2>
+    <p class="section-body" id="promptBody">Choose the question that speaks to you. There are no wrong answers.</p>
+    <div id="promptList"></div>
+    <div class="field-error" id="error1"></div>
+    <button class="btn-primary" onclick="validateStep1()">Continue →</button>
+  </div>
+
+  <!-- SCREEN 2: WRITE YOUR MEMORY -->
+  <div class="screen" id="screen2">
+    <button class="btn-back" onclick="goTo(1)">← Back</button>
+    <div class="section-eyebrow">Your memory</div>
+    <h2 class="section-title">Say what you'd want<br>them to <em>remember.</em></h2>
+    <div id="selectedPromptDisplay" style="padding:1rem 1.1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;margin-bottom:1.2rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.7);line-height:1.5;"></div>
     <label class="field-label">Your answer</label>
-    <textarea class="field-input" id="answerText" placeholder="Take your time. Write as little or as much as you want."></textarea>
+    <textarea class="field-input" id="answerText" placeholder="Take your time. Write as much or as little as you want. Your exact words are what make this irreplaceable." oninput="updateCharCount()"></textarea>
+    <div class="char-count" id="charCount"></div>
+    <div class="field-error" id="error2"></div>
+    <button class="btn-primary" onclick="validateStep2()">Continue →</button>
+  </div>
 
-    <label class="field-label">Your name <span style="font-weight:400;opacity:.5;">(shown to the recipient)</span></label>
-    <input class="field-input" id="contributorName" type="text" placeholder="e.g. Coach Williams, Aunt Sarah, or just First Name"/>
-
+  <!-- SCREEN 3: SIGNATURE -->
+  <div class="screen" id="screen3">
+    <button class="btn-back" onclick="goTo(2)">← Back</button>
+    <div class="section-eyebrow">Your signature</div>
+    <h2 class="section-title">So they know<br>it came from <em>you.</em></h2>
+    <p class="section-body">Use whatever name feels right — first name, nickname, or full name.</p>
+    <label class="field-label">Your name</label>
+    <input class="field-input" id="contributorName" type="text" placeholder="e.g. Coach Williams, Aunt Sarah, or just your first name"/>
     <label class="field-label">Your relationship to them</label>
-    <input class="field-input" id="contributorRelation" type="text" placeholder="e.g. Coach, Teacher, Teammate, Friend"/>
-
-    <div style="font-size:.72rem;color:rgba(242,232,216,.22);line-height:1.6;margin-bottom:1.2rem;">Your response goes directly into their time capsule. The recipient won't see it until the Keeper decides to present it.</div>
-
-    <div style="font-size:.72rem;color:#e07060;margin-bottom:.5rem;min-height:.9rem;" id="formError"></div>
-    <button class="btn-submit" id="submitBtn" onclick="submitMemory()">Add My Memory →</button>
-
-    <div style="margin-top:1.4rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:12px;text-align:center;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.2);margin-bottom:.4rem;">Want to build one for someone you love?</div>
-      <a href="grad2026.html" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.5);text-decoration:none;">Start a time capsule →</a>
-    </div>
+    <input class="field-input" id="contributorRelation" type="text" placeholder="e.g. Coach, Teacher, Best friend, Mom"/>
+    <div style="font-size:.72rem;color:rgba(242,232,216,.2);line-height:1.6;margin-bottom:1.2rem;">Your response is private until the keeper chooses to present the capsule. We don't share your information.</div>
+    <div class="field-error" id="error3"></div>
+    <button class="btn-primary" onclick="submitMemory()" id="submitBtn">Submit My Memory →</button>
   </div>
 
-  <!-- SEALED STATE -->
-  <div id="sealedArea" style="display:none;text-align:center;padding:2rem 0;">
-    <div style="font-size:2.5rem;margin-bottom:1rem;">✦</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--cream);margin-bottom:.5rem;">This capsule has been presented.</div>
-    <div style="font-size:.85rem;color:rgba(242,232,216,.38);line-height:1.8;margin-bottom:2rem;">Thank you for being part of it. Your memory is in there.</div>
-
-    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.4rem;text-align:left;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.3);margin-bottom:.6rem;">Still have something to say?</div>
-      <div style="font-size:.85rem;color:rgba(242,232,216,.42);line-height:1.6;margin-bottom:1rem;">Send it to the Keeper — they may add it.</div>
-      <textarea id="lateMessage" placeholder="Write your message here..." style="width:100%;min-height:100px;padding:.8rem .9rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--cream);outline:none;resize:none;line-height:1.6;margin-bottom:.7rem;" onfocus="this.style.borderColor='rgba(201,125,58,.4)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"></textarea>
-      <input id="lateName" type="text" placeholder="Your name" style="width:100%;padding:.7rem .9rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--cream);outline:none;margin-bottom:.7rem;" onfocus="this.style.borderColor='rgba(201,125,58,.4)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"/>
-      <button onclick="sendLateMessage()" style="width:100%;padding:.8rem;background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);cursor:pointer;">Send to Keeper →</button>
-      <div id="lateConfirm" style="display:none;text-align:center;padding:.8rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.6);">Sent. The Keeper will see it. ✦</div>
+  <!-- SCREEN 4: SUCCESS -->
+  <div class="screen" id="screen4">
+    <div style="padding-top:.8rem;">
+      <div class="success-card">
+        <span class="success-icon">✦</span>
+        <div class="success-title">Your memory is in.</div>
+        <div class="success-body" id="successBody">It's been added to their capsule. They'll receive it at exactly the right moment — when the keeper decides to present it.</div>
+      </div>
+      <div id="addAnotherWrap">
+        <button class="btn-add-more" onclick="addAnother()">✦ Add another memory →</button>
+      </div>
+      <div class="gold-line"></div>
+      <div style="text-align:center;padding:.5rem 0 1.4rem;">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.28);line-height:1.7;margin-bottom:1rem;">"Every person who answers this becomes part<br>of something that outlasts the moment."</div>
+        <a href="gift-leaf.html" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(201,125,58,.45);text-decoration:none;">Build one for someone you love →</a>
+      </div>
     </div>
-
-    <div style="margin-top:1.6rem;">
-      <a href="grad2026.html" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(201,125,58,.45);text-decoration:none;">Start a capsule for someone you love →</a>
-    </div>
-  </div>
-    <div class="success-icon">✦</div>
-    <div class="success-title">Your memory is in.</div>
-    <div class="success-body">It's been added to their capsule. They'll receive it at exactly the right moment — when the Keeper decides to present it.</div>
-    <div class="success-cta">Want to build one for someone you love?<br><a href="grad2026.html">Start a time capsule →</a></div>
   </div>
 
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
-// Check if leaf is sealed
-var leafStatus = (capsuleData && capsuleData.status) || 'open';
-if (leafStatus === 'sealed') {
-  document.getElementById('formArea').style.display = 'none';
-  document.getElementById('sealedArea').style.display = 'block';
-}
+var params = new URLSearchParams(window.location.search);
+var leafId = params.get('id') || window.location.pathname.split('/').pop();
+var capsuleData = null;
+var selectedPrompts = [];
+var isUrgent = false;
+var allAnswers = [];
 
-function sendLateMessage() {
-  var msg = document.getElementById('lateMessage').value.trim();
-  var name = document.getElementById('lateName').value.trim();
-  if (!msg) return;
-
-  // Save to Airtable as a pending contribution
-  fetch('/api/airtable', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      action: 'create', table: 'Responses',
-      fields: {
-        'response_id':    'late_' + Date.now(),
-        'user_id':        leafId,
-        'spoken_answer':  '[Late message from ' + (name||'Anonymous') + ']\n\n' + msg,
-        'is_living_legacy': true,
-        'recorded_at':    new Date().toISOString()
-      }
-    })
-  }).catch(function(){});
-
-  // Save locally
-  try {
-    var lates = JSON.parse(localStorage.getItem('cc_late_' + leafId) || '[]');
-    lates.push({ name: name||'Anonymous', message: msg, date: new Date().toISOString() });
-    localStorage.setItem('cc_late_' + leafId, JSON.stringify(lates));
-  } catch(e) {}
-
-  document.getElementById('lateMessage').style.display = 'none';
-  document.getElementById('lateName').style.display = 'none';
-  document.querySelector('[onclick="sendLateMessage()"]').style.display = 'none';
-  document.getElementById('lateConfirm').style.display = 'block';
-}
 var PROMPTS = {
-  'Graduation 2026': [
+  'Graduation': [
     "What did you see in them that they probably couldn't see in themselves?",
     "What moment do you never want them to forget?",
     "What did they teach you — even if they didn't know they were teaching you?",
     "What do you hope they carry with them into whatever comes next?",
-    "What's something about them that made a room feel different when they walked in?"
+    "What's something about them that made a room feel different when they walked in?",
+    "What would you want them to know they meant to the people around them?"
   ],
   'Retirement': [
-    "What will be different now that they're gone from this chapter?",
+    "What will be different now that they're stepping away from this chapter?",
     "What did this person teach you about showing up?",
     "What moment do you never want them to forget from this season?",
-    "What would you want them to know they meant to the people around them?"
+    "What would you want them to know they meant to the people around them?",
+    "What did they model for you that you'll carry forward?",
+    "What do you hope this next chapter brings them?"
+  ],
+  "Mother's Day": [
+    "What did she teach you that she probably doesn't know she taught you?",
+    "What do you see in her that you hope she knows?",
+    "What's a moment with her you never want to forget?",
+    "What did she give you that you didn't realize until later?",
+    "How has knowing her changed who you are?",
+    "What do you want her to know about what she means to you?"
+  ],
+  "Father's Day": [
+    "What did he teach you that he probably doesn't know he taught you?",
+    "What do you see in him that you hope he knows?",
+    "What's a moment with him you never want to forget?",
+    "What did he give you that you didn't realize until later?",
+    "How has knowing him changed who you are?",
+    "What do you want him to know about what he means to you?"
+  ],
+  'End of Life': [
+    "What do you hope they know — without question — about what they meant to you?",
+    "What's something they did that you'll carry with you forever?",
+    "What did they teach you about how to live?",
+    "What's a moment with them you return to often?",
+    "What do you want them to hear from you?",
+    "What has knowing them given you that nothing else could?"
   ],
   'default': [
     "What do you see in them that they probably can't see in themselves?",
     "What moment do you never want them to forget?",
     "What did they teach you — even if they didn't know they were teaching you?",
-    "What do you hope they carry with them into whatever comes next?"
+    "What do you hope they carry with them into whatever comes next?",
+    "How has knowing them changed who you are?",
+    "What do you want them to know that you've never quite said out loud?"
   ]
 };
 
-// Load capsule data from URL
-var params = new URLSearchParams(window.location.search);
-var leafId = params.get('id') || window.location.pathname.split('/').pop();
-var capsuleData = null;
-var selectedPrompt = '';
+var ICONS = {
+  'Graduation':'🎓','Retirement':'✦',"Mother's Day":'🌸',
+  "Father's Day":'⚓','End of Life':'🍃','Birthday':'✨',
+  'Anniversary':'💛','default':'🍃'
+};
 
-// Try to load from localStorage
+// Load capsule data
 try {
   var stored = localStorage.getItem('cc_capsule_' + leafId);
   if (stored) capsuleData = JSON.parse(stored);
 } catch(e) {}
 
-// Populate UI
-var occasion = (capsuleData && capsuleData.occasion) || 'Graduation 2026';
+var occasion = (capsuleData && capsuleData.occasion) || 'default';
 var recipientName = (capsuleData && capsuleData.recipientName) || 'Someone special';
 var recipientFirst = recipientName.split(' ')[0];
+var personalNote = (capsuleData && capsuleData.personalNote) || '';
+var keeperName = (capsuleData && capsuleData.keeperName) || '';
+var deadline = (capsuleData && capsuleData.deadline) || '';
+var status = (capsuleData && capsuleData.status) || 'open';
+isUrgent = (capsuleData && capsuleData.mode) === 'urgent';
 
-document.getElementById('capsuleName').textContent = recipientName;
-document.getElementById('capsuleOccasion').textContent = occasion + ' · Time Capsule';
-document.getElementById('capsuleSub').textContent = 'Someone who loves ' + recipientFirst + ' is building something special. Your memory is part of it.';
+// Populate welcome
+document.getElementById('welcomeIcon').textContent = ICONS[occasion] || ICONS.default;
+document.getElementById('welcomeOccasion').textContent = occasion + ' · Living Legacy';
+document.getElementById('welcomeName').textContent = recipientName;
+document.getElementById('welcomeSub').textContent = (keeperName || 'Someone') + ' is building something special for ' + recipientFirst + '. Your memory is part of it.';
 
-// Build prompt options
+// Deadline banner
+if (deadline) {
+  var dDate = new Date(deadline);
+  var daysLeft = Math.ceil((dDate - new Date()) / 86400000);
+  if (daysLeft > 0) {
+    document.getElementById('deadlineBanner').style.display = 'flex';
+    document.getElementById('deadlineText').textContent = daysLeft === 1
+      ? 'Responses needed by tomorrow'
+      : 'Responses needed in ' + daysLeft + ' days — ' + dDate.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  }
+}
+
+// Keeper note
+if (personalNote) {
+  document.getElementById('keeperNoteWrap').style.display = 'block';
+  document.getElementById('keeperNoteText').textContent = '"' + personalNote + '"';
+  if (keeperName) document.getElementById('keeperNoteFrom').textContent = '— ' + keeperName;
+}
+
+// Sealed
+if (status === 'sealed') {
+  document.getElementById('startBtn').style.display = 'none';
+  document.getElementById('sealedState').style.display = 'block';
+}
+
+// Build prompts
 var prompts = PROMPTS[occasion] || PROMPTS.default;
 var html = '';
-prompts.forEach(function(p, i) {
-  html += '<div class="prompt-opt' + (i===0?' selected':'') + '" onclick="selectPrompt(this,\'' + p.replace(/'/g,"&#39;") + '\')">"' + p + '"</div>';
-});
-document.getElementById('promptOptions').innerHTML = html;
-selectedPrompt = '"' + prompts[0] + '"';
+if (isUrgent) {
+  document.getElementById('promptEyebrow').textContent = 'Choose your prompts';
+  document.getElementById('promptTitle').innerHTML = 'Answer as many as<br>you\'d like — <em>time is short.</em>';
+  document.getElementById('promptBody').textContent = 'Select every question you want to answer. You can add as many memories as you want.';
+  prompts.forEach(function(p, i) {
+    html += '<div class="prompt-card multi" onclick="togglePrompt(this,' + i + ')">';
+    html += '<span class="prompt-check">✓</span>';
+    html += '"' + p + '"</div>';
+  });
+} else {
+  prompts.forEach(function(p, i) {
+    html += '<div class="prompt-card' + (i===0?' selected':'') + '" onclick="selectPrompt(this,' + i + ')">';
+    html += '<span class="prompt-check">✓</span>';
+    html += '"' + p + '"</div>';
+  });
+  selectedPrompts = [0];
+}
+document.getElementById('promptList').innerHTML = html;
 
-function selectPrompt(el, p) {
-  document.querySelectorAll('.prompt-opt').forEach(function(o){ o.classList.remove('selected'); });
+function selectPrompt(el, idx) {
+  document.querySelectorAll('.prompt-card:not(.multi)').forEach(function(c){ c.classList.remove('selected'); });
   el.classList.add('selected');
-  selectedPrompt = '"' + p + '"';
+  selectedPrompts = [idx];
+}
+
+function togglePrompt(el, idx) {
+  el.classList.toggle('selected');
+  var i = selectedPrompts.indexOf(idx);
+  if (i > -1) selectedPrompts.splice(i,1);
+  else selectedPrompts.push(idx);
+}
+
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('screen' + n).classList.add('active');
+  window.scrollTo(0,0);
+  if (n === 2) {
+    var displayPrompts = selectedPrompts.map(function(i){ return '"' + prompts[i] + '"'; }).join('\n\n');
+    document.getElementById('selectedPromptDisplay').textContent = displayPrompts;
+    document.getElementById('answerText').value = '';
+    document.getElementById('charCount').textContent = '';
+  }
+}
+
+function validateStep1() {
+  if (selectedPrompts.length === 0) {
+    document.getElementById('error1').textContent = 'Please choose at least one prompt.';
+    return;
+  }
+  document.getElementById('error1').textContent = '';
+  goTo(2);
+}
+
+function updateCharCount() {
+  var len = document.getElementById('answerText').value.length;
+  document.getElementById('charCount').textContent = len > 50 ? len + ' characters' : '';
+}
+
+function validateStep2() {
+  var answer = document.getElementById('answerText').value.trim();
+  if (!answer) { document.getElementById('error2').textContent = 'Please write your memory first.'; return; }
+  document.getElementById('error2').textContent = '';
+  goTo(3);
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2400);
 }
 
 function submitMemory() {
   var answer = document.getElementById('answerText').value.trim();
   var name = document.getElementById('contributorName').value.trim();
   var relation = document.getElementById('contributorRelation').value.trim();
-
-  if (!answer) { document.getElementById('formError').textContent = 'Please write your memory first.'; return; }
-  if (!name)   { document.getElementById('formError').textContent = 'Please add your name so they know it\'s from you.'; return; }
-  document.getElementById('formError').textContent = '';
+  if (!name) { document.getElementById('error3').textContent = 'Please add your name so they know it\'s from you.'; return; }
+  document.getElementById('error3').textContent = '';
 
   var btn = document.getElementById('submitBtn');
   btn.textContent = 'Saving…'; btn.disabled = true;
 
-  // Save to Airtable
+  var promptText = selectedPrompts.map(function(i){ return '"' + prompts[i] + '"'; }).join(' / ');
+  var fullResponse = promptText + '\n\n' + answer + '\n\n— ' + name + (relation ? ' (' + relation + ')' : '');
+
   fetch('/api/airtable', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -291,27 +374,39 @@ function submitMemory() {
       action: 'create',
       table: 'Responses',
       fields: {
-        'response_id':    'contrib_' + Date.now(),
-        'user_id':        leafId,
-        'spoken_answer':  selectedPrompt + '\n\n' + answer + '\n\n— ' + name + (relation ? ' (' + relation + ')' : ''),
+        'response_id': 'contrib_' + Date.now(),
+        'user_id': leafId,
+        'spoken_answer': fullResponse,
         'is_living_legacy': true,
-        'recorded_at':    new Date().toISOString()
+        'recorded_at': new Date().toISOString()
       }
     })
   }).catch(function(){});
 
-  // Save locally too
   try {
     var contribs = JSON.parse(localStorage.getItem('cc_contrib_' + leafId) || '[]');
-    contribs.push({ name, relation, prompt: selectedPrompt, answer, date: new Date().toISOString() });
+    contribs.push({ name: name, relation: relation, prompts: promptText, answer: answer, date: new Date().toISOString() });
     localStorage.setItem('cc_contrib_' + leafId, JSON.stringify(contribs));
   } catch(e) {}
 
-  setTimeout(function() {
-    document.getElementById('formArea').style.display = 'none';
-    document.getElementById('successArea').style.display = 'block';
-    window.scrollTo(0,0);
-  }, 600);
+  document.getElementById('successBody').textContent = 'Your memory for ' + recipientFirst + ' has been added to their capsule. They\'ll receive it at exactly the right moment.';
+
+  setTimeout(function() { goTo(4); }, 600);
+}
+
+function addAnother() {
+  document.getElementById('answerText').value = '';
+  document.getElementById('contributorName').value = '';
+  document.getElementById('contributorRelation').value = '';
+  document.getElementById('submitBtn').textContent = 'Submit My Memory →';
+  document.getElementById('submitBtn').disabled = false;
+  selectedPrompts = isUrgent ? [] : [0];
+  if (!isUrgent) {
+    document.querySelectorAll('.prompt-card').forEach(function(c,i){ c.classList.toggle('selected', i===0); });
+  } else {
+    document.querySelectorAll('.prompt-card').forEach(function(c){ c.classList.remove('selected'); });
+  }
+  goTo(1);
 }
 </script>
 </body>

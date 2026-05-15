@@ -3,386 +3,533 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Start a Time Capsule — Curated Connections</title>
+<title>Start a Living Legacy — Curated Connections</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSCN4MBVZ0"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CSCN4MBVZ0');</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--ink:#03060a;--gold:#c97d3a;--gold2:#e8a045;--cream:#f2e8d8;}
-html,body{min-height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;}
-.page{max-width:480px;margin:0 auto;padding:2rem 1.2rem 5rem;}
-.back-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,232,216,.3);background:none;border:none;cursor:pointer;margin-bottom:2rem;text-decoration:none;}
-.steps-nav{display:flex;align-items:center;gap:.4rem;margin-bottom:2.4rem;}
-.step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);transition:all .3s;}
-.step-dot.active{background:var(--gold);width:24px;border-radius:4px;}
-.step-dot.done{background:rgba(201,125,58,.35);}
-.screen{display:none;}
-.screen.active{display:block;}
-.screen-eyebrow{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.7rem;}
-.screen-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;line-height:1.15;color:var(--cream);margin-bottom:.5rem;}
-.screen-title em{font-style:italic;color:var(--gold);}
-.screen-sub{font-size:.85rem;color:rgba(242,232,216,.42);line-height:1.7;margin-bottom:1.8rem;}
-.field-label{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.45);margin-bottom:.4rem;display:block;}
-.field-input{width:100%;padding:.82rem 1rem;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--cream);outline:none;transition:border-color .2s;margin-bottom:1rem;}
-.field-input:focus{border-color:rgba(201,125,58,.4);}
-.field-input::placeholder{color:rgba(242,232,216,.22);}
-
-/* MODE OPTIONS — big tappable cards */
-.mode-options{display:grid;gap:.8rem;margin-bottom:1.8rem;}
-.mode-opt{
-  padding:1.4rem 1.2rem;
-  border:1.5px solid rgba(255,255,255,.08);
-  border-radius:18px;cursor:pointer;
-  transition:all .18s;
-  background:rgba(255,255,255,.025);
-  position:relative;
+:root{
+  --ink:#03060a;
+  --gold:#c97d3a;
+  --gold2:#e8a045;
+  --gold-dim:rgba(201,125,58,.55);
+  --cream:#f2e8d8;
+  --cream-dim:rgba(242,232,216,.6);
+  --cream-faint:rgba(242,232,216,.28);
+  --green:#3aad90;
+  --green-dim:rgba(58,173,144,.55);
+  --r:16px;
 }
-.mode-opt:hover{border-color:rgba(201,125,58,.3);background:rgba(201,125,58,.05);}
-.mode-opt.selected{border-color:rgba(201,125,58,.5);background:rgba(201,125,58,.08);}
-.mode-opt-icon{font-size:1.6rem;margin-bottom:.5rem;}
-.mode-opt-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--cream);margin-bottom:.3rem;}
-.mode-opt.selected .mode-opt-title{color:var(--gold);}
-.mode-opt-desc{font-size:.8rem;color:rgba(242,232,216,.4);line-height:1.6;}
-.mode-opt-check{position:absolute;top:.9rem;right:.9rem;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:transparent;}
-.mode-opt.selected .mode-opt-check{background:rgba(201,125,58,.8);border-color:rgba(201,125,58,.8);color:#fff;}
+html,body{min-height:100%;background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+
+/* ATMOSPHERIC BACKGROUND */
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(201,125,58,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(58,173,144,.04) 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 6rem;}
+
+/* BRAND */
+.brand-bar{width:100%;max-width:480px;padding:1.4rem 1.4rem .8rem;display:flex;align-items:center;justify-content:space-between;}
+.brand-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--gold-dim);letter-spacing:.02em;}
+.brand-step{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.2);}
+
+/* SCREENS */
+.screen{width:100%;max-width:480px;padding:0 1.4rem;display:none;animation:fadeUp .4s ease both;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* OPENING SCREEN */
+.opening-icon{text-align:center;font-size:3.2rem;margin:2.4rem 0 1.2rem;animation:breathe 3s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.85;}50%{transform:scale(1.04);opacity:1;}}
+.opening-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:300;line-height:1.25;text-align:center;margin-bottom:.8rem;color:var(--cream);}
+.opening-title em{font-style:italic;color:var(--gold);}
+.opening-body{font-size:.88rem;color:var(--cream-dim);line-height:1.8;text-align:center;max-width:340px;margin:0 auto 2.4rem;}
+.opening-steps{margin-bottom:2.4rem;}
+.opening-step{display:flex;align-items:flex-start;gap:.9rem;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.opening-step:last-child{border-bottom:none;}
+.step-num{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.1em;color:var(--gold-dim);min-width:1.4rem;margin-top:.15rem;}
+.step-text{font-size:.83rem;color:var(--cream-dim);line-height:1.5;}
+.step-text strong{color:var(--cream);font-weight:500;}
+
+/* BUTTONS */
+.btn-primary{width:100%;padding:1rem;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 6px 24px rgba(201,125,58,.25);transition:all .2s;margin-bottom:.8rem;}
+.btn-primary:hover{box-shadow:0 8px 32px rgba(201,125,58,.35);transform:translateY(-1px);}
+.btn-secondary{width:100%;padding:.85rem;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.04em;color:var(--cream-dim);cursor:pointer;transition:all .2s;margin-bottom:.8rem;}
+.btn-back{background:none;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.5rem 0;margin-bottom:1.4rem;display:inline-flex;align-items:center;gap:.4rem;}
+
+/* SECTION HEADER */
+.section-eyebrow{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.5rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;line-height:1.3;color:var(--cream);margin-bottom:.5rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+.section-body{font-size:.83rem;color:var(--cream-dim);line-height:1.7;margin-bottom:1.6rem;}
+
+/* FIELDS */
+.field-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.38);margin-bottom:.4rem;display:block;}
+.field-input{width:100%;padding:.82rem 1rem;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.09);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--cream);outline:none;transition:border-color .2s;margin-bottom:1.1rem;}
+.field-input:focus{border-color:rgba(201,125,58,.4);background:rgba(255,255,255,.055);}
+.field-input::placeholder{color:rgba(242,232,216,.2);}
+textarea.field-input{min-height:110px;resize:none;line-height:1.6;}
 
 /* OCCASION CHIPS */
-.occasion-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.4rem;}
-.occ-chip{padding:.4rem .9rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.45);cursor:pointer;background:rgba(255,255,255,.03);transition:all .18s;}
-.occ-chip.selected{background:rgba(201,125,58,.1);border-color:rgba(201,125,58,.4);color:var(--gold);}
+.chip-row{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.4rem;}
+.chip{padding:.45rem .9rem;border:1px solid rgba(255,255,255,.1);border-radius:999px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:rgba(242,232,216,.45);cursor:pointer;transition:all .18s;background:transparent;}
+.chip:hover{border-color:rgba(201,125,58,.3);color:rgba(242,232,216,.7);}
+.chip.selected{border-color:var(--gold);background:rgba(201,125,58,.1);color:var(--cream);}
 
-/* PROMO BANNER */
-.promo-banner{padding:.85rem 1rem;border-radius:12px;margin-bottom:1.4rem;border:1px solid;}
+/* MODE CARDS */
+.mode-card{padding:1.1rem 1.1rem 1rem;border:1.5px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;transition:all .2s;margin-bottom:.65rem;display:flex;gap:.9rem;align-items:flex-start;}
+.mode-card:hover{border-color:rgba(201,125,58,.25);background:rgba(201,125,58,.04);}
+.mode-card.selected{border-color:var(--gold);background:rgba(201,125,58,.07);}
+.mode-icon{font-size:1.4rem;line-height:1;flex-shrink:0;margin-top:.1rem;}
+.mode-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--cream);margin-bottom:.2rem;}
+.mode-desc{font-size:.78rem;color:var(--cream-dim);line-height:1.5;}
+.mode-tag{display:inline-block;font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .5rem;border-radius:999px;margin-top:.4rem;}
+.mode-tag.recommended{background:rgba(58,173,144,.15);color:var(--green);}
+.mode-tag.urgent{background:rgba(201,125,58,.15);color:var(--gold);}
 
-.btn-next{width:100%;padding:.95rem;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 6px 24px rgba(201,125,58,.28);transition:all .2s;margin-top:.5rem;}
-.btn-next:disabled{opacity:.35;cursor:not-allowed;}
-.btn-back-step{width:100%;padding:.7rem;margin-top:.5rem;background:none;border:1px solid rgba(255,255,255,.07);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;}
-.field-error{font-size:.72rem;color:#e07060;margin-bottom:.5rem;min-height:.9rem;}
+/* PROMPT PREVIEW */
+.prompt-preview{padding:1.1rem 1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;margin-bottom:1.2rem;}
+.prompt-preview-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.5rem;}
+.prompt-preview-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(242,232,216,.75);line-height:1.5;}
 
-.share-box{padding:1.2rem;background:rgba(201,125,58,.07);border:1px solid rgba(201,125,58,.2);border-radius:14px;margin:1.4rem 0;}
-.share-url{font-family:'DM Sans',sans-serif;font-size:.82rem;color:rgba(242,232,216,.65);word-break:break-all;margin-bottom:.7rem;}
-.btn-copy{width:100%;padding:.65rem;background:rgba(201,125,58,.15);border:1px solid rgba(201,125,58,.3);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer;}
-.share-options{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.8rem;}
-.share-opt{padding:.75rem .5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;text-align:center;cursor:pointer;text-decoration:none;display:block;}
-.share-opt-icon{font-size:1.2rem;display:block;margin-bottom:.2rem;}
-.share-opt-label{font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,232,216,.4);}
+/* SHARE SCREEN */
+.share-hero{text-align:center;padding:1.6rem 0 1.2rem;}
+.share-icon{font-size:3rem;margin-bottom:.8rem;display:block;}
+.share-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:.4rem;}
+.share-sub{font-size:.82rem;color:var(--cream-dim);line-height:1.6;margin-bottom:1.4rem;}
+
+.share-link-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1.2rem;}
+.share-link-label{font-family:'Nunito',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.4rem;}
+.share-link-url{font-size:.78rem;color:var(--gold-dim);word-break:break-all;line-height:1.5;margin-bottom:.7rem;}
+.share-copy-btn{font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(201,125,58,.1);border:1px solid rgba(201,125,58,.25);border-radius:8px;padding:.35rem .8rem;cursor:pointer;transition:all .18s;}
+.share-copy-btn:hover{background:rgba(201,125,58,.18);}
+
+.share-options{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.6rem;}
+.share-opt{padding:.85rem .5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;text-align:center;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.45);transition:all .18s;}
+.share-opt:hover{border-color:rgba(201,125,58,.25);color:rgba(242,232,216,.75);background:rgba(201,125,58,.05);}
+.share-opt-icon{font-size:1.3rem;display:block;margin-bottom:.3rem;}
+
+/* DEADLINE */
+.deadline-box{padding:1rem 1.1rem;background:rgba(201,125,58,.06);border:1px solid rgba(201,125,58,.18);border-radius:14px;margin-bottom:1.2rem;}
+.deadline-label{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.5rem;}
+
+/* FIRST PROMPT CARD */
+.first-prompt-card{padding:1.3rem;background:linear-gradient(145deg,rgba(58,173,144,.08),rgba(10,40,30,.12));border:1px solid rgba(58,173,144,.2);border-radius:16px;margin-bottom:1.4rem;}
+.fpc-label{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.5rem;}
+.fpc-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.78);line-height:1.5;}
+
+/* WHAT THEY'LL SEE */
+.contributor-preview{border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;margin-bottom:1.4rem;}
+.cp-header{padding:.65rem 1rem;background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.05);font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.25);}
+.cp-body{padding:1rem;}
+.cp-occasion{font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.3rem;}
+.cp-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:.2rem;}
+.cp-sub{font-size:.75rem;color:var(--cream-faint);line-height:1.5;}
+
+/* GOLD DIVIDER */
+.gold-line{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,125,58,.2),transparent);margin:1.4rem 0;}
+
+/* ERROR */
+.field-error{font-size:.72rem;color:#e07060;margin-bottom:.6rem;min-height:.9rem;}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(42,28,8,.95);border:1px solid rgba(201,125,58,.3);border-radius:999px;padding:.5rem 1.2rem;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;color:var(--cream);z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
-<div class="page">
-  <a class="back-btn" href="javascript:history.back()">← Back</a>
+<div class="app">
 
-  <div class="steps-nav">
-    <div class="step-dot active" id="dot0"></div>
-    <div class="step-dot" id="dot1"></div>
-    <div class="step-dot" id="dot2"></div>
-    <div class="step-dot" id="dot3"></div>
+  <div class="brand-bar">
+    <div class="brand-logo">Curated Connections</div>
+    <div class="brand-step" id="stepIndicator">Living Legacy</div>
   </div>
 
-  <!-- SCREEN 0: GIFT NOW OR START NOW -->
+  <!-- SCREEN 0: OPENING -->
   <div class="screen active" id="screen0">
-    <div class="screen-eyebrow" id="s0eyebrow">Step 1 of 4</div>
-    <div class="screen-title" id="s0title">How do you want<br>to <em>give this?</em></div>
-    <div class="screen-sub" id="s0sub">You're building something for someone. Choose how you want to present it.</div>
+    <div class="opening-icon">🍃</div>
+    <h1 class="opening-title">You're about to build<br>something <em>irreplaceable.</em></h1>
+    <p class="opening-body">A Living Legacy is a collection of memories, voices, and love — gathered from the people who matter most, preserved forever, and presented as a gift at exactly the right moment.</p>
 
-    <!-- Promo banner — injected by JS if applicable -->
-    <div id="promoBanner" style="display:none;" class="promo-banner"></div>
-
-    <div class="mode-options">
-      <div class="mode-opt selected" id="modeNow" onclick="selectMode('now')">
-        <div class="mode-opt-check">✓</div>
-        <div class="mode-opt-icon">🎁</div>
-        <div class="mode-opt-title">Gift Now & Send</div>
-        <div class="mode-opt-desc">Build it this week. Invite contributors. Send the link at graduation, a party, or right now.</div>
+    <div class="opening-steps">
+      <div class="opening-step">
+        <div class="step-num">01</div>
+        <div class="step-text"><strong>Tell us who this is for.</strong> Name, relationship, and the occasion that makes this the right time.</div>
       </div>
-      <div class="mode-opt" id="modeLater" onclick="selectMode('later')">
-        <div class="mode-opt-check">✓</div>
-        <div class="mode-opt-icon">⏳</div>
-        <div class="mode-opt-title">Start Now, Gift Later</div>
-        <div class="mode-opt-desc">Build quietly over months or years. They won't know until you're ready to present it.</div>
+      <div class="opening-step">
+        <div class="step-num">02</div>
+        <div class="step-text"><strong>Choose how to gather memories.</strong> Weekly prompts over time, or all at once when time is short.</div>
       </div>
-    </div>
-
-    <!-- Occasion chips — hidden if pre-set from URL -->
-    <div id="occasionSection" style="margin-bottom:1rem;">
-      <div class="screen-sub" style="margin-bottom:.6rem;">What are you celebrating?</div>
-      <div class="occasion-chips" id="occasionChips">
-        <div class="occ-chip selected" onclick="selectOccasion(this,'Graduation 2026')">🎓 Graduation 2026</div>
-        <div class="occ-chip" onclick="selectOccasion(this,&quot;Mother\'s Day&quot;)">🌸 Mother's Day</div>
-        <div class="occ-chip" onclick="selectOccasion(this,'Retirement')">🌅 Retirement</div>
-        <div class="occ-chip" onclick="selectOccasion(this,'Milestone Birthday')">🎂 Milestone Birthday</div>
-        <div class="occ-chip" onclick="selectOccasion(this,'End of Season')">🏆 End of Season</div>
-        <div class="occ-chip" onclick="selectOccasion(this,'Wedding')">💍 Wedding</div>
-        <div class="occ-chip" onclick="selectOccasion(this,'Just Because')">✦ Just Because</div>
+      <div class="opening-step">
+        <div class="step-num">03</div>
+        <div class="step-text"><strong>Share your link.</strong> Contributors answer from their phone — no app needed. Their words go straight into the capsule.</div>
+      </div>
+      <div class="opening-step">
+        <div class="step-num">04</div>
+        <div class="step-text"><strong>Present it when it matters.</strong> You control when they see it. We keep it safe until then.</div>
       </div>
     </div>
 
-    <button class="btn-next" onclick="goStep(1)">Continue →</button>
+    <button class="btn-primary" onclick="goTo(1)">Begin → <span style="font-weight:400;opacity:.7;">Takes about 3 minutes</span></button>
+    <button class="btn-secondary" onclick="goTo(1)">I've done this before — skip ahead</button>
   </div>
 
   <!-- SCREEN 1: WHO IS THIS FOR -->
   <div class="screen" id="screen1">
-    <div class="screen-eyebrow">Step 2 of 4</div>
-    <div class="screen-title">Who is this<br><em>for?</em></div>
-    <div class="screen-sub">This becomes the cover of their capsule.</div>
+    <button class="btn-back" onclick="goTo(0)">← Back</button>
+    <div class="section-eyebrow">Step 1 of 3</div>
+    <h2 class="section-title">Who are you<br>honoring<em>?</em></h2>
+    <p class="section-body">This is the person whose story you're preserving. Their name will appear on every invitation sent to contributors.</p>
+
     <label class="field-label">Their full name</label>
-    <input class="field-input" id="recipientName" type="text" placeholder="e.g. Jordan Lee Collins" maxlength="60"/>
+    <input class="field-input" id="recipientName" type="text" placeholder="e.g. Margaret Ruth Collins"/>
+
     <label class="field-label">Your relationship to them</label>
-    <input class="field-input" id="recipientRelation" type="text" placeholder="e.g. Mom, Coach, Best friend, Teacher"/>
-    <div style="display:flex;gap:.6rem;">
-      <div style="flex:1;">
-        <label class="field-label">Year</label>
-        <input class="field-input" id="recipientYear" type="text" placeholder="2026" value="2026" maxlength="4"/>
-      </div>
-      <div style="flex:1;">
-        <label class="field-label">School / team</label>
-        <input class="field-input" id="recipientSchool" type="text" placeholder="optional"/>
-      </div>
+    <input class="field-input" id="relationship" type="text" placeholder="e.g. My mother, Our coach, My grandmother"/>
+
+    <label class="field-label">The occasion</label>
+    <div class="chip-row" id="occasionChips">
+      <div class="chip" onclick="selectOccasion(this,'Graduation')">Graduation</div>
+      <div class="chip" onclick="selectOccasion(this,'Retirement')">Retirement</div>
+      <div class="chip" onclick="selectOccasion(this,"Mother's Day")">Mother's Day</div>
+      <div class="chip" onclick="selectOccasion(this,'Father\'s Day')">Father's Day</div>
+      <div class="chip" onclick="selectOccasion(this,'Birthday')">Birthday</div>
+      <div class="chip" onclick="selectOccasion(this,'Anniversary')">Anniversary</div>
+      <div class="chip" onclick="selectOccasion(this,'End of Life')">End of Life</div>
+      <div class="chip" onclick="selectOccasion(this,'Just Because')">Just Because</div>
     </div>
-    <div class="field-error" id="screen1Error"></div>
-    <button class="btn-next" onclick="goStep(2)">Continue →</button>
-    <button class="btn-back-step" onclick="goStep(0)">← Back</button>
+
+    <label class="field-label">Or describe it in your own words</label>
+    <input class="field-input" id="customOccasion" type="text" placeholder="e.g. Before she moves across the country"/>
+
+    <div class="field-error" id="error1"></div>
+    <button class="btn-primary" onclick="validateStep1()">Continue →</button>
   </div>
 
-  <!-- SCREEN 2: KEEPER INFO -->
+  <!-- SCREEN 2: GATHER MODE -->
   <div class="screen" id="screen2">
-    <div class="screen-eyebrow">Step 3 of 4</div>
-    <div class="screen-title">You're the<br><em>Keeper.</em></div>
-    <div class="screen-sub">You control this capsule until you're ready to present it.</div>
-    <label class="field-label">Your name</label>
-    <input class="field-input" id="keeperName" type="text" placeholder="Your name"/>
-    <label class="field-label">Your email</label>
-    <input class="field-input" id="keeperEmail" type="email" placeholder="For your capsule link and weekly prompts"/>
+    <button class="btn-back" onclick="goTo(1)">← Back</button>
+    <div class="section-eyebrow">Step 2 of 3</div>
+    <h2 class="section-title">How do you want to<br><em>gather</em> memories?</h2>
+    <p class="section-body">Some stories build slowly. Others need to be captured now. Choose what fits your moment.</p>
 
-    <div id="promoCodeEntry" style="display:none;margin-bottom:1rem;">
-      <label class="field-label">Promo code</label>
-      <input class="field-input" id="promoCode" type="text" placeholder="Enter code" style="margin-bottom:.3rem;"/>
-      <div id="promoMsg" style="font-size:.72rem;min-height:.9rem;"></div>
-    </div>
-
-    <div style="background:rgba(201,125,58,.06);border:1px solid rgba(201,125,58,.15);border-radius:14px;padding:1rem 1.1rem;margin:1.2rem 0;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,125,58,.6);margin-bottom:.4rem;">What you get</div>
-      <div style="font-size:.82rem;color:rgba(242,232,216,.5);line-height:1.7;">One time capsule · Unlimited contributor invites · Weekly prompts · Private until you present it · Yours forever</div>
-      <div style="margin-top:.8rem;font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--cream);" id="priceDisplay">$4.99 <span style="font-size:.75rem;font-family:'DM Sans',sans-serif;color:rgba(242,232,216,.3);">one-time</span></div>
-    </div>
-
-    <div class="field-error" id="screen2Error"></div>
-    <button class="btn-next" onclick="startCapsule()" id="step2Btn">Start the Capsule — $4.99 →</button>
-    <div style="font-size:.7rem;color:rgba(242,232,216,.2);text-align:center;margin-top:.6rem;">Secure payment via Stripe. No subscription.</div>
-    <button class="btn-back-step" onclick="goStep(1)">← Back</button>
-  </div>
-
-  <!-- SCREEN 3: SUCCESS -->
-  <div class="screen" id="screen3">
-    <div style="font-size:3rem;text-align:center;margin-bottom:1rem;" id="successIcon">🎓</div>
-    <div class="screen-eyebrow">Time capsule started</div>
-    <div class="screen-title">It's alive.<br><em>Invite people.</em></div>
-    <div class="screen-sub">Share this link — no account needed, takes 5 minutes.</div>
-    <div class="share-box">
-      <div class="share-url" id="shareUrl">joincuratedconnections.com/contribute/...</div>
-      <button class="btn-copy" id="copyBtn" onclick="copyLink()">📋 Copy contributor link</button>
-      <div class="share-options">
-        <a class="share-opt" onclick="shareSMS()"><span class="share-opt-icon">💬</span><span class="share-opt-label">Text</span></a>
-        <a class="share-opt" onclick="shareNative()"><span class="share-opt-icon">📤</span><span class="share-opt-label">Share…</span></a>
+    <div class="mode-card selected" id="modeWeekly" onclick="selectMode('weekly')">
+      <div class="mode-icon">🌱</div>
+      <div>
+        <div class="mode-title">Over time — weekly prompts</div>
+        <div class="mode-desc">Contributors receive one thoughtful prompt each week. Memories accumulate slowly and deeply. Best when you have a few weeks before the moment.</div>
+        <div class="mode-tag recommended">Recommended for most occasions</div>
       </div>
     </div>
-    <div style="padding:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:1rem;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,232,216,.28);margin-bottom:.35rem;">Your first prompt</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(242,232,216,.7);line-height:1.55;" id="firstPrompt"></div>
+
+    <div class="mode-card" id="modeUrgent" onclick="selectMode('urgent')">
+      <div class="mode-icon">⏳</div>
+      <div>
+        <div class="mode-title">All at once — deadline mode</div>
+        <div class="mode-desc">Contributors see all questions at once and can answer as many as they'd like before your deadline. Best when time is short.</div>
+        <div class="mode-tag urgent">Ideal for graduations, end of life, surprise gifts</div>
+      </div>
     </div>
-    <div style="font-size:.78rem;color:rgba(242,232,216,.3);line-height:1.7;margin-bottom:1.4rem;">Weekly prompts sent to <span id="confirmEmail" style="color:rgba(201,125,58,.5);"></span></div>
-    <a href="gather.html" class="btn-next" style="text-decoration:none;display:block;text-align:center;">Go to your account →</a>
+
+    <div id="deadlineSection" style="display:none;">
+      <div class="gold-line"></div>
+      <div class="deadline-box">
+        <div class="deadline-label">⏱ Responses needed by</div>
+        <input class="field-input" id="deadlineDate" type="date" style="margin-bottom:0;background:transparent;border-color:rgba(201,125,58,.25);"/>
+      </div>
+      <p style="font-size:.75rem;color:rgba(242,232,216,.3);line-height:1.6;margin-bottom:1.2rem;">Contributors will see a countdown and can answer all questions at once. You'll receive everything before your deadline.</p>
+    </div>
+
+    <div class="gold-line"></div>
+    <button class="btn-primary" onclick="goTo(3)">Continue →</button>
+  </div>
+
+  <!-- SCREEN 3: PREVIEW & PERSONALIZE -->
+  <div class="screen" id="screen3">
+    <button class="btn-back" onclick="goTo(2)">← Back</button>
+    <div class="section-eyebrow">Step 3 of 3</div>
+    <h2 class="section-title">Preview what<br>contributors will <em>see.</em></h2>
+    <p class="section-body">This is the experience each person receives when they click your link. You can add a personal note to make it feel even more intentional.</p>
+
+    <div class="contributor-preview">
+      <div class="cp-header">What your contributors will see</div>
+      <div class="cp-body">
+        <div class="cp-occasion" id="previewOccasion">Graduation · Living Legacy</div>
+        <div class="cp-name" id="previewName">Margaret Collins</div>
+        <div class="cp-sub" id="previewSub">Someone who loves Margaret is building something special. Your memory is part of it.</div>
+      </div>
+    </div>
+
+    <div class="first-prompt-card">
+      <div class="fpc-label">✦ Their first prompt</div>
+      <div class="fpc-text" id="firstPromptPreview">"What do you see in them that they probably can't see in themselves?"</div>
+    </div>
+
+    <label class="field-label">Add a personal note to contributors <span style="font-weight:400;opacity:.5;">(optional)</span></label>
+    <textarea class="field-input" id="personalNote" placeholder="e.g. I'm building this for mom's 70th birthday. She doesn't know yet. Even a few sentences from you would mean everything."></textarea>
+
+    <label class="field-label">Your name <span style="font-weight:400;opacity:.5;">(shown to contributors)</span></label>
+    <input class="field-input" id="keeperName" type="text" placeholder="e.g. Margaret's daughter Sarah"/>
+
+    <label class="field-label">Your email <span style="font-weight:400;opacity:.5;">(for your capsule link)</span></label>
+    <input class="field-input" id="keeperEmail" type="email" placeholder="For your private keeper link"/>
+
+    <div class="field-error" id="error3"></div>
+    <button class="btn-primary" onclick="createLeaf()">Create the Leaf →</button>
+  </div>
+
+  <!-- SCREEN 4: SHARE -->
+  <div class="screen" id="screen4">
+    <div class="share-hero">
+      <span class="share-icon">✦</span>
+      <div class="share-title" id="shareTitle">The leaf is ready.</div>
+      <div class="share-sub" id="shareSub">Share this link with the people whose memories you want to gather. They'll receive a warm welcome and a prompt to answer — no app required.</div>
+    </div>
+
+    <div class="share-link-box">
+      <div class="share-link-label">Contributor link</div>
+      <div class="share-link-url" id="shareUrl">joincuratedconnections.com/contribute/...</div>
+      <button class="share-copy-btn" onclick="copyLink()">Copy Link</button>
+    </div>
+
+    <div class="share-options">
+      <div class="share-opt" onclick="shareText()">
+        <span class="share-opt-icon">💬</span>Text
+      </div>
+      <div class="share-opt" onclick="shareEmail()">
+        <span class="share-opt-icon">✉️</span>Email
+      </div>
+      <div class="share-opt" onclick="shareNative()">
+        <span class="share-opt-icon">📤</span>Share…
+      </div>
+      <div class="share-opt" onclick="copyLink()">
+        <span class="share-opt-icon">🔗</span>Copy
+      </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <div style="padding:1rem 1.1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:14px;margin-bottom:1.2rem;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,232,216,.25);margin-bottom:.5rem;">🔒 Your keeper link</div>
+      <div style="font-size:.78rem;color:rgba(242,232,216,.38);line-height:1.6;margin-bottom:.6rem;">This private link lets you see all contributions as they arrive and present the capsule when you're ready.</div>
+      <div class="share-link-url" id="keeperUrl" style="color:rgba(242,232,216,.35);">joincuratedconnections.com/keeper/...</div>
+      <button class="share-copy-btn" onclick="copyKeeperLink()" style="margin-top:.5rem;">Copy Keeper Link</button>
+    </div>
+
+    <div style="text-align:center;padding:1rem 0;">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(242,232,216,.3);line-height:1.7;">Every person who answers this becomes part of something<br>that will outlast the moment it was made for.</div>
+    </div>
+
+    <button class="btn-primary" onclick="window.location.href='gather.html'">Return to Gather →</button>
   </div>
 
 </div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-var C = { occasion:'Graduation 2026', mode:'now', leafId:null };
-var params = new URLSearchParams(window.location.search);
-
-var OCCASION_MAP = {
-  'graduation2026': 'Graduation 2026',
-  'mothersday':     "Mother's Day",
-  'retirement':     'Retirement',
-  'birthday':       'Milestone Birthday'
-};
-
-var PROMOS = {
-  'Graduation 2026': { code:'GRAD2026',        label:'Free through Dec 31 · Code: GRAD2026',        color:'rgba(201,125,58,' },
-  "Mother's Day":    { code:'MOTHERS2026',     label:"Free through Dec 31 · Code: MOTHERS2026",     color:'rgba(200,100,140,' },
-  "Father's Day":    { code:'FATHERS2026',     label:"Free through Dec 31 · Code: FATHERS2026",     color:'rgba(58,130,200,' },
-  'Grandparents':    { code:'GRANDPARENTS2026',label:'Free through Dec 31 · Code: GRANDPARENTS2026',color:'rgba(180,140,80,' },
-  'Siblings':        { code:'SIBLINGS2027',    label:'Free access · Code: SIBLINGS2027',            color:'rgba(100,180,120,' },
-  'Legacy':          { code:'LEGACY2026',      label:'Free through Dec 31 · Code: LEGACY2026',      color:'rgba(58,173,144,' }
-};
-
-var ICONS = {
-  'Graduation 2026': '🎓',
-  "Mother's Day":    '🌸',
-  'Retirement':      '🌅',
-  'default':         '✦'
+var C = {
+  recipientName: '',
+  relationship: '',
+  occasion: '',
+  mode: 'weekly',
+  deadline: '',
+  personalNote: '',
+  keeperName: '',
+  keeperEmail: '',
+  leafId: ''
 };
 
 var FIRST_PROMPTS = {
-  'Graduation 2026': '"What do you want them to remember about who they are right now — before everything changes?"',
-  "Mother's Day":    '"What did she teach you that she probably doesn\'t know she taught you?"',
-  'Retirement':      '"What did this season of life teach you that had nothing to do with the work?"',
-  'default':         '"What do you see in them that they probably can\'t see in themselves?"'
+  'Graduation':   '"What do you want them to remember about who they are right now — before everything changes?"',
+  'Retirement':   '"What did this season of your life teach you that had nothing to do with the work itself?"',
+  "Mother's Day": '"What did she teach you that she probably doesn\'t know she taught you?"',
+  "Father's Day": '"What did he teach you that he probably doesn\'t know he taught you?"',
+  'Birthday':     '"What do you see in them that they probably can\'t see in themselves?"',
+  'Anniversary':  '"What does watching them love each other teach you about love?"',
+  'End of Life':  '"What do you hope they know — without question — about what they meant to you?"',
+  'Just Because': '"What do you see in them that you hope they never lose?"',
+  'default':      '"What do you see in them that they probably can\'t see in themselves?"'
 };
 
-var presetOccasion = params.get('occasion') ? OCCASION_MAP[params.get('occasion')] : null;
-if (presetOccasion) C.occasion = presetOccasion;
-
-// Store promo code in session so upgrade buttons pick it up
-var _presetPromo = presetOccasion && PROMOS[presetOccasion] ? PROMOS[presetOccasion].code : null;
-if (_presetPromo) {
-  try { sessionStorage.setItem('cc_promo', _presetPromo); } catch(e) {}
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-  if (presetOccasion) {
-    // Hide occasion section — we already know
-    document.getElementById('occasionSection').style.display = 'none';
-
-    // Update header to reflect the occasion
-    document.getElementById('s0eyebrow').textContent = presetOccasion;
-    document.getElementById('s0title').innerHTML = 'How do you want<br>to <em>give this?</em>';
-
-    // Show promo banner
-    var promo = PROMOS[presetOccasion];
-    if (promo) {
-      var b = document.getElementById('promoBanner');
-      b.style.display = 'block';
-      b.style.borderColor = promo.color + '0.25)';
-      b.style.background   = promo.color + '0.06)';
-      b.innerHTML = '<div style="font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:' + promo.color + '0.7);margin-bottom:.3rem;">🎉 ' + promo.label + '</div>'
-        + '<div style="display:flex;align-items:center;justify-content:space-between;">'
-        + '<div style="font-size:.9rem;color:rgba(242,232,216,.75);">Code: <strong style="color:' + promo.color + '1);">' + promo.code + '</strong></div>'
-        + '<button onclick="copyCode(\'' + promo.code + '\')" style="padding:.25rem .65rem;background:none;border:1px solid ' + promo.color + '0.3);border-radius:6px;font-family:\'Nunito\',sans-serif;font-size:.62rem;font-weight:800;color:' + promo.color + '0.7);cursor:pointer;">Copy</button>'
-        + '</div>';
-
-      // Pre-fill promo code in step 3
-      document.getElementById('promoCodeEntry').style.display = 'block';
-      document.getElementById('promoCode').value = promo.code;
-    }
-
-    // Pre-select occasion chip
-    document.querySelectorAll('.occ-chip').forEach(function(c) {
-      c.classList.toggle('selected', c.textContent.trim().includes(presetOccasion.split(' ')[0]));
-    });
-
-    // Update success icon
-    document.getElementById('successIcon').textContent = ICONS[presetOccasion] || '✦';
-  }
-
-  // Set first prompt
-  document.getElementById('firstPrompt').textContent = FIRST_PROMPTS[C.occasion] || FIRST_PROMPTS.default;
-});
-
-function copyCode(code) {
-  if (navigator.clipboard) navigator.clipboard.writeText(code).then(function(){
-    event.target.textContent = 'Copied!';
-    setTimeout(function(){ event.target.textContent = 'Copy'; }, 2000);
-  });
-}
-
-function selectOccasion(el,v) {
-  document.querySelectorAll('.occ-chip').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
-  C.occasion = v;
-  var promo = PROMOS[v];
-  document.getElementById('successIcon').textContent = ICONS[v] || '✦';
-  document.getElementById('firstPrompt').textContent = FIRST_PROMPTS[v] || FIRST_PROMPTS.default;
-}
-
-function selectMode(m) {
-  C.mode = m;
-  document.getElementById('modeNow').classList.toggle('selected',   m === 'now');
-  document.getElementById('modeLater').classList.toggle('selected', m === 'later');
-}
-
-function goStep(n) {
-  if (n === 2) {
-    var nm = document.getElementById('recipientName').value.trim();
-    if (!nm) { document.getElementById('screen1Error').textContent = 'Please enter their name.'; return; }
-    document.getElementById('screen1Error').textContent = '';
-  }
-  for (var i = 0; i < 4; i++) {
-    document.getElementById('dot'+i).className = 'step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
-  }
+function goTo(n) {
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
-  document.getElementById('screen'+n).classList.add('active');
+  document.getElementById('screen' + n).classList.add('active');
+  document.getElementById('stepIndicator').textContent = n > 0 ? 'Step ' + Math.min(n,3) + ' of 3' : 'Living Legacy';
   window.scrollTo(0,0);
+  if (n === 3) updatePreview();
 }
 
-function startCapsule() {
-  var nm = document.getElementById('keeperName').value.trim();
-  var em = document.getElementById('keeperEmail').value.trim();
-  if (!nm) { document.getElementById('screen2Error').textContent = 'Please enter your name.'; return; }
-  if (!em || !em.includes('@')) { document.getElementById('screen2Error').textContent = 'Please enter a valid email.'; return; }
-  document.getElementById('screen2Error').textContent = '';
+function selectOccasion(el, val) {
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  C.occasion = val;
+  document.getElementById('customOccasion').value = '';
+  updatePromptPreview();
+}
 
-  var btn = document.getElementById('step2Btn');
-  btn.textContent = 'Creating…'; btn.disabled = true;
+function updatePromptPreview() {
+  var occ = C.occasion || document.getElementById('customOccasion').value || 'default';
+  var prompt = FIRST_PROMPTS[occ] || FIRST_PROMPTS.default;
+  var el = document.getElementById('firstPromptPreview');
+  if (el) el.textContent = prompt;
+}
 
-  var leafId = 'leaf_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
-  C.leafId = leafId; C.keeperName = nm; C.keeperEmail = em;
-  C.recipientName     = document.getElementById('recipientName').value.trim();
-  C.recipientRelation = document.getElementById('recipientRelation').value.trim();
-  C.recipientYear     = document.getElementById('recipientYear').value.trim();
-  C.promoCode         = document.getElementById('promoCode').value.trim();
-  C.created           = new Date().toISOString();
+function selectMode(mode) {
+  C.mode = mode;
+  document.getElementById('modeWeekly').classList.toggle('selected', mode === 'weekly');
+  document.getElementById('modeUrgent').classList.toggle('selected', mode === 'urgent');
+  document.getElementById('deadlineSection').style.display = mode === 'urgent' ? 'block' : 'none';
+}
 
+function validateStep1() {
+  var name = document.getElementById('recipientName').value.trim();
+  var rel  = document.getElementById('relationship').value.trim();
+  var occ  = C.occasion || document.getElementById('customOccasion').value.trim();
+  if (!name) { document.getElementById('error1').textContent = 'Please enter their name.'; return; }
+  if (!occ)  { document.getElementById('error1').textContent = 'Please choose or describe the occasion.'; return; }
+  document.getElementById('error1').textContent = '';
+  C.recipientName = name;
+  C.relationship = rel;
+  C.occasion = occ || C.occasion;
+  goTo(2);
+}
+
+function updatePreview() {
+  var first = C.recipientName.split(' ')[0];
+  document.getElementById('previewOccasion').textContent = C.occasion + ' · Living Legacy';
+  document.getElementById('previewName').textContent = C.recipientName;
+  document.getElementById('previewSub').textContent = 'Someone who loves ' + first + ' is building something special. Your memory is part of it.';
+  updatePromptPreview();
+}
+
+function createLeaf() {
+  var note  = document.getElementById('personalNote').value.trim();
+  var kName = document.getElementById('keeperName').value.trim();
+  var kEmail= document.getElementById('keeperEmail').value.trim();
+  if (!kEmail || !kEmail.includes('@')) { document.getElementById('error3').textContent = 'Please enter your email so we can send you your keeper link.'; return; }
+  document.getElementById('error3').textContent = '';
+
+  C.personalNote = note;
+  C.keeperName = kName;
+  C.keeperEmail = kEmail;
+  C.deadline = document.getElementById('deadlineDate').value;
+
+  // Generate leaf ID
+  C.leafId = 'leaf_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+
+  // Save to localStorage
   try {
-    var caps = JSON.parse(localStorage.getItem('cc_capsules') || '[]');
-    caps.unshift(C);
-    localStorage.setItem('cc_capsules', JSON.stringify(caps));
-    localStorage.setItem('cc_capsule_' + leafId, JSON.stringify(C));
+    localStorage.setItem('cc_capsule_' + C.leafId, JSON.stringify({
+      recipientName: C.recipientName,
+      relationship:  C.relationship,
+      occasion:      C.occasion,
+      mode:          C.mode,
+      deadline:      C.deadline,
+      personalNote:  C.personalNote,
+      keeperName:    C.keeperName,
+      keeperEmail:   C.keeperEmail,
+      created:       new Date().toISOString(),
+      status:        'open'
+    }));
   } catch(e) {}
 
+  // Save to Airtable
   fetch('/api/airtable', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ action:'create', table:'Living Legacy Leaves', fields:{
-      'Full Name':      C.recipientName,
-      'Known As':       C.recipientName.split(' ')[0],
-      'Relationship':   C.recipientRelation,
-      'Keeper User ID': em,
-      'Leaf Status':    'Active',
-      'Subject Living': true
-    }})
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      action: 'create',
+      table: 'Living Legacy Leaves',
+      fields: {
+        'leaf_id':       C.leafId,
+        'recipient':     C.recipientName,
+        'relationship':  C.relationship,
+        'occasion':      C.occasion,
+        'mode':          C.mode,
+        'deadline':      C.deadline || '',
+        'keeper_name':   C.keeperName,
+        'keeper_email':  C.keeperEmail,
+        'status':        'open',
+        'created_at':    new Date().toISOString()
+      }
+    })
   }).catch(function(){});
 
-  setTimeout(function() {
-    var url = 'https://joincuratedconnections.com/contribute/' + leafId;
-    document.getElementById('shareUrl').textContent = url;
-    document.getElementById('confirmEmail').textContent = em;
-    document.getElementById('firstPrompt').textContent = FIRST_PROMPTS[C.occasion] || FIRST_PROMPTS.default;
-    goStep(3);
-    btn.textContent = 'Start the Capsule — $4.99 →'; btn.disabled = false;
-  }, 800);
+  // Set share URLs
+  var shareUrl = 'https://joincuratedconnections.com/contribute/' + C.leafId;
+  var keeperUrl = 'https://joincuratedconnections.com/contribute/' + C.leafId + '?keeper=1';
+  document.getElementById('shareUrl').textContent = shareUrl;
+  document.getElementById('keeperUrl').textContent = keeperUrl;
+
+  // Update share screen
+  var first = C.recipientName.split(' ')[0];
+  document.getElementById('shareTitle').textContent = first + "'s leaf is ready.";
+  var sub = C.mode === 'urgent'
+    ? 'Share this link now. Contributors can answer all questions at once before your deadline.'
+    : 'Share this link when you\'re ready. Contributors will receive a new prompt each week.';
+  document.getElementById('shareSub').textContent = sub;
+
+  goTo(4);
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2400);
 }
 
 function copyLink() {
   var url = document.getElementById('shareUrl').textContent;
-  if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){
-    document.getElementById('copyBtn').textContent = '✦ Copied!';
-    setTimeout(function(){ document.getElementById('copyBtn').textContent = '📋 Copy contributor link'; }, 2000);
-  });
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ showToast('Link copied ✦'); });
 }
 
-function shareSMS() {
-  var nm  = C.recipientName ? C.recipientName.split(' ')[0] : 'them';
+function copyKeeperLink() {
+  var url = document.getElementById('keeperUrl').textContent;
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ showToast('Keeper link copied ✦'); });
+}
+
+function shareText() {
   var url = document.getElementById('shareUrl').textContent;
-  window.open('sms:?body=' + encodeURIComponent('I\'m building a time capsule for ' + nm + '. Would you add a memory? Takes 5 minutes — ' + url));
+  var first = C.recipientName.split(' ')[0];
+  var msg = (C.personalNote ? C.personalNote + '\n\n' : '') + 'I\'m building something for ' + first + '. Would mean everything to have your voice in it.\n\n' + url;
+  window.open('sms:?body=' + encodeURIComponent(msg));
+}
+
+function shareEmail() {
+  var url = document.getElementById('shareUrl').textContent;
+  var first = C.recipientName.split(' ')[0];
+  var body = (C.personalNote ? C.personalNote + '\n\n' : 'I\'m building a Living Legacy for ' + first + ' and I\'d love your memory to be part of it.\n\n') + 'Click here to add yours:\n' + url;
+  window.open('mailto:?subject=I\'d love your memory for ' + first + '&body=' + encodeURIComponent(body));
 }
 
 function shareNative() {
-  var nm  = C.recipientName ? C.recipientName.split(' ')[0] : 'them';
   var url = document.getElementById('shareUrl').textContent;
-  if (navigator.share) { navigator.share({ text: 'I\'m building a time capsule for ' + nm + '. Would you add a memory?', url: url }); }
-  else { copyLink(); }
+  var first = C.recipientName.split(' ')[0];
+  if (navigator.share) {
+    navigator.share({ title: 'A memory for ' + first, text: C.personalNote || 'I\'m building something for ' + first + ' and I\'d love your voice in it.', url: url });
+  } else {
+    copyLink();
+  }
 }
+
+// Handle URL params
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var occ = params.get('occasion');
+  var MAP = { 'graduation2026':'Graduation', 'mothersday':"Mother's Day", 'retirement':'Retirement', 'birthday':'Birthday' };
+  if (occ && MAP[occ]) {
+    C.occasion = MAP[occ];
+    var chips = document.querySelectorAll('.chip');
+    chips.forEach(function(c){ if (c.textContent.trim() === MAP[occ]) c.classList.add('selected'); });
+  }
+  if (params.get('self') === '1') {
+    document.getElementById('relationship').value = 'Myself';
+    document.querySelector('.section-title').innerHTML = 'Tell us a little<br>about <em>yourself.</em>';
+  }
+})();
 </script>
 </body>
 </html>
