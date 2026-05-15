@@ -482,12 +482,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   <!-- SCROLL -->
   <div class="scroll">
 
-    <!-- DAILY UPLIFT -->
-    <div style="padding:1.6rem 1.4rem .6rem;text-align:center;">
-      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.6rem;">✦ Thought for the Day</div>
-      <div id="dailyUplift" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.32rem;color:rgba(242,232,216,.82);line-height:1.65;max-width:320px;margin:0 auto;"></div>
-    </div>
-
     <!-- HERO CARD -->
     <div class="hero-card" id="heroCard" onclick="heroTap()">
       <div class="hero-bg"></div>
@@ -542,6 +536,34 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
       </div>
       <div class="shelf-row" id="tonightShelf">
         <!-- Populated by loadTonightCards() -->
+      </div>
+    </div>
+
+    <!-- THOUGHT FOR THE DAY + JOURNAL -->
+    <div id="todSection" style="padding:1.8rem 1.4rem 0;text-align:center;">
+      <div style="font-family:'Nunito',sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,125,58,.55);margin-bottom:.7rem;">✦ Thought for the Day</div>
+      <div id="dailyUplift" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.32rem;color:rgba(242,232,216,.85);line-height:1.65;max-width:320px;margin:0 auto 1.2rem;transition:opacity .8s ease;"></div>
+
+      <!-- REFLECTION PROMPT -->
+      <div id="todReflect" style="display:none;animation:fadeUp .5s ease both;">
+        <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:rgba(242,232,216,.38);line-height:1.6;margin-bottom:1rem;max-width:280px;margin-left:auto;margin-right:auto;">Does this land for you? Think of a specific moment —</div>
+        <div style="display:flex;gap:.6rem;justify-content:center;margin-bottom:1rem;">
+          <button onclick="openTodJournal('change')" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(242,232,216,.15);background:rgba(255,255,255,.04);color:rgba(242,232,216,.55);cursor:pointer;transition:all .2s;">A moment I'd change</button>
+          <button onclick="openTodJournal('grateful')" style="font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(201,125,58,.25);background:rgba(201,125,58,.07);color:rgba(201,125,58,.7);cursor:pointer;transition:all .2s;">A moment I'm grateful for</button>
+        </div>
+      </div>
+
+      <!-- JOURNAL OVERLAY FOR TOD -->
+      <div id="todJournalOverlay" style="display:none;position:fixed;inset:0;background:#03060a;z-index:300;overflow-y:auto;animation:fadeUp .3s ease both;">
+        <div style="max-width:480px;margin:0 auto;padding:1.4rem 1.4rem 6rem;">
+          <button onclick="closeTodJournal()" style="background:none;border:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(242,232,216,.28);cursor:pointer;padding:.5rem 0;margin-bottom:1.4rem;">← Back</button>
+          <div style="font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,125,58,.5);margin-bottom:.5rem;">Reflection</div>
+          <div id="todJournalObs" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:rgba(242,232,216,.55);line-height:1.6;margin-bottom:.5rem;"></div>
+          <div id="todJournalPrompt" style="font-family:'DM Sans',sans-serif;font-size:.8rem;color:rgba(242,232,216,.35);margin-bottom:1.4rem;"></div>
+          <textarea id="todJournalText" placeholder="Write whatever comes. There's no right length." style="width:100%;min-height:180px;padding:.9rem 1rem;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--cream);outline:none;resize:none;line-height:1.6;" onfocus="this.style.borderColor='rgba(201,125,58,.4)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"></textarea>
+          <button onclick="saveTodJournal()" style="width:100%;margin-top:.8rem;padding:1rem;background:linear-gradient(135deg,#c97d3a,#e8a045);border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;cursor:pointer;">Save to Journal →</button>
+          <div id="todJournalConfirm" style="display:none;text-align:center;padding:1.4rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(201,125,58,.6);">Saved to your journal. ✦</div>
+        </div>
       </div>
     </div>
 
@@ -2473,7 +2495,13 @@ async function loadDailyUplift() {
         el.style.opacity = '0';
         el.style.transition = 'opacity 0.8s ease';
         el.textContent = '\u201c' + text + '\u201d';
-        setTimeout(function(){ el.style.opacity = '1'; }, 50);
+        setTimeout(function(){
+          el.style.opacity = '1';
+          setTimeout(function(){
+            var ref = document.getElementById('todReflect');
+            if (ref) ref.style.display = 'block';
+          }, 1200);
+        }, 50);
         return;
       }
     }
@@ -3521,6 +3549,53 @@ var now = new Date();
 document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 ' + months[now.getMonth()] + ' ' + now.getDate();
 
 // ── INIT ──
+
+var _todMode = '';
+
+function openTodJournal(mode) {
+  _todMode = mode;
+  var obs = document.getElementById('dailyUplift').textContent;
+  document.getElementById('todJournalObs').textContent = obs;
+  document.getElementById('todJournalPrompt').textContent = mode === 'change'
+    ? 'Think of a moment you wish had gone differently — what would you want to change?'
+    : 'Think of a moment you're grateful for — what made it stay with you?';
+  document.getElementById('todJournalText').value = '';
+  document.getElementById('todJournalConfirm').style.display = 'none';
+  document.getElementById('todJournalOverlay').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function closeTodJournal() {
+  document.getElementById('todJournalOverlay').style.display = 'none';
+}
+
+function saveTodJournal() {
+  var text = document.getElementById('todJournalText').value.trim();
+  if (!text) return;
+  var obs = document.getElementById('dailyUplift').textContent;
+  var entry = {
+    id: Date.now(),
+    type: 'reflection',
+    source: 'thought-for-the-day',
+    mode: _todMode,
+    observation: obs,
+    text: text,
+    date: new Date().toISOString()
+  };
+  try {
+    var u = CC && CC.getUser ? CC.getUser() : null;
+    var key = 'cc_journal_' + (u ? u.user_id : 'guest');
+    var entries = JSON.parse(localStorage.getItem(key) || '[]');
+    entries.unshift(entry);
+    localStorage.setItem(key, JSON.stringify(entries));
+    if (window.CCFB && CCFB.saveJournalEntry) CCFB.saveJournalEntry(entry);
+  } catch(e) {}
+  document.getElementById('todJournalText').style.display = 'none';
+  document.querySelector('[onclick="saveTodJournal()"]').style.display = 'none';
+  document.getElementById('todJournalConfirm').style.display = 'block';
+  setTimeout(function(){ closeTodJournal(); }, 1800);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   var params = new URLSearchParams(window.location.search);
 
@@ -3624,7 +3699,7 @@ async function loadQuizSection(){
     : 'New quiz '+(du===1?'tomorrow':'in '+du+' days')+' \u00b7 '+ns;
 
   var wk=Math.floor((now-new Date(now.getFullYear(),0,1))/(7*24*60*60*1000));
-  var level=getTierLevel();
+  var level=getTierLevel(), ql=[2,4,6,99][level]||2;
 
   // Each tier sees its pool + all lower tiers
   var ALLOWED=[['Gather'],['Gather','Connect'],['Gather','Connect','Insight'],['Gather','Connect','Insight','Legacy']];
@@ -3663,7 +3738,7 @@ async function loadQuizSection(){
       return;
     }
 
-    var picks=seededShuffleByWeek(eligible,wk);
+    var picks=seededShuffleByWeek(eligible,wk).slice(0,ql);
     var html='';
     picks.forEach(function(rec,i){
       var f=rec.fields,st=QS[i%QS.length];
