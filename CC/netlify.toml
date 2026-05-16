@@ -1,97 +1,19 @@
-[build]
-  functions = "netlify/functions"
-
-[functions]
-  node_bundler = "esbuild"
-
 [[redirects]]
   from = "/api/airtable"
   to = "/.netlify/functions/airtable-proxy"
   status = 200
 
 [[redirects]]
-  from = "/api/stripe-webhook"
-  to = "/.netlify/functions/stripe-webhook"
+  from = "/api/invite"
+  to = "/.netlify/functions/circle-invite"
+  status = 200
+
+[[redirects]]
+  from = "/api/stripe-sync"
+  to = "/.netlify/functions/stripe-sync"
   status = 200
 
 [[redirects]]
   from = "/api/play-live"
   to = "/.netlify/functions/play-live"
   status = 200
-
-[[redirects]]
-  from = "/api/circle-invite"
-  to = "/.netlify/functions/circle-invite"
-  status = 200
-
-[[redirects]]
-  from = "/api/storage"
-  to = "/.netlify/functions/storage-tracker"
-  status = 200
-
-[[redirects]]
-  from = "/gather"
-  to = "/gather.html"
-  status = 200
-
-[[redirects]]
-  from = "/circles"
-  to = "/circles.html"
-  status = 200
-
-[[redirects]]
-  from = "/legacy"
-  to = "/legacy.html"
-  status = 200
-
-[[redirects]]
-  from = "/journal"
-  to = "/journal.html"
-  status = 200
-
-[[redirects]]
-  from = "/games"
-  to = "/games.html"
-  status = 200
-
-[[redirects]]
-  from = "/start"
-  to = "/onboarding.html"
-  status = 200
-
-[[redirects]]
-  from = "/join/*"
-  to = "/circle-join.html"
-  status = 200
-
-[[redirects]]
-  from = "/play/really-bad-day"
-  to = "/really-bad-day.html"
-  status = 200
-
-[[redirects]]
-  from = "/play/that-tracks"
-  to = "/that-tracks.html"
-  status = 200
-
-[[redirects]]
-  from = "/contribute/*"
-  to = "/contribute.html"
-  status = 200
-
-[[redirects]]
-  from = "/legal"
-  to = "/legal.html"
-  status = 200
-
-[[redirects]]
-  from = "/help"
-  to = "/help.html"
-  status = 200
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
