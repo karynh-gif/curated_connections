@@ -985,6 +985,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
   </div>
 </div>
 
+  <div class="toast-wrap" id="toastWrap" style="display:none;"><div class="toast" id="toastMsg"></div></div>
 </div><!-- /app -->
 
 <script src="/airtable.js"></script>
@@ -3371,22 +3372,10 @@ document.getElementById('topDate').textContent = days[now.getDay()] + ' \u00B7 '
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
   var params = new URLSearchParams(window.location.search);
-
-  var _dbg = document.createElement('div');
-  _dbg.id = 'debugBar';
-  _dbg.style.cssText = 'position:fixed;bottom:60px;left:0;right:0;z-index:9999;padding:.5rem;font-size:.65rem;font-family:monospace;background:rgba(0,0,0,.85);color:#0f0;max-height:120px;overflow-y:auto;';
-  document.body.appendChild(_dbg);
-  function dbg(msg, err) {
-    var line = document.createElement('div');
-    line.style.color = err ? '#f55' : '#0f0';
-    line.textContent = (err ? '✗ ' : '✓ ') + msg + (err ? ': ' + err.message : '');
-    _dbg.appendChild(line);
-  }
-
-  try { loadTonightCards(); dbg('loadTonightCards'); } catch(e) { dbg('loadTonightCards FAILED', e); }
-  try { loadWitWonder(); dbg('loadWitWonder'); } catch(e) { dbg('loadWitWonder FAILED', e); }
-  try { loadQuizSection(); dbg('loadQuizSection'); } catch(e) { dbg('loadQuizSection FAILED', e); }
-  try { loadCircles(); dbg('loadCircles'); } catch(e) { dbg('loadCircles FAILED', e); }
+  loadTonightCards();
+  loadWitWonder();
+  loadQuizSection();
+  loadCircles();
   var ls = document.getElementById('legacyShelf');
   if (ls) ls.style.display = 'block';
   checkNotifBadge();
@@ -3430,7 +3419,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Auto-open signup modal if redirected from another page
-  var params = new URLSearchParams(window.location.search);
   if (params.get('signup') === '1' && !CC.getUser()) {
     setTimeout(function() {
       openAccount('create your free account');
@@ -3456,7 +3444,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── QUIZ SECTION — weekly rotation with tier filtering ──────────
 function seededShuffleByWeek(arr,wk){
   var a=arr.slice(),seed=(wk*1000+new Date().getFullYear())|0;
-    for(var i=a.length-1;i>0;i--){var j=Math.floor(rand()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  function rand(){seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(rand()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
   return a;
 }
 
