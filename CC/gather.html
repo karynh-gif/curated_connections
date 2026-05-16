@@ -1237,7 +1237,7 @@ async function loadTonightCards() {
   var formula = filterFormulas[level] || filterFormulas[0];
 
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula: formula, maxRecords:100})});
+    var res = await fetch('/.netlify/functions/airtable-proxy', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Conversation Cards', filterFormula: formula, maxRecords:100})});
     if (!res.ok) {
       shelf.innerHTML = '<div style="padding:1.2rem;font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(242,232,216,.3);font-style:italic;">Error ' + res.status + ' — tap to retry</div>';
       shelf.onclick = function() { shelf.onclick = null; loadTonightCards(); };
@@ -1390,7 +1390,7 @@ async function loadWitWonder() {
   var countEl = document.getElementById('wwCount');
   if (!shelf) return;
   try {
-    var res = await fetch('/api/airtable', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', maxRecords:100})});
+    var res = await fetch('/.netlify/functions/airtable-proxy', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'list', table:'Wit and Wonder', maxRecords:100})});
     if (!res.ok) { countEl.textContent = 'error'; return; }
     var data = await res.json();
     if (!data.records || !data.records.length) { countEl.textContent = 'none'; return; }
@@ -1779,7 +1779,7 @@ function ppRate(n) {
     r.unshift({rating:n,page:'profile',date:new Date().toISOString()});
     localStorage.setItem('cc_ratings',JSON.stringify(r));
   } catch(e){}
-  fetch('/api/airtable',{method:'POST',headers:{'Content-Type':'application/json'},
+  fetch('/.netlify/functions/airtable-proxy',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({action:'create',table:'Responses',fields:{
       'response_id':'rate_'+Date.now(),'user_id':'rating',
       'spoken_answer':'profile · '+n+'/5','is_living_legacy':false,'recorded_at':new Date().toISOString()
@@ -2411,7 +2411,7 @@ function saveToFeed(type) {
 
   // Save to Airtable if logged in
   if (user) {
-    fetch('/api/airtable', {
+    fetch('/.netlify/functions/airtable-proxy', {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         action: 'create', table: 'Responses',
@@ -2641,7 +2641,7 @@ function saveResponse(visibility) {
 
   // Attempt Airtable save
   if (user) {
-    fetch('/api/airtable', {
+    fetch('/.netlify/functions/airtable-proxy', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ action:'create', table:'Responses', fields:{
         'response_id': 'resp_'+Date.now(), 'user_id': user.user_id||'',
@@ -2784,7 +2784,7 @@ async function createAcct() {
     localStorage.setItem('cc_user', JSON.stringify(ccUser));
 
     // Save to Airtable Users table (non-blocking)
-    fetch('/api/airtable', {
+    fetch('/.netlify/functions/airtable-proxy', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -3019,7 +3019,7 @@ async function openQuiz(recordId) {
 
   if (!cached || !cached.qj || cached.qj === '') {
     try {
-      var res = await fetch('/api/airtable', {method:'POST',
+      var res = await fetch('/.netlify/functions/airtable-proxy', {method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({action:'get', table:'Gather Quizzes', recordId: recordId})});
       var data = await res.json();
@@ -3478,7 +3478,7 @@ async function loadQuizSection(){
   ];
 
   try {
-    var res=await fetch('/api/airtable',{method:'POST',
+    var res=await fetch('/.netlify/functions/airtable-proxy',{method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({action:'list',table:'Gather Quizzes',maxRecords:150})});
     if(!res.ok)return;
