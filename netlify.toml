@@ -1,5 +1,5 @@
 [build]
-  functions = "netlify/Functions"
+  functions = "netlify/functions"
 
 [[redirects]]
   from = "/api/airtable"
