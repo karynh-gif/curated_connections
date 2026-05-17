@@ -686,8 +686,7 @@ var CARDS=[
 ];
 
 // ─── GLOBALS ─────────────────────────────────────────
-var PROXY='/.netlify/functions/airtable-proxy';
-var TABLE='RBD Sessions';
+var PROXY='/.netlify/functions/game-session';
 var myPlayerId=null;
 var myName=null;
 var currentRoomCode=null;
@@ -715,15 +714,21 @@ function genCode(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';var r='';for(var i=0
 function getMyId(){var id=localStorage.getItem('rbd_pid');if(!id){id=genId();localStorage.setItem('rbd_pid',id);}return id;}
 
 // ─── AIRTABLE PROXY ──────────────────────────────────
-async function atProxy(body){
-  var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+
+async function atCreate(fields){
+  var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'create',fields:fields})});
   if(!r.ok)throw new Error('Proxy '+r.status);
   return r.json();
 }
-async function atCreate(fields){return atProxy({action:'create',table:TABLE,fields:fields});}
-async function atUpdate(recId,fields){return atProxy({action:'update',table:TABLE,recordId:recId,fields:fields});}
+async function atUpdate(recId,fields){
+  var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'update',recordId:recId,fields:fields})});
+  if(!r.ok)throw new Error('Proxy '+r.status);
+  return r.json();
+}
 async function atFind(code){
-  var d=await atProxy({action:'list',table:TABLE,filterFormula:'{Room Code}="'+code+'"',maxRecords:1});
+  var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'find',filterByFormula:'{Room Code}="'+code+'"'})});
+  if(!r.ok)throw new Error('Proxy '+r.status);
+  var d=await r.json();
   return d.records&&d.records[0]||null;
 }
 
