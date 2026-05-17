@@ -1,4 +1,4 @@
- // netlify/functions/airtable-proxy.js
+ // netlify/Functions/airtable-proxy.js
 // All Airtable reads/writes go through here.
 // AIRTABLE_API_KEY and AIRTABLE_BASE_ID live in Netlify env only.
 
