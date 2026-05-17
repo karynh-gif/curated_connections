@@ -757,7 +757,7 @@ async function createGame(){
     showLobby();
     startPolling();
   }catch(e){
-    document.getElementById('createErr').textContent='Could not create room. Check connection.';
+    document.getElementById('createErr').textContent='Error: '+e.message;
     document.getElementById('createBtn').disabled=false;
     document.getElementById('createBtn').textContent='Create Room →';
   }
