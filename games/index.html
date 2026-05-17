@@ -1,1220 +1,1475 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background:#080604">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Really Bad Day™ · Curated Connections</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#080604;--card:#131008;--surface:#1e1508;
-  --orange:#FF6600;--orange2:#FF8822;--oglow:rgba(255,102,0,.18);
-  --white:#FFFFFF;--silver:#C2C2C2;--silver-dim:#A8A8A8;
-  --red:#CC2200;--green:#1A7A44;--ink:#080604;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;font-family:"Barlow",sans-serif;background:var(--bg);color:var(--white);}
-body::before{content:"";position:fixed;inset:0;background:repeating-linear-gradient(-52deg,transparent 0px,transparent 34px,rgba(255,102,0,.024) 34px,rgba(255,102,0,.024) 36px);pointer-events:none;z-index:0;}
-.screen{position:fixed;inset:0;display:flex;flex-direction:column;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .28s;z-index:1;}
-.screen.active{opacity:1;pointer-events:all;}
-
-/* ── WELCOME ── */
-#scWelcome{background:radial-gradient(ellipse 75% 55% at 30% 25%,rgba(255,102,0,.28),transparent 60%),radial-gradient(ellipse 55% 45% at 80% 80%,rgba(180,30,0,.2),transparent 55%),var(--bg);align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;}
-.w-super{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.85rem,2.5vw,1.1rem);font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,102,0,.5);margin-bottom:.7rem;}
-.w-logo{font-family:"Black Ops One",display;font-size:clamp(3.5rem,16vw,7rem);line-height:.82;color:var(--orange);text-shadow:5px 5px 0 rgba(150,25,0,.55),10px 10px 0 rgba(0,0,0,.22);margin-bottom:.6rem;}
-.w-sub{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(.95rem,3.5vw,1.4rem);letter-spacing:.34em;text-transform:uppercase;color:var(--silver);margin-bottom:.5rem;}
-.w-tag{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(.95rem,3vw,1.2rem);color:rgba(255,255,255,.58);margin-bottom:2.8rem;line-height:1.55;}
-
-/* ── SETUP ── */
-#scSetup{background:var(--bg);}
-.s-hdr{background:linear-gradient(160deg,var(--card),var(--surface));padding:clamp(1.4rem,4vw,2rem) 1.5rem;text-align:center;border-bottom:2.5px solid rgba(255,102,0,.22);}
-.s-title{font-family:"Black Ops One",display;font-size:clamp(1.6rem,5vw,2.2rem);color:var(--orange);}
-.s-sub{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(.95rem,3vw,1.1rem);color:var(--silver-dim);margin-top:.3rem;}
-.s-body{padding:clamp(1.2rem,3.5vw,1.8rem) clamp(1.2rem,4vw,2rem) 2.5rem;}
-.s-lbl{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.8rem,2.5vw,.95rem);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:.9rem;}
-.player-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.1rem;}
-.player-row{display:flex;align-items:center;gap:.6rem;}
-.player-input{flex:1;background:rgba(255,255,255,.06);border:2px solid rgba(255,102,0,.22);border-radius:10px;padding:clamp(.7rem,2vw,.95rem) 1.1rem;color:var(--white);font-family:"Barlow",sans-serif;font-weight:600;font-size:clamp(1rem,3vw,1.15rem);outline:none;}
-.player-input::placeholder{color:rgba(255,255,255,.22);}
-.player-input:focus{border-color:rgba(255,102,0,.55);}
-.p-num{width:clamp(34px,5vw,42px);height:clamp(34px,5vw,42px);border-radius:50%;background:var(--orange);color:var(--ink);font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(.9rem,2.5vw,1.05rem);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.btn-add{background:transparent;border:2px dashed rgba(255,102,0,.3);border-radius:10px;padding:.9rem;color:rgba(255,102,0,.55);font-family:"Barlow",sans-serif;font-weight:700;font-size:clamp(.9rem,2.5vw,1.05rem);cursor:pointer;width:100%;}
-.btn-rem{background:rgba(180,40,0,.25);border:none;color:rgba(200,60,0,.8);width:clamp(30px,4.5vw,38px);height:clamp(30px,4.5vw,38px);border-radius:50%;font-size:1.1rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.rank-opts{display:flex;gap:.6rem;margin-bottom:1.6rem;}
-.r-opt{flex:1;padding:clamp(.65rem,2vw,.9rem);border-radius:10px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:clamp(1.1rem,3.5vw,1.3rem);text-align:center;cursor:pointer;border:2.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.45);transition:all .18s;}
-.r-opt.sel{border-color:var(--orange);background:rgba(255,102,0,.15);color:var(--orange);}
-
-/* ── BUTTONS ── */
-.btn-p{background:linear-gradient(135deg,var(--orange),var(--orange2));color:var(--ink);font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(1.05rem,3.5vw,1.25rem);padding:clamp(.9rem,2.5vw,1.1rem) 2rem;border:none;border-radius:50px;cursor:pointer;box-shadow:0 4px 20px rgba(255,102,0,.35);width:100%;letter-spacing:.04em;}
-.btn-p:disabled{opacity:.35;pointer-events:none;}
-.btn-s{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.14);border-radius:50px;color:rgba(255,255,255,.6);font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:clamp(.95rem,3vw,1.1rem);padding:.9rem 1.5rem;cursor:pointer;width:100%;}
-
-/* ── GAME HEADER ── */
-.g-hdr{background:linear-gradient(135deg,var(--card),var(--surface));padding:clamp(.9rem,2.5vw,1.2rem) 1.25rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2.5px solid rgba(255,102,0,.2);flex-shrink:0;}
-.gh-brand{font-family:"Black Ops One",display;font-size:clamp(1rem,3vw,1.2rem);color:var(--orange);}
-.gh-ctr{text-align:center;}
-.gh-round{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.7rem,2vw,.88rem);font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.65);}
-.gh-player{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.95rem,2.8vw,1.1rem);font-weight:800;color:var(--white);}
-.gh-scores{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.72rem,2vw,.88rem);font-weight:700;color:var(--orange);cursor:pointer;}
-
-/* ── RANKING SCREEN ── */
-#scCard,#scPredict{background:var(--bg);padding-bottom:2rem;}
-.c-hero{padding:clamp(1rem,3vw,1.5rem) 1.5rem;text-align:center;border-bottom:2px solid rgba(255,102,0,.15);}
-.c-deck-label{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.75rem,2vw,.9rem);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,102,0,.55);margin-bottom:.35rem;}
-.c-deck-name{font-family:"Black Ops One",display;font-size:clamp(1.3rem,4.5vw,1.8rem);color:var(--orange);}
-.c-badge{background:rgba(30,120,255,.18);border:2px solid rgba(50,140,255,.6);border-radius:50px;display:inline-block;padding:.38rem 1.2rem;margin-top:.5rem;font-family:"Barlow Condensed",sans-serif;font-size:clamp(.88rem,2.5vw,1.05rem);font-weight:800;color:#4DAAFF;box-shadow:0 0 12px rgba(50,140,255,.25);}
-.c-instr{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(1rem,3vw,1.15rem);color:rgba(255,255,255,.62);margin-top:.35rem;}
-.sc-wrap{padding:clamp(.8rem,2.5vw,1.1rem) 1.25rem 0;}
-.sc-lbl{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.85rem,2.5vw,1rem);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:.7rem;text-align:center;}
-.sc-item{background:var(--surface);border:2px solid rgba(255,255,255,.07);border-radius:14px;padding:clamp(.9rem,2.5vw,1.15rem) 1rem;margin-bottom:.55rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:all .18s;position:relative;user-select:none;}
-.sc-item.ranked{border-color:var(--orange);background:rgba(255,102,0,.1);}
-.sc-item.r1{border-color:var(--green);background:rgba(26,122,68,.12);}
-.sc-item.rlast{border-color:var(--red);background:rgba(204,34,0,.12);}
-.sc-letter{width:clamp(34px,5vw,42px);height:clamp(34px,5vw,42px);border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(.95rem,2.8vw,1.1rem);color:rgba(255,255,255,.5);flex-shrink:0;transition:all .18s;}
-.sc-item.ranked .sc-letter{background:var(--orange);color:var(--ink);}
-.sc-item.r1 .sc-letter{background:var(--green);color:white;}
-.sc-item.rlast .sc-letter{background:var(--red);color:white;}
-.sc-badge{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);border-radius:50px;padding:.15rem .6rem;font-family:"Barlow Condensed",sans-serif;font-size:clamp(.72rem,2vw,.85rem);font-weight:900;color:var(--orange);}
-.sc-text{font-family:"Barlow",sans-serif;font-size:clamp(1.08rem,3.5vw,1.25rem);font-weight:600;color:rgba(255,255,255,.9);line-height:1.5;flex:1;}
-.sc-tag{font-family:"Barlow Condensed",sans-serif;font-size:.78rem;font-weight:700;color:rgba(255,102,0,.65);white-space:nowrap;display:inline-block;margin-right:.15rem;}
-.sc-tag-sm{font-family:"Barlow Condensed",sans-serif;font-size:.72rem;font-weight:700;color:rgba(255,102,0,.5);white-space:nowrap;margin-right:.25rem;}
-.rank-leg{display:flex;justify-content:space-between;padding:.5rem 1.25rem;margin-top:.25rem;}
-.rl-i{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.82rem,2.5vw,.95rem);font-weight:700;display:flex;align-items:center;gap:.35rem;color:rgba(255,255,255,.65);}
+:root{--bg:#080604;--card:#131008;--surface:#1e1508;--orange:#FF6600;--orange2:#FF8822;--white:#fff;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color:var(--white);min-height:100vh;overscroll-behavior:none;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+@keyframes wheelPulse{0%,100%{box-shadow:0 0 30px rgba(255,102,0,.3);}50%{box-shadow:0 0 60px rgba(255,102,0,.7);}}
+.screen{display:none;min-height:100vh;flex-direction:column;}.screen.active{display:flex;}
+.hdr{background:repeating-linear-gradient(45deg,var(--orange) 0,var(--orange) 10px,#1a0800 10px,#1a0800 20px);padding:1rem 1.25rem .9rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.hdr-logo{font-family:"Black Ops One",display;font-size:1.05rem;color:var(--white);}
+.hdr-meta{font-family:"Barlow Condensed",sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.75);text-align:center;flex:1;padding:0 .5rem;}
+.hdr-code{font-family:"Barlow Condensed",sans-serif;font-size:.85rem;font-weight:900;color:var(--orange);letter-spacing:.1em;}
+.btn-p{background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:50px;padding:.88rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.15rem;font-weight:900;letter-spacing:.06em;color:var(--white);cursor:pointer;width:100%;box-shadow:0 4px 24px rgba(255,102,0,.3);}
+.btn-p:disabled{opacity:.4;cursor:not-allowed;}
+.btn-s{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:50px;padding:.82rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.55);cursor:pointer;width:100%;}
+.btn-g{background:rgba(34,197,94,.12);border:1.5px solid rgba(34,197,94,.3);border-radius:50px;padding:.82rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.05rem;font-weight:700;color:var(--green);cursor:pointer;width:100%;}
+/* HOME */
+.home-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;gap:1.1rem;}
+.home-super{font-family:"Barlow Condensed",sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,102,0,.65);}
+.home-logo{font-family:"Black Ops One",display;font-size:clamp(3rem,13vw,4.5rem);color:var(--white);line-height:1;text-shadow:0 0 50px rgba(255,102,0,.35);}
+.home-sub{font-family:"Barlow Condensed",sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38);}
+.home-btns{display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:340px;}
+/* FORMS */
+.form-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;gap:1.2rem;max-width:400px;margin:0 auto;width:100%;}
+.form-title{font-family:"Black Ops One",display;font-size:1.6rem;color:var(--white);text-align:center;}
+.form-sub{font-family:"Barlow Condensed",sans-serif;font-size:1rem;color:rgba(255,255,255,.45);text-align:center;line-height:1.5;}
+.field-label{font-family:"Barlow Condensed",sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);align-self:flex-start;margin-bottom:-.5rem;}
+.field-input{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:12px;padding:.75rem 1rem;font-family:"Barlow",sans-serif;font-size:1.1rem;color:var(--white);outline:none;text-align:center;}
+.field-input:focus{border-color:var(--orange);}
+.field-input.code{font-family:"Barlow Condensed",sans-serif;font-size:1.8rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;}
+.err-msg{font-family:"Barlow Condensed",sans-serif;font-size:.9rem;color:var(--red);text-align:center;}
+/* LOBBY */
+.lobby-body{flex:1;padding:1.25rem;display:flex;flex-direction:column;gap:1.1rem;overflow-y:auto;}
+.lobby-code-box{background:rgba(255,102,0,.08);border:2px solid rgba(255,102,0,.25);border-radius:16px;padding:1.2rem;text-align:center;}
+.lobby-code-label{font-family:"Barlow Condensed",sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,102,0,.65);margin-bottom:.4rem;}
+.lobby-code{font-family:"Black Ops One",display;font-size:2.8rem;color:var(--orange);letter-spacing:.15em;}
+.lobby-hint{font-family:"Barlow",sans-serif;font-size:.85rem;color:rgba(255,255,255,.35);margin-top:.3rem;}
+.s-label{font-family:"Barlow Condensed",sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:.4rem;}
+.player-chip{display:flex;align-items:center;gap:.65rem;background:var(--surface);border-radius:12px;padding:.7rem .9rem;animation:fadeIn .2s ease both;}
+.p-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.p-chip-name{font-family:"Barlow Condensed",sans-serif;font-size:1.05rem;font-weight:800;color:rgba(255,255,255,.85);flex:1;}
+.p-chip-badge{font-family:"Barlow Condensed",sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.rank-opts{display:flex;gap:.6rem;}
+.rank-btn{flex:1;padding:.75rem;border-radius:10px;border:2px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);font-family:"Barlow Condensed",sans-serif;font-size:1.3rem;font-weight:900;color:rgba(255,255,255,.45);cursor:pointer;}
+.rank-btn.sel{border-color:var(--orange);background:rgba(255,102,0,.1);color:var(--orange);}
+.pad{padding:1rem 1.25rem 2rem;display:flex;flex-direction:column;gap:.5rem;}
+/* WAITING */
+.wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;gap:1.5rem;}
+.wait-spinner{width:56px;height:56px;border:3px solid rgba(255,102,0,.2);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
+.wait-title{font-family:"Black Ops One",display;font-size:1.6rem;color:var(--white);}
+.wait-sub{font-family:"Barlow Condensed",sans-serif;font-size:1rem;color:rgba(255,255,255,.45);line-height:1.55;max-width:280px;}
+.wait-players{display:flex;flex-direction:column;gap:.4rem;width:100%;max-width:300px;}
+/* CARD */
+.card-body{flex:1;padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:.9rem;overflow-y:auto;}
+.c-header{background:linear-gradient(135deg,var(--card),#1a1008);border-radius:14px;padding:1rem 1.1rem;border:1px solid rgba(255,102,0,.14);}
+.c-deck{font-family:"Barlow Condensed",sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,102,0,.65);margin-bottom:.3rem;}
+.c-badge{display:inline-block;background:rgba(255,102,0,.13);border-radius:50px;padding:.22rem .72rem;font-family:"Barlow Condensed",sans-serif;font-size:.78rem;font-weight:700;color:var(--orange);margin-bottom:.4rem;}
+.c-instr{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:1rem;color:rgba(255,255,255,.6);}
+.rank-legend{display:flex;justify-content:space-between;padding:0 .2rem;}
+.rl-i{display:flex;align-items:center;gap:.35rem;font-family:"Barlow Condensed",sans-serif;font-size:.85rem;font-weight:700;color:rgba(255,255,255,.55);}
 .rl-dot{width:9px;height:9px;border-radius:50%;}
-
-/* ── PRIVATE / PASS ── */
-#scPrivate{background:var(--bg);align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;}
-.prv-icon{font-size:clamp(3rem,10vw,5rem);margin-bottom:1rem;}
-.prv-title{font-family:"Black Ops One",display;font-size:clamp(1.8rem,6vw,2.5rem);color:var(--orange);margin-bottom:.5rem;}
-.prv-sub{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(1rem,3vw,1.2rem);color:rgba(255,255,255,.62);margin-bottom:2.2rem;line-height:1.6;}
-.prv-name{color:var(--orange);font-weight:800;}
-
-/* ── PREDICT HEADER ── */
-.pred-hdr{background:linear-gradient(135deg,#0a1a0e,#0e2a14);padding:clamp(1rem,3vw,1.4rem) 1.25rem;text-align:center;border-bottom:2px solid rgba(26,122,68,.25);}
-.pred-badge{background:rgba(26,122,68,.2);border:1.5px solid rgba(26,122,68,.4);border-radius:50px;display:inline-block;padding:.4rem 1.2rem;font-family:"Barlow Condensed",sans-serif;font-size:clamp(.82rem,2.5vw,1rem);font-weight:800;color:#5DBA8A;margin-bottom:.45rem;}
-.pred-title{font-family:"Black Ops One",display;font-size:clamp(1.1rem,3.5vw,1.45rem);color:var(--white);}
-.pred-sub{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(.85rem,2.5vw,1rem);color:rgba(255,255,255,.65);margin-top:.2rem;}
-.pred-prog{display:flex;gap:.45rem;justify-content:center;padding:.65rem;}
-.pp-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.15);}
-.pp-dot.done{background:#5DBA8A;}
-.pp-dot.cur{background:var(--orange);}
-
-/* ── WHEEL ── */
-#scWheel{background:var(--bg);align-items:center;justify-content:center;text-align:center;padding:2.5rem 1.5rem;}
-.wh-title{font-family:"Black Ops One",display;font-size:clamp(1.6rem,5vw,2.2rem);color:var(--orange);margin-bottom:.4rem;}
-.wh-sub{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(.95rem,3vw,1.15rem);color:rgba(255,255,255,.58);margin-bottom:2rem;}
-.wh-wrap{position:relative;width:min(280px,78vw);height:min(280px,78vw);margin:0 auto 1.5rem;}
-.wh-needle{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:30px solid var(--orange);filter:drop-shadow(0 2px 8px rgba(255,102,0,.6));z-index:3;}
-.wh-svg{width:100%;height:100%;transform-origin:center;border-radius:50%;overflow:visible;}
-.wh-countdown{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.82rem,2.5vw,.95rem);color:rgba(255,102,0,.5);margin-bottom:.8rem;min-height:1.4rem;}
-.wh-result{font-family:"Black Ops One",display;font-size:clamp(1.4rem,4.5vw,1.9rem);color:var(--orange);min-height:2.5rem;margin-bottom:.35rem;}
-.wh-desc{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.9rem,2.8vw,1.05rem);color:rgba(255,255,255,.52);margin-bottom:1.5rem;min-height:1.5rem;}
-/* spin handled by Web Animations API */
-
-/* ── REVEAL ── */
-#scReveal{background:var(--bg);padding-bottom:2rem;}
-.rev-hdr{background:linear-gradient(135deg,#1a0802,#2e0e04);padding:clamp(1.2rem,3.5vw,1.7rem) 1.5rem;text-align:center;border-bottom:2px solid rgba(255,102,0,.25);}
-.rev-title{font-family:"Black Ops One",display;font-size:clamp(1.4rem,4.5vw,1.9rem);color:var(--orange);margin-bottom:.3rem;}
-.rev-sub{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(.85rem,2.5vw,1rem);color:rgba(255,255,255,.62);}
-.rev-body{padding:clamp(.9rem,2.5vw,1.2rem) 1.25rem;}
-.rev-lbl{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.72rem,2vw,.85rem);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:.6rem;margin-top:.9rem;}
-.rev-row{display:flex;align-items:center;gap:.65rem;background:var(--surface);border-radius:12px;padding:clamp(.65rem,2vw,.85rem) .9rem;margin-bottom:.4rem;}
-.rr-pos{min-width:clamp(44px,7vw,56px);height:clamp(34px,5vw,42px);border-radius:50px;display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(.82rem,2.2vw,.98rem);flex-shrink:0;padding:0 .4rem;white-space:nowrap;}
-.rr-text{font-family:"Barlow",sans-serif;font-size:clamp(1rem,3vw,1.12rem);font-weight:600;color:rgba(255,255,255,.9);flex:1;line-height:1.4;}
-.rr-pts{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.78rem,2vw,.92rem);font-weight:800;color:rgba(255,255,255,.3);flex-shrink:0;}
-.ps-row{display:flex;align-items:center;gap:.65rem;background:var(--surface);border-radius:12px;padding:clamp(.6rem,2vw,.8rem) .9rem;margin-bottom:.4rem;}
-.ps-name{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.95rem,2.8vw,1.1rem);font-weight:800;color:rgba(255,255,255,.8);flex:1;}
-.ps-matches{font-family:"Barlow",sans-serif;font-size:clamp(.75rem,2vw,.88rem);color:rgba(255,255,255,.4);}
-.ps-pts{font-family:"Black Ops One",display;font-size:clamp(.95rem,3vw,1.15rem);color:var(--orange);flex-shrink:0;}
-.wh-result-box{background:rgba(255,102,0,.08);border:1.5px solid rgba(255,102,0,.25);border-radius:14px;padding:.9rem 1.1rem;margin:.5rem 0;text-align:center;}
-.wrb-name{font-family:"Black Ops One",display;font-size:clamp(1.05rem,3.2vw,1.3rem);color:var(--orange);margin-bottom:.2rem;}
-.wrb-desc{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.82rem,2.5vw,.98rem);color:rgba(255,255,255,.5);}
-.scores-bar{display:flex;flex-direction:column;gap:.45rem;padding:.75rem 1.25rem;}
+.rank-prog{font-family:"Barlow Condensed",sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);text-align:center;}
+.sc-item{display:flex;align-items:flex-start;gap:.65rem;background:var(--surface);border-radius:12px;padding:.85rem .9rem;border:1.5px solid transparent;cursor:pointer;transition:border-color .15s;animation:fadeIn .2s ease both;}
+.sc-item.ranked{border-color:rgba(255,102,0,.2);}
+.sc-num{min-width:32px;height:32px;border-radius:50px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:.9rem;color:rgba(255,255,255,.45);flex-shrink:0;transition:all .15s;padding:0 .3rem;white-space:nowrap;}
+.sc-num.placed{background:var(--orange);color:var(--white);}
+.sc-text{font-family:"Barlow",sans-serif;font-size:clamp(1.05rem,3.3vw,1.2rem);font-weight:600;color:rgba(255,255,255,.9);line-height:1.5;flex:1;}
+.sc-tag{font-family:"Barlow Condensed",sans-serif;font-size:.75rem;font-weight:700;color:rgba(255,102,0,.58);display:block;margin-bottom:.2rem;}
+/* WHEEL */
+.wheel-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;gap:1.5rem;text-align:center;}
+.wheel-ring{width:210px;height:210px;border-radius:50%;border:4px solid var(--orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;background:var(--card);box-shadow:0 0 40px rgba(255,102,0,.2);}
+.wheel-ring.spinning{animation:wheelPulse .4s ease infinite;}
+.wheel-emoji{font-size:3rem;line-height:1;}
+.wheel-name{font-family:"Black Ops One",display;font-size:1.1rem;color:var(--orange);}
+.wheel-desc{font-family:"Barlow",sans-serif;font-size:.95rem;color:rgba(255,255,255,.6);max-width:270px;line-height:1.5;}
+/* REVEAL */
+.reveal-body{flex:1;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:1rem;overflow-y:auto;}
+.reveal-title{font-family:"Black Ops One",display;font-size:1.6rem;color:var(--orange);text-align:center;padding:.5rem 0;}
+.rev-lbl{font-family:"Barlow Condensed",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,102,0,.6);}
+.rev-row{display:flex;align-items:center;gap:.65rem;background:var(--surface);border-radius:12px;padding:.75rem .9rem;animation:fadeIn .25s ease both;}
+.rr-pos{min-width:52px;height:38px;border-radius:50px;display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:.9rem;flex-shrink:0;padding:0 .4rem;}
+.rr-text{font-family:"Barlow",sans-serif;font-size:clamp(1rem,3vw,1.1rem);font-weight:600;color:rgba(255,255,255,.9);flex:1;line-height:1.4;}
+.rr-tag{font-family:"Barlow Condensed",sans-serif;font-size:.72rem;font-weight:700;color:rgba(255,102,0,.5);}
+.p-chips{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end;}
+.p-chip{width:26px;height:26px;border-radius:50%;border:2.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-size:.65rem;font-weight:900;}
+.scores-bar{display:flex;flex-direction:column;gap:.4rem;}
 .sc-chip{display:flex;align-items:center;gap:.65rem;background:var(--surface);border-radius:12px;padding:.65rem .9rem;}
-.sc-chip.sc-leader{background:rgba(255,102,0,.1);border:1.5px solid rgba(255,102,0,.3);}
-.sc-rank{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.78rem,2vw,.9rem);font-weight:900;color:rgba(255,255,255,.35);width:1.4rem;text-align:center;flex-shrink:0;}
+.sc-chip.leader{background:rgba(255,102,0,.1);border:1.5px solid rgba(255,102,0,.28);}
+.sc-rank{font-family:"Barlow Condensed",sans-serif;font-size:.85rem;font-weight:900;color:rgba(255,255,255,.3);width:1.8rem;text-align:center;flex-shrink:0;}
 .sc-rank.gold{color:#FFB300;}
 .sc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .sc-name{font-family:"Barlow Condensed",sans-serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:800;color:rgba(255,255,255,.85);flex:1;}
-.sc-pts-big{font-family:"Black Ops One",display;font-size:clamp(1.3rem,4.5vw,1.6rem);color:var(--orange);flex-shrink:0;}
-.sc-chip.sc-leader .sc-pts-big{color:#FFB300;}
-.convo-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:.85rem 1rem;margin-top:.35rem;}
-.convo-lbl{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.65rem,1.8vw,.75rem);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:.35rem;}
-.convo-text{font-family:"Barlow",sans-serif;font-size:clamp(.85rem,2.5vw,.98rem);font-weight:500;color:rgba(255,255,255,.45);line-height:1.55;font-style:italic;}
-.segue-box{background:linear-gradient(135deg,#0e1020,#1a1030);border:1.5px solid rgba(150,100,220,.25);border-radius:16px;padding:1.1rem;}
-.segue-lbl{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.68rem,2vw,.82rem);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(150,100,220,.7);margin-bottom:.5rem;}
-.segue-text{font-family:"Barlow",sans-serif;font-size:clamp(.95rem,3vw,1.1rem);font-weight:600;color:var(--white);line-height:1.55;}
-
-/* ── END ── */
-#scEnd{background:radial-gradient(ellipse at 50% 30%,rgba(255,102,0,.18),transparent 60%),var(--bg);align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;}
-.end-trophy{font-size:clamp(3rem,10vw,5rem);margin-bottom:.5rem;}
-.end-lbl{font-family:"Barlow Condensed",sans-serif;font-size:clamp(.82rem,2.5vw,1rem);font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,102,0,.55);margin-bottom:.3rem;}
-.end-winner{font-family:"Black Ops One",display;font-size:clamp(1.8rem,6.5vw,2.6rem);color:var(--orange);margin-bottom:.25rem;}
-.end-sub{font-family:"Barlow Condensed",sans-serif;font-style:italic;font-size:clamp(.95rem,3vw,1.15rem);color:rgba(255,255,255,.58);margin-bottom:2rem;}
-.final-scores{background:var(--surface);border-radius:16px;padding:1.25rem;margin-bottom:2rem;width:100%;max-width:340px;text-align:left;}
-.fs-row{display:flex;align-items:center;padding:.55rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
-.fs-row:last-child{border:none;}
-.fs-rank{width:clamp(26px,4vw,32px);height:clamp(26px,4vw,32px);border-radius:50%;background:var(--orange);color:var(--ink);font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(.8rem,2vw,.95rem);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:.7rem;}
-.fs-name{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:clamp(.95rem,3vw,1.1rem);flex:1;}
-.fs-pts{font-family:"Black Ops One",display;font-size:clamp(.95rem,3vw,1.1rem);color:var(--orange);}
-
-/* rules overlay */
-#rulesOverlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;display:none;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px);}
-.rules-card{background:#1a1008;border:1.5px solid rgba(255,102,0,.25);border-radius:20px;padding:1.75rem 1.5rem;max-width:400px;width:100%;max-height:88vh;overflow-y:auto;}
-.rules-title{font-family:"Black Ops One",display;font-size:clamp(1.3rem,4vw,1.6rem);color:var(--orange);margin-bottom:1rem;text-align:center;}
-.rules-step{display:flex;gap:.75rem;align-items:flex-start;margin-bottom:.9rem;}
-.rs-n{width:clamp(30px,4.5vw,36px);height:clamp(30px,4.5vw,36px);border-radius:50%;background:var(--orange);color:var(--ink);font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:clamp(.9rem,2.5vw,1.05rem);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.rs-t{font-family:"Barlow",sans-serif;font-size:clamp(.88rem,2.8vw,1rem);font-weight:600;color:rgba(255,255,255,.75);line-height:1.55;}
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-thumb{background:rgba(255,102,0,.25);border-radius:2px;}
-/* Player color chips on reveal */
-.rev-row-grid{display:flex;align-items:flex-start;gap:.6rem;flex-wrap:nowrap;}
-.p-chips{display:flex;flex-wrap:wrap;gap:.3rem;flex-shrink:0;justify-content:flex-end;min-width:0;}
-.p-chip{display:flex;align-items:center;gap:.18rem;border-radius:50px;padding:.18rem .45rem;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:clamp(.68rem,1.8vw,.82rem);white-space:nowrap;cursor:default;}
-.p-chip-init{opacity:.7;}
-.p-chip-pos{font-size:clamp(.7rem,2vw,.85rem);}
-/* Match pips in prediction results */
-.ps-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.match-pips{display:flex;gap:.25rem;align-items:center;flex:1;}
-.match-pip{width:clamp(14px,3vw,18px);height:clamp(14px,3vw,18px);border-radius:4px;}
+.sc-pts{font-family:"Black Ops One",display;font-size:clamp(1.3rem,4.5vw,1.6rem);color:var(--orange);}
+.sc-chip.leader .sc-pts{color:#FFB300;}
+.pred-row{display:flex;align-items:center;gap:.65rem;background:var(--surface);border-radius:12px;padding:.62rem .9rem;}
+.pred-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.pred-name{font-family:"Barlow Condensed",sans-serif;font-size:1rem;font-weight:700;flex:1;color:rgba(255,255,255,.75);}
+.pred-sqs{display:flex;gap:.25rem;flex-wrap:wrap;}
+.pred-sq{width:20px;height:20px;border-radius:4px;background:rgba(255,255,255,.1);}
+.pred-pts{font-family:"Black Ops One",display;font-size:1.1rem;color:var(--orange);}
+.convo-box{background:linear-gradient(135deg,#0e1020,#1a1030);border:1.5px solid rgba(140,90,220,.22);border-radius:16px;padding:1.1rem;}
+.convo-lbl{font-family:"Barlow Condensed",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(140,90,220,.65);margin-bottom:.5rem;}
+.convo-text{font-family:"Barlow",sans-serif;font-size:clamp(.95rem,3vw,1.08rem);font-weight:600;color:var(--white);line-height:1.55;}
+/* END */
+.end-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;gap:1.5rem;text-align:center;}
+.end-trophy{font-size:4rem;}
+.end-title{font-family:"Black Ops One",display;font-size:2rem;color:var(--orange);}
+.end-winner{font-family:"Barlow Condensed",sans-serif;font-size:1.15rem;color:rgba(255,255,255,.5);}
+.final-scores{width:100%;display:flex;flex-direction:column;gap:.45rem;}
 </style>
 </head>
 <body>
 
-<!-- WELCOME -->
-<div class="screen active" id="scWelcome">
-  <div class="w-super">Curated Connections presents</div>
-  <div class="w-logo">Really<br>Bad Day<sup style="font-size:.4em;vertical-align:super">™</sup></div>
-  <div class="w-sub">The Ranking Game</div>
-  <div class="w-tag">Six things to rank. One Judge.<br>Everyone tries to think like them.</div>
-  <div style="max-width:320px;width:100%;display:flex;flex-direction:column;gap:.7rem;">
-    <button class="btn-p" onclick="goTo('scSetup')">Let's Play →</button>
-    <button class="btn-s" onclick="document.getElementById('rulesOverlay').style.display='flex'">How to Play</button>
-  </div>
-  <div style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.14em;color:rgba(255,102,0,.28);text-transform:uppercase;margin-top:2rem;">A Curated Connections™ Game</div>
-</div>
-
-<!-- RULES -->
-<div id="rulesOverlay" onclick="this.style.display='none'">
-  <div class="rules-card" onclick="event.stopPropagation()">
-    <div class="rules-title">How to Play</div>
-    <div class="rules-step"><div class="rs-n">1</div><div class="rs-t">The <strong style="color:var(--orange)">Judge</strong> draws a card with scenarios and secretly ranks them — least bad first, worst last.</div></div>
-    <div class="rules-step"><div class="rs-n">2</div><div class="rs-t">Pass the phone. Every other player <strong style="color:var(--orange)">ranks all scenarios in the same order they think the Judge did.</strong> Try to think like them.</div></div>
-    <div class="rules-step"><div class="rs-n">3</div><div class="rs-t"><strong style="color:var(--orange)">Score by position.</strong> Get position 4 right = 4 pts. Get position 6 right = 6 pts. <strong>Judge always scores equal to the highest player that round.</strong></div></div>
-    <div class="rules-step"><div class="rs-n">🎡</div><div class="rs-t">The <strong style="color:var(--orange)">Wheel spins</strong> every round — Face Value, Double Top, Judge Jackpot, and more. Auto-spins in 5 seconds or tap first.</div></div>
-    <div class="rules-step"><div class="rs-n">↻</div><div class="rs-t">Decks <strong style="color:var(--orange)">rotate automatically</strong> — Really Bad Day → Survive This → Best Day Ever → Road Trip → Work Day → Family Reunion → That's My Life → Kid Logic.</div></div>
-    <button class="btn-p" style="margin-top:.8rem;" onclick="document.getElementById('rulesOverlay').style.display='none'">Got It →</button>
-  </div>
-</div>
-
-<!-- SETUP -->
-<div class="screen" id="scSetup">
-  <div class="s-hdr">
-    <div class="s-title">Who's Playing?</div>
-    <div class="s-sub">Add players · First player is first Judge</div>
-  </div>
-  <div class="s-body">
-    <div class="s-lbl">Players</div>
-    <div class="player-list" id="playerList"></div>
-    <button class="btn-add" id="addBtn" onclick="addPlayer()">+ Add Player</button>
-    <div style="height:1.5rem"></div>
-    <div class="s-lbl">How many to rank?</div>
-    <div class="rank-opts" id="rankOpts">
-      <div class="r-opt" onclick="setRank(4,this)">4</div>
-      <div class="r-opt sel" onclick="setRank(6,this)">6</div>
-      <div class="r-opt" onclick="setRank(8,this)">8</div>
+<!-- HOME -->
+<div id="scHome" class="screen active">
+  <div class="home-wrap">
+    <div class="home-super">Curated Connections™ presents</div>
+    <div class="home-logo">Really<br>Bad Day<sup style="font-size:.4em;vertical-align:super">™</sup></div>
+    <div class="home-sub">The Ranking Game</div>
+    <div class="home-btns">
+      <button class="btn-p" onclick="goTo('scCreate')">Host a Game →</button>
+      <button class="btn-g" onclick="goTo('scJoin')">Join a Game</button>
+      <button class="btn-s" onclick="startSolo()">Play Solo (Pass & Play)</button>
     </div>
+  </div>
+</div>
+
+<!-- CREATE -->
+<div id="scCreate" class="screen">
+  <div class="form-wrap">
+    <div class="form-title">Host a Game</div>
+    <div class="form-sub">Enter your name. You'll get a room code to share with friends.</div>
+    <div class="field-label">Your Name</div>
+    <input class="field-input" id="hostName" placeholder="Your name" maxlength="20" oninput="checkHostReady()">
+    <button class="btn-p" id="createBtn" onclick="createGame()" disabled>Create Room →</button>
+    <button class="btn-s" onclick="goTo('scHome')">← Back</button>
+    <div class="err-msg" id="createErr"></div>
+  </div>
+</div>
+
+<!-- JOIN -->
+<div id="scJoin" class="screen">
+  <div class="form-wrap">
+    <div class="form-title">Join a Game</div>
+    <div class="form-sub">Enter the room code from the host, then your name.</div>
+    <div class="field-label">Room Code</div>
+    <input class="field-input code" id="joinCode" placeholder="ABC123" maxlength="6" oninput="this.value=this.value.toUpperCase();checkJoinReady()">
+    <div class="field-label">Your Name</div>
+    <input class="field-input" id="joinName" placeholder="Your name" maxlength="20" oninput="checkJoinReady()">
+    <button class="btn-p" id="joinBtn" onclick="joinGame()" disabled>Join Room →</button>
+    <button class="btn-s" onclick="goTo('scHome')">← Back</button>
+    <div class="err-msg" id="joinErr"></div>
+  </div>
+</div>
+
+<!-- LOBBY -->
+<div id="scLobby" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta">Lobby</div>
+    <div class="hdr-code" id="lobbyCodeDisplay"></div>
+  </div>
+  <div class="lobby-body">
+    <div class="lobby-code-box">
+      <div class="lobby-code-label">Share this code</div>
+      <div class="lobby-code" id="lobbyCode">------</div>
+      <div class="lobby-hint">Friends go to this site and tap "Join a Game"</div>
+    </div>
+    <div>
+      <div class="s-label" id="playerCountLabel">Players (0)</div>
+      <div id="lobbyPlayers"></div>
+    </div>
+    <div id="rankSizeSection">
+      <div class="s-label">How Many to Rank?</div>
+      <div class="rank-opts">
+        <button class="rank-btn" onclick="setRankSize(this,4)">4</button>
+        <button class="rank-btn sel" onclick="setRankSize(this,6)">6</button>
+        <button class="rank-btn" onclick="setRankSize(this,8)">8</button>
+      </div>
+    </div>
+  </div>
+  <div class="pad">
     <button class="btn-p" id="startBtn" onclick="startGame()" disabled>Start Game →</button>
-    <div style="height:.8rem"></div>
-    <button class="btn-s" onclick="goTo('scWelcome')">← Back</button>
+    <div style="text-align:center;padding-top:.3rem;">
+      <button onclick="leaveGame()" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:600;color:rgba(255,255,255,.2);cursor:pointer;text-transform:uppercase;letter-spacing:.06em;">Leave Game</button>
+    </div>
   </div>
 </div>
 
-<!-- JUDGE RANKING -->
-<div class="screen" id="scCard">
-  <div class="g-hdr">
-    <div class="gh-brand">RBD™</div>
-    <div class="gh-ctr">
-      <div class="gh-round" id="ghRound">Round 1 of 6</div>
-      <div class="gh-player" id="ghPlayer">Judge</div>
+<!-- JUDGING -->
+<div id="scJudging" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta" id="judgeRound">Round 1</div>
+    <div class="hdr-code" id="judgeCode"></div>
+  </div>
+  <div class="card-body">
+    <div class="c-header">
+      <div class="c-deck" id="judgeDeck"></div>
+      <div class="c-badge">⚖️ YOU ARE THE JUDGE</div>
+      <div class="c-instr" id="judgeInstr">Rank from least bad to worst</div>
     </div>
-    <div class="gh-scores" id="ghScores" onclick="showScoresOverlay()">Scores ↓</div>
-  </div>
-  <div class="c-hero">
-    <div class="c-deck-label" id="cDeckLabel">Really Bad Day</div>
-    <div class="c-deck-name" id="cCat">Social Disasters</div>
-    <div class="c-badge" id="cBadge">Your turn, Name</div>
-    <div class="c-instr" id="cInstr">Tap to rank · Least bad first · Worst last</div>
-  </div>
-  <div class="sc-wrap">
-    <div class="rank-leg">
-      <div class="rl-i"><div class="rl-dot" style="background:var(--green)"></div><span id="legFirst">Least bad</span></div>
-      <div class="rl-i"><span id="legLast">Worst</span> <div class="rl-dot" style="background:var(--red)"></div></div>
+    <div class="rank-legend">
+      <div class="rl-i"><div class="rl-dot" style="background:var(--green)"></div>Least bad</div>
+      <div class="rl-i">Worst<div class="rl-dot" style="background:var(--red)"></div></div>
     </div>
-    <div class="sc-lbl" id="rankProg">Tap to rank them in order</div>
-    <div id="scenariosList"></div>
+    <div class="rank-prog" id="judgeProgTxt">Tap to rank them in order</div>
+    <div id="judgeList"></div>
   </div>
-  <div style="padding:1rem 1.25rem;display:flex;flex-direction:column;gap:.5rem;">
-    <button class="btn-p" id="lockBtn" onclick="lockInRanking()" disabled>Lock In My Ranking →</button>
-    <button class="btn-s" onclick="resetRanking()">Reset</button>
+  <div class="pad">
+    <button class="btn-p" id="judgeLockBtn" onclick="submitJudgeRanking()" disabled>Lock In My Ranking →</button>
+    <button class="btn-s" onclick="resetJudgeRanking()">Reset</button>
   </div>
 </div>
 
-<!-- PRIVATE PASS -->
-<div class="screen" id="scPrivate">
-  <div class="prv-icon">🙈</div>
-  <div class="prv-title">Don't Peek!</div>
-  <div class="prv-sub">
-    <span class="prv-name" id="prvName">Player</span> has locked in their ranking.<br>Pass the phone to<br><span class="prv-name" id="prvNext">the next player</span>.
+<!-- WAITING FOR JUDGE -->
+<div id="scWaitJudge" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta" id="waitJudgeRound">Round 1</div>
+    <div class="hdr-code" id="waitJudgeCode"></div>
   </div>
-  <div style="max-width:280px;width:100%;display:flex;flex-direction:column;gap:.6rem;">
-    <button class="btn-p" id="prvBtn" onclick="startPredictions()">Ready → Pass It</button>
+  <div class="wait-wrap">
+    <div class="wait-spinner"></div>
+    <div class="wait-title" id="waitJudgeTitle">Judge is ranking…</div>
+    <div class="wait-sub" id="waitJudgeSub">Sit tight — the reveal happens after everyone predicts.</div>
+    <div class="wait-players" id="waitJudgePlayers"></div>
   </div>
 </div>
 
-<!-- PREDICTOR RANKING -->
-<div class="screen" id="scPredict">
-  <div class="g-hdr">
-    <div class="gh-brand">RBD™</div>
-    <div class="gh-ctr">
-      <div class="gh-round">Predictions</div>
-      <div class="gh-player" id="predName">Predictor</div>
+<!-- PREDICTING -->
+<div id="scPredicting" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta" id="predRound">Round 1 · Predict</div>
+    <div class="hdr-code" id="predCode"></div>
+  </div>
+  <div class="card-body">
+    <div class="c-header">
+      <div class="c-deck" id="predDeck"></div>
+      <div class="c-badge" id="predBadge">🎯 YOUR PREDICTION</div>
+      <div class="c-instr" id="predInstr">How do you think the judge ranked them?</div>
     </div>
-    <div></div>
-  </div>
-  <div class="pred-hdr">
-    <div class="pred-badge" id="predAbout">Predicting for: Name</div>
-    <div class="pred-title">How did they rank these?</div>
-    <div class="pred-sub" id="predSub">Try to think like them</div>
-  </div>
-  <div style="padding:.5rem 1.25rem .15rem;display:flex;justify-content:center;">
-    <div class="pred-prog" id="predProg"></div>
-  </div>
-  <div class="sc-wrap">
-    <div class="rank-leg">
-      <div class="rl-i"><div class="rl-dot" style="background:var(--green)"></div><span id="plegFirst">Least bad</span></div>
-      <div class="rl-i"><span id="plegLast">Worst</span> <div class="rl-dot" style="background:var(--red)"></div></div>
+    <div class="rank-legend">
+      <div class="rl-i"><div class="rl-dot" style="background:var(--green)"></div>Least bad</div>
+      <div class="rl-i">Worst<div class="rl-dot" style="background:var(--red)"></div></div>
     </div>
-    <div class="sc-lbl" id="predRankProg">Tap in the order you think they chose</div>
-    <div id="predScenariosList"></div>
+    <div class="rank-prog" id="predProgTxt">Tap in the order you think they chose</div>
+    <div id="predList"></div>
   </div>
-  <div style="padding:1rem 1.25rem;display:flex;flex-direction:column;gap:.5rem;">
-    <button class="btn-p" id="submitPred" onclick="submitPrediction()" disabled>Lock In →</button>
+  <div class="pad">
+    <button class="btn-p" id="predLockBtn" onclick="submitPrediction()" disabled>Lock In Prediction →</button>
+    <button class="btn-s" onclick="resetPrediction()">Reset</button>
+  </div>
+</div>
+
+<!-- WAITING FOR PREDICTIONS -->
+<div id="scWaitPred" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta" id="waitPredRound">Round 1</div>
+    <div class="hdr-code" id="waitPredCode"></div>
+  </div>
+  <div class="wait-wrap">
+    <div class="wait-spinner"></div>
+    <div class="wait-title">Waiting for Everyone…</div>
+    <div class="wait-sub">Your prediction is locked. Waiting for the others to submit.</div>
+    <div class="wait-players" id="waitPredPlayers"></div>
   </div>
 </div>
 
 <!-- WHEEL -->
-<div class="screen" id="scWheel">
-  <div class="wh-title">Spin the Wheel!</div>
-  <div class="wh-sub">Changes scoring for this round</div>
-  <div class="wh-wrap">
-    <div class="wh-needle"></div>
-    <svg class="wh-svg" id="wheelSvg" viewBox="0 0 200 200"></svg>
+<div id="scWheel" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta" id="wheelRound">Round 1 · Wheel</div>
+    <div class="hdr-code" id="wheelCode"></div>
   </div>
-  <div class="wh-countdown" id="wCount">Tap to spin — auto-spins in <span id="wCt">5</span>s</div>
-  <button class="btn-p" id="spinBtn" onclick="doSpin()" style="max-width:260px;">🎰 SPIN!</button>
-  <div class="wh-result" id="wResult" style="margin-top:1.2rem;"></div>
-  <div class="wh-desc" id="wDesc"></div>
-  <button class="btn-s" id="wNext" onclick="showReveal()" style="display:none;max-width:260px;margin-top:.5rem;">See Results →</button>
+  <div class="wheel-wrap">
+    <div class="wheel-ring" id="wheelRing">
+      <div class="wheel-emoji" id="wEmoji">🎰</div>
+      <div class="wheel-name" id="wName">Spin It</div>
+    </div>
+    <div class="wheel-desc" id="wDesc">Spin the wheel to see what happens this round</div>
+    <button class="btn-p" id="spinBtn" onclick="spinWheel()" style="max-width:280px">Spin the Wheel →</button>
+    <button class="btn-s" id="wheelNextBtn" onclick="goToReveal()" style="max-width:280px;display:none">See the Reveal →</button>
+    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite">Host is spinning the wheel…</div>
+  </div>
 </div>
 
 <!-- REVEAL -->
-<div class="screen" id="scReveal">
-  <div class="g-hdr">
-    <div class="gh-brand">RBD™</div>
-    <div class="gh-ctr">
-      <div class="gh-round" id="revRound">Round 1</div>
-      <div class="gh-player">The Reveal</div>
-    </div>
-    <div></div>
+<div id="scReveal" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta" id="revRound">Round 1 · Reveal</div>
+    <div class="hdr-code" id="revCode"></div>
   </div>
-  <div class="rev-hdr">
-    <div class="rev-title">Here's How It Went</div>
-    <div class="rev-sub" id="revSub">Name's ranking</div>
+  <div class="reveal-body">
+    <div class="reveal-title">Here's How It Went</div>
+    <div>
+      <div class="rev-lbl" style="margin-bottom:.4rem">🏆 The Judge's Ranking</div>
+      <div id="revRanking"></div>
+    </div>
+    <div>
+      <div class="rev-lbl" style="margin-bottom:.4rem">🎯 Predictions &amp; Points</div>
+      <div id="revPredictions"></div>
+    </div>
+    <div>
+      <div class="rev-lbl" style="margin-bottom:.4rem">🎰 Wheel Result</div>
+      <div style="background:var(--surface);border-radius:12px;padding:.75rem .9rem;display:flex;align-items:center;gap:.75rem;">
+        <div style="font-size:1.6rem" id="revWheelEmoji">🎰</div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;" id="revWheelName"></div>
+          <div style="font-family:'Barlow',sans-serif;font-size:.88rem;color:rgba(255,255,255,.5);" id="revWheelDesc"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="rev-lbl" style="margin-bottom:.4rem">📊 Scoreboard</div>
+      <div class="scores-bar" id="revScores"></div>
+    </div>
+    <div class="convo-box">
+      <div class="convo-lbl">Keep the conversation going</div>
+      <div class="convo-text" id="revPrompt"></div>
+    </div>
   </div>
-  <div class="rev-body">
-    <div class="rev-lbl">🏆 The Full Ranking</div>
-    <div id="revRanking"></div>
-    <div class="rev-lbl">🎯 Predictions &amp; Points</div>
-    <div id="revPredictions"></div>
-    <div class="rev-lbl">🎡 Wheel Result</div>
-    <div class="wh-result-box">
-      <div class="wrb-name" id="revWheelName"></div>
-      <div class="wrb-desc" id="revWheelDesc"></div>
-    </div>
-    <div class="rev-lbl">📊 Scores</div>
-    <div class="scores-bar" id="scoresBar"></div>
-  </div>
-  <div style="padding:.75rem 1.25rem 2rem;display:flex;flex-direction:column;gap:.75rem;">
-    <div class="segue-box">
-      <div class="segue-lbl">Conversation Prompt</div>
-      <div class="segue-text" id="revPrompt"></div>
-    </div>
-    <button class="btn-p" id="nextBtn" onclick="nextRound()">Next Round →</button>
-    <div style="text-align:center;">
-      <button onclick="endGame()" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:600;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;">End Game</button>
-    </div>
+  <div class="pad">
+    <button class="btn-p" id="nextRoundBtn" onclick="nextRound()" style="display:none">Next Round →</button>
+    <button class="btn-s" id="endGameBtn" onclick="endGame()" style="display:none">End Game</button>
+    <div id="revWaitMsg" style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.35);animation:pulse 2s ease infinite">Waiting for host…</div>
   </div>
 </div>
 
 <!-- END -->
-<div class="screen" id="scEnd">
-  <div class="end-trophy">🏆</div>
-  <div class="end-lbl">Winner</div>
-  <div class="end-winner" id="winnerName">Name</div>
-  <div class="end-sub">Thanks for a terrible time.<br>In the best possible way.</div>
-  <div class="final-scores" id="finalScores"></div>
-  <div style="max-width:280px;width:100%;display:flex;flex-direction:column;gap:.6rem;">
-    <button class="btn-p" onclick="resetAll()">Play Again</button>
-    <button class="btn-s" onclick="goTo('scWelcome')">← Home</button>
+<div id="scEnd" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta">Game Over</div>
+    <div style="width:48px"></div>
+  </div>
+  <div class="end-wrap">
+    <div class="end-trophy">🏆</div>
+    <div class="end-title" id="endWinner">Winner!</div>
+    <div class="end-winner">Final Standings</div>
+    <div class="final-scores" id="endScores"></div>
+    <div style="display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:340px;">
+      <button class="btn-p" onclick="location.reload()">Play Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- SOLO SETUP -->
+<div id="scSoloSetup" class="screen">
+  <div class="hdr">
+    <div class="hdr-logo">RBD™</div>
+    <div class="hdr-meta">Pass &amp; Play Setup</div>
+    <div style="width:48px"></div>
+  </div>
+  <div class="lobby-body">
+    <div>
+      <div class="s-label">Players · First player is first Judge</div>
+      <div id="soloPlayerList"></div>
+      <button class="add-btn" id="soloAddBtn" onclick="addSoloPlayer()" style="width:100%;border:2px dashed rgba(255,102,0,.3);border-radius:10px;padding:.65rem;background:none;color:rgba(255,102,0,.55);font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;letter-spacing:.08em;margin-top:.5rem">+ Add Player</button>
+    </div>
+    <div>
+      <div class="s-label">How Many to Rank?</div>
+      <div class="rank-opts">
+        <button class="rank-btn" onclick="setSoloRank(this,4)">4</button>
+        <button class="rank-btn sel" onclick="setSoloRank(this,6)">6</button>
+        <button class="rank-btn" onclick="setSoloRank(this,8)">8</button>
+      </div>
+    </div>
+  </div>
+  <div class="pad">
+    <button class="btn-p" id="soloStartBtn" onclick="startSoloGame()" disabled>Start Game →</button>
+    <button class="btn-s" onclick="goTo('scHome')">← Back</button>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
-// REALLY BAD DAY™ — Complete Game Engine
-// 8 decks · Full ranking prediction · Wheel scoring · Judge = max player
-// ══════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// REALLY BAD DAY™ — Multiplayer + Pass & Play
+// Airtable: appfZxPopcR5cNra0 / RBD Sessions
+// Proxy: /.netlify/functions/airtable-proxy
+// ═══════════════════════════════════════════════════
 
-const CARDS = [
+var PLAYER_COLORS=['#ef4444','#3b82f6','#a855f7','#f59e0b','#10b981','#ec4899','#f97316','#06b6d4'];
+
+var WHEEL=[
+  {name:'Face Value',emoji:'⚖️',desc:'Standard scoring — every correct position counts.',apply:function(sc,j,preds,rs){return sc;}},
+  {name:'Double Top',emoji:'✌️',desc:'Correctly placing #1 earns double points.',apply:function(sc,j,preds,rs){
+    var s=Object.assign({},sc);
+    preds.forEach(function(p){if(p.name!==j&&p.rank&&p.rank[0]===judgeRanking[0])s[p.name]=(s[p.name]||0)+1;});
+    return s;}},
+  {name:'+1 to All',emoji:'🎁',desc:'Everyone gets a free bonus point this round.',apply:function(sc,j,preds,rs){
+    var s=Object.assign({},sc);
+    preds.forEach(function(p){if(p.name!==j)s[p.name]=(s[p.name]||0)+1;});
+    return s;}},
+  {name:'Judge Jackpot',emoji:'👑',desc:'Judge earns the highest predictor score as a bonus.',apply:function(sc,j,preds,rs){
+    var s=Object.assign({},sc);
+    var top=0;preds.forEach(function(p){if((p.earned||0)>top)top=p.earned||0;});
+    s[j]=(s[j]||0)+top;return s;}},
+  {name:'Last Slot Triple',emoji:'💀',desc:'Nailing the worst scenario earns triple points.',apply:function(sc,j,preds,rs){
+    var s=Object.assign({},sc);
+    preds.forEach(function(p){if(p.name!==j&&p.rank&&p.rank[rs-1]===judgeRanking[rs-1])s[p.name]=(s[p.name]||0)+(rs-1)*2;});
+    return s;}},
+  {name:'Steal a Point',emoji:'🦝',desc:'Lowest scorer steals a point from the leader.',apply:function(sc,j,preds,rs){
+    var s=Object.assign({},sc);
+    var names=preds.filter(function(p){return p.name!==j;}).map(function(p){return p.name;});
+    if(names.length<2)return s;
+    var lo=names[0],hi=names[0];
+    names.forEach(function(n){if((s[n]||0)<(s[lo]||0))lo=n;if((s[n]||0)>(s[hi]||0))hi=n;});
+    if(lo!==hi&&(s[hi]||0)>0){s[hi]--;s[lo]=(s[lo]||0)+1;}
+    return s;}}
+];
+
+var CARDS=[
   {theme:"Life Comes At You Fast",emoji:"⚡",prompt:"Which of these would be hardest to recover from — and what would you actually do?",s:[
-    {tag:"📱 Tech",t:"Your autocorrect changes something wildly inappropriate in a professional message — and you don't catch it until three people have replied."},
+    {tag:"📱 Tech",t:"Your autocorrect changes something wildly inappropriate in a professional message — and you don\'t catch it until three people have replied."},
     {tag:"💰 Money",t:"Your card declines at a first date at a nice restaurant. Your account has $4.38."},
     {tag:"👨‍👩‍👧 Family",t:"You accidentally reveal a surprise someone has been planning for three months — at the party."},
-    {tag:"💼 Work",t:"You send a passive-aggressive email about your boss — directly to your boss. The whole team is CC'd."},
-    {tag:"🚗 Road",t:"You stop for gas and drive off without one person in your group. You don't notice for 20 minutes."},
+    {tag:"💼 Work",t:"You send a passive-aggressive email about your boss — directly to your boss. The whole team is CC\'d."},
+    {tag:"🚗 Road",t:"You stop for gas and drive off without one person in your group. You don\'t notice for 20 minutes."},
     {tag:"😅 Social",t:"You wave enthusiastically at someone — and they were waving at the person behind you. You lock eyes with both."},
-    {tag:"🪞 Real Life",t:"You say you'll start Monday. You have been saying that for six consecutive Mondays."},
-    {tag:"🧸 Kids",t:"A child tells a stranger something extremely personal about your household at full volume in a grocery store."},
+    {tag:"🪞 Real Life",t:"You say you\'ll start Monday. You have been saying that for six consecutive Mondays."},
+    {tag:"🧸 Kids",t:"A child tells a stranger something extremely personal about your household at full volume in a grocery store."}
   ]},
   {theme:"Trust the Process",emoji:"🎯",prompt:"Which of these reveals the most about how you handle things going sideways?",s:[
-    {tag:"💼 Work",t:"You're on mute for an entire important presentation. You discover this when everyone claps and you look confused."},
+    {tag:"💼 Work",t:"You\'re on mute for an entire important presentation. You discover this when everyone claps and you look confused."},
     {tag:"💰 Money",t:"You confidently pick up the tab for the whole table and then realize you absolutely do not have enough."},
     {tag:"👨‍👩‍👧 Family",t:"You try to end a family argument by saying something that starts a significantly larger argument."},
     {tag:"🚗 Road",t:"The GPS sends you on a shortcut that is a one-lane dirt road that dead ends at a field."},
     {tag:"📱 Tech",t:"You pocket-dial your manager during a conversation where you are absolutely roasting your manager."},
     {tag:"😅 Social",t:"You laugh out loud at a funeral because someone whispered something — and you cannot stop."},
     {tag:"🧸 Kids",t:"A child decides to help with something while you are occupied and succeeds in the completely wrong direction."},
-    {tag:"🪞 Real Life",t:"You know something is a bad idea before you do it, you do it anyway, and it is the bad idea."},
+    {tag:"🪞 Real Life",t:"You know something is a bad idea before you do it, you do it anyway, and it is the bad idea."}
   ]},
   {theme:"The Moment You Realize",emoji:"😬",prompt:"Which realization would take you the longest to get over?",s:[
     {tag:"👨‍👩‍👧 Family",t:"You re-gift something a family member gave you — back to the same family member."},
-    {tag:"💼 Work",t:"You give a confident opinion about a project and find out you're talking to the person who built it."},
+    {tag:"💼 Work",t:"You give a confident opinion about a project and find out you\'re talking to the person who built it."},
     {tag:"📱 Tech",t:"You post a photo and realize 45 minutes and 12 likes in that the background is completely incriminating."},
     {tag:"😅 Social",t:"You spend 10 minutes talking to someone at a party before realizing you have no idea who they are."},
     {tag:"💰 Money",t:"You find out a close friend knows exactly what you make — after years of implying otherwise."},
     {tag:"🚗 Road",t:"You arrive at your destination and discover the event was last weekend, not this weekend."},
     {tag:"🪞 Real Life",t:"You are always running exactly 7 minutes late regardless of how early you actually left."},
-    {tag:"🧸 Kids",t:"A child explains your personal business to company with a level of detail that suggests they've been processing it."},
+    {tag:"🧸 Kids",t:"A child explains your personal business to company with a level of detail that suggests they\'ve been processing it."}
   ]},
   {theme:"Hard to Come Back From",emoji:"💀",prompt:"Be honest — which one would you be replaying for the next two weeks?",s:[
     {tag:"💼 Work",t:"You fall asleep in a video meeting and everyone can see you — including the sound effects."},
-    {tag:"😅 Social",t:"You call your boss 'Mom' in front of the whole team. There is a very long silence."},
+    {tag:"😅 Social",t:"You call your boss \'Mom\' in front of the whole team. There is a very long silence."},
     {tag:"💰 Money",t:"You bounce a check to your landlord and find out when they call you. Twice."},
     {tag:"👨‍👩‍👧 Family",t:"You leave a family gathering early, come back for something you forgot, and walk in on a conversation about you."},
     {tag:"📱 Tech",t:"You send a very personal text to your entire work group chat by mistake."},
-    {tag:"🏕️ Wild",t:"You confidently lead the group on a hike — and after two hours realize you've been walking in a circle back to the trailhead."},
-    {tag:"🧸 Kids",t:"A child announces they don't like something at the exact moment the person who made it walks in."},
-    {tag:"🪞 Real Life",t:"You rehearse a conversation in your head, it goes completely differently, and you replay both versions for days."},
+    {tag:"🏕️ Wild",t:"You confidently lead the group on a hike — and after two hours realize you\'ve been walking in a circle back to the trailhead."},
+    {tag:"🧸 Kids",t:"A child announces they don\'t like something at the exact moment the person who made it walks in."},
+    {tag:"🪞 Real Life",t:"You rehearse a conversation in your head, it goes completely differently, and you replay both versions for days."}
   ]},
   {theme:"No One Saw That Right?",emoji:"🙈",prompt:"Which one would make you want to move to a new city and start over?",s:[
     {tag:"😅 Social",t:"You walk confidently into a glass door in front of a crowd and bounce off it. You try to play it cool."},
-    {tag:"💼 Work",t:"You join the wrong meeting, contribute confidently for 10 minutes, and only then realize it's not for you."},
+    {tag:"💼 Work",t:"You join the wrong meeting, contribute confidently for 10 minutes, and only then realize it\'s not for you."},
     {tag:"💰 Money",t:"You go to pay at the register and your card, backup card, and phone all fail. Growing line behind you."},
     {tag:"👨‍👩‍👧 Family",t:"You ask someone when the baby is due. There is no baby."},
     {tag:"📱 Tech",t:"You video call someone instead of texting and your camera is already on before you realize."},
     {tag:"🚗 Road",t:"You get a flat tire an hour from anywhere, no cell service, and the spare is also flat."},
     {tag:"🧸 Kids",t:"A child corrects you in front of other adults — and they are correct."},
-    {tag:"🪞 Real Life",t:"You confidently sing along to a song and realize mid-verse you've had the wrong lyrics for 20 years."},
+    {tag:"🪞 Real Life",t:"You confidently sing along to a song and realize mid-verse you\'ve had the wrong lyrics for 20 years."}
   ]},
   {theme:"Nature Had Other Plans",emoji:"🐍",prompt:"Which of these encounters would make you rethink your whole relationship with the outdoors?",s:[
-    {tag:"🏕️ Wild",t:"You volunteer to navigate for the whole group without a signal — and lead everyone somewhere completely wrong with total confidence."},
-    {tag:"🏕️ Wild",t:"You insist the weather app says it's fine to drive — and then it is extremely not fine and everyone is looking at you."},
-    {tag:"🐍 Wild",t:"You reach into something — a box, a bush, under the deck — and your hand touches something that moves. You don't know what it is. It moves again."},
-    {tag:"⬆️ Heights",t:"You are on a ladder that is taller than you thought. You are now stuck. Going down is not obviously possible. Someone is watching. You cannot hide."},
+    {tag:"🐍 Wild",t:"You reach into something — a box, a bush, under the deck — and your hand touches something that moves. You don\'t know what it is. It moves again."},
     {tag:"🐝 Swarm",t:"You accidentally disturb a wasp or bee nest. Not one or two. The whole thing. You are running in a direction you have not chosen consciously."},
-    {tag:"😅 Social",t:"You confidently recommend a restaurant to a group — and it's been closed for two years."},
-    {tag:"🪞 Real Life",t:"You are the last person to know something that everyone around you has known for a while."},
-    {tag:"👨‍👩‍👧 Family",t:"A family group chat conversation comes up in person and everyone has read it, including the parts about them."},
-  ]},
-  {theme:"Heights, Water & Other Bad Ideas",emoji:"😰",prompt:"Which of these would make your body refuse to cooperate — even knowing you're safe?",s:[
-    {tag:"🌊 Water",t:"You get caught in a current — river, ocean, doesn't matter — and for a real moment you are not moving toward shore. You are moving away from it."},
-    {tag:"⬆️ Heights",t:"A glass floor, glass bridge, or glass elevator. You know it's safe. Your body does not care what you know. Your legs have made a separate decision."},
-    {tag:"✈️ Air",t:"Turbulence. Real turbulence. The kind where things fall and the flight attendants sit down and the pilot says nothing for a while and then says it calmly."},
-    {tag:"🌊 Water",t:"You're in open water — ocean, lake, doesn't matter — and you look down and cannot see the bottom. Your brain has fully registered that nothing is under you."},
-    {tag:"⬆️ Heights",t:"You're on a roof, a balcony, a cliff edge — somewhere that felt manageable from below. You are now there. It is not manageable. You need to get down and you're not sure how."},
-    {tag:"🚇 City",t:"You get on the wrong subway train late at night, realize it after two stops, and the car you're in has one other person in it who has been watching you since you got on."},
-    {tag:"💼 Work",t:"You've been doing something confidently and incorrectly for two years. Someone finally tells you."},
-    {tag:"😅 Social",t:"You overshare something personal at a work event and spend the rest of the evening regretting it."},
-  ]},
-  {theme:"City at Night",emoji:"🌆",prompt:"Which of these situations would make you question every decision that led you to that moment?",s:[
-    {tag:"🏙️ City",t:"You take what you think is a shortcut through an unfamiliar neighborhood at night. The street dead ends. You have to go back the way you came. Something feels different on the way back."},
-    {tag:"🅿️ City",t:"You're in a parking garage alone at night. The elevator doesn't come. You take the stairs. The lights on two of the four floors are out. You hear footsteps that stop when you stop."},
-    {tag:"🚇 City",t:"You fall asleep on the subway. You wake up and there's nobody else in the car. You don't recognize the station. The doors close before you can get off."},
-    {tag:"⛽ Rural",t:"You stop at a rural gas station. The attendant is helpful, normal, friendly. You get back in the car and realize they told you your first name at some point in the conversation. You never introduced yourself."},
     {tag:"🕷️ Bugs",t:"You find a spider in your car while driving on the highway. Not a small one. You see it move from the corner of your eye. You cannot stop."},
-    {tag:"😅 Social",t:"You trip going up the stairs in front of everyone and the noise removes any chance of playing it off."},
-    {tag:"🪞 Real Life",t:"You give advice that was not requested about something extremely personal to someone you barely know."},
-    {tag:"💰 Money",t:"You accidentally send $200 to the wrong person and they spend it immediately."},
-  ]},
-  {theme:"Middle of Nowhere",emoji:"🌑",prompt:"Which of these rural situations would have you reconsidering the choices that brought you there?",s:[
-    {tag:"🏠 Rural",t:"You're staying at a house in the country. You hear something in the walls. Not mice. Rhythmic. Like knocking. It moves room to room and then stops. You don't mention it to anyone until morning."},
-    {tag:"🌲 Rural",t:"You go for a walk in the woods behind a rental property. You find something that shouldn't be there — an arrangement of objects, positioned deliberately, recently — and you walk back quickly without touching it."},
-    {tag:"🏠 Rural",t:"You knock on the door of a rural house to ask for directions. Someone answers. They're very normal, very helpful. Then they say something that makes you realize they already knew which way you came from."},
-    {tag:"🚗 Road",t:"You lock the keys in the car at a rest stop two states from home."},
-    {tag:"🪞 Real Life",t:"You underestimate how long something will take — for the 40th time — despite all available evidence."},
-    {tag:"👨‍👩‍👧 Family",t:"Someone announces a major life decision at Thanksgiving dinner with no warning — and it affects everyone."},
-    {tag:"😅 Social",t:"You cancel plans because you're tired — and get photographed at something else that same night."},
-    {tag:"🧸 Kids",t:"A child repeats something you said in private — word for word — at the worst possible time."},
-  ]},
-  {theme:"Not My Job But Now It Is",emoji:"🚨",prompt:"Which of these situations would make you realize you are completely unprepared for real life?",s:[
-    {tag:"🏠 Home",t:"Something breaks in your house that you've been meaning to fix for six months — right before guests arrive."},
-    {tag:"🏠 Home",t:"You plan an outdoor event with total confidence — and the weather is the opposite of everything you promised everyone."},
-    {tag:"🏥 Crisis",t:"Someone near you collapses and people immediately look at you like you're going to know what to do. You do not know what to do. There is a crowd forming."},
-    {tag:"🧸 Kids",t:"A child shares a family opinion in public that was a family opinion for a very specific reason."},
-    {tag:"🚗 Road",t:"Your Airbnb host is there when you arrive and keeps showing up throughout the entire stay."},
-    {tag:"💼 Work",t:"You make a joke that gets complete silence — then someone explains why it landed wrong."},
-    {tag:"😅 Social",t:"You make someone laugh harder than they have in a long time — and you absolutely meant to do it."},
-    {tag:"🪞 Real Life",t:"You wait until the last possible moment for something that would have been much easier three weeks ago."},
-  ]},
-  {theme:"Way Out of My Comfort Zone",emoji:"😳",prompt:"Which of these would have you completely faking it — and which one might honestly break you?",s:[
-    {tag:"💼 Work",t:"You call in sick and run into your manager at a restaurant you described as a family emergency."},
-    {tag:"🌍 Travel",t:"You are the designated translator in a foreign country for your group. Your language skills are significantly worse than you led everyone to believe. Things are being agreed to."},
-    {tag:"🍳 Kitchen",t:"You are cooking for 30 people at an event. You said you could do it. The stove has more settings than you've ever seen. People arrive in two hours. You've made a decision you cannot walk back."},
-    {tag:"🎤 Stage",t:"You are introduced as the keynote speaker at an event. You were told it was a small informal chat. There is a microphone, a stage, a screen behind you, and 200 people who paid to be here."},
-    {tag:"😅 Social",t:"You claim you are not competitive. You then become extremely competitive."},
-    {tag:"🚗 Road",t:"The passenger who narrates everything they see out the window for six hours as if nobody else has eyes."},
-    {tag:"🪞 Real Life",t:"You handle a difficult situation gracefully and don't regret a single thing you said."},
-    {tag:"🧸 Kids",t:"A child creates art on a surface that was not intended to be art — and they are very proud of it."},
-  ]},
-  {theme:"Did That Really Just Happen",emoji:"🎬",prompt:"Which of these would make the best viral video — and which one has happened to someone at this table?",s:[
-    {tag:"😅 Social",t:"You have to give a toast at dinner — right now — no warning — and you can see from the way they're looking at you that they expect it to be good."},
-    {tag:"💼 Work",t:"You spend all morning preparing for a meeting that was canceled — and you were the one who canceled it."},
-    {tag:"😅 Social",t:"You end up in a very small waiting room with someone you talked about at length in the car on the way there."},
-    {tag:"🪞 Real Life",t:"You say yes when you mean maybe, maybe when you mean no, and everyone has quietly learned to decode this."},
-    {tag:"👨‍👩‍👧 Family",t:"You mix up two relatives' names — repeatedly — in the middle of a story that is specifically about them."},
-    {tag:"😅 Social",t:"You say the wrong person's name during a toast — at their party — and cannot recover."},
-    {tag:"🪞 Real Life",t:"You wait until something is truly urgent — then discover it would have been easy three weeks ago."},
-    {tag:"😅 Social",t:"You sit down confidently in a chair that immediately breaks under you in front of a group. You try to play it off."},
-  ]},
-  {theme:"I Probably Shouldn't Be Here",emoji:"🎰",prompt:"Which of these situations should have gone completely wrong — and which one is honestly you?",s:[
-    {tag:"💼 Work",t:"Someone you genuinely respect tells you they've been paying close attention to your work."},
-    {tag:"😅 Social",t:"Something falls, you reach to catch it, and in doing so knock three other things off the table. The original thing still hits the floor."},
-    {tag:"🪞 Real Life",t:"You start something with a lot of energy, set it down for just a moment, and find it years later."},
-    {tag:"🚗 Road",t:"The AC dies on hour three of a 10-hour drive in 95-degree weather."},
-    {tag:"💼 Work",t:"You volunteer for things in the abstract — then have complicated feelings once they're concrete."},
-    {tag:"🪞 Real Life",t:"You set multiple alarms and still negotiate with all of them before eventually getting up."},
-    {tag:"😅 Social",t:"You go in for a handshake, they go in for a hug. You both switch. You end up shaking hands with their shoulder."},
-    {tag:"💰 Money",t:"You brag about a financial decision at dinner — and have to explain it went wrong by dessert."},
-  ]},
-  {theme:"The Witnesses Will Never Let You Forget",emoji:"👀",prompt:"Which one would absolutely become the story people tell about you forever?",s:[
-    {tag:"😅 Social",t:"You confidently push a door. It says pull. You push again. Then you read the sign. You pull. There are people behind you the whole time."},
-    {tag:"👨‍👩‍👧 Family",t:"You show up confidently to the wrong holiday dinner at the wrong house and have to explain yourself."},
-    {tag:"💼 Work",t:"You get called out by name in a meeting for something you didn't do — in front of leadership."},
-    {tag:"🪞 Real Life",t:"You give excellent advice that you then completely fail to apply to your own life in any way."},
-    {tag:"😅 Social",t:"You guessed on something you had absolutely zero knowledge of — in front of people — stated it with authority — and were exactly right."},
-    {tag:"📱 Tech",t:"You accidentally leave a voice memo for someone containing your honest and unfiltered thoughts about them."},
-    {tag:"😅 Social",t:"You bluffed your way through something you had absolutely no business doing — smiled confidently — and nobody noticed."},
-    {tag:"👨‍👩‍👧 Family",t:"Everyone you actually care about is in the same room and the energy is exactly right."},
-  ]},
-  {theme:"Physical Comedy",emoji:"🤸",prompt:"Which of these physical disasters would you least want caught on video?",s:[
-    {tag:"😅 Social",t:"The exact wrong person overheard the exact wrong conversation at the exact wrong moment. Complete sentence. Full context. Nothing missing."},
-    {tag:"💼 Work",t:"You're seated next to your ex's new partner at a work event and nobody warned you."},
-    {tag:"🚗 Road",t:"You insist you know a shortcut. The shortcut adds 45 minutes and ends in a parking lot."},
-    {tag:"😅 Social",t:"You were caught doing something you cannot explain in a way that sounds reasonable. The explanation makes it worse. You can feel that."},
-    {tag:"🪞 Real Life",t:"You overcomplicate things that would be fine if you just did the obvious simple version."},
-    {tag:"🧸 Kids",t:"A child hides something important in a location they will absolutely not remember."},
-    {tag:"😅 Social",t:"You thought you were whispering. You were speaking at full volume. Everyone in the room heard the whole thing."},
-    {tag:"💼 Work",t:"You miss a deadline you forgot about — and find out in a meeting where everyone already knows."},
-  ]},
-  {theme:"Complete Chaos",emoji:"🌪️",prompt:"Which of these disasters would become the story your family tells for the next 20 years?",s:[
-    {tag:"🔥 Crisis",t:"A fire alarm goes off in a building you're in and nobody is moving. Everyone waits for someone to take charge. You are the person who takes charge. You have no idea where the exits are."},
-    {tag:"🚗 Road",t:"Your travel goes so smoothly it feels like the world is personally on your side."},
-    {tag:"🧸 Kids",t:"A child says something so specific and observant about you that it stays with you for days."},
-    {tag:"🏥 Crisis",t:"Someone at a gathering has a severe allergic reaction. Someone produces an EpiPen and looks directly at you. You have never used one. The instructions are on the side."},
-    {tag:"😅 Social",t:"You trip on absolutely nothing — flat ground, no obstacles — in front of people — and have to look back at the ground like something was there."},
-    {tag:"🧸 Kids",t:"A child gives a very honest review of a gift to the gift-giver before you can redirect the conversation."},
-    {tag:"👨‍👩‍👧 Family",t:"You hold yourself to a standard you consider completely unreasonable when anyone else applies it."},
     {tag:"🏕️ Wild",t:"Something large and unidentified is moving outside your tent at night. You can hear it breathing. You are completely inside your sleeping bag and cannot move."},
-  ]},
-  {theme:"One Thing Led to Another",emoji:"💥",prompt:"Which of these situations would you most regret starting?",s:[
-    {tag:"💼 Work",t:"You demonstrate how easy something is — and immediately, completely fail at it — in front of everyone you were trying to impress."},
-    {tag:"🐊 Wild",t:"You're swimming somewhere and realize — not immediately, but after a moment — that you are not alone in the water. You are also not close to shore."},
-    {tag:"🪞 Real Life",t:"You tell yourself you're resting for 20 minutes. You wake up three hours later."},
-    {tag:"📱 Tech",t:"You reply-all to a company-wide email with something clearly meant for one person."},
-    {tag:"👨‍👩‍👧 Family",t:"Two people who are not speaking are both at the dinner table and everyone is managing the geometry."},
-    {tag:"🚗 Road",t:"You always say you'll leave with plenty of time. You always leave at the last possible moment."},
-    {tag:"💰 Money",t:"You lend someone money confidently — then immediately need that money back and have to ask for it."},
-    {tag:"😅 Social",t:"You drop something, bend down to pick it up, and hit your head on the exact thing you were trying to avoid on the way back up."},
-  ]},
-  {theme:"You Cannot Make This Up",emoji:"🤯",prompt:"Which of these 'it really happened' moments would you least believe?",s:[
-    {tag:"📱 Tech",t:"Your screen share during a presentation accidentally shows your browser history."},
-    {tag:"😅 Social",t:"You reach for something on a table, knock your drink, try to catch the drink, miss, and the spill hits exactly the worst possible target."},
-    {tag:"👨‍👩‍👧 Family",t:"You're accidentally added to a group chat where people are discussing you."},
-    {tag:"📱 Tech",t:"You draft a very honest email about a colleague, accidentally send it, and immediately check their desk."},
-    {tag:"🚗 Road",t:"You confidently merge onto the highway going the wrong direction and have to figure out how to fix it."},
-    {tag:"🪞 Real Life",t:"You apologize for things that are not your fault and then immediately apologize for apologizing."},
-    {tag:"💰 Money",t:"You save your leftovers, leave them at the restaurant, and only realize when you're already home."},
-    {tag:"😅 Social",t:"You run into someone you've been actively avoiding — in a location that makes no logical sense for either of you to be — twice in the same week."},
-  ]},
-  {theme:"Best Possible Day",emoji:"✨",prompt:"Which one would actually make your whole week — and what does that say about you?",s:[
-    {tag:"😅 Social",t:"A rumor about you turns out to be accidentally true in a way nobody could have known — including you — until after everyone already heard it."},
-    {tag:"💼 Work",t:"You didn't prepare for something at all, got called on first, somehow pulled it off, and have been riding that high ever since."},
-    {tag:"💰 Money",t:"You find $200 in a jacket pocket you completely forgot about."},
-    {tag:"👨‍👩‍👧 Family",t:"Someone at a family gathering asks what you've been 'up to lately' and you realize you have no good answer and everyone is waiting."},
-    {tag:"🪞 Real Life",t:"You take something personally that had nothing to do with you — and then feel bad about that too."},
-    {tag:"🚗 Road",t:"You get hopelessly lost in an unfamiliar city at night with a dead phone."},
-    {tag:"📱 Tech",t:"You finish something creative you're genuinely proud of, share it, and people actually get it."},
-    {tag:"🧸 Kids",t:"A child makes a decision about someone else's property with full confidence and absolutely no warning."},
-  ]},
-  {theme:"The Pattern Is Clear",emoji:"🔁",prompt:"Which of these patterns do your closest people know about you — that you haven't fully accepted?",s:[
-    {tag:"🪞 Real Life",t:"You explain something at length and realize halfway through that you don't actually know what you're talking about."},
-    {tag:"💼 Work",t:"You fell asleep somewhere you absolutely should not have fallen asleep and woke up somehow completely fine with no consequences."},
-    {tag:"💰 Money",t:"You are fully convinced you will remember the price, the PIN, the total. You do not remember it."},
-    {tag:"👨‍👩‍👧 Family",t:"The one photo from a group event where everyone looks amazing — you have the expression of someone who just remembered something bad."},
-    {tag:"🪞 Real Life",t:"You throw something at the trash can from four feet away, miss completely, and don't pick it up because people are watching."},
-    {tag:"🚗 Road",t:"You confidently give the group directions somewhere — and when you arrive it is nothing like you described it would be."},
-    {tag:"📱 Tech",t:"You keep meaning to respond to a message and now enough time has passed that responding feels impossible."},
-    {tag:"🧸 Kids",t:"You do an activity with a child that they are clearly better at than you — in front of other adults — and you try to recover your dignity."},
-  ]},
-  {theme:"Most Like Me",emoji:"🪞",prompt:"Which of these hits closest to home — and when did you last catch yourself doing it?",s:[
-    {tag:"🪞 Real Life",t:"You try to sneak out of something quietly and make the single loudest noise imaginable at the exact moment you need silence."},
-    {tag:"🪞 Real Life",t:"You said something completely made up in a confident tone and it turned out to be factually true. You did not correct anyone about the made-up part."},
-    {tag:"💼 Work",t:"Two completely separate embarrassing things happened to you within five minutes of each other. Same room. Same witnesses. Both times."},
-    {tag:"👨‍👩‍👧 Family",t:"You told someone a story about an embarrassing thing that happened to you — and they were at the event — and you didn't know."},
-    {tag:"🪞 Real Life",t:"You made a decision that by every measure should have been wrong — and somehow it was the right one — and you cannot explain why."},
-    {tag:"💰 Money",t:"Your card, backup card, and phone all fail at the register at the same time."},
-    {tag:"👶 Chaos",t:"You are suddenly the only adult responsible for 11 toddlers at a birthday party. The person who was supposed to be in charge has disappeared. The kids are aware of this."},
-    {tag:"🚗 Road",t:"You gave someone totally wrong directions with complete confidence — then found out they actually arrived using your directions."},
-  ]},
-  {theme:"That's On You",emoji:"🫵",prompt:"Which of these is the most 'I did that to myself' situation?",s:[
-    {tag:"🪞 Real Life",t:"Something you were completely certain nobody saw — someone saw. They didn't say anything at the time. They brought it up later. In a group."},
-    {tag:"💼 Work",t:"You wave goodbye, turn to leave, and immediately walk directly into a wall or door that you absolutely saw coming."},
-    {tag:"💰 Money",t:"You discover your registration expired three months ago — during a traffic stop."},
-    {tag:"👨‍👩‍👧 Family",t:"You get something confidently wrong in front of someone who knows you're wrong — and they let you finish — and then let you walk away."},
-    {tag:"🪞 Real Life",t:"You go to put your phone in your pocket and miss completely. It goes straight to the floor. You watch it happen and cannot stop it."},
-    {tag:"🚗 Road",t:"You go to get in a car and pull the handle of the wrong car — realize it's not yours — look around — and the owner is watching."},
-    {tag:"📱 Tech",t:"Your phone dies at a party where you don't know anyone and cannot call your ride."},
-    {tag:"👶 Chaos",t:"You are babysitting and the child chokes on something small. You have watched a video about this once. You are now living the video. You have about four seconds."},
-  ]},
-  {theme:"Read the Room",emoji:"📖",prompt:"Which of these is the best story about someone who completely did not read the room?",s:[
-    {tag:"👨‍👩‍👧 Family",t:"You show up to something you planned — that you organized — and discover you wrote the wrong date down — and you are the only one who showed up."},
-    {tag:"💼 Work",t:"You go to sit down at your desk and miss the chair. Completely. The chair is right there. You miss it. Someone saw."},
-    {tag:"🪞 Real Life",t:"You have the same conversation with someone twice — in the same week — give the exact same advice — and they treat it like a brand new idea both times."},
-    {tag:"💰 Money",t:"You split the bill at dinner, do the math confidently, and everyone's portion comes out completely wrong — in your favor."},
-    {tag:"🚗 Road",t:"You park, go into a store, come out, get in the wrong car, sit down, adjust the mirror, and only then realize this is not your car."},
-    {tag:"📱 Tech",t:"Your phone dies mid-navigation in an unfamiliar city with no charger and no landmarks you recognize."},
-    {tag:"👶 Chaos",t:"You are left in charge of someone else's children for what was supposed to be 20 minutes. It has been two and a half hours. You have made decisions that their parents would not have made."},
-    {tag:"💼 Work",t:"You send an email, realize immediately it was the wrong person, send a second email apologizing, and realize that one also went to the wrong person."},
-  ]},
-  {theme:"The Slow Realization",emoji:"🌊",prompt:"Which one would take the longest to fully sink in?",s:[
-    {tag:"💼 Work",t:"You are asked to present to a boardroom of executives about something you were briefed on forty minutes ago. They are nodding. You are not sure what they are agreeing with."},
-    {tag:"💰 Money",t:"You bought something on complete impulse with money you did not have — and somehow it worked out — and you've told this story like it was smart."},
-    {tag:"👨‍⚕️ Medical",t:"You are in a medical setting — hospital, urgent care, anywhere — and the staff start talking to you like you're someone else. Someone with a different level of authority. You go with it longer than you should."},
-    {tag:"📱 Tech",t:"A photo or video of a moment you completely forgot existed surfaces in a group chat. Multiple people confirm they've always had it."},
-    {tag:"💼 Work",t:"You are running a meeting you were not supposed to run. You have no agenda. There are twelve people looking at you. One of them is significantly more senior than you were told."},
-    {tag:"🚗 City",t:"You're driving in the city at night and realize you've passed the same corner three times. You haven't made a wrong turn. You just keep ending up back there."},
-    {tag:"🛣️ Rural",t:"You're driving on a rural road at night, no signal, and your headlights show something standing at the edge of the road. You can't tell what it is. It doesn't move as you pass."},
-    {tag:"🛣️ Rural",t:"Your GPS takes you down a dirt road marked private. You follow it because you're late. The road goes on longer than it should. When you finally get signal back, the GPS shows you on a road that isn't on the map."},
-  ]},
-  {theme:"It Could Always Be Worse",emoji:"🔥",prompt:"Which one would make you say 'well at least it wasn't that one' for the rest of the night?",s:[
-    {tag:"🚗 Road",t:"The driver of the car you're in is not able to drive anymore and you have to take over. You are unfamiliar with the car, the area, and the reason you're now driving."},
-    {tag:"💰 Money",t:"You lose something you absolutely need, turn your life upside down looking for it, find it in the first place you looked, and still can't explain how you missed it."},
-    {tag:"📱 Tech",t:"Your phone autocorrects something to a word that doesn't exist, the recipient understands it perfectly, and you've never corrected it."},
+    {tag:"🌊 Water",t:"You get caught in a current — river, ocean, doesn\'t matter — and for a real moment you are not moving toward shore. You are moving away from it."},
     {tag:"🐻 Wild",t:"You round a corner on a trail and come face to face with something large that is between you and the way back. You both stop. Nobody moves first."},
     {tag:"🕷️ Bugs",t:"You discover a cockroach situation in a kitchen that is not yours while you are a guest. You have to decide whether to say something. There are multiple."},
-    {tag:"🐍 Wild",t:"You find a snake in your house. Not outside. Inside. In a room you use regularly. You don't know how long it's been there."},
-    {tag:"🏕️ Rural",t:"You're camping and wake up at 3am. Something has moved your shoes — both of them — from outside the tent to about six inches from your head. Inside the tent. The zipper is still closed."},
-    {tag:"🏕️ Rural",t:"You wake up camping and all the food you left outside — properly hung, correctly stored — is on the ground, opened, and whatever did it has eaten some of everything but taken nothing."},
+    {tag:"🐍 Wild",t:"You find a snake in your house. Not outside. Inside. In a room you use regularly. You don\'t know how long it\'s been there."}
   ]},
-  {theme:"Surviving the Day",emoji:"🛟",prompt:"Which of these situations would genuinely test everything you've got?",s:[
-    {tag:"🔧 Fix It",t:"A pipe bursts and the water won't stop and you're the only one there. You find the shutoff valve. It doesn't look like the internet said it would. Water is still going."},
-    {tag:"🏕️ Wild",t:"You tell everyone you know how to navigate by landmarks. You are now navigating by landmarks. The landmark you described is not here. Nobody has signal. They're still trusting you."},
-    {tag:"🌊 Water",t:"You get stung by something in the water. You don't know what. You are not close to shore. Something touched your leg. You are now swimming faster than you knew you could."},
+  {theme:"Heights, Water & Other Bad Ideas",emoji:"😰",prompt:"Which of these would make your body refuse to cooperate — even knowing you\'re safe?",s:[
+    {tag:"⬆️ Heights",t:"You are on a ladder that is taller than you thought. You are now stuck. Going down is not obviously possible. Someone is watching. You cannot hide."},
+    {tag:"🌊 Water",t:"A glass floor, glass bridge, or glass elevator. You know it\'s safe. Your body does not care what you know. Your legs have made a separate decision."},
+    {tag:"✈️ Air",t:"Turbulence. Real turbulence. The kind where things fall and the flight attendants sit down and the pilot says nothing for a while and then says it calmly."},
+    {tag:"🌊 Water",t:"You\'re in open water — ocean, lake — and you look down and cannot see the bottom. Your brain has fully registered that nothing is under you."},
+    {tag:"⬆️ Heights",t:"You\'re on a roof, a balcony, a cliff edge — somewhere that felt manageable from below. You are now there. It is not manageable. You need to get down."},
     {tag:"✈️ Air",t:"You are in a very small plane or helicopter. The pilot says something casually that would only be relevant if something was wrong. They do not follow up. You do not ask."},
-    {tag:"✈️ Air",t:"The pilot announces they need to know if anyone on the plane has any medical training. There is a long pause. People start looking around. You consider whether to say something that isn't true."},
-    {tag:"🏙️ City",t:"Your phone dies in an unfamiliar part of the city at night. You ask someone for directions. They give you directions. Something about the way they watch you leave makes you not take that route."},
-    {tag:"🏢 City",t:"You get in an elevator in a building. It stops on a floor you didn't press. The doors open. Nobody gets in. The doors close. It doesn't go to your floor for a while."},
-    {tag:"🏙️ City",t:"You're walking back to your car and realize someone has been walking the same pace behind you for two blocks. You stop to look at your phone. They stop. You start. They start."},
-  ]}
-];;
-
-const WHEEL = [
-  { name:'Face Value', emoji:'😌', desc:'Each correct position earns its position number in points', apply:(base,n)=>base },
-  { name:'+1 to All', emoji:'🎁', desc:'Every predictor who matched at least one position gets +1 bonus', apply:(base,n)=>base+1 },
-  { name:'Double Top', emoji:'🔥', desc:'The highest-scoring predictor this round doubles their points', apply:'doubletop' },
-  { name:'Judge Jackpot', emoji:'👑', desc:'The Judge scores double their usual amount this round', apply:'judgejackpot' },
-  { name:'Last Slot Counts Triple', emoji:'💀', desc:"Anyone who correctly predicted the Judge's #1 worst scores triple for that slot", apply:'lasttriple' },
-  { name:'Steal a Point', emoji:'😈', desc:'Highest scorer takes 1 point from last place', apply:'steal' }
+    {tag:"💼 Work",t:"You\'ve been doing something confidently and incorrectly for two years. Someone finally tells you."},
+    {tag:"😅 Social",t:"You overshare something personal at a work event and spend the rest of the evening regretting it."}
+  ]},
+  {theme:"City at Night",emoji:"🌆",prompt:"Which of these situations would make you question every decision that led you to that moment?",s:[
+    {tag:"🚇 City",t:"You get on the wrong subway train late at night, realize it after two stops, and the car has one other person who has been watching you since you got on."},
+    {tag:"🏙️ City",t:"You take what you think is a shortcut through an unfamiliar neighborhood at night. The street dead ends. You have to go back the way you came."},
+    {tag:"🅿️ City",t:"You\'re in a parking garage alone at night. The elevator doesn\'t come. You take the stairs. The lights on two floors are out. You hear footsteps that stop when you stop."},
+    {tag:"🚇 City",t:"You fall asleep on the subway. You wake up and there\'s nobody else in the car. You don\'t recognize the station. The doors close before you can get off."},
+    {tag:"🌊 Water",t:"You get stung by something in the water. You don\'t know what. You are not close to shore. Something touched your leg. You are now swimming faster than you knew you could."},
+    {tag:"😅 Social",t:"You are walking back to your car and realize someone has been walking the same pace behind you for two blocks. You stop. They stop. You start. They start."},
+    {tag:"🪞 Real Life",t:"You are the last person to know something that everyone around you has known for a while."},
+    {tag:"💰 Money",t:"You accidentally send $200 to the wrong person and they spend it immediately."}
+  ]},
+  {theme:"Middle of Nowhere",emoji:"🌑",prompt:"Which of these rural situations would have you reconsidering the choices that brought you there?",s:[
+    {tag:"🛣️ Rural",t:"You\'re driving on a rural road at night, no signal, and your headlights show something standing at the edge of the road. You can\'t tell what it is. It doesn\'t move as you pass."},
+    {tag:"🏕️ Rural",t:"You\'re camping and wake up at 3am. Something has moved your shoes — both of them — from outside the tent to about six inches from your head. Inside the tent. The zipper is still closed."},
+    {tag:"⛽ Rural",t:"You stop at a rural gas station. The attendant is helpful and friendly. You get back in the car and realize they told you your first name in the conversation. You never introduced yourself."},
+    {tag:"🏠 Rural",t:"You\'re staying at a house in the country. You hear something in the walls. Not mice. Rhythmic. Like knocking. It moves room to room and then stops."},
+    {tag:"🛣️ Rural",t:"Your GPS takes you down a dirt road marked private. The road goes on longer than it should. When you get signal back, the GPS shows you on a road that isn\'t on the map."},
+    {tag:"🌲 Rural",t:"You go for a walk in the woods behind a rental property. You find something that shouldn\'t be there — an arrangement of objects, positioned deliberately, recently. You walk back quickly."},
+    {tag:"👨‍👩‍👧 Family",t:"Someone announces a major life decision at Thanksgiving dinner with no warning — and it affects everyone at the table."},
+    {tag:"🧸 Kids",t:"A child repeats something you said in private — word for word — at the worst possible time."}
+  ]},
+  {theme:"Not My Job But Now It Is",emoji:"🚨",prompt:"Which of these situations would make you realize you are completely unprepared for real life?",s:[
+    {tag:"👶 Chaos",t:"You are suddenly the only adult responsible for 11 toddlers at a birthday party. The person who was supposed to be in charge has disappeared. The kids are aware of this."},
+    {tag:"🏥 Crisis",t:"Someone near you collapses and people immediately look at you like you\'re going to know what to do. You do not know what to do. There is a crowd forming."},
+    {tag:"✈️ Air",t:"The pilot announces they need to know if anyone on the plane has any medical training. There is a long pause. People start looking around. You consider whether to say something that isn\'t true."},
+    {tag:"🔥 Crisis",t:"A fire alarm goes off in a building you\'re in and nobody is moving. Everyone waits for someone to take charge. You are the person who takes charge. You have no idea where the exits are."},
+    {tag:"👶 Chaos",t:"You are babysitting and the child chokes on something small. You have watched a video about this once. You are now living the video. You have about four seconds."},
+    {tag:"🏥 Crisis",t:"Someone at a gathering has a severe allergic reaction. Someone produces an EpiPen and looks directly at you. You have never used one. The instructions are on the side."},
+    {tag:"🚗 Road",t:"The driver of the car you\'re in is not able to drive anymore and you have to take over. You are unfamiliar with the car, the area, and the reason you\'re now driving."},
+    {tag:"💼 Work",t:"You make a joke that gets complete silence — then someone explains why it landed wrong."}
+  ]},
+  {theme:"Way Out of My Comfort Zone",emoji:"😳",prompt:"Which of these would have you completely faking it — and which one might honestly break you?",s:[
+    {tag:"💼 Work",t:"You are asked to present to a boardroom of executives about something you were briefed on forty minutes ago. They are nodding. You are not sure what they are agreeing with."},
+    {tag:"🌍 Travel",t:"You are the designated translator in a foreign country for your group. Your language skills are significantly worse than you led everyone to believe. Things are being agreed to."},
+    {tag:"🍳 Kitchen",t:"You are cooking for 30 people at an event. You said you could do it. The stove has more settings than you\'ve ever seen. People arrive in two hours. You\'ve made a decision you cannot walk back."},
+    {tag:"🎤 Stage",t:"You are introduced as the keynote speaker at an event. You were told it was a small informal chat. There is a microphone, a stage, and 200 people who paid to be here."},
+    {tag:"😅 Social",t:"You claim you are not competitive. You then become extremely competitive."},
+    {tag:"🚗 Road",t:"The passenger who narrates everything they see out the window for six hours as if nobody else has eyes."},
+    {tag:"🪞 Real Life",t:"You handle a difficult situation gracefully and don\'t regret a single thing you said."},
+    {tag:"🧸 Kids",t:"You are left in charge of someone else\'s children for what was supposed to be 20 minutes. It has been two and a half hours. You have made decisions that their parents would not have made."}
+  ]},
+  {theme:"Did That Really Just Happen",emoji:"🎬",prompt:"Which of these would make the best viral video — and which one has happened to someone at this table?",s:[
+    {tag:"😅 Social",t:"You sit down confidently in a chair that immediately breaks under you in front of a group. You try to play it off."},
+    {tag:"💼 Work",t:"You demonstrate how easy something is — and immediately, completely fail at it — in front of everyone you were trying to impress."},
+    {tag:"😅 Social",t:"Something falls, you reach to catch it, and in doing so knock three other things off the table. The original thing still hits the floor."},
+    {tag:"🪞 Real Life",t:"You throw something at the trash can from four feet away, miss completely, and don\'t pick it up because people are watching."},
+    {tag:"👨‍👩‍👧 Family",t:"The one photo from a group event where everyone looks amazing — you have the expression of someone who just remembered something bad."},
+    {tag:"😅 Social",t:"You go in for a handshake, they go in for a hug. You both switch. You end up shaking hands with their shoulder."},
+    {tag:"🪞 Real Life",t:"You try to sneak out of something quietly and make the single loudest noise imaginable at the exact moment you need silence."},
+    {tag:"😅 Social",t:"You confidently push a door. It says pull. You push again. Then you read the sign. You pull. There are people behind you the whole time."}
+  ]},
+  {theme:"I Probably Shouldn\'t Be Here",emoji:"🎰",prompt:"Which of these situations should have gone completely wrong — and which one is honestly you?",s:[
+    {tag:"💼 Work",t:"You didn\'t prepare for something at all, got called on first, somehow pulled it off, and have been riding that high ever since."},
+    {tag:"😅 Social",t:"You guessed on something you had absolutely zero knowledge of — in front of people — stated it with authority — and were exactly right."},
+    {tag:"🪞 Real Life",t:"You said something completely made up in a confident tone and it turned out to be factually true. You did not correct anyone about the made-up part."},
+    {tag:"🚗 Road",t:"You gave someone totally wrong directions with complete confidence — then found out they actually arrived using your directions."},
+    {tag:"💼 Work",t:"You fell asleep somewhere you absolutely should not have fallen asleep and woke up somehow completely fine with no consequences."},
+    {tag:"🪞 Real Life",t:"You made a decision that by every measure should have been wrong — and somehow it was the right one — and you cannot explain why."},
+    {tag:"😅 Social",t:"You bluffed your way through something you had absolutely no business doing — smiled confidently — and nobody noticed."},
+    {tag:"💰 Money",t:"You bought something on complete impulse with money you did not have — and somehow it worked out — and you\'ve told this story like it was smart."}
+  ]},
+  {theme:"Nobody Forgets This",emoji:"👀",prompt:"Which one would absolutely become the story people tell about you forever?",s:[
+    {tag:"😅 Social",t:"The exact wrong person overheard the exact wrong conversation at the exact wrong moment. Complete sentence. Full context. Nothing missing."},
+    {tag:"👨‍👩‍👧 Family",t:"You told someone a story about an embarrassing thing that happened to you — and they were at the event — and you didn\'t know."},
+    {tag:"💼 Work",t:"Two completely separate embarrassing things happened to you within five minutes of each other. Same room. Same witnesses. Both times."},
+    {tag:"🪞 Real Life",t:"Something you were completely certain nobody saw — someone saw. They didn\'t say anything at the time. They brought it up later. In a group."},
+    {tag:"😅 Social",t:"You were caught doing something you cannot explain in a way that sounds reasonable. The explanation makes it worse. You can feel that."},
+    {tag:"📱 Tech",t:"A photo or video of a moment you completely forgot existed surfaces in a group chat. Multiple people confirm they\'ve always had it."},
+    {tag:"😅 Social",t:"You thought you were whispering. You were speaking at full volume. Everyone in the room heard the whole thing."},
+    {tag:"👨‍👩‍👧 Family",t:"You get something confidently wrong in front of someone who knows you\'re wrong — and they let you finish — and then let you walk away."}
+  ]},
+  {theme:"Physical Comedy",emoji:"🤸",prompt:"Which of these physical disasters would you least want caught on video?",s:[
+    {tag:"😅 Social",t:"You trip on absolutely nothing — flat ground, no obstacles — in front of people — and have to look back at the ground like something was there."},
+    {tag:"💼 Work",t:"You wave goodbye, turn to leave, and immediately walk directly into a wall or door that you absolutely saw coming."},
+    {tag:"🚗 Road",t:"You go to get in a car and pull the handle of the wrong car — realize it\'s not yours — look around — and the owner is watching."},
+    {tag:"😅 Social",t:"You drop something, bend down to pick it up, and hit your head on the exact thing you were trying to avoid on the way back up."},
+    {tag:"🪞 Real Life",t:"You go to put your phone in your pocket and miss completely. It goes straight to the floor. You watch it happen and cannot stop it."},
+    {tag:"🧸 Kids",t:"You do an activity with a child that they are clearly better at than you — in front of other adults — and you try to recover your dignity."},
+    {tag:"😅 Social",t:"You reach for something on a table, knock your drink, try to catch the drink, miss, and the spill hits exactly the worst possible target."},
+    {tag:"💼 Work",t:"You go to sit down at your desk and miss the chair. Completely. The chair is right there. You miss it. Someone saw."}
+  ]},
+  {theme:"Complete Chaos",emoji:"🌪️",prompt:"Which of these disasters would become the story your family tells for the next 20 years?",s:[
+    {tag:"🏠 Home",t:"A raccoon gets into your house. You cannot get it out. It has been two hours. You have tried everything. It has moved to the kitchen."},
+    {tag:"🚗 Road",t:"Your car rolls away while you\'re not in it. You watch it happen. You cannot stop it. It comes to rest somewhere that creates new problems."},
+    {tag:"🧸 Kids",t:"A child locks the car — with the keys, the dog, and everything important inside — and cannot remember how locks work under pressure."},
+    {tag:"🏠 Home",t:"You start a small kitchen fire, use the extinguisher, and now the fire is out but the extinguisher powder has covered every surface in the entire kitchen."},
+    {tag:"😅 Social",t:"You lock yourself out of your house in a state of undress you cannot explain to the locksmith, a neighbor, and a mail carrier who all arrive at the same time."},
+    {tag:"🧸 Kids",t:"A child puts something important — phone, keys, remote — somewhere creative. The search takes four hours. It is inside something else."},
+    {tag:"🏕️ Wild",t:"A bird gets into your house and will not leave. It has now been inside for three hours. It has broken two things. You have tried everything reasonable and several unreasonable things."},
+    {tag:"🏥 Crisis",t:"Someone at a gathering has a severe allergic reaction. Someone produces an EpiPen and looks directly at you. You have never used one. The instructions are on the side."}
+  ]},
+  {theme:"One Thing Led to Another",emoji:"💥",prompt:"Which of these situations would you most regret starting?",s:[
+    {tag:"🏠 Home",t:"You start a simple DIY repair. Three days, two trips to the hardware store, and one professional consultation later, the original problem is still there plus a new one."},
+    {tag:"🐾 Pet",t:"Your dog gets out. You spend two hours chasing it through the neighborhood in clothes you cannot explain. Multiple neighbors are now involved. The dog is having a great time."},
+    {tag:"🪞 Real Life",t:"You paint a room the wrong color, realize it halfway through, finish it anyway, live with it for a week, repaint it, and it\'s still not right."},
+    {tag:"💼 Work",t:"You try to quietly fix a small mistake before anyone notices. Fixing it creates a larger mistake. You are now actively making it worse while trying to make it better."},
+    {tag:"🍳 Kitchen",t:"You attempt a recipe from a video that took the creator 22 minutes. Four hours later your kitchen is destroyed and the result is technically edible."},
+    {tag:"📱 Tech",t:"You try to fix something on your phone or computer. You factory reset it. You did not back it up. Everything is gone."},
+    {tag:"🏠 Home",t:"Something you assembled slightly wrong works fine for months — then fails completely in front of guests in a way that makes it clear you built it wrong from the beginning."},
+    {tag:"🚗 Road",t:"You insist you know a shortcut. The shortcut adds 45 minutes and ends in a parking lot."}
+  ]},
+  {theme:"You Cannot Make This Up",emoji:"🤯",prompt:"Which of these moments would you least believe if someone else told you?",s:[
+    {tag:"💼 Work",t:"You send an email, realize immediately it was the wrong person, send a second email apologizing, and realize that one also went to the wrong person."},
+    {tag:"😅 Social",t:"You run into someone you\'ve been actively avoiding — in a location that makes no logical sense for either of you to be — twice in the same week."},
+    {tag:"👨‍👩‍👧 Family",t:"You show up to something you planned — that you organized — and discover you wrote the wrong date down — and you are the only one who showed up."},
+    {tag:"📱 Tech",t:"Your screen share during a presentation accidentally shows your browser history."},
+    {tag:"🚗 Road",t:"You park, go into a store, come out, get in the wrong car, sit down, adjust the mirror, and only then realize this is not your car."},
+    {tag:"🪞 Real Life",t:"You have the same conversation with someone twice — in the same week — give the exact same advice — and they treat it like a brand new idea both times."},
+    {tag:"💰 Money",t:"You lose something you absolutely need, turn your life upside down looking for it, find it in the first place you looked, and still can\'t explain how you missed it."},
+    {tag:"😅 Social",t:"A rumor about you turns out to be accidentally true in a way nobody could have known — including you — until after everyone already heard it."}
+  ]},
+  {theme:"Best Possible Day",emoji:"✨",prompt:"Which one would actually make your whole week — and what does that say about you?",s:[
+    {tag:"😅 Social",t:"You make someone laugh harder than they have in a long time — and you absolutely meant to do it."},
+    {tag:"💼 Work",t:"Someone you genuinely respect tells you they\'ve been paying close attention to your work."},
+    {tag:"💰 Money",t:"You find $200 in a jacket pocket you completely forgot about."},
+    {tag:"👨‍👩‍👧 Family",t:"Everyone you actually care about is in the same room and the energy is exactly right."},
+    {tag:"🪞 Real Life",t:"You handle a difficult situation gracefully and don\'t regret a single thing you said."},
+    {tag:"🚗 Road",t:"Your travel goes so smoothly it feels like the world is personally on your side."},
+    {tag:"📱 Tech",t:"You finish something creative you\'re genuinely proud of, share it, and people actually get it."},
+    {tag:"🧸 Kids",t:"A child says something so specific and observant about you that it stays with you for days."}
+  ]},
+  {theme:"The Pattern Is Clear",emoji:"🔁",prompt:"Which of these patterns do your closest people know about you — that you haven\'t fully accepted?",s:[
+    {tag:"🪞 Real Life",t:"You say yes when you mean maybe, maybe when you mean no, and everyone has quietly learned to decode this."},
+    {tag:"💼 Work",t:"You volunteer for things in the abstract — then have complicated feelings once they\'re concrete."},
+    {tag:"💰 Money",t:"You are fully convinced you will remember the price, the PIN, the total. You do not remember it."},
+    {tag:"👨‍👩‍👧 Family",t:"You hold yourself to a standard you consider completely unreasonable when anyone else applies it."},
+    {tag:"😅 Social",t:"You claim you are not competitive. You then become extremely competitive."},
+    {tag:"🚗 Road",t:"You always say you\'ll leave with plenty of time. You always leave at the last possible moment."},
+    {tag:"📱 Tech",t:"You keep meaning to respond to a message and now enough time has passed that responding feels impossible."},
+    {tag:"🧸 Kids",t:"A child gives a very honest review of a gift to the gift-giver before you can redirect the conversation."}
+  ]},
+  {theme:"Most Like Me",emoji:"🪞",prompt:"Which of these hits closest to home — and when did you last catch yourself doing it?",s:[
+    {tag:"🪞 Real Life",t:"You start something with a lot of energy, set it down for just a moment, and find it years later."},
+    {tag:"🪞 Real Life",t:"You set multiple alarms and still negotiate with all of them before eventually getting up."},
+    {tag:"💼 Work",t:"You give excellent advice that you then completely fail to apply to your own life in any way."},
+    {tag:"👨‍👩‍👧 Family",t:"You hold yourself to a standard you consider completely unreasonable when anyone else does it."},
+    {tag:"😅 Social",t:"You cancel plans because you\'re tired — and get photographed at something else that same night."},
+    {tag:"💰 Money",t:"You split the bill at dinner, do the math confidently, and everyone\'s portion comes out wrong — in your favor."},
+    {tag:"🧸 Kids",t:"A child makes a decision about someone else\'s property with full confidence and absolutely no warning."},
+    {tag:"🚗 Road",t:"You confidently give the group directions somewhere — and when you arrive it is nothing like you described."}
+  ]},
+  {theme:"That\'s On You",emoji:"🫵",prompt:"Which of these is the most \'I did that to myself\' situation?",s:[
+    {tag:"🪞 Real Life",t:"You wait until the last possible moment for something that would have been much easier three weeks ago."},
+    {tag:"💼 Work",t:"You spend all morning preparing for a meeting that was canceled — and you were the one who canceled it."},
+    {tag:"💰 Money",t:"You save your leftovers, leave them at the restaurant, and only realize when you\'re already home."},
+    {tag:"👨‍👩‍👧 Family",t:"You show up confidently to the wrong holiday dinner at the wrong house and have to explain yourself."},
+    {tag:"😅 Social",t:"You cancel plans because you\'re tired — and get photographed at something else that same night."},
+    {tag:"🚗 Road",t:"You insist you know a shortcut. The shortcut adds 45 minutes and ends in a parking lot."},
+    {tag:"📱 Tech",t:"You draft a very honest email about a colleague, accidentally send it, and immediately check their desk."},
+    {tag:"🧸 Kids",t:"A child hides something important in a location they will absolutely not remember."}
+  ]},
+  {theme:"The Slow Realization",emoji:"🌊",prompt:"Which one would take the longest to fully sink in?",s:[
+    {tag:"💼 Work",t:"You\'ve been doing something confidently and incorrectly for two years. Someone finally tells you."},
+    {tag:"💰 Money",t:"You accidentally send $200 to the wrong person and they spend it immediately."},
+    {tag:"👨‍👩‍👧 Family",t:"A family group chat conversation comes up in person and everyone has read it, including the parts about them."},
+    {tag:"📱 Tech",t:"You accidentally leave a voice memo for someone containing your honest and unfiltered thoughts about them."},
+    {tag:"😅 Social",t:"You confidently recommend a restaurant to a group — and it\'s been closed for two years."},
+    {tag:"🚗 Road",t:"Your Airbnb host is there when you arrive and keeps showing up throughout the entire stay."},
+    {tag:"🪞 Real Life",t:"You are the last person to know something that everyone around you has known for a while."},
+    {tag:"🧸 Kids",t:"A child repeats something you said in private — word for word — at the worst possible time."}
+  ]},
+  {theme:"It Could Always Be Worse",emoji:"🔥",prompt:"Which one would make you say \'well at least it wasn\'t that one\' for the rest of the night?",s:[
+    {tag:"💼 Work",t:"You call in sick and run into your manager at a restaurant you described as a family emergency."},
+    {tag:"💰 Money",t:"You lend someone money confidently — then immediately need that money back and have to ask for it."},
+    {tag:"👨‍👩‍👧 Family",t:"You mix up two relatives\' names — repeatedly — in the middle of a story that is specifically about them."},
+    {tag:"😅 Social",t:"You trip going up the stairs in front of everyone and the noise removes any chance of playing it off."},
+    {tag:"📱 Tech",t:"Your screen share during a presentation accidentally shows your browser history."},
+    {tag:"🚗 Road",t:"The AC dies on hour three of a 10-hour drive in 95-degree weather."},
+    {tag:"🪞 Real Life",t:"You underestimate how long something will take — for the 40th time — despite all available evidence."},
+    {tag:"🧸 Kids",t:"A child creates art on a surface that was not intended to be art — and they are very proud of it."}
+  ]},
+  {theme:"Surviving the Day",emoji:"🛟",prompt:"Which of these situations would genuinely test everything you\'ve got?",s:[
+    {tag:"🔧 Fix It",t:"A pipe bursts and the water won\'t stop and you\'re the only one there. You find the shutoff valve. It doesn\'t look like the internet said it would. Water is still going."},
+    {tag:"😅 Social",t:"You end up in a very small waiting room with someone you talked about at length in the car on the way there."},
+    {tag:"🚗 Road",t:"You get hopelessly lost in an unfamiliar city at night with a dead phone."},
+    {tag:"💼 Work",t:"You\'re seated next to your ex\'s new partner at a work event and nobody warned you."},
+    {tag:"🏕️ Wild",t:"You tell everyone you know how to navigate by landmarks. You are now navigating by landmarks. The landmark you described is not here. Nobody has signal. They\'re still trusting you."},
+    {tag:"💰 Money",t:"You discover your registration expired three months ago — during a traffic stop."},
+    {tag:"👨‍👩‍👧 Family",t:"You\'re accidentally added to a group chat where people are discussing you."},
+    {tag:"🌆 City",t:"You are walking back to your car and realize someone has been walking the same pace behind you for two blocks. You stop. They stop. You start. They start."}
+  ]},
+  {theme:"Read the Room",emoji:"📖",prompt:"Which of these is the best story about someone who completely did not read the room?",s:[
+    {tag:"👨‍👩‍👧 Family",t:"Someone announces a major life decision at Thanksgiving dinner with no warning — and it affects everyone at the table."},
+    {tag:"💼 Work",t:"You make a joke that gets complete silence — then someone explains why it landed wrong."},
+    {tag:"😅 Social",t:"You overshare something personal at a work event and spend the rest of the evening regretting it."},
+    {tag:"💰 Money",t:"You brag about a financial decision at dinner — and have to explain it went wrong by dessert."},
+    {tag:"🚗 Road",t:"The passenger who narrates everything they see out the window for six hours as if nobody else has eyes."},
+    {tag:"📱 Tech",t:"You reply-all to a company-wide email with something clearly meant for one person."},
+    {tag:"🧸 Kids",t:"A child shares a family opinion in public that was a family opinion for a very specific reason."},
+    {tag:"🪞 Real Life",t:"You give advice that was not requested about something extremely personal to someone you barely know."}
+  ]},
 ];
 
-const RANK_COLORS = ['#1A7A44','#4A9A44','#88A830','#D4843A','#CC5500','#CC2200','#AA1800','#880800'];
-const PLAYER_COLORS = ['#FF5555','#4499FF','#AA66FF','#22DDAA','#FFB300','#FF66AA','#88DD22','#00CCEE'];
-const LETTERS = ['A','B','C','D','E','F','G','H'];
+// ─── GLOBALS ─────────────────────────────────────────
+var PROXY='/.netlify/functions/airtable-proxy';
+var TABLE='RBD Sessions';
+var myPlayerId=null;
+var myName=null;
+var currentRoomCode=null;
+var currentRecordId=null;
+var isHost=false;
+var pollTimer=null;
+var lastStatus=null;
 
-// ── STATE ──────────────────────────────────────────────────────────────────
-let players = [], rankSize = 6;
-let scores = {}, deckIdx = 0, cardQueue = [], cardIdx = 0, judgeIdx = 0;
-let judgeRanking = [], predictions = {}, predictorOrder = [], currentPredIdx = 0;
-let currentScenarios = [], spinResult = null, currentWheelIdx = -1;
-var playerColors = {};
-let spinTimer = null, spinning = false;
+// Solo mode globals
+var soloPlayers=[],soloScores={},soloColors={},soloCardQueue=[],soloCardIdx=0,soloJudgeIdx=0;
+var soloScenarios=[],soloRanking=[],soloPredictions=[],soloPredIdx=0,soloRankSize=6,soloWheel=null;
+var soloMode=false;
 
-function goTo(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+// Current round data (populated from session)
+var currentScenarios=[];
+var judgeRanking=[];
+var myPrediction=[];
+
+// ─── HELPERS ─────────────────────────────────────────
+function goTo(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function genId(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
+function genCode(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';var r='';for(var i=0;i<6;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
+function getMyId(){var id=localStorage.getItem('rbd_pid');if(!id){id=genId();localStorage.setItem('rbd_pid',id);}return id;}
+
+// ─── AIRTABLE PROXY ──────────────────────────────────
+async function atProxy(body){
+  var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok)throw new Error('Proxy '+r.status);
+  return r.json();
+}
+async function atCreate(fields){return atProxy({action:'create',table:TABLE,fields:fields});}
+async function atUpdate(recId,fields){return atProxy({action:'update',table:TABLE,recordId:recId,fields:fields});}
+async function atFind(code){
+  var d=await atProxy({action:'list',table:TABLE,filterFormula:'{Room Code}="'+code+'"',maxRecords:1});
+  return d.records&&d.records[0]||null;
 }
 
-// ── SETUP ──────────────────────────────────────────────────────────────────
-function addPlayer() {
-  if (players.length >= 8) return;
-  players.push('');
-  renderPlayers();
-  if (players.length >= 8) document.getElementById('addBtn').style.display = 'none';
+function parseJSON(s,def){try{return JSON.parse(s);}catch(e){return def;}}
+
+// ─── CREATE GAME ─────────────────────────────────────
+function checkHostReady(){document.getElementById('createBtn').disabled=!document.getElementById('hostName').value.trim();}
+function checkJoinReady(){var c=document.getElementById('joinCode').value.trim();var n=document.getElementById('joinName').value.trim();document.getElementById('joinBtn').disabled=!(c.length===6&&n.length>0);}
+
+async function createGame(){
+  var name=document.getElementById('hostName').value.trim();
+  if(!name)return;
+  myPlayerId=getMyId();myName=name;isHost=true;
+  var code=genCode();
+  var players=[{id:myPlayerId,name:name,color:PLAYER_COLORS[0],score:0}];
+  document.getElementById('createBtn').disabled=true;
+  document.getElementById('createBtn').textContent='Creating…';
+  try{
+    var rec=await atCreate({
+      'Room Code':code,'Status':'lobby',
+      'Players':JSON.stringify(players),'Host ID':myPlayerId,
+      'Judge Index':0,'Round':0,'Rank Size':6,
+      'Card Sequence':'[]','Current Scenarios':'[]',
+      'Judge Ranking':'','Predictions':'{}',
+      'Wheel Result':'','Scores':'{}',
+      'Updated At':new Date().toISOString()
+    });
+    currentRoomCode=code;
+    currentRecordId=rec.id;
+    showLobby();
+    startPolling();
+  }catch(e){
+    document.getElementById('createErr').textContent='Could not create room. Check connection.';
+    document.getElementById('createBtn').disabled=false;
+    document.getElementById('createBtn').textContent='Create Room →';
+  }
 }
-function removePlayer(i) {
-  players.splice(i, 1);
-  renderPlayers();
-  document.getElementById('addBtn').style.display = '';
-}
-function renderPlayers() {
-  var html = '';
-  for (var i = 0; i < players.length; i++) {
-    var p = players[i];
-    html += '<div class="player-row">';
-    html += '<div class="p-num" style="background:' + PLAYER_COLORS[i % PLAYER_COLORS.length] + '">' + (i+1) + '</div>';
-    html += '<input class="player-input" placeholder="Player ' + (i+1) + '" value="' + p.replace(/"/g,'&quot;') + '"';
-    html += ' data-idx="' + i + '" oninput="updatePlayer(this)" onfocus="this.select()"/>';
-    if (players.length > 2) {
-      html += '<button class="btn-rem" data-idx="' + i + '" onclick="removePlayerBtn(this)">&#215;</button>';
+
+// ─── JOIN GAME ────────────────────────────────────────
+async function joinGame(){
+  var code=document.getElementById('joinCode').value.trim().toUpperCase();
+  var name=document.getElementById('joinName').value.trim();
+  if(!code||!name)return;
+  myPlayerId=getMyId();myName=name;isHost=false;
+  document.getElementById('joinBtn').disabled=true;
+  document.getElementById('joinBtn').textContent='Joining…';
+  document.getElementById('joinErr').textContent='';
+  try{
+    var rec=await atFind(code);
+    if(!rec){document.getElementById('joinErr').textContent='Room not found. Check the code.';document.getElementById('joinBtn').disabled=false;document.getElementById('joinBtn').textContent='Join Room →';return;}
+    if(rec.fields['Status']!=='lobby'){document.getElementById('joinErr').textContent='Game already in progress.';document.getElementById('joinBtn').disabled=false;document.getElementById('joinBtn').textContent='Join Room →';return;}
+    var players=parseJSON(rec.fields['Players']||'[]',[]);
+    if(players.find(function(p){return p.id===myPlayerId;})){
+      // Already in, just rejoin
+    } else {
+      players.push({id:myPlayerId,name:name,color:PLAYER_COLORS[players.length%PLAYER_COLORS.length],score:0});
+      await atUpdate(rec.id,{'Players':JSON.stringify(players),'Updated At':new Date().toISOString()});
     }
-    html += '</div>';
-  }
-  document.getElementById('playerList').innerHTML = html;
-  validateStart();
-}
-function updatePlayer(input) {
-  var idx = parseInt(input.getAttribute('data-idx'));
-  players[idx] = input.value;
-  validateStart();
-}
-function removePlayerBtn(btn) {
-  var idx = parseInt(btn.getAttribute('data-idx'));
-  removePlayer(idx);
-}
-function validateStart() {
-  document.getElementById('startBtn').disabled = players.filter(p=>p.trim()).length < 2;
-}
-function setRank(n, el) {
-  rankSize = n;
-  document.querySelectorAll('.r-opt').forEach(b => b.classList.remove('sel'));
-  el.classList.add('sel');
-}
-
-// ── GAME START ──────────────────────────────────────────────────────────────
-function startGame() {
-  try {
-    players = players.filter(function(p){ return p.trim(); });
-    scores = {};
-    playerColors = {};
-    for (var i = 0; i < players.length; i++) {
-      scores[players[i]] = 0;
-      playerColors[players[i]] = PLAYER_COLORS[i % PLAYER_COLORS.length];
-    }
-    deckIdx = 0;
-    judgeIdx = 0;
-    buildCardQueue();
-    cardIdx = 0;
-    loadCard();
-    goTo('scCard');
-  } catch(e) {
-    var errDiv = document.getElementById('startError');
-    if (!errDiv) { errDiv = document.createElement('div'); errDiv.id='startError'; errDiv.style.cssText='position:fixed;top:0;left:0;right:0;background:red;color:white;padding:1rem;z-index:9999;font-size:.85rem;word-break:break-all;'; document.body.appendChild(errDiv); }
-    errDiv.textContent = 'Error: ' + e.message + ' line:' + (e.lineNumber||'?');
+    currentRoomCode=code;
+    currentRecordId=rec.id;
+    showLobby();
+    startPolling();
+  }catch(e){
+    document.getElementById('joinErr').textContent='Connection error. Try again.';
+    document.getElementById('joinBtn').disabled=false;
+    document.getElementById('joinBtn').textContent='Join Room →';
   }
 }
-function buildCardQueue() {
-  // Shuffle all mixed cards
-  var pool = CARDS.slice();
-  for (var i = pool.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
-  }
-  cardQueue = pool;
+
+// ─── LOBBY ────────────────────────────────────────────
+function showLobby(){
+  document.getElementById('lobbyCode').textContent=currentRoomCode;
+  document.getElementById('lobbyCodeDisplay').textContent=currentRoomCode;
+  document.getElementById('rankSizeSection').style.display=isHost?'':'none';
+  goTo('scLobby');
 }
 
-// ── CARD / JUDGE RANKING ────────────────────────────────────────────────────
-function loadCard() {
-  var card = cardQueue[cardIdx % cardQueue.length];
-  var judge = players[judgeIdx];
-
-  // Pick scenarios (take first rankSize from shuffled list)
-  var allS = card.s.slice();
-  for (var si2 = allS.length - 1; si2 > 0; si2--) {
-    var sj = Math.floor(Math.random() * (si2 + 1));
-    var stmp = allS[si2]; allS[si2] = allS[sj]; allS[sj] = stmp;
-  }
-  currentScenarios = allS.slice(0, rankSize);
-  judgeRanking = [];
-
-  document.getElementById('ghRound').textContent = 'Round ' + (cardIdx + 1);
-  document.getElementById('ghPlayer').textContent = judge;
-  document.getElementById('ghScores').textContent = Object.entries(scores).map(([n,s])=>`${n.split(' ')[0]}: ${s}`).join(' · ');
-  document.getElementById('cDeckLabel').textContent = card.emoji + ' ' + card.theme;
-  document.getElementById('cCat').textContent = card.theme;
-  document.getElementById('cBadge').innerHTML = '<span style="font-size:.9em">⚖️</span> JUDGE · ' + judge;
-  document.getElementById('cInstr').textContent = 'Rank from least bad to worst — or closest to your situation';
-  var l1 = document.getElementById('legFirst'); if(l1) l1.textContent = 'Least bad';
-  var l2 = document.getElementById('legLast'); if(l2) l2.textContent = 'Worst';
-  var p1 = document.getElementById('plegFirst'); if(p1) p1.textContent = 'Least bad';
-  var p2 = document.getElementById('plegLast'); if(p2) p2.textContent = 'Worst';
-  document.getElementById('lockBtn').disabled = true;
-  renderScenarios('scenariosList', judgeRanking, true);
-  updateRankProg();
+function setRankSize(btn,n){
+  document.querySelectorAll('.rank-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+  // Update Airtable
+  if(currentRecordId)atUpdate(currentRecordId,{'Rank Size':n,'Updated At':new Date().toISOString()}).catch(function(){});
 }
 
-function renderScenarios(listId, ranking, isJudge) {
-  var list = document.getElementById(listId);
-  var fn = isJudge ? 'toggleJudgeRank' : 'togglePredRank';
-  var html = '';
-  for (var i = 0; i < currentScenarios.length; i++) {
-    var s = currentScenarios[i];
-    html += '<div class="sc-item" id="' + listId + '_' + i + '" onclick="' + fn + '(' + i + ')">';
-    html += '<div class="sc-letter" id="' + listId + '_L' + i + '">' + LETTERS[i] + '</div>';
-    var scText = (typeof s === 'object') ? s.t : s;
-    var scTag = (typeof s === 'object') ? s.tag : '';
-    html += '<div class="sc-text">' + (scTag ? '<span class="sc-tag">' + scTag + '</span> ' : '') + escHtml(scText) + '</div>';
-    html += '<div class="sc-badge" id="' + listId + '_B' + i + '" style="display:none"></div>';
-    html += '</div>';
+function renderLobby(session){
+  var players=parseJSON(session.fields['Players']||'[]',[]);
+  var pb=document.getElementById('lobbyPlayers');
+  pb.innerHTML='';
+  players.forEach(function(p,i){
+    var chip=document.createElement('div');
+    chip.className='player-chip';
+    chip.innerHTML='<div class="p-dot" style="background:'+p.color+'"></div>'
+      +'<div class="p-chip-name">'+esc(p.name)+'</div>'
+      +'<div class="p-chip-badge">'+(i===0?'HOST':'')+'</div>';
+    pb.appendChild(chip);
+  });
+  document.getElementById('playerCountLabel').textContent='Players ('+players.length+')';
+  if(isHost){
+    document.getElementById('startBtn').disabled=players.length<2;
+    document.getElementById('startBtn').textContent=players.length<2?'Need 2+ players':'Start Game →';
+  } else {
+    document.getElementById('startBtn').style.display='none';
+    document.getElementById('rankSizeSection').style.display='none';
   }
-  list.innerHTML = html;
-  updateRankDisplay(listId, ranking, isJudge);
-}
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function updateRankDisplay(listId, ranking, isJudge) {
-  var total = currentScenarios.length;
-  for (var i = 0; i < total; i++) {
-    var item = document.getElementById(listId + '_' + i);
-    var badge = document.getElementById(listId + '_B' + i);
-    if (!item || !badge) continue;
-    item.className = 'sc-item';
-    badge.style.display = 'none';
-  }
-  // Reorder items in DOM to match ranking order (ranked first, unranked after)
-  var container = document.getElementById(listId);
-  if (container && ranking.length > 0) {
-    // Collect all items
-    var allItems = [];
-    for (var j = 0; j < currentScenarios.length; j++) {
-      var el = document.getElementById(listId + '_' + j);
-      if (el) allItems[j] = el;
-    }
-    // Append ranked items in rank order, then unranked
-    ranking.forEach(function(si) { if (allItems[si]) container.appendChild(allItems[si]); });
-    for (var k = 0; k < allItems.length; k++) {
-      if (ranking.indexOf(k) === -1 && allItems[k]) container.appendChild(allItems[k]);
-    }
-  }
-
-  ranking.forEach(function(si, pos) {
-    var item = document.getElementById(listId + '_' + si);
-    var badge = document.getElementById(listId + '_B' + si);
-    if (!item) return;
-    const rankNum = pos + 1;
-    if (pos === 0) item.classList.add('r1');
-    else if (pos === total - 1 && ranking.length === total) item.classList.add('rlast');
-    else item.classList.add('ranked');
-    badge.style.display = '';
-    badge.textContent = pos === 0 ? '😅 least bad' : (pos === total-1 && ranking.length === total ? '💀 worst' : `#${rankNum}`);
+async function startGame(){
+  var players=await getCurrentPlayers();
+  var cardQ=shuffle(CARDS.map(function(c){return c.theme;}));
+  var rankSize=parseInt(document.querySelector('.rank-btn.sel').textContent)||6;
+  var card=CARDS.find(function(c){return c.theme===cardQ[0];});
+  var scenarios=shuffle(card.s).slice(0,rankSize);
+  await atUpdate(currentRecordId,{
+    'Status':'judging','Round':1,'Judge Index':0,'Rank Size':rankSize,
+    'Card Sequence':JSON.stringify(cardQ),
+    'Current Scenarios':JSON.stringify(scenarios),
+    'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
+    'Scores':JSON.stringify(Object.fromEntries(players.map(function(p){return [p.name,0];}))),
+    'Updated At':new Date().toISOString()
   });
 }
 
-function toggleJudgeRank(i) {
-  const idx = judgeRanking.indexOf(i);
-  if (idx !== -1) judgeRanking.splice(idx, 1);
-  else judgeRanking.push(i);
-  updateRankDisplay('scenariosList', judgeRanking, true);
-  updateRankProg();
-  document.getElementById('lockBtn').disabled = judgeRanking.length < rankSize;
-}
-function updateRankProg() {
-  const done = judgeRanking.length, total = rankSize;
-  const el = document.getElementById('rankProg');
-  if (!el) return;
-  if (done === 0) el.textContent = 'Tap to rank them in order';
-  else if (done < total) el.textContent = `${done} ranked · ${total - done} left`;
-  else el.textContent = 'Ranked! Items are now in your order. Lock in when ready.';
-}
-function resetRanking() {
-  judgeRanking = [];
-  renderScenarios('scenariosList', judgeRanking, true);
-  updateRankProg();
-  document.getElementById('lockBtn').disabled = true;
-}
-function lockInRanking() {
-  const judge = players[judgeIdx];
-  predictorOrder = players.map((_,i)=>i).filter(i=>i!==judgeIdx);
-  currentPredIdx = 0;
-  predictions = {};
-  document.getElementById('prvName').textContent = judge;
-  document.getElementById('prvNext').textContent = players[predictorOrder[0]];
-  document.getElementById('prvBtn').onclick = startPredictions;
-  document.getElementById('prvBtn').textContent = 'Ready → Pass It';
-  goTo('scPrivate');
+async function getCurrentPlayers(){
+  var rec=await atFind(currentRoomCode);
+  return parseJSON(rec&&rec.fields['Players']||'[]',[]);
 }
 
-// ── PREDICTIONS ─────────────────────────────────────────────────────────────
-let predRanking = [];
-function startPredictions() {
-  renderPredScreen();
-  goTo('scPredict');
-}
-function renderPredScreen() {
-  const judge = players[judgeIdx];
-  const predPlayerIdx = predictorOrder[currentPredIdx];
-  const predictor = players[predPlayerIdx];
-  predRanking = [];
+// ─── POLLING ──────────────────────────────────────────
+function startPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(poll,2500);}
+function stopPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=null;}
 
-  document.getElementById('predName').textContent = predictor;
-  document.getElementById('predAbout').textContent = `Predicting for: ${judge}`;
-  document.getElementById('predSub').textContent = `${predictor}, rank them how you think ${judge} did`;
-
-  const prog = document.getElementById('predProg');
-  prog.innerHTML = predictorOrder.map((_,i) => {
-    let cls = 'pp-dot';
-    if (i < currentPredIdx) cls += ' done';
-    else if (i === currentPredIdx) cls += ' cur';
-    return `<div class="${cls}"></div>`;
-  }).join('');
-
-  renderScenarios('predScenariosList', predRanking, false);
-  updatePredRankProg();
-  document.getElementById('submitPred').disabled = true;
-  document.getElementById('submitPred').textContent = currentPredIdx < predictorOrder.length - 1 ? 'Lock In → Pass It' : 'Lock In → Reveal!';
+async function poll(){
+  if(!currentRoomCode)return;
+  try{
+    var rec=await atFind(currentRoomCode);
+    if(!rec)return;
+    currentRecordId=rec.id;
+    handleSession(rec);
+  }catch(e){}
 }
 
-function togglePredRank(i) {
-  const idx = predRanking.indexOf(i);
-  if (idx !== -1) predRanking.splice(idx, 1);
-  else predRanking.push(i);
-  updateRankDisplay('predScenariosList', predRanking, false);
-  updatePredRankProg();
-  document.getElementById('submitPred').disabled = predRanking.length < rankSize;
-}
-function updatePredRankProg() {
-  const done = predRanking.length, total = rankSize;
-  const el = document.getElementById('predRankProg');
-  if (!el) return;
-  if (done === 0) el.textContent = 'Tap in the order you think they ranked them';
-  else if (done < total) el.textContent = `${done} placed · ${total - done} left`;
-  else el.textContent = 'All placed! Lock in when ready.';
-}
-function submitPrediction() {
-  const predPlayerIdx = predictorOrder[currentPredIdx];
-  const predictor = players[predPlayerIdx];
-  predictions[predictor] = [...predRanking];
-  currentPredIdx++;
+function handleSession(rec){
+  var f=rec.fields;
+  var status=f['Status']||'lobby';
+  if(status===lastStatus&&status!=='predicting'&&status!=='lobby')return;
+  lastStatus=status;
+  var players=parseJSON(f['Players']||'[]',[]);
+  var judgeIdx=parseInt(f['Judge Index']||0);
+  var judge=players[judgeIdx%players.length];
+  var isJudge=judge&&judge.id===myPlayerId;
+  var scenarios=parseJSON(f['Current Scenarios']||'[]',[]);
+  var cardSeq=parseJSON(f['Card Sequence']||'[]',[]);
+  var round=parseInt(f['Round']||1);
+  var rankSize=parseInt(f['Rank Size']||6);
+  var cardTheme=cardSeq[(round-1)%cardSeq.length];
+  var card=CARDS.find(function(c){return c.theme===cardTheme;})||CARDS[0];
+  var preds=parseJSON(f['Predictions']||'{}',{});
+  var scores=parseJSON(f['Scores']||'{}',{});
+  var wheelResult=f['Wheel Result']||'';
+  var jRanking=parseJSON(f['Judge Ranking']||'null',null);
 
-  if (currentPredIdx < predictorOrder.length) {
-    const nextIdx = predictorOrder[currentPredIdx];
-    const nextName = players[nextIdx];
-    document.getElementById('prvName').textContent = predictor;
-    document.getElementById('prvNext').textContent = nextName;
-    document.getElementById('prvBtn').textContent = `Ready → Pass to ${nextName}`;
-    document.getElementById('prvBtn').onclick = function() { renderPredScreen(); goTo('scPredict'); };
-    goTo('scPrivate');
-  } else {
-    showWheel();
+  currentScenarios=scenarios;
+
+  // Update header codes on all screens
+  ['judgeCode','waitJudgeCode','predCode','waitPredCode','wheelCode','revCode'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.textContent=currentRoomCode;
+  });
+
+  if(status==='lobby'){
+    renderLobby(rec);
+  }
+  else if(status==='judging'){
+    if(isJudge){
+      showJudgingScreen(card,cardTheme,round,rankSize,scenarios);
+    } else {
+      showWaitJudge(card,cardTheme,round,judge,players,preds);
+    }
+  }
+  else if(status==='predicting'){
+    if(isJudge){
+      showWaitJudge(card,cardTheme,round,judge,players,preds);
+    } else {
+      var myPred=preds[myName];
+      if(myPred){
+        showWaitPred(card,cardTheme,round,players,preds);
+      } else {
+        showPredicting(card,cardTheme,round,judge,rankSize,scenarios);
+      }
+    }
+  }
+  else if(status==='wheel'){
+    showWheelScreen(card,cardTheme,round,wheelResult);
+  }
+  else if(status==='reveal'){
+    showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResult);
+  }
+  else if(status==='complete'){
+    showEndScreen(players,scores);
   }
 }
 
-// ── WHEEL ───────────────────────────────────────────────────────────────────
-function showWheel() {
-  spinning = false;
-  currentWheelIdx = -1;
-  clearInterval(spinTimer);
-  // Cancel any running Web Animations on the SVG
-  const svgEl = document.getElementById('wheelSvg');
-  if (svgEl && svgEl.getAnimations) {
-    svgEl.getAnimations().forEach(a => a.cancel());
+// ─── JUDGING SCREEN ───────────────────────────────────
+var judgeRankingLocal=[];
+
+function showJudgingScreen(card,theme,round,rankSize,scenarios){
+  if(document.getElementById('scJudging').classList.contains('active')&&judgeRankingLocal.length>0)return;
+  document.getElementById('judgeRound').textContent=card.emoji+' '+theme+' · Round '+round;
+  document.getElementById('judgeDeck').textContent=card.emoji+' '+theme;
+  document.getElementById('judgeInstr').textContent='Rank from least bad to worst';
+  judgeRankingLocal=[];
+  renderRankList('judgeList',scenarios,judgeRankingLocal,'judgeLockBtn','judgeProgTxt',rankSize);
+  document.getElementById('judgeLockBtn').disabled=true;
+  goTo('scJudging');
+}
+
+function renderRankList(listId,scenarios,ranking,lockId,progId,rankSize){
+  var list=document.getElementById(listId);
+  list.innerHTML='';
+  scenarios.forEach(function(s,i){
+    var pos=ranking.indexOf(i);
+    var placed=pos!==-1;
+    var div=document.createElement('div');
+    div.className='sc-item'+(placed?' ranked':'');
+    div.style.animationDelay=(i*0.04)+'s';
+    var lbl=placed?(pos===0?'1 😅':pos===rankSize-1?rankSize+' 💀':String(pos+1)):'';
+    div.innerHTML='<div class="sc-num'+(placed?' placed':'')+'" >'+lbl+'</div>'
+      +'<div class="sc-text"><span class="sc-tag">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>';
+    div.onclick=(function(idx){return function(){tapRank(listId,scenarios,ranking,lockId,progId,rankSize,idx);};})(i);
+    list.appendChild(div);
+  });
+}
+
+function tapRank(listId,scenarios,ranking,lockId,progId,rankSize,idx){
+  var pos=ranking.indexOf(idx);
+  if(pos!==-1)ranking.splice(pos,1);
+  else if(ranking.length<rankSize)ranking.push(idx);
+  renderRankList(listId,scenarios,ranking,lockId,progId,rankSize);
+  var prog=document.getElementById(progId);
+  if(ranking.length===rankSize){prog.textContent='Ranking complete — ready!';document.getElementById(lockId).disabled=false;}
+  else{prog.textContent='Pick #'+(ranking.length+1)+' of '+rankSize;document.getElementById(lockId).disabled=true;}
+}
+
+function resetJudgeRanking(){
+  judgeRankingLocal=[];
+  var rankSize=parseInt(currentScenarios.length)||6;
+  renderRankList('judgeList',currentScenarios,judgeRankingLocal,'judgeLockBtn','judgeProgTxt',rankSize);
+  document.getElementById('judgeProgTxt').textContent='Tap to rank them in order';
+  document.getElementById('judgeLockBtn').disabled=true;
+}
+
+async function submitJudgeRanking(){
+  document.getElementById('judgeLockBtn').disabled=true;
+  document.getElementById('judgeLockBtn').textContent='Submitting…';
+  await atUpdate(currentRecordId,{
+    'Status':'predicting',
+    'Judge Ranking':JSON.stringify(judgeRankingLocal),
+    'Predictions':'{}',
+    'Updated At':new Date().toISOString()
+  });
+}
+
+// ─── WAIT FOR JUDGE ───────────────────────────────────
+function showWaitJudge(card,theme,round,judge,players,preds){
+  document.getElementById('waitJudgeRound').textContent=card.emoji+' '+theme+' · Round '+round;
+  document.getElementById('waitJudgeTitle').textContent=(judge?judge.name:'Judge')+' is ranking…';
+  document.getElementById('waitJudgeSub').textContent='Sit tight — everyone predicts after the judge submits.';
+  var pb=document.getElementById('waitJudgePlayers');
+  pb.innerHTML='';
+  players.forEach(function(p){
+    var chip=document.createElement('div');
+    chip.className='player-chip';
+    chip.innerHTML='<div class="p-dot" style="background:'+p.color+'"></div>'
+      +'<div class="p-chip-name">'+esc(p.name)+'</div>';
+    pb.appendChild(chip);
+  });
+  goTo('scWaitJudge');
+}
+
+// ─── PREDICTING ───────────────────────────────────────
+var myPredictionLocal=[];
+var predRankSizeLocal=6;
+
+function showPredicting(card,theme,round,judge,rankSize,scenarios){
+  if(document.getElementById('scPredicting').classList.contains('active')&&myPredictionLocal.length>0)return;
+  predRankSizeLocal=rankSize;
+  document.getElementById('predRound').textContent=card.emoji+' '+theme+' · Round '+round;
+  document.getElementById('predDeck').textContent=card.emoji+' '+theme;
+  document.getElementById('predBadge').textContent='🎯 PREDICTING — HOW DID '+(judge?judge.name.toUpperCase():'JUDGE')+' RANK THEM?';
+  document.getElementById('predInstr').textContent='Tap in the order you think they chose';
+  myPredictionLocal=[];
+  renderRankList('predList',scenarios,myPredictionLocal,'predLockBtn','predProgTxt',rankSize);
+  document.getElementById('predLockBtn').disabled=true;
+  goTo('scPredicting');
+}
+
+function resetPrediction(){
+  myPredictionLocal=[];
+  renderRankList('predList',currentScenarios,myPredictionLocal,'predLockBtn','predProgTxt',predRankSizeLocal);
+  document.getElementById('predProgTxt').textContent='Tap in the order you think they chose';
+  document.getElementById('predLockBtn').disabled=true;
+}
+
+async function submitPrediction(){
+  document.getElementById('predLockBtn').disabled=true;
+  document.getElementById('predLockBtn').textContent='Submitting…';
+  // Read current predictions, add mine
+  var rec=await atFind(currentRoomCode);
+  var preds=parseJSON(rec.fields['Predictions']||'{}',{});
+  preds[myName]=myPredictionLocal;
+  // Check if all non-judges have predicted
+  var players=parseJSON(rec.fields['Players']||'[]',[]);
+  var judgeIdx=parseInt(rec.fields['Judge Index']||0);
+  var judge=players[judgeIdx%players.length];
+  var nonJudges=players.filter(function(p){return p.id!==judge.id;});
+  var allPredicted=nonJudges.every(function(p){return preds[p.name];});
+  var newStatus=allPredicted?'wheel':'predicting';
+  // Calculate wheel if transitioning
+  var wheelResult='';
+  if(allPredicted){
+    var w=WHEEL[Math.floor(Math.random()*WHEEL.length)];
+    wheelResult=w.name;
   }
-  drawWheel();
-  currentWheelIdx = -1;
-  document.getElementById('wResult').textContent = '';
-  document.getElementById('wDesc').textContent = '';
-  document.getElementById('wNext').style.display = 'none';
-  document.getElementById('spinBtn').style.display = '';
-  document.getElementById('wCount').textContent = '';
-  let ct = 5;
-  document.getElementById('wCount').textContent = `Tap to spin — auto-spins in ${ct}s`;
-  spinTimer = setInterval(function() {
-    ct--;
-    if (ct <= 0) { clearInterval(spinTimer); if (!spinning) doSpin(); }
-    else document.getElementById('wCount').textContent = 'Tap to spin — auto-spins in ' + ct + 's';
-  }, 1000);
+  var update={'Predictions':JSON.stringify(preds),'Updated At':new Date().toISOString()};
+  if(allPredicted){update['Status']='wheel';update['Wheel Result']=wheelResult;}
+  await atUpdate(currentRecordId,update);
+  goTo('scWaitPred');
+}
+
+// ─── WAIT FOR PREDICTIONS ─────────────────────────────
+function showWaitPred(card,theme,round,players,preds){
+  document.getElementById('waitPredRound').textContent=card.emoji+' '+theme+' · Round '+round;
+  var pb=document.getElementById('waitPredPlayers');
+  pb.innerHTML='';
+  players.forEach(function(p){
+    var submitted=preds&&preds[p.name];
+    var chip=document.createElement('div');
+    chip.className='player-chip';
+    chip.innerHTML='<div class="p-dot" style="background:'+p.color+'"></div>'
+      +'<div class="p-chip-name">'+esc(p.name)+'</div>'
+      +'<div class="p-chip-badge">'+(submitted?'✓ LOCKED':'waiting…')+'</div>';
+    pb.appendChild(chip);
+  });
+  goTo('scWaitPred');
+}
+
+// ─── WHEEL ────────────────────────────────────────────
+var wheelSpun=false;
+
+function showWheelScreen(card,theme,round,wheelResult){
+  document.getElementById('wheelRound').textContent=card.emoji+' '+theme+' · Round '+round;
+  if(wheelResult){
+    // Already spun — show result
+    var w=WHEEL.find(function(x){return x.name===wheelResult;})||WHEEL[0];
+    document.getElementById('wEmoji').textContent=w.emoji;
+    document.getElementById('wName').textContent=w.name;
+    document.getElementById('wDesc').textContent=w.desc;
+    document.getElementById('spinBtn').style.display='none';
+    document.getElementById('wheelWaitMsg').style.display='none';
+    if(isHost){
+      document.getElementById('wheelNextBtn').style.display='';
+      document.getElementById('revWaitMsg').style.display='none';
+    } else {
+      document.getElementById('wheelNextBtn').style.display='none';
+      document.getElementById('wheelWaitMsg').style.display='';
+    }
+    document.getElementById('wheelRing').classList.remove('spinning');
+    goTo('scWheel');
+    return;
+  }
+  // Not yet spun
+  document.getElementById('wEmoji').textContent='🎰';
+  document.getElementById('wName').textContent='Spin It';
+  document.getElementById('wDesc').textContent='Spin the wheel to see what happens this round';
+  document.getElementById('wheelRing').classList.remove('spinning');
+  document.getElementById('spinBtn').style.display=isHost?'':'none';
+  document.getElementById('wheelWaitMsg').style.display=isHost?'none':'';
+  document.getElementById('wheelNextBtn').style.display='none';
+  wheelSpun=false;
   goTo('scWheel');
 }
 
-function drawWheel() {
-  const svg = document.getElementById('wheelSvg');
-  const n = WHEEL.length, r = 100, cx = 100, cy = 100;
-  const colors = ['#1a0800','#2a1000','#1e0c00','#281400','#200e00','#241200'];
-  let html = '';
-  WHEEL.forEach((w, i) => {
-    const start = (i / n) * 2 * Math.PI - Math.PI/2;
-    const end = ((i+1) / n) * 2 * Math.PI - Math.PI/2;
-    const x1 = cx + r * Math.cos(start), y1 = cy + r * Math.sin(start);
-    const x2 = cx + r * Math.cos(end), y2 = cy + r * Math.sin(end);
-    const midA = (start + end) / 2;
-    const tx = cx + (r * .62) * Math.cos(midA), ty = cy + (r * .62) * Math.sin(midA);
-    html += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 0,1 ${x2},${y2} Z" fill="${colors[i%colors.length]}" stroke="rgba(255,102,0,.3)" stroke-width="1.5"/>`;
-    html += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" font-size="16" fill="rgba(255,102,0,.8)">${w.emoji}</text>`;
-    // segment label
-    const lx = cx + (r * .85) * Math.cos(midA), ly = cy + (r * .85) * Math.sin(midA);
-    html += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="7" fill="rgba(255,255,255,.35)" font-family="Barlow Condensed">${w.name.split(' ').slice(0,2).join(' ')}</text>`;
-  });
-  // center
-  html += `<circle cx="${cx}" cy="${cy}" r="18" fill="#080604" stroke="rgba(255,102,0,.5)" stroke-width="2"/>`;
-  html += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="var(--orange)">⚡</text>`;
-  svg.innerHTML = html;
+function spinWheel(){
+  if(wheelSpun)return;
+  wheelSpun=true;
+  document.getElementById('spinBtn').style.display='none';
+  document.getElementById('wheelRing').classList.add('spinning');
+  setTimeout(async function(){
+    // Pick wheel and save to Airtable
+    var rec=await atFind(currentRoomCode);
+    var w=WHEEL.find(function(x){return x.name===(rec.fields['Wheel Result']||'');});
+    if(!w)w=WHEEL[Math.floor(Math.random()*WHEEL.length)];
+    // Calculate scores
+    var players=parseJSON(rec.fields['Players']||'[]',[]);
+    var judgeIdx=parseInt(rec.fields['Judge Index']||0);
+    var judge=players[judgeIdx%players.length];
+    var jRanking=parseJSON(rec.fields['Judge Ranking']||'null',null)||[];
+    var preds=parseJSON(rec.fields['Predictions']||'{}',{});
+    var scores=parseJSON(rec.fields['Scores']||'{}',{});
+    var rankSize=parseInt(rec.fields['Rank Size']||6);
+    var predArr=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
+      return{name:p.name,rank:preds[p.name]||[],earned:0};
+    });
+    // Score each predictor
+    predArr.forEach(function(pred){
+      var pts=0;
+      (pred.rank||[]).forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
+      scores[pred.name]=(scores[pred.name]||0)+pts;
+      pred.earned=pts;
+    });
+    // Judge earns top predictor score
+    var maxPred=0;predArr.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
+    scores[judge.name]=(scores[judge.name]||0)+maxPred;
+    // Apply wheel
+    scores=w.apply(scores,judge.name,predArr,rankSize);
+    // Update players scores
+    players.forEach(function(p){p.score=scores[p.name]||0;});
+    await atUpdate(currentRecordId,{
+      'Wheel Result':w.name,'Status':'reveal',
+      'Scores':JSON.stringify(scores),
+      'Players':JSON.stringify(players),
+      'Updated At':new Date().toISOString()
+    });
+    document.getElementById('wheelRing').classList.remove('spinning');
+    document.getElementById('wEmoji').textContent=w.emoji;
+    document.getElementById('wName').textContent=w.name;
+    document.getElementById('wDesc').textContent=w.desc;
+    document.getElementById('wheelNextBtn').style.display='';
+  },2200);
 }
 
-function doSpin() {
-  if (spinning) return;
-  clearInterval(spinTimer);
-  spinning = true;
-  document.getElementById('spinBtn').style.display = 'none';
-  document.getElementById('wCount').textContent = 'Spinning…';
+function goToReveal(){
+  // Trigger reveal for all by polling
+  poll();
+}
 
-  const resultIdx = Math.floor(Math.random() * WHEEL.length);
-  currentWheelIdx = resultIdx;
-  const extraSpins = 4 + Math.random() * 3;
-  const sliceAngle = 360 / WHEEL.length;
-  const targetDeg = extraSpins * 360 + (360 - resultIdx * sliceAngle - sliceAngle / 2);
+// ─── REVEAL ───────────────────────────────────────────
+function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResult){
+  var f=rec.fields;
+  var judgeIdx=parseInt(f['Judge Index']||0);
+  var judge=players[judgeIdx%players.length];
+  var rankSize=parseInt(f['Rank Size']||6);
+  var w=WHEEL.find(function(x){return x.name===wheelResult;})||WHEEL[0];
+  var scenarios=parseJSON(f['Current Scenarios']||'[]',[]);
 
-  const svg = document.getElementById('wheelSvg');
-  // Cancel any existing animations first
-  if (svg.getAnimations) svg.getAnimations().forEach(a => a.cancel());
+  document.getElementById('revRound').textContent=card.emoji+' '+card.theme+' · Round '+round;
+  document.getElementById('revWheelEmoji').textContent=w.emoji;
+  document.getElementById('revWheelName').textContent=w.name;
+  document.getElementById('revWheelDesc').textContent=w.desc;
 
-  // Web Animations API — reliable on all iOS Safari versions
-  try {
-    svg.animate(
-      [{ transform: 'rotate(0deg)' }, { transform: 'rotate(' + targetDeg + 'deg)' }],
-      { duration: 3500, easing: 'cubic-bezier(0.17,0.67,0.13,1)', fill: 'forwards' }
-    );
-  } catch(e) {
-    // Fallback: just show result immediately if animation API fails
+  // Ranking rows
+  var rankDiv=document.getElementById('revRanking');
+  rankDiv.innerHTML='';
+  if(jRanking){
+    jRanking.forEach(function(scIdx,pos){
+      var s=scenarios[scIdx]||{tag:'',t:''};
+      var color=pos===0?'#22c55e':pos===rankSize-1?'#ef4444':'#555';
+      var lbl=pos===0?'1 😅':pos===rankSize-1?rankSize+' 💀':String(pos+1);
+      var chips=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
+        var pr=preds[p.name]||[];
+        var match=pr[pos]===scIdx;
+        return '<div class="p-chip" style="background:'+(match?p.color:'transparent')+';border-color:'+(match?p.color:'rgba(255,255,255,.2)')+';color:white">'+p.name[0].toUpperCase()+'</div>';
+      }).join('');
+      var row=document.createElement('div');
+      row.className='rev-row';row.style.animationDelay=(pos*0.06)+'s';
+      row.innerHTML='<div class="rr-pos" style="background:'+color+';color:white">'+lbl+'</div>'
+        +'<div class="rr-text"><span class="rr-tag">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>'
+        +'<div class="p-chips">'+chips+'</div>';
+      rankDiv.appendChild(row);
+    });
   }
 
-  setTimeout(function() {
-    const w = WHEEL[resultIdx];
-    document.getElementById('wResult').textContent = w.emoji + ' ' + w.name;
-    document.getElementById('wDesc').textContent = w.desc;
-    document.getElementById('wCount').textContent = '';
-    document.getElementById('wNext').style.display = '';
-    spinning = false;
-  }, 3600);
-}
-
-// ── REVEAL ───────────────────────────────────────────────────────────────────
-const POS_COLORS = ['#1A7A44','#3A8A44','#68A030','#C47830','#BB4400','#AA1800','#881400','#660A00'];
-
-function showReveal() {
-  var judge = players[judgeIdx];
-  var card = cardQueue[cardIdx % cardQueue.length];
-  var wheel = WHEEL[currentWheelIdx] || WHEEL[0];
-
-  // Calculate base scores (position match = position number)
-  const baseScores = {};
-  predictorOrder.forEach(pi => {
-    const pName = players[pi];
-    const pred = predictions[pName] || [];
-    let pts = 0;
-    pred.forEach((si, pos) => {
-      if (judgeRanking[pos] === si) pts += (pos + 1);
-    });
-    baseScores[pName] = pts;
-  });
-
-  // Apply wheel modifier
-  const finalScores = applyWheel(baseScores, wheel);
-
-  // Judge = highest player (doubled if Judge Jackpot)
-  const maxScore = Math.max(0, ...Object.values(finalScores));
-  finalScores[judge] = (wheel.name === 'Judge Jackpot') ? maxScore * 2 : maxScore;
-
-  // Add to running totals
-  Object.entries(finalScores).forEach(([name, pts]) => {
-    scores[name] = (scores[name] || 0) + pts;
-  });
-
-  // Build ranking display
-  document.getElementById('revRound').textContent = card.emoji + ' ' + card.theme + ' · Round ' + (cardIdx + 1);
-  document.getElementById('revSub').textContent = `${judge}'s ranking`;
-
-  // Build player position lookup: for each predictor, what position did they assign each scenario?
-  const predPosByScenario = {};
-  predictorOrder.forEach(pi => {
-    const pName = players[pi];
-    const pred = predictions[pName] || [];
-    pred.forEach((si, pos) => {
-      if (!predPosByScenario[si]) predPosByScenario[si] = {};
-      predPosByScenario[si][pName] = pos + 1; // 1-indexed
-    });
-  });
-
-  document.getElementById('revRanking').innerHTML = judgeRanking.map((si, pos) => {
-    const judgePos = pos + 1;
-    const color = POS_COLORS[Math.min(pos, POS_COLORS.length-1)];
-    var deckLbls = {first:'😅', last:'💀'};
-    var posNum = String(judgePos);
-    var lbl = pos === 0 ? (posNum + ' ' + deckLbls.first) : (pos === rankSize-1 ? (posNum + ' ' + deckLbls.last) : posNum);
-    // Build player chips for this scenario
-    const chips = predictorOrder.map(pi => {
-      const pName = players[pi];
-      const theirPos = predPosByScenario[si] ? predPosByScenario[si][pName] : null;
-      const matched = theirPos === judgePos;
-      const pColor = playerColors[pName] || '#888';
-      const initial = pName.charAt(0).toUpperCase();
-      return `<div class="p-chip" style="background:${matched?pColor:'rgba(255,255,255,.08)'};border:1.5px solid ${pColor};color:${matched?'#080604':pColor}" title="${pName}: ranked #${theirPos||'?'}">
-        <span class="p-chip-init">${initial}</span><span class="p-chip-pos">${theirPos||'?'}${matched?'✓':''}</span>
-      </div>`;
+  // Predictions
+  var predDiv=document.getElementById('revPredictions');
+  predDiv.innerHTML='';
+  players.filter(function(p){return p.id!==judge.id;}).forEach(function(p){
+    var pr=preds[p.name]||[];
+    var earned=0;
+    if(jRanking)pr.forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)earned+=(pos+1);});
+    var sqs=Array(rankSize).fill(0).map(function(_,i){
+      var match=jRanking&&pr[i]===jRanking[i];
+      return '<div class="pred-sq" style="background:'+(match?p.color:'rgba(255,255,255,.1)')+'"></div>';
     }).join('');
-    var scEntry = currentScenarios[si];
-    var scDisplay = (typeof scEntry === 'object') ?
-      ('<span class="sc-tag-sm">' + scEntry.tag + '</span> ' + scEntry.t) :
-      scEntry;
-    return '<div class="rev-row rev-row-grid">' +
-      '<div class="rr-pos" style="background:' + color + ';color:white;font-size:clamp(.82rem,2.5vw,1rem);font-weight:900">' + lbl + '</div>' +
-      '<div class="rr-text" style="min-width:0">' + scDisplay + '</div>' +
-      '<div class="p-chips">' + chips + '</div>' +
-    '</div>';
-  }).join('');
+    var row=document.createElement('div');
+    row.className='pred-row';
+    row.innerHTML='<div class="pred-dot" style="background:'+p.color+'"></div>'
+      +'<div class="pred-name">'+esc(p.name)+'</div>'
+      +'<div class="pred-sqs">'+sqs+'</div>'
+      +'<div class="pred-pts">+'+earned+'</div>';
+    predDiv.appendChild(row);
+  });
 
-  // Prediction results
-  document.getElementById('revPredictions').innerHTML = predictorOrder.map(pi => {
-    const pName = players[pi];
-    const pred = predictions[pName] || [];
-    const matches = pred.filter((si,pos) => judgeRanking[pos] === si).length;
-    const pts = finalScores[pName] || 0;
-    const pColor = playerColors[pName] || '#FF6600';
-    const matchPips = Array.from({length: rankSize}, (_,pos) => {
-      const matched = pred[pos] !== undefined && judgeRanking[pos] === pred[pos];
-      return `<div class="match-pip" style="background:${matched?pColor:'rgba(255,255,255,.12)'};border:1px solid ${matched?pColor:'rgba(255,255,255,.18)'}"></div>`;
-    }).join('');
-    return `<div class="ps-row">
-      <div class="ps-dot" style="background:${pColor}"></div>
-      <div class="ps-name" style="color:${pColor}">${pName}</div>
-      <div class="match-pips">${matchPips}</div>
-      <div class="ps-pts">+${pts}</div>
-    </div>`;
-  }).join('');
+  // Scoreboard
+  buildScoreboard('revScores',players,scores);
+  document.getElementById('revPrompt').textContent=card.prompt||'';
 
-  document.getElementById('revWheelName').textContent = `${wheel.emoji} ${wheel.name}`;
-  document.getElementById('revWheelDesc').textContent = wheel.desc;
-
-  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-  var sortedSc = Object.entries(scores).sort(function(a,b){return b[1]-a[1];});
-  document.getElementById('scoresBar').innerHTML = sortedSc.map(function(entry, i) {
-    var n = entry[0], p = entry[1];
-    var color = playerColors[n] || '#FF6600';
-    var isLeader = i === 0 && p > 0;
-    var rankLabel = i === 0 ? '1st' : i === 1 ? '2nd' : i === 2 ? '3rd' : (i+1)+'th';
-    return '<div class="sc-chip' + (isLeader ? ' sc-leader' : '') + '">' +
-      '<div class="sc-rank' + (isLeader ? ' gold' : '') + '">' + rankLabel + '</div>' +
-      '<div class="sc-dot" style="background:' + color + '"></div>' +
-      '<div class="sc-name">' + n + '</div>' +
-      '<div class="sc-pts-big">' + p + '</div>' +
-    '</div>';
-  }).join('');
-
-  document.getElementById('revPrompt').textContent = card.prompt;
-
-  document.getElementById('nextBtn').textContent = 'Next Round →';
-  document.getElementById('nextBtn').onclick = nextRound;
-
+  // Buttons
+  if(isHost){
+    document.getElementById('nextRoundBtn').style.display='';
+    document.getElementById('endGameBtn').style.display='';
+    document.getElementById('revWaitMsg').style.display='none';
+  } else {
+    document.getElementById('nextRoundBtn').style.display='none';
+    document.getElementById('endGameBtn').style.display='none';
+    document.getElementById('revWaitMsg').style.display='';
+  }
   goTo('scReveal');
 }
 
-function applyWheel(base, wheel) {
-  const out = {...base};
-  if (wheel.name === 'Face Value') return out; // already face value
-  if (wheel.name === '+1 to All') {
-    Object.keys(out).forEach(n => { if (out[n] > 0) out[n]++; });
-  } else if (wheel.name === 'Double Top') {
-    const max = Math.max(...Object.values(out));
-    Object.keys(out).forEach(n => { if (out[n] === max) out[n] *= 2; });
-  } else if (wheel.name === 'Last Slot Counts Triple') {
-    const lastPos = rankSize - 1;
-    const correctSi = judgeRanking[lastPos];
-    Object.entries(predictions).forEach(([pName, pred]) => {
-      if (pred[lastPos] === correctSi && out[pName] !== undefined) {
-        out[pName] += (lastPos + 1) * 2; // bonus 2x for last slot
-      }
-    });
-  } else if (wheel.name === 'Steal a Point') {
-    const names = Object.keys(out);
-    if (names.length >= 2) {
-      const sorted = [...names].sort((a,b)=>out[b]-out[a]);
-      if (out[sorted[sorted.length-1]] > 0) {
-        out[sorted[0]]++;
-        out[sorted[sorted.length-1]] = Math.max(0, out[sorted[sorted.length-1]]-1);
-      }
-    }
-  }
-  // Judge Jackpot handled separately in showReveal (judge gets double max)
-  return out;
+function buildScoreboard(id,players,scores){
+  var sorted=players.slice().sort(function(a,b){return (scores[b.name]||0)-(scores[a.name]||0);});
+  var div=document.getElementById(id);div.innerHTML='';
+  sorted.forEach(function(p,i){
+    var pts=scores[p.name]||0;
+    var isLeader=i===0&&pts>0;
+    var chip=document.createElement('div');
+    chip.className='sc-chip'+(isLeader?' leader':'');
+    chip.innerHTML='<div class="sc-rank'+(isLeader?' gold':'')+'">'+['1st','2nd','3rd'][i]||((i+1)+'th')+'</div>'
+      +'<div class="sc-dot" style="background:'+p.color+'"></div>'
+      +'<div class="sc-name">'+esc(p.name)+'</div>'
+      +'<div class="sc-pts">'+pts+'</div>';
+    div.appendChild(chip);
+  });
 }
 
-// ── NEXT ROUND ───────────────────────────────────────────────────────────────
-function nextRound() {
-  cardIdx++;
-  if (cardIdx >= cardQueue.length) {
-    // Played all cards — reshuffle the full mixed pool
-    cardIdx = 0;
-    buildCardQueue();
-  }
-  judgeIdx = (judgeIdx + 1) % players.length;
-  const svgEl2 = document.getElementById('wheelSvg');
-  if (svgEl2 && svgEl2.getAnimations) {
-    svgEl2.getAnimations().forEach(a => a.cancel());
-  }
-  spinning = false;
-  clearInterval(spinTimer);
-  loadCard();
-  goTo('scCard');
+async function nextRound(){
+  var rec=await atFind(currentRoomCode);
+  var players=parseJSON(rec.fields['Players']||'[]',[]);
+  var cardSeq=parseJSON(rec.fields['Card Sequence']||'[]',[]);
+  var round=parseInt(rec.fields['Round']||1)+1;
+  var judgeIdx=(parseInt(rec.fields['Judge Index']||0)+1)%players.length;
+  var rankSize=parseInt(rec.fields['Rank Size']||6);
+  var cardTheme=cardSeq[(round-1)%cardSeq.length];
+  var card=CARDS.find(function(c){return c.theme===cardTheme;})||CARDS[0];
+  var scenarios=shuffle(card.s).slice(0,rankSize);
+  await atUpdate(currentRecordId,{
+    'Status':'judging','Round':round,'Judge Index':judgeIdx,
+    'Current Scenarios':JSON.stringify(scenarios),
+    'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
+    'Updated At':new Date().toISOString()
+  });
+  judgeRankingLocal=[];wheelSpun=false;
 }
 
-function endGame() {
-  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-  document.getElementById('winnerName').textContent = sorted[0][0];
-  document.getElementById('finalScores').innerHTML = sorted.map(([n,p],i) => `
-    <div class="fs-row">
-      <div class="fs-rank">${i+1}</div>
-      <div class="fs-name">${n}</div>
-      <div class="fs-pts">${p} pts</div>
-    </div>`).join('');
+async function endGame(){
+  await atUpdate(currentRecordId,{'Status':'complete','Updated At':new Date().toISOString()});
+}
+
+function showEndScreen(players,scores){
+  stopPolling();
+  var sorted=players.slice().sort(function(a,b){return (scores[b.name]||0)-(scores[a.name]||0);});
+  document.getElementById('endWinner').textContent='🏆 '+sorted[0].name;
+  buildScoreboard('endScores',players,scores);
   goTo('scEnd');
 }
 
-function resetAll() {
-  players = ['',''];
-  scores = {};
-  renderPlayers();
-  goTo('scSetup');
+function leaveGame(){
+  stopPolling();
+  currentRoomCode=null;currentRecordId=null;isHost=false;lastStatus=null;
+  goTo('scHome');
 }
 
-function showScoresOverlay() {
-  const sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-  alert(sorted.map(([n,p])=>`${n}: ${p} pts`).join('\n'));
+// ─── SOLO (PASS & PLAY) ───────────────────────────────
+var soloRankSize2=6;
+
+function startSolo(){goTo('scSoloSetup');renderSoloPlayers();}
+
+function renderSoloPlayers(){
+  if(soloPlayers.length===0)soloPlayers=['',''];
+  var list=document.getElementById('soloPlayerList');
+  list.innerHTML='';
+  soloPlayers.forEach(function(name,i){
+    var color=PLAYER_COLORS[i%PLAYER_COLORS.length];
+    var row=document.createElement('div');
+    row.className='player-chip';
+    row.innerHTML='<div class="p-dot" style="background:'+color+'"></div>'
+      +'<input style="flex:1;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.11);border-radius:10px;padding:.5rem .8rem;font-family:\'Barlow\',sans-serif;font-size:1rem;color:white;outline:none;" placeholder="Player '+(i+1)+'" value="'+esc(name)+'" oninput="soloPlayers['+i+']=this.value;checkSoloStart()">';
+    list.appendChild(row);
+  });
+  document.getElementById('soloAddBtn').style.display=soloPlayers.length>=8?'none':'';
+  checkSoloStart();
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
-window.onload = function() { players = ['','']; renderPlayers(); };
+function addSoloPlayer(){if(soloPlayers.length<8){soloPlayers.push('');renderSoloPlayers();}}
+function setSoloRank(btn,n){soloRankSize2=n;document.querySelectorAll('.rank-btn').forEach(function(b){b.classList.remove('sel');});btn.classList.add('sel');}
+function checkSoloStart(){var ok=soloPlayers.filter(function(p){return p.trim();}).length>=2;document.getElementById('soloStartBtn').disabled=!ok;}
+
+function startSoloGame(){
+  soloMode=true;
+  var named=soloPlayers.filter(function(p){return p.trim();});
+  soloPlayers=named;
+  soloColors={};soloScores={};
+  soloPlayers.forEach(function(p,i){soloColors[p]=PLAYER_COLORS[i%PLAYER_COLORS.length];soloScores[p]=0;});
+  soloCardQueue=shuffle(CARDS);soloCardIdx=0;soloJudgeIdx=0;soloRankSize=soloRankSize2;
+  soloWheel=null;
+  loadSoloCard();
+}
+
+function loadSoloCard(){
+  var card=soloCardQueue[soloCardIdx%soloCardQueue.length];
+  var judge=soloPlayers[soloJudgeIdx%soloPlayers.length];
+  isHost=true;myName=judge;currentRoomCode='LOCAL';
+  currentScenarios=shuffle(card.s).slice(0,soloRankSize);
+  document.getElementById('judgeRound').textContent=card.emoji+' '+card.theme+' · Round '+(soloCardIdx+1);
+  document.getElementById('judgeCode').textContent='';
+  document.getElementById('judgeDeck').textContent=card.emoji+' '+card.theme;
+  document.getElementById('judgeInstr').textContent='Rank from least bad to worst';
+  judgeRankingLocal=[];
+  renderRankList('judgeList',currentScenarios,judgeRankingLocal,'judgeLockBtn','judgeProgTxt',soloRankSize);
+  document.getElementById('judgeLockBtn').disabled=true;
+  document.getElementById('judgeLockBtn').onclick=function(){soloJudgeDone(card,judge);};
+  goTo('scJudging');
+}
+
+function soloJudgeDone(card,judge){
+  // Store judge ranking, start predictions
+  soloPredictions=soloPlayers.filter(function(p){return p!==judge;}).map(function(p){return{name:p,rank:[]};});
+  soloPredIdx=0;
+  loadSoloPrediction(card,judge);
+}
+
+function loadSoloPrediction(card,judge){
+  if(soloPredIdx>=soloPredictions.length){
+    // All predicted — go to wheel
+    soloWheel=WHEEL[Math.floor(Math.random()*WHEEL.length)];
+    showSoloWheel(card);
+    return;
+  }
+  var pred=soloPredictions[soloPredIdx];
+  document.getElementById('predRound').textContent=card.emoji+' '+card.theme+' · Predict';
+  document.getElementById('predCode').textContent='';
+  document.getElementById('predDeck').textContent=card.emoji+' '+card.theme;
+  document.getElementById('predBadge').textContent='🎯 '+pred.name.toUpperCase()+' PREDICTING';
+  document.getElementById('predInstr').textContent='How do you think '+judge+' ranked them?';
+  myPredictionLocal=pred.rank;
+  renderRankList('predList',currentScenarios,pred.rank,'predLockBtn','predProgTxt',soloRankSize);
+  document.getElementById('predLockBtn').disabled=true;
+  document.getElementById('predLockBtn').onclick=function(){
+    soloPredIdx++;
+    loadSoloPrediction(card,judge);
+  };
+  document.getElementById('predProgTxt').textContent='Tap in the order you think they chose';
+  goTo('scPredicting');
+}
+
+function showSoloWheel(card){
+  var judge=soloPlayers[soloJudgeIdx%soloPlayers.length];
+  document.getElementById('wheelRound').textContent=card.emoji+' '+card.theme+' · Wheel';
+  document.getElementById('wheelCode').textContent='';
+  document.getElementById('wEmoji').textContent='🎰';
+  document.getElementById('wName').textContent='Spin It';
+  document.getElementById('wDesc').textContent='Spin the wheel to see what happens this round';
+  document.getElementById('wheelRing').classList.remove('spinning');
+  document.getElementById('spinBtn').style.display='';
+  document.getElementById('wheelNextBtn').style.display='none';
+  document.getElementById('wheelWaitMsg').style.display='none';
+  wheelSpun=false;
+  document.getElementById('spinBtn').onclick=function(){soloSpinWheel(card,judge);};
+  goTo('scWheel');
+}
+
+function soloSpinWheel(card,judge){
+  if(wheelSpun)return;wheelSpun=true;
+  document.getElementById('spinBtn').style.display='none';
+  document.getElementById('wheelRing').classList.add('spinning');
+  setTimeout(function(){
+    document.getElementById('wheelRing').classList.remove('spinning');
+    var w=soloWheel||WHEEL[0];
+    document.getElementById('wEmoji').textContent=w.emoji;
+    document.getElementById('wName').textContent=w.name;
+    document.getElementById('wDesc').textContent=w.desc;
+    // Score
+    var preds=soloPredictions;
+    preds.forEach(function(pred){
+      var pts=0;
+      pred.rank.forEach(function(scIdx,pos){if(judgeRankingLocal[pos]===scIdx)pts+=(pos+1);});
+      soloScores[pred.name]=(soloScores[pred.name]||0)+pts;
+      pred.earned=pts;
+    });
+    var maxPred=0;preds.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
+    soloScores[judge]=(soloScores[judge]||0)+maxPred;
+    soloScores=w.apply(soloScores,judge,preds,soloRankSize);
+    document.getElementById('wheelNextBtn').style.display='';
+    document.getElementById('wheelNextBtn').onclick=function(){soloReveal(card,judge,w);};
+  },2200);
+}
+
+function soloReveal(card,judge,w){
+  var players=soloPlayers.map(function(p,i){return{name:p,color:soloColors[p],id:p};});
+  var preds={};soloPredictions.forEach(function(p){preds[p.name]=p.rank;});
+  // Build fake session-like object for reveal
+  document.getElementById('revRound').textContent=card.emoji+' '+card.theme+' · Round '+(soloCardIdx+1);
+  document.getElementById('revCode').textContent='';
+  document.getElementById('revWheelEmoji').textContent=w.emoji;
+  document.getElementById('revWheelName').textContent=w.name;
+  document.getElementById('revWheelDesc').textContent=w.desc;
+  // Ranking
+  var rankDiv=document.getElementById('revRanking');rankDiv.innerHTML='';
+  judgeRankingLocal.forEach(function(scIdx,pos){
+    var s=currentScenarios[scIdx]||{tag:'',t:''};
+    var color=pos===0?'#22c55e':pos===soloRankSize-1?'#ef4444':'#555';
+    var lbl=pos===0?'1 😅':pos===soloRankSize-1?soloRankSize+' 💀':String(pos+1);
+    var chips=soloPredictions.map(function(pred){
+      var match=(pred.rank||[])[pos]===scIdx;
+      return '<div class="p-chip" style="background:'+(match?soloColors[pred.name]:'transparent')+';border-color:'+(match?soloColors[pred.name]:'rgba(255,255,255,.2)')+';color:white">'+pred.name[0].toUpperCase()+'</div>';
+    }).join('');
+    var row=document.createElement('div');row.className='rev-row';row.style.animationDelay=(pos*0.06)+'s';
+    row.innerHTML='<div class="rr-pos" style="background:'+color+';color:white">'+lbl+'</div>'
+      +'<div class="rr-text"><span class="rr-tag">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>'
+      +'<div class="p-chips">'+chips+'</div>';
+    rankDiv.appendChild(row);
+  });
+  // Predictions
+  var predDiv=document.getElementById('revPredictions');predDiv.innerHTML='';
+  soloPredictions.forEach(function(pred){
+    var sqs=Array(soloRankSize).fill(0).map(function(_,i){
+      var match=(pred.rank||[])[i]===judgeRankingLocal[i];
+      return '<div class="pred-sq" style="background:'+(match?soloColors[pred.name]:'rgba(255,255,255,.1)')+'"></div>';
+    }).join('');
+    var row=document.createElement('div');row.className='pred-row';
+    row.innerHTML='<div class="pred-dot" style="background:'+soloColors[pred.name]+'"></div>'
+      +'<div class="pred-name">'+esc(pred.name)+'</div>'
+      +'<div class="pred-sqs">'+sqs+'</div>'
+      +'<div class="pred-pts">+'+pred.earned+'</div>';
+    predDiv.appendChild(row);
+  });
+  buildScoreboard('revScores',players,soloScores);
+  document.getElementById('revPrompt').textContent=card.prompt||'';
+  document.getElementById('nextRoundBtn').style.display='';
+  document.getElementById('endGameBtn').style.display='';
+  document.getElementById('revWaitMsg').style.display='none';
+  document.getElementById('nextRoundBtn').onclick=function(){
+    soloCardIdx++;soloJudgeIdx=(soloJudgeIdx+1)%soloPlayers.length;
+    judgeRankingLocal=[];wheelSpun=false;soloWheel=null;
+    loadSoloCard();
+  };
+  document.getElementById('endGameBtn').onclick=function(){
+    var sorted=soloPlayers.slice().sort(function(a,b){return soloScores[b]-soloScores[a];});
+    document.getElementById('endWinner').textContent='🏆 '+sorted[0];
+    buildScoreboard('endScores',players,soloScores);
+    goTo('scEnd');
+  };
+  goTo('scReveal');
+}
+
+window.onload=function(){myPlayerId=getMyId();};
 </script>
 </body>
 </html>
-
