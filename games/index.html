@@ -127,7 +127,7 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="home-sub">The Ranking Game</div>
     <div class="home-btns">
       <button class="btn-p" onclick="goTo('scCreate')">Host a Game →</button>
-      <button class="btn-g" onclick="goTo('scJoin')">Join a Game</button>
+      <button class="btn-g" onclick="goTo('scJoin');initJoinScreen()">Join a Game</button>
       <button class="btn-s" onclick="startSolo()">Play Solo (Pass & Play)</button>
     </div>
   </div>
@@ -731,7 +731,8 @@ function parseJSON(s,def){try{return JSON.parse(s);}catch(e){return def;}}
 
 // ─── CREATE GAME ─────────────────────────────────────
 function checkHostReady(){document.getElementById('createBtn').disabled=!document.getElementById('hostName').value.trim();}
-function checkJoinReady(){var c=document.getElementById('joinCode').value.trim();var n=document.getElementById('joinName').value.trim();document.getElementById('joinBtn').disabled=!(c.length===6&&n.length>0);}
+function initJoinScreen(){document.getElementById('joinCode').value='';document.getElementById('joinName').value='';document.getElementById('joinErr').textContent='';document.getElementById('joinBtn').disabled=true;}
+function checkJoinReady(){var c=document.getElementById('joinCode').value.trim();var n=document.getElementById('joinName').value.trim();document.getElementById('joinBtn').disabled=!(c.length>=4&&n.length>0);}
 
 async function createGame(){
   var name=document.getElementById('hostName').value.trim();
