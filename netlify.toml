@@ -1,1 +1,7 @@
+[build]
+  functions = "netlify/Functions"
 
+[[redirects]]
+  from = "/api/airtable"
+  to = "/.netlify/functions/airtable-proxy"
+  status = 200
