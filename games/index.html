@@ -1046,15 +1046,8 @@ async function submitPrediction(){
   var judge=players[judgeIdx%players.length];
   var nonJudges=players.filter(function(p){return p.id!==judge.id;});
   var allPredicted=nonJudges.every(function(p){return preds[p.name];});
-  var newStatus=allPredicted?'wheel':'predicting';
-  // Calculate wheel if transitioning
-  var wheelResult='';
-  if(allPredicted){
-    var w=WHEEL[Math.floor(Math.random()*WHEEL.length)];
-    wheelResult=w.name;
-  }
   var update={'Predictions':JSON.stringify(preds),'Updated At':new Date().toISOString()};
-  if(allPredicted){update['Status']='wheel';update['Wheel Result']=wheelResult;}
+  if(allPredicted){update['Status']='wheel';}
   await atUpdate(currentRecordId,update);
   goTo('scWaitPred');
 }
@@ -1162,8 +1155,9 @@ function spinWheel(){
 }
 
 function goToReveal(){
-  // Trigger reveal for all by polling
-  poll();
+  atUpdate(currentRecordId,{'Status':'reveal','Updated At':new Date().toISOString()}).then(function(){
+    poll();
+  });
 }
 
 // ─── REVEAL ───────────────────────────────────────────
