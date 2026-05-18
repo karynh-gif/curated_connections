@@ -14,13 +14,10 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 @keyframes wheelPulse{0%,100%{box-shadow:0 0 30px rgba(255,102,0,.3);}50%{box-shadow:0 0 60px rgba(255,102,0,.7);}}
 .screen{display:none;min-height:100vh;flex-direction:column;}.screen.active{display:flex;}
-.hdr{background:transparent;padding:1.25rem 1.4rem 1.1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(255,102,0,.18);}
-.hdr-logo{font-family:"Black Ops One",display;font-size:1.25rem;color:var(--white);}
-.hdr-meta{font-family:"Barlow Condensed",sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.75);text-align:center;flex:1;padding:0 .5rem;}
-.hdr-code{font-family:"Barlow Condensed",sans-serif;font-size:.95rem;font-weight:900;color:var(--orange);letter-spacing:.1em;}
-.active-player-banner{background:linear-gradient(135deg,#0a2a4a,#1a3a6a);border:1.5px solid rgba(59,130,246,.35);border-radius:14px;padding:.9rem 1.1rem;text-align:center;margin-bottom:.25rem;}
-.active-player-label{font-family:"Barlow Condensed",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(59,130,246,.7);margin-bottom:.3rem;}
-.active-player-name{font-family:"Black Ops One",display;font-size:1.5rem;color:#60a5fa;}
+.hdr{background:repeating-linear-gradient(45deg,var(--orange) 0,var(--orange) 10px,#1a0800 10px,#1a0800 20px);padding:1rem 1.25rem .9rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.hdr-logo{font-family:"Black Ops One",display;font-size:1.05rem;color:var(--white);}
+.hdr-meta{font-family:"Barlow Condensed",sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.75);text-align:center;flex:1;padding:0 .5rem;}
+.hdr-code{font-family:"Barlow Condensed",sans-serif;font-size:.85rem;font-weight:900;color:var(--orange);letter-spacing:.1em;}
 .btn-p{background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:50px;padding:.88rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.15rem;font-weight:900;letter-spacing:.06em;color:var(--white);cursor:pointer;width:100%;box-shadow:0 4px 24px rgba(255,102,0,.3);}
 .btn-p:disabled{opacity:.4;cursor:not-allowed;}
 .btn-s{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:50px;padding:.82rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.55);cursor:pointer;width:100%;}
@@ -78,14 +75,13 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
 .sc-text{font-family:"Barlow",sans-serif;font-size:clamp(1.05rem,3.3vw,1.2rem);font-weight:600;color:rgba(255,255,255,.9);line-height:1.5;flex:1;}
 .sc-tag{font-family:"Barlow Condensed",sans-serif;font-size:.75rem;font-weight:700;color:rgba(255,102,0,.58);display:block;margin-bottom:.2rem;}
 /* WHEEL */
-.wheel-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1.25rem 2rem;gap:1.1rem;}
+.wheel-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1.25rem 2rem;gap:1rem;text-align:center;}
 .wheel-canvas-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
 .wheel-pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:22px solid var(--orange);filter:drop-shadow(0 0 6px rgba(255,102,0,.9));z-index:10;}
-.wheel-title{font-family:"Black Ops One",display;font-size:1.25rem;color:var(--white);text-align:center;}
-.wheel-sub{font-family:"Barlow",sans-serif;font-size:.88rem;color:rgba(255,255,255,.45);text-align:center;max-width:280px;line-height:1.5;}
-.wheel-result-box{background:rgba(255,102,0,.1);border:1.5px solid rgba(255,102,0,.4);border-radius:14px;padding:.9rem 1.2rem;text-align:center;width:100%;max-width:320px;animation:fadeIn .4s ease both;display:none;}
-.wheel-result-name{font-family:"Black Ops One",display;font-size:1.4rem;color:var(--orange);}
-.wheel-result-desc{font-family:"Barlow",sans-serif;font-size:.85rem;color:rgba(255,255,255,.6);margin-top:.3rem;line-height:1.5;}
+.wheel-result{background:rgba(255,102,0,.1);border:1.5px solid rgba(255,102,0,.4);border-radius:14px;padding:.85rem 1.2rem;width:100%;max-width:300px;display:none;animation:fadeIn .4s ease both;}
+.wheel-result-name{font-family:"Black Ops One",display;font-size:1.3rem;color:var(--orange);}
+.wheel-result-desc{font-family:"Barlow",sans-serif;font-size:.82rem;color:rgba(255,255,255,.55);margin-top:.25rem;line-height:1.5;}
+.wheel-desc{font-family:"Barlow",sans-serif;font-size:.95rem;color:rgba(255,255,255,.6);max-width:270px;line-height:1.5;}
 /* REVEAL */
 .reveal-body{flex:1;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:1rem;overflow-y:auto;}
 .reveal-title{font-family:"Black Ops One",display;font-size:1.6rem;color:var(--orange);text-align:center;padding:.5rem 0;}
@@ -175,7 +171,7 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
   </div>
   <div class="lobby-body">
     <div class="lobby-code-box">
-      <div class="lobby-code-label">Room Code</div>
+      <div class="lobby-code-label">Share this code</div>
       <div class="lobby-code" id="lobbyCode">------</div>
       <button class="btn-p" onclick="shareInviteLink()" style="margin-top:.85rem;font-size:1rem;">📤 Share Invite Link</button>
     </div>
@@ -187,8 +183,8 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
       <div class="s-label">How Many to Rank?</div>
       <div class="rank-opts">
         <button class="rank-btn" onclick="setRankSize(this,4)">4</button>
-        <button class="rank-btn sel" onclick="setRankSize(this,5)">5</button>
-        <button class="rank-btn" onclick="setRankSize(this,6)">6</button>
+        <button class="rank-btn sel" onclick="setRankSize(this,6)">6</button>
+        <button class="rank-btn" onclick="setRankSize(this,8)">8</button>
       </div>
     </div>
   </div>
@@ -208,12 +204,9 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-code" id="judgeCode"></div>
   </div>
   <div class="card-body">
-    <div class="active-player-banner">
-      <div class="active-player-label">⚖️ You Are the Judge</div>
-      <div class="active-player-name" id="judgeNameBanner" style="color:#60a5fa;">Your Turn</div>
-    </div>
     <div class="c-header">
       <div class="c-deck" id="judgeDeck"></div>
+      <div class="c-badge">⚖️ YOU ARE THE JUDGE</div>
       <div class="c-instr" id="judgeInstr">Rank from least bad to worst</div>
     </div>
     <div class="rank-legend">
@@ -236,16 +229,11 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-meta" id="waitJudgeRound">Round 1</div>
     <div class="hdr-code" id="waitJudgeCode"></div>
   </div>
-  <div class="card-body">
-    <div class="active-player-banner">
-      <div class="active-player-label">⚖️ Now Ranking</div>
-      <div class="active-player-name" id="waitJudgeTitle">Judge</div>
-    </div>
-    <div class="c-header" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08);">
-      <div class="c-deck" id="waitJudgeDeck"></div>
-      <div class="c-instr" style="color:rgba(255,255,255,.4);font-size:.88rem;">Read the scenarios — predict their ranking while they decide</div>
-    </div>
-    <div id="waitJudgeScenarios"></div>
+  <div class="wait-wrap">
+    <div class="wait-spinner"></div>
+    <div class="wait-title" id="waitJudgeTitle">Judge is ranking…</div>
+    <div class="wait-sub" id="waitJudgeSub">Sit tight — the reveal happens after everyone predicts.</div>
+    <div class="wait-players" id="waitJudgePlayers"></div>
   </div>
 </div>
 
@@ -257,13 +245,10 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-code" id="predCode"></div>
   </div>
   <div class="card-body">
-    <div class="active-player-banner">
-      <div class="active-player-label">🎯 Predicting For</div>
-      <div class="active-player-name" id="predJudgeName">Judge</div>
-    </div>
     <div class="c-header">
       <div class="c-deck" id="predDeck"></div>
-      <div class="c-instr" id="predInstr">How do you think they ranked them?</div>
+      <div class="c-badge" id="predBadge">🎯 YOUR PREDICTION</div>
+      <div class="c-instr" id="predInstr">How do you think the judge ranked them?</div>
     </div>
     <div class="rank-legend">
       <div class="rl-i"><div class="rl-dot" style="background:var(--green)"></div>Least bad</div>
@@ -301,19 +286,17 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-code" id="wheelCode"></div>
   </div>
   <div class="wheel-wrap">
-    <div class="wheel-title" id="wheelTitle">🎰 What's the rule?</div>
     <div class="wheel-canvas-wrap">
       <div class="wheel-pointer"></div>
       <canvas id="wheelCanvas" width="260" height="260"></canvas>
     </div>
-    <div class="wheel-result-box" id="wheelResultBox">
-      <div class="wheel-result-name" id="wheelResultName"></div>
-      <div class="wheel-result-desc" id="wheelResultDesc"></div>
+    <div class="wheel-result" id="wheelResult">
+      <div class="wheel-result-name" id="wName"></div>
+      <div class="wheel-result-desc" id="wDesc"></div>
     </div>
-    <div class="wheel-sub" id="wheelSub">Spin to see what rule applies this round</div>
     <button class="btn-p" id="spinBtn" onclick="spinWheel()" style="max-width:280px">Spin the Wheel →</button>
     <button class="btn-s" id="wheelNextBtn" onclick="goToReveal()" style="max-width:280px;display:none">See the Reveal →</button>
-    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite;text-align:center;">Waiting for host to reveal…</div>
+    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite">Waiting for judge to spin…</div>
   </div>
 </div>
 
@@ -373,7 +356,7 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="end-winner">Final Standings</div>
     <div class="final-scores" id="endScores"></div>
     <div style="display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:340px;">
-      <button class="btn-p" onclick="playAgain()">Play Again →</button>
+      <button class="btn-p" onclick="location.reload()">Play Again</button>
     </div>
   </div>
 </div>
@@ -395,8 +378,8 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
       <div class="s-label">How Many to Rank?</div>
       <div class="rank-opts">
         <button class="rank-btn" onclick="setSoloRank(this,4)">4</button>
-        <button class="rank-btn sel" onclick="setSoloRank(this,5)">5</button>
-        <button class="rank-btn" onclick="setSoloRank(this,6)">6</button>
+        <button class="rank-btn sel" onclick="setSoloRank(this,6)">6</button>
+        <button class="rank-btn" onclick="setSoloRank(this,8)">8</button>
       </div>
     </div>
   </div>
@@ -706,6 +689,41 @@ var CARDS=[
   ]},
 ];
 
+var BDE_CARDS=[
+  {theme:'Money & Luck',emoji:'💰',prompt:'What would you actually do with a windfall?',s:[
+    {tag:'💰 Money',t:'You find $500 cash in an old coat pocket you forgot about'},
+    {tag:'🍀 Luck',t:'Your lottery ticket wins $10,000 completely tax-free'},
+    {tag:'💰 Money',t:'Your boss gives you an unexpected $2,000 bonus out of nowhere'},
+    {tag:'✈️ Luck',t:'You get bumped to first class on a six-hour flight for free'},
+    {tag:'💰 Money',t:'Someone anonymously pays off one of your bills entirely'},
+    {tag:'🍀 Luck',t:'You win a free week-long trip with all expenses paid'}
+  ]},
+  {theme:'Love & Connection',emoji:'💛',prompt:'When did you last feel truly seen by someone?',s:[
+    {tag:'🤝 Connection',t:'Your best friend flies in as a surprise just to spend the day with you'},
+    {tag:'💛 Love',t:'Someone you admire tells you that you\'ve genuinely inspired them'},
+    {tag:'🤝 Connection',t:'A stranger randomly compliments something deeply meaningful about you'},
+    {tag:'💛 Love',t:'You receive a long heartfelt letter from someone who loves you'},
+    {tag:'🤝 Connection',t:'Your entire family shows up to support something important to you'},
+    {tag:'💛 Love',t:'Someone makes you a home-cooked meal after you\'ve had a brutal week'}
+  ]},
+  {theme:'Rest & Freedom',emoji:'☀️',prompt:'What does a perfect do-nothing day look like for you?',s:[
+    {tag:'☀️ Freedom',t:'You wake up with absolutely zero obligations and a full weekend ahead'},
+    {tag:'😴 Rest',t:'You sleep ten full hours and somehow still feel like you could nap again'},
+    {tag:'☀️ Freedom',t:'Every single task on your to-do list is already completely done'},
+    {tag:'🌿 Rest',t:'You spend an entire day outside with no phone and no interruptions'},
+    {tag:'☀️ Freedom',t:'You cancel plans completely guilt-free and genuinely feel great about it'},
+    {tag:'😴 Rest',t:'You get two uninterrupted hours to do exactly the thing you love most'}
+  ]},
+  {theme:'Wins & Recognition',emoji:'🏆',prompt:'What recognition would mean the most to you right now?',s:[
+    {tag:'🏆 Win',t:'You nail a high-stakes presentation and the whole room applauds'},
+    {tag:'🌟 Recognition',t:'Something you created goes viral for all the best possible reasons'},
+    {tag:'🏆 Win',t:'You beat your personal best at something you\'ve been working hard at'},
+    {tag:'🌟 Recognition',t:'Someone you deeply respect publicly credits you in a major moment'},
+    {tag:'🏆 Win',t:'You get accepted into something you honestly didn\'t think you\'d get into'},
+    {tag:'🌟 Recognition',t:'A mentor looks you in the eyes and tells you they are proud of you'}
+  ]}
+];
+
 // ─── GLOBALS ─────────────────────────────────────────
 var PROXY='/.netlify/functions/game-session';
 var myPlayerId=null;
@@ -713,7 +731,6 @@ var myName=null;
 var currentRoomCode=null;
 var currentRecordId=null;
 var isHost=false;
-var isJudge=false;
 var pollTimer=null;
 var lastStatus=null;
 
@@ -861,18 +878,26 @@ function renderLobby(session){
 async function startGame(){
   var players=await getCurrentPlayers();
   var rankSize=parseInt(document.querySelector('.rank-btn.sel').textContent)||5;
-  var startJudge=parseInt(new URLSearchParams(location.search).get('nextJudge')||'0')%players.length;
-  sessionStorage.setItem('lastJudgeIdx',String(startJudge));
-  // Round 1 = RBD, use first RBD card
-  var card=CARDS[0];
+  // Session 1, judge = player[0] (first to register)
+  var card=pickCard(1,players.length);
   var scenarios=shuffle(card.s).slice(0,rankSize);
   await atUpdate(currentRecordId,{
-    'Status':'judging','Round':1,'Judge Index':startJudge,'Rank Size':rankSize,
+    'Status':'judging','Round':1,'Judge Index':0,'Rank Size':rankSize,
     'Current Scenarios':JSON.stringify(scenarios),
     'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
     'Scores':JSON.stringify(Object.fromEntries(players.map(function(p){return [p.name,0];}))),
     'Updated At':new Date().toISOString()
   });
+}
+
+// session = the Airtable "Round" field (1-based session number)
+// judge = (session-1) % players.length — deterministic, never drifts
+// BDE starts at session > 2 * players.length
+// game ends at session >= 4 * players.length
+function pickCard(session,playerCount){
+  var isBDE=session>(playerCount*2);
+  var deck=isBDE?BDE_CARDS:CARDS;
+  return deck[(session-1)%deck.length];
 }
 
 async function getCurrentPlayers(){
@@ -882,7 +907,6 @@ async function getCurrentPlayers(){
 
 // ─── POLLING ──────────────────────────────────────────
 var lastUpdatedAt='';
-
 function startPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(poll,2500);}
 function stopPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=null;}
 
@@ -893,7 +917,6 @@ async function poll(){
     if(!rec)return;
     currentRecordId=rec.id;
     var updatedAt=rec.fields['Updated At']||'';
-    // Only re-render if something actually changed in Airtable
     if(updatedAt&&updatedAt===lastUpdatedAt)return;
     lastUpdatedAt=updatedAt;
     handleSession(rec);
@@ -905,62 +928,50 @@ function handleSession(rec){
   var status=f['Status']||'lobby';
   lastStatus=status;
   var players=parseJSON(f['Players']||'[]',[]);
-  var judgeIdx=parseInt(f['Judge Index']||0);
-  var judge=players[judgeIdx%players.length];
+  var n=players.length||1;
+  var turn=parseInt(f['Round']||1);          // "Round" field stores turn number
+  var judgeIdx=(turn-1)%n;                    // always correct, derived from turn
+  var judge=players[judgeIdx];
   var isJudge=judge&&judge.id===myPlayerId;
   window._isJudge=isJudge;
   var scenarios=parseJSON(f['Current Scenarios']||'[]',[]);
-  var cardSeq=parseJSON(f['Card Sequence']||'[]',[]);
-  var round=parseInt(f['Round']||1);
-  var rankSize=parseInt(f['Rank Size']||6);
-  var cardTheme=cardSeq[(round-1)%cardSeq.length];
-  var card=CARDS.find(function(c){return c.theme===cardTheme;})||CARDS[0];
+  var rankSize=parseInt(f['Rank Size']||5);
+  var isBDE=turn>(n*2);
+  var deck=isBDE?BDE_CARDS:CARDS;
+  var card=deck[(turn-1)%deck.length];
+  var cardTheme=card?card.theme:'';
   var preds=parseJSON(f['Predictions']||'{}',{});
   var scores=parseJSON(f['Scores']||'{}',{});
   var wheelResult=f['Wheel Result']||'';
   var jRanking=parseJSON(f['Judge Ranking']||'null',null);
+  var roundNum=Math.ceil(turn/n);             // display round number
+  var displayLabel=(isBDE?'☀️ Best Day Ever':'😅 Really Bad Day')+' · Round '+roundNum;
 
   currentScenarios=scenarios;
 
-  // Update header codes on all screens
   ['judgeCode','waitJudgeCode','predCode','waitPredCode','wheelCode','revCode'].forEach(function(id){
-    var el=document.getElementById(id);
-    if(el)el.textContent=currentRoomCode;
+    var el=document.getElementById(id);if(el)el.textContent=currentRoomCode;
   });
 
   if(status==='lobby'){
     renderLobby(rec);
   }
-  else if(status==='judging'||status==='bde_judging'){
-    BDE_MODE=round>2;
-    var activeCard=BDE_MODE?(BDE_CARDS[(round-3)%BDE_CARDS.length]):card;
-    if(isJudge){
-      showJudgingScreen(activeCard,cardTheme,round,rankSize,scenarios,BDE_MODE);
-    } else {
-      showWaitJudge(activeCard,cardTheme,round,judge,players,preds,BDE_MODE);
-    }
+  else if(status==='judging'){
+    if(isJudge){showJudgingScreen(card,displayLabel,rankSize,scenarios);}
+    else{showWaitJudge(card,displayLabel,judge,players,preds);}
   }
   else if(status==='predicting'){
-    BDE_MODE=round>2;
-    var activeCard2=BDE_MODE?(BDE_CARDS[(round-3)%BDE_CARDS.length]):card;
-    if(isJudge){
-      showWaitJudge(activeCard2,cardTheme,round,judge,players,preds,BDE_MODE);
-    } else {
-      var myPred=preds[myName];
-      if(myPred){
-        showWaitPred(activeCard2,cardTheme,round,players,preds);
-      } else {
-        showPredicting(activeCard2,cardTheme,round,judge,rankSize,scenarios,BDE_MODE);
-      }
+    if(isJudge){showWaitJudge(card,displayLabel,judge,players,preds);}
+    else{
+      if(preds[myName]){showWaitPred(card,displayLabel,players,preds);}
+      else{showPredicting(card,displayLabel,judge,rankSize,scenarios);}
     }
   }
   else if(status==='wheel'){
-    BDE_MODE=round>2;
-    showWheelScreen(card,cardTheme,round,wheelResult,BDE_MODE);
+    showWheelScreen(card,displayLabel,wheelResult);
   }
   else if(status==='reveal'){
-    BDE_MODE=round>2;
-    showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResult,BDE_MODE);
+    showRevealScreen(rec,card,displayLabel,turn,n,players,jRanking,preds,scores,wheelResult);
   }
   else if(status==='complete'){
     showEndScreen(players,scores);
@@ -970,12 +981,11 @@ function handleSession(rec){
 // ─── JUDGING SCREEN ───────────────────────────────────
 var judgeRankingLocal=[];
 
-function showJudgingScreen(card,theme,round,rankSize,scenarios,bde){
+function showJudgingScreen(card,label,rankSize,scenarios){
   if(document.getElementById('scJudging').classList.contains('active')&&judgeRankingLocal.length>0)return;
-  document.getElementById('judgeRound').textContent=card.emoji+' '+theme+' · Round '+round;
-  document.getElementById('judgeDeck').textContent=card.emoji+' '+theme;
-  document.getElementById('judgeNameBanner').textContent=myName||'You';
-  document.getElementById('judgeInstr').textContent=bde?'Rank from "meh" to BEST DAY EVER ☀️':'Rank from least bad to worst';
+  document.getElementById('judgeRound').textContent=label;
+  document.getElementById('judgeDeck').textContent=card.emoji+' '+card.theme;
+  document.getElementById('judgeInstr').textContent='Rank from least bad to worst';
   judgeRankingLocal=[];
   renderRankList('judgeList',scenarios,judgeRankingLocal,'judgeLockBtn','judgeProgTxt',rankSize);
   document.getElementById('judgeLockBtn').disabled=true;
@@ -1029,19 +1039,18 @@ async function submitJudgeRanking(){
 }
 
 // ─── WAIT FOR JUDGE ───────────────────────────────────
-function showWaitJudge(card,theme,round,judge,players,preds){
-  document.getElementById('waitJudgeRound').textContent=card.emoji+' '+theme+' · Round '+round;
-  document.getElementById('waitJudgeTitle').textContent=judge?judge.name:'Judge';
-  document.getElementById('waitJudgeDeck').textContent=card.emoji+' '+theme;
-  // Show scenarios read-only
-  var scDiv=document.getElementById('waitJudgeScenarios');
-  scDiv.innerHTML='';
-  (currentScenarios||[]).forEach(function(s){
-    var div=document.createElement('div');
-    div.className='sc-item';
-    div.style.cursor='default';
-    div.innerHTML='<div class="sc-text"><span class="sc-tag">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>';
-    scDiv.appendChild(div);
+function showWaitJudge(card,label,judge,players,preds){
+  document.getElementById('waitJudgeRound').textContent=label;
+  document.getElementById('waitJudgeTitle').textContent=(judge?judge.name:'Judge')+' is ranking…';
+  document.getElementById('waitJudgeSub').textContent='Sit tight — everyone predicts after the judge submits.';
+  var pb=document.getElementById('waitJudgePlayers');
+  pb.innerHTML='';
+  players.forEach(function(p){
+    var chip=document.createElement('div');
+    chip.className='player-chip';
+    chip.innerHTML='<div class="p-dot" style="background:'+p.color+'"></div>'
+      +'<div class="p-chip-name">'+esc(p.name)+'</div>';
+    pb.appendChild(chip);
   });
   goTo('scWaitJudge');
 }
@@ -1050,12 +1059,12 @@ function showWaitJudge(card,theme,round,judge,players,preds){
 var myPredictionLocal=[];
 var predRankSizeLocal=6;
 
-function showPredicting(card,theme,round,judge,rankSize,scenarios){
+function showPredicting(card,label,judge,rankSize,scenarios){
   if(document.getElementById('scPredicting').classList.contains('active')&&myPredictionLocal.length>0)return;
   predRankSizeLocal=rankSize;
-  document.getElementById('predRound').textContent=card.emoji+' '+theme+' · Round '+round;
-  document.getElementById('predDeck').textContent=card.emoji+' '+theme;
-  document.getElementById('predJudgeName').textContent=judge?judge.name:'Judge';
+  document.getElementById('predRound').textContent=label;
+  document.getElementById('predDeck').textContent=card.emoji+' '+card.theme;
+  document.getElementById('predBadge').textContent='🎯 PREDICTING — HOW DID '+(judge?judge.name.toUpperCase():'JUDGE')+' RANK THEM?';
   document.getElementById('predInstr').textContent='Tap in the order you think they chose';
   myPredictionLocal=[];
   renderRankList('predList',scenarios,myPredictionLocal,'predLockBtn','predProgTxt',rankSize);
@@ -1079,8 +1088,9 @@ async function submitPrediction(){
   preds[myName]=myPredictionLocal;
   // Check if all non-judges have predicted
   var players=parseJSON(rec.fields['Players']||'[]',[]);
-  var judgeIdx=parseInt(rec.fields['Judge Index']||0);
-  var judge=players[judgeIdx%players.length];
+  var turn=parseInt(rec.fields['Round']||1);
+  var judgeIdx=(turn-1)%players.length;
+  var judge=players[judgeIdx];
   var nonJudges=players.filter(function(p){return p.id!==judge.id;});
   var allPredicted=nonJudges.every(function(p){return preds[p.name];});
   var update={'Predictions':JSON.stringify(preds),'Updated At':new Date().toISOString()};
@@ -1090,8 +1100,8 @@ async function submitPrediction(){
 }
 
 // ─── WAIT FOR PREDICTIONS ─────────────────────────────
-function showWaitPred(card,theme,round,players,preds){
-  document.getElementById('waitPredRound').textContent=card.emoji+' '+theme+' · Round '+round;
+function showWaitPred(card,label,players,preds){
+  document.getElementById('waitPredRound').textContent=label;
   var pb=document.getElementById('waitPredPlayers');
   pb.innerHTML='';
   players.forEach(function(p){
@@ -1106,235 +1116,110 @@ function showWaitPred(card,theme,round,players,preds){
   goTo('scWaitPred');
 }
 
-// ─── BEST DAY EVER ────────────────────────────────────
-var BDE_CARDS=[
-  {theme:'Money & Luck',emoji:'💰',prompt:'What would you actually do with a windfall?',s:[
-    {tag:'Money',t:'You find $500 cash in an old coat pocket'},
-    {tag:'Luck',t:'Your lottery ticket wins $10,000 tax-free'},
-    {tag:'Money',t:'Your boss gives you an unexpected $2,000 bonus'},
-    {tag:'Luck',t:'You get bumped to first class on a 6-hour flight'},
-    {tag:'Money',t:'Someone anonymously pays off one of your bills'},
-    {tag:'Luck',t:'You win a free week-long trip, all expenses paid'}
-  ]},
-  {theme:'Love & Connection',emoji:'💛',prompt:'When did you last feel truly seen by someone?',s:[
-    {tag:'Connection',t:'Your best friend flies in as a surprise just to hang out'},
-    {tag:'Love',t:'Someone you admire tells you you\'ve inspired them'},
-    {tag:'Connection',t:'A stranger randomly compliments something meaningful about you'},
-    {tag:'Love',t:'You get a long letter from someone who loves you'},
-    {tag:'Connection',t:'Your whole family shows up to something important to you'},
-    {tag:'Love',t:'Someone makes you a home-cooked meal after a brutal week'}
-  ]},
-  {theme:'Rest & Freedom',emoji:'☀️',prompt:'What does a perfect do-nothing day look like for you?',s:[
-    {tag:'Freedom',t:'You wake up with zero obligations and a full weekend ahead'},
-    {tag:'Rest',t:'You sleep 10 hours and still feel like you could nap'},
-    {tag:'Freedom',t:'Every task on your to-do list is already done'},
-    {tag:'Rest',t:'You spend the whole day outside with no phone'},
-    {tag:'Freedom',t:'You cancel plans guilt-free and feel great about it'},
-    {tag:'Rest',t:'You have two uninterrupted hours to do exactly what you love'}
-  ]},
-  {theme:'Wins & Recognition',emoji:'🏆',prompt:'What recognition would mean the most to you?',s:[
-    {tag:'Win',t:'You nail a high-stakes presentation and everyone applauds'},
-    {tag:'Recognition',t:'Your work goes viral for all the right reasons'},
-    {tag:'Win',t:'You beat your personal best at something you\'ve worked hard at'},
-    {tag:'Recognition',t:'Someone you respect publicly credits you in a big moment'},
-    {tag:'Win',t:'You get accepted into something you didn\'t think you\'d get into'},
-    {tag:'Recognition',t:'A mentor tells you they\'re proud of you'}
-  ]},
-  {theme:'Simple Joy',emoji:'🌤️',prompt:'What small thing genuinely makes your whole day?',s:[
-    {tag:'Joy',t:'You hit every green light on the way somewhere important'},
-    {tag:'Simple',t:'The coffee is exactly right and you have nowhere to be'},
-    {tag:'Joy',t:'You find money in a pocket you forgot about'},
-    {tag:'Simple',t:'The restaurant has your exact order ready faster than expected'},
-    {tag:'Joy',t:'You wake up thinking it\'s Monday and it\'s actually Saturday'},
-    {tag:'Simple',t:'You finish a book you\'ve been reading for months'}
-  ]}
-];
-
-var BDE_WHEEL=[
-  {name:'Double Joy',emoji:'✨',desc:'Top scorer earns a bonus point — luck stacks on luck',apply:function(s,j,pa,rs){var top=pa.reduce(function(a,b){return a.earned>b.earned?a:b},{earned:-1});if(top.earned>0)s[top.name]=(s[top.name]||0)+1;return s;}},
-  {name:'Shared Win',emoji:'🤝',desc:'Everyone gets +1 — today\'s a good day for all',apply:function(s,j,pa,rs){Object.keys(s).forEach(function(k){s[k]=(s[k]||0)+1;});return s;}},
-  {name:'Judge\'s Gift',emoji:'🎁',desc:'Judge gives +2 to the predictor they choose',apply:function(s,j,pa,rs){if(pa.length>0){var pick=pa[Math.floor(Math.random()*pa.length)];s[pick.name]=(s[pick.name]||0)+2;}return s;}},
-  {name:'Underdog Rises',emoji:'🌱',desc:'Lowest scorer earns +2 — everyone gets their moment',apply:function(s,j,pa,rs){var min=Infinity;Object.values(s).forEach(function(v){if(v<min)min=v;});Object.keys(s).forEach(function(k){if(s[k]===min)s[k]=(s[k]||0)+2;});return s;}},
-  {name:'Perfect Round',emoji:'🌟',desc:'Any predictor who got all correct earns a bonus +3',apply:function(s,j,pa,rs){pa.forEach(function(p){if(p.earned===rs*(rs+1)/2)s[p.name]=(s[p.name]||0)+3;});return s;}},
-  {name:'Keep Going',emoji:'☀️',desc:'No change — the joy of playing is enough',apply:function(s){return s;}}
-];
-
-function startBDE(){
-  // Transition to Best Day Ever mode — same mechanics, positive framing
-  atFind(currentRoomCode).then(async function(rec){
-    var players=parseJSON(rec.fields['Players']||'[]',[]);
-    var rankSize=parseInt(rec.fields['Rank Size']||5);
-    var round=parseInt(rec.fields['Round']||1)+1;
-    var cardQ=shuffle(BDE_CARDS.map(function(c){return c.theme;}));
-    var card=BDE_CARDS[0];
-    var scenarios=shuffle(card.s).slice(0,rankSize);
-    var judgeIdx=(parseInt(new URLSearchParams(location.search).get('nextJudge')||'0')+round-1)%players.length;
-    await atUpdate(currentRecordId,{
-      'Status':'bde_judging','Round':round,'Judge Index':judgeIdx,
-      'BDE Mode':'1',
-      'Card Sequence':JSON.stringify(cardQ),
-      'Current Scenarios':JSON.stringify(scenarios),
-      'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
-      'Updated At':new Date().toISOString()
-    });
-    lastUpdatedAt='';
-  });
-}
-
-var BDE_MODE=false;
-
 // ─── WHEEL ────────────────────────────────────────────
 var wheelSpun=false;
 var wheelAngle=0;
 var wheelAnimFrame=null;
 var wheelFreespinning=false;
+var WHL_COLORS=['#c0392b','#e67e22','#27ae60','#2980b9','#8e44ad','#d35400'];
 
-var WHEEL_COLORS=['#c0392b','#e67e22','#27ae60','#2980b9','#8e44ad','#16a085'];
-
-function drawWheel(angle){
-  var canvas=document.getElementById('wheelCanvas');
-  if(!canvas)return;
-  var ctx=canvas.getContext('2d');
-  var cx=130,cy=130,r=122;
-  var n=WHEEL.length;
-  var arc=2*Math.PI/n;
+function drawWheel(a){
+  var cv=document.getElementById('wheelCanvas');if(!cv)return;
+  var cx=130,cy=130,r=122,n=WHEEL.length,arc=2*Math.PI/n,ctx=cv.getContext('2d');
   ctx.clearRect(0,0,260,260);
   WHEEL.forEach(function(w,i){
-    var start=angle+i*arc-Math.PI/2;
-    var end=start+arc;
-    ctx.beginPath();ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,start,end);ctx.closePath();
-    ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
-    ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=2;ctx.stroke();
-    ctx.save();
-    ctx.translate(cx,cy);
-    ctx.rotate(start+arc/2);
-    ctx.textAlign='right';
-    ctx.font='18px serif';
-    ctx.fillText(w.emoji,r-8,6);
-    ctx.font='bold 11px Barlow Condensed, sans-serif';
-    ctx.fillStyle='white';
-    ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=3;
-    var label=w.name.length>10?w.name.slice(0,9)+'…':w.name;
-    ctx.fillText(label,r-32,6);
+    var s=a+i*arc-Math.PI/2,e=s+arc;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e);ctx.closePath();
+    ctx.fillStyle=WHL_COLORS[i%WHL_COLORS.length];ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.5)';ctx.lineWidth=2.5;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(s+arc/2);ctx.textAlign='right';
+    ctx.font='17px serif';ctx.fillText(w.emoji,r-7,6);
+    ctx.font='bold 11px sans-serif';ctx.fillStyle='#fff';
+    ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=3;
+    ctx.fillText(w.name.length>10?w.name.slice(0,9)+'…':w.name,r-30,6);
     ctx.restore();
   });
-  ctx.beginPath();ctx.arc(cx,cy,22,0,2*Math.PI);
+  ctx.beginPath();ctx.arc(cx,cy,19,0,2*Math.PI);
   ctx.fillStyle='#080604';ctx.fill();
-  ctx.strokeStyle='rgba(255,102,0,.6)';ctx.lineWidth=3;ctx.stroke();
-  ctx.font='bold 16px serif';ctx.textAlign='center';ctx.fillStyle='white';
-  ctx.shadowColor='none';ctx.shadowBlur=0;
-  ctx.fillText('🎰',cx,cy+6);
+  ctx.strokeStyle='rgba(255,102,0,.8)';ctx.lineWidth=3;ctx.stroke();
+  ctx.font='13px serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.shadowBlur=0;
+  ctx.fillText('🎰',cx,cy+5);
 }
 
 function startFreeSpin(){
   wheelFreespinning=true;
-  var speed=0.055;
-  function frame(){
-    if(!wheelFreespinning)return;
-    wheelAngle+=speed;
-    drawWheel(wheelAngle);
-    wheelAnimFrame=requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
+  (function f(){if(!wheelFreespinning)return;wheelAngle+=0.05;drawWheel(wheelAngle);wheelAnimFrame=requestAnimationFrame(f);})();
 }
 
-function stopFreeSpinAndLand(winIdx,onDone){
+function landOnCenter(winIdx,done){
+  // Stops free-spin and eases to CENTER of winning segment (arc/2 offset = the fix)
   wheelFreespinning=false;
   if(wheelAnimFrame)cancelAnimationFrame(wheelAnimFrame);
-  var n=WHEEL.length;
-  var arc=2*Math.PI/n;
-  var current=wheelAngle%(2*Math.PI);
-  if(current<0)current+=2*Math.PI;
-  var target=current-(current%(2*Math.PI))-(winIdx*arc)+Math.PI*10;
-  var startAngle=wheelAngle;
-  var startTime=null;
-  var duration=3200;
-  function ease(t){return 1-Math.pow(1-t,4);}
-  function animate(ts){
-    if(!startTime)startTime=ts;
-    var t=Math.min((ts-startTime)/duration,1);
-    wheelAngle=startAngle+(target-startAngle)*ease(t);
+  var n=WHEEL.length,arc=2*Math.PI/n;
+  var target=wheelAngle+Math.PI*10-(wheelAngle%(2*Math.PI))-(winIdx*arc+arc/2);
+  var s0=wheelAngle,t0=null,dur=3400;
+  (function go(ts){
+    if(!t0)t0=ts;var t=Math.min((ts-t0)/dur,1);
+    wheelAngle=s0+(target-s0)*(1-Math.pow(1-t,4));
     drawWheel(wheelAngle);
-    if(t<1){wheelAnimFrame=requestAnimationFrame(animate);}
-    else if(onDone){onDone();}
-  }
-  requestAnimationFrame(animate);
+    if(t<1)wheelAnimFrame=requestAnimationFrame(go);
+    else if(done)done();
+  })(performance.now());
 }
 
-function showWheelResult(winIdx){
-  var w=WHEEL[winIdx];
-  document.getElementById('wheelTitle').textContent=w.emoji+' '+w.name;
-  document.getElementById('wheelResultBox').style.display='';
-  document.getElementById('wheelResultName').textContent=w.emoji+' '+w.name;
-  document.getElementById('wheelResultDesc').textContent=w.desc;
-  document.getElementById('wheelSub').style.display='none';
-}
-
-function showWheelScreen(card,theme,round,wheelResult){
-  wheelFreespinning=false;
-  if(wheelAnimFrame)cancelAnimationFrame(wheelAnimFrame);
-  document.getElementById('wheelRound').textContent=card.emoji+' '+theme+' · Round '+round;
-  document.getElementById('wheelResultBox').style.display='none';
-  document.getElementById('wheelSub').style.display='';
-  document.getElementById('wheelSub').textContent='Spin to see what rule applies this round';
-
+function showWheelScreen(card,label,wheelResult){
+  var isJudge=window._isJudge||false;
+  wheelFreespinning=false;if(wheelAnimFrame)cancelAnimationFrame(wheelAnimFrame);
+  document.getElementById('wheelRound').textContent=label;
+  document.getElementById('wheelResult').style.display='none';
+  document.getElementById('wheelNextBtn').style.display='none';
+  document.getElementById('wheelWaitMsg').style.display='none';
+  document.getElementById('spinBtn').style.display='none';
+  goTo('scWheel');
   if(wheelResult){
-    var wi=WHEEL.findIndex(function(x){return x.name===wheelResult;});
-    if(wi<0)wi=0;
-    document.getElementById('spinBtn').style.display='none';
-    document.getElementById('wheelWaitMsg').style.display='none';
-    if(isHost){
-      document.getElementById('wheelNextBtn').style.display='';
-    } else {
-      document.getElementById('wheelNextBtn').style.display='none';
-      document.getElementById('wheelWaitMsg').style.display='';
-      document.getElementById('wheelWaitMsg').textContent='Waiting for host to continue…';
-    }
-    goTo('scWheel');
-    // Everyone sees the wheel spin down to the result
+    var wi=WHEEL.findIndex(function(x){return x.name===wheelResult;});if(wi<0)wi=0;
     setTimeout(function(){
       startFreeSpin();
       setTimeout(function(){
-        stopFreeSpinAndLand(wi,function(){showWheelResult(wi);});
-      },800);
+        landOnCenter(wi,function(){
+          var w=WHEEL[wi];
+          document.getElementById('wName').textContent=w.emoji+' '+w.name;
+          document.getElementById('wDesc').textContent=w.desc;
+          document.getElementById('wheelResult').style.display='';
+          if(isHost){document.getElementById('wheelNextBtn').style.display='';}
+          else{document.getElementById('wheelWaitMsg').textContent='Waiting for host to continue…';document.getElementById('wheelWaitMsg').style.display='';}
+        });
+      },700);
     },50);
-    return;
+  } else {
+    wheelSpun=false;
+    setTimeout(function(){startFreeSpin();},50);
+    if(isJudge){document.getElementById('spinBtn').style.display='';}
+    else{document.getElementById('wheelWaitMsg').textContent='Waiting for judge to spin…';document.getElementById('wheelWaitMsg').style.display='';}
   }
-
-  // No result yet — everyone free-spins; judge gets spin button
-  wheelSpun=false;
-  document.getElementById('wheelTitle').textContent='🎰 What\'s the rule?';
-  document.getElementById('spinBtn').style.display=window._isJudge?'':'none';
-  document.getElementById('wheelWaitMsg').style.display=window._isJudge?'none':'';
-  document.getElementById('wheelWaitMsg').textContent='Judge is spinning…';
-  document.getElementById('wheelNextBtn').style.display='none';
-  goTo('scWheel');
-  setTimeout(function(){startFreeSpin();},50);
 }
 
 function spinWheel(){
-  if(wheelSpun)return;
-  wheelSpun=true;
+  if(wheelSpun)return;wheelSpun=true;
   document.getElementById('spinBtn').style.display='none';
-  document.getElementById('wheelTitle').textContent='🎰 Spinning…';
   var winIdx=Math.floor(Math.random()*WHEEL.length);
   var w=WHEEL[winIdx];
-  // Write result to Airtable immediately — everyone's poll will trigger landing
+  // Save scores + result to Airtable, then land
   atFind(currentRoomCode).then(async function(rec){
     var players=parseJSON(rec.fields['Players']||'[]',[]);
-    var judgeIdx=parseInt(rec.fields['Judge Index']||0);
-    var judge=players[judgeIdx%players.length];
+    var turn=parseInt(rec.fields['Round']||1);
+    var judgeIdx=(turn-1)%players.length;
+    var judge=players[judgeIdx];
     var jRanking=parseJSON(rec.fields['Judge Ranking']||'null',null)||[];
     var preds=parseJSON(rec.fields['Predictions']||'{}',{});
     var scores=parseJSON(rec.fields['Scores']||'{}',{});
-    var rankSize=parseInt(rec.fields['Rank Size']||6);
+    var rankSize=parseInt(rec.fields['Rank Size']||5);
     var predArr=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
       return{name:p.name,rank:preds[p.name]||[],earned:0};
     });
     predArr.forEach(function(pred){
       var pts=0;
-      (pred.rank||[]).forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
+      pred.rank.forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
       scores[pred.name]=(scores[pred.name]||0)+pts;pred.earned=pts;
     });
     var maxPred=0;predArr.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
@@ -1343,34 +1228,34 @@ function spinWheel(){
     players.forEach(function(p){p.score=scores[p.name]||0;});
     await atUpdate(currentRecordId,{
       'Wheel Result':w.name,'Status':'wheel',
-      'Scores':JSON.stringify(scores),
-      'Players':JSON.stringify(players),
+      'Scores':JSON.stringify(scores),'Players':JSON.stringify(players),
       'Updated At':new Date().toISOString()
     });
-    // Judge lands locally; non-hosts will land via poll
-    stopFreeSpinAndLand(winIdx,function(){
-      showWheelResult(winIdx);
+    landOnCenter(winIdx,function(){
+      document.getElementById('wName').textContent=w.emoji+' '+w.name;
+      document.getElementById('wDesc').textContent=w.desc;
+      document.getElementById('wheelResult').style.display='';
       document.getElementById('wheelNextBtn').style.display='';
     });
   });
 }
 
 function goToReveal(){
-  atUpdate(currentRecordId,{'Status':'reveal','Updated At':new Date().toISOString()}).then(function(){
-    poll();
-  });
+  atUpdate(currentRecordId,{'Status':'reveal','Updated At':new Date().toISOString()}).then(function(){poll();});
 }
 
 // ─── REVEAL ───────────────────────────────────────────
-function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResult){
+function showRevealScreen(rec,card,label,turn,n,players,jRanking,preds,scores,wheelResult){
   var f=rec.fields;
-  var judgeIdx=parseInt(f['Judge Index']||0);
-  var judge=players[judgeIdx%players.length];
-  var rankSize=parseInt(f['Rank Size']||6);
+  var judgeIdx=(turn-1)%n;
+  var judge=players[judgeIdx];
+  var rankSize=parseInt(f['Rank Size']||5);
   var w=WHEEL.find(function(x){return x.name===wheelResult;})||WHEEL[0];
   var scenarios=parseJSON(f['Current Scenarios']||'[]',[]);
+  var isLastTurn=turn>=(n*4);
+  var isRoundEnd=(turn%n===0);
 
-  document.getElementById('revRound').textContent=card.emoji+' '+card.theme+' · Round '+round;
+  document.getElementById('revRound').textContent=label;
   document.getElementById('revWheelEmoji').textContent=w.emoji;
   document.getElementById('revWheelName').textContent=w.name;
   document.getElementById('revWheelDesc').textContent=w.desc;
@@ -1384,8 +1269,7 @@ function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResu
       var color=pos===0?'#22c55e':pos===rankSize-1?'#ef4444':'#555';
       var lbl=pos===0?'1 😅':pos===rankSize-1?rankSize+' 💀':String(pos+1);
       var chips=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
-        var pr=preds[p.name]||[];
-        var match=pr[pos]===scIdx;
+        var pr=preds[p.name]||[];var match=pr[pos]===scIdx;
         return '<div class="p-chip" style="background:'+(match?p.color:'transparent')+';border-color:'+(match?p.color:'rgba(255,255,255,.2)')+';color:white">'+p.name[0].toUpperCase()+'</div>';
       }).join('');
       var row=document.createElement('div');
@@ -1397,59 +1281,31 @@ function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResu
     });
   }
 
-  // Predictions — show each predictor's full order
+  // Predictions
   var predDiv=document.getElementById('revPredictions');
   predDiv.innerHTML='';
   players.filter(function(p){return p.id!==judge.id;}).forEach(function(p){
-    var pr=preds[p.name]||[];
-    var earned=0;
+    var pr=preds[p.name]||[];var earned=0;
     if(jRanking)pr.forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)earned+=(pos+1);});
-    // Header row: name + points
-    var header=document.createElement('div');
-    header.style.cssText='display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem;margin-top:.6rem;';
-    header.innerHTML='<div style="width:11px;height:11px;border-radius:50%;background:'+p.color+';flex-shrink:0;"></div>'
-      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:1rem;font-weight:800;color:rgba(255,255,255,.85);flex:1;">'+esc(p.name)+'</div>'
-      +'<div style="font-family:\'Black Ops One\',display;font-size:1.1rem;color:'+p.color+';">+'+earned+'</div>';
-    predDiv.appendChild(header);
-    // Their ranked order
-    pr.forEach(function(scIdx,pos){
-      var s=scenarios[scIdx]||{tag:'',t:''};
-      var judgePos=jRanking?jRanking.indexOf(scIdx):-1;
-      var match=jRanking&&jRanking[pos]===scIdx;
-      var posLbl=pos===0?'1 😅':pos===pr.length-1?pr.length+' 💀':String(pos+1);
-      var row=document.createElement('div');
-      row.style.cssText='display:flex;align-items:center;gap:.55rem;background:var(--surface);border-radius:10px;padding:.55rem .75rem;margin-bottom:.3rem;border:1.5px solid '+(match?p.color:'rgba(255,255,255,.06)')+';';
-      row.innerHTML='<div style="min-width:36px;height:28px;border-radius:6px;background:'+(match?p.color:'rgba(255,255,255,.08)')+';display:flex;align-items:center;justify-content:center;font-family:\'Barlow Condensed\',sans-serif;font-size:.78rem;font-weight:900;color:'+(match?'white':'rgba(255,255,255,.4)')+';">'+posLbl+'</div>'
-        +'<div style="font-family:\'Barlow\',sans-serif;font-size:.8rem;color:rgba(255,255,255,.75);flex:1;line-height:1.35;"><span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.7rem;font-weight:700;color:rgba(255,102,0,.5);display:block;">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>'
-        +(match?'<div style="font-size:.9rem;">✓</div>':'');
-      predDiv.appendChild(row);
-    });
+    var sqs=Array(rankSize).fill(0).map(function(_,i){
+      var match=jRanking&&pr[i]===jRanking[i];
+      return '<div class="pred-sq" style="background:'+(match?p.color:'rgba(255,255,255,.1)')+'"></div>';
+    }).join('');
+    var row=document.createElement('div');row.className='pred-row';
+    row.innerHTML='<div class="pred-dot" style="background:'+p.color+'"></div>'
+      +'<div class="pred-name">'+esc(p.name)+'</div>'
+      +'<div class="pred-sqs">'+sqs+'</div>'
+      +'<div class="pred-pts">+'+earned+'</div>';
+    predDiv.appendChild(row);
   });
 
-  // Scoreboard
   buildScoreboard('revScores',players,scores);
   document.getElementById('revPrompt').textContent=card.prompt||'';
 
-  // Fixed structure: rounds 1-2 = RBD, 3-4 = BDE, end after round 4
-  var isLastRound=round>=4;
-  var enteringBDE=round===2; // About to flip to BDE
-
   if(isHost){
     var nrBtn=document.getElementById('nextRoundBtn');
-    if(isLastRound){
-      nrBtn.style.display='none';
-    } else if(enteringBDE){
-      nrBtn.textContent='☀️ Enter Best Day Ever →';
-      nrBtn.style.background='linear-gradient(135deg,#f59e0b,#fbbf24)';
-      nrBtn.style.color='#1a0a00';
-      nrBtn.style.display='';
-      nrBtn.onclick=function(){nextRound();};
-    } else {
-      nrBtn.textContent='Next Round →';
-      nrBtn.style.background='';nrBtn.style.color='';
-      nrBtn.style.display='';
-      nrBtn.onclick=function(){nextRound();};
-    }
+    nrBtn.style.display=isLastTurn?'none':'';
+    nrBtn.textContent=isRoundEnd&&!isLastTurn?'Start Next Round →':'Next Turn →';
     document.getElementById('endGameBtn').style.display='';
     document.getElementById('revWaitMsg').style.display='none';
   } else {
@@ -1463,17 +1319,16 @@ function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResu
 function buildScoreboard(id,players,scores){
   var sorted=players.slice().sort(function(a,b){return (scores[b.name]||0)-(scores[a.name]||0);});
   var div=document.getElementById(id);div.innerHTML='';
-  var rankLabels=['1st','2nd','3rd'];
+  var labels=['1st','2nd','3rd'];
   sorted.forEach(function(p,i){
     var pts=scores[p.name]||0;
     var isLeader=i===0&&pts>0;
     var chip=document.createElement('div');
     chip.className='sc-chip'+(isLeader?' leader':'');
-    var rankLbl=rankLabels[i]||(i+1)+'th';
-    chip.innerHTML='<div class="sc-rank'+(isLeader?' gold':'')+'">'+rankLbl+'</div>'
-      +'<div class="sc-dot" style="background:'+p.color+';width:14px;height:14px;"></div>'
+    chip.innerHTML='<div class="sc-rank'+(isLeader?' gold':'')+'">'+(labels[i]||(i+1)+'th')+'</div>'
+      +'<div class="sc-dot" style="background:'+p.color+'"></div>'
       +'<div class="sc-name">'+esc(p.name)+'</div>'
-      +'<div class="sc-pts">'+pts+'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.3);margin-left:2px;">pts</span></div>';
+      +'<div class="sc-pts">'+pts+'</div>';
     div.appendChild(chip);
   });
 }
@@ -1481,38 +1336,25 @@ function buildScoreboard(id,players,scores){
 async function nextRound(){
   var rec=await atFind(currentRoomCode);
   var players=parseJSON(rec.fields['Players']||'[]',[]);
-  var round=parseInt(rec.fields['Round']||1)+1;
+  var n=players.length;
+  var turn=parseInt(rec.fields['Round']||1)+1;     // next turn number
+  var judgeIdx=(turn-1)%n;                          // always derived, never stored
   var rankSize=parseInt(rec.fields['Rank Size']||5);
-  var startJudge=parseInt(new URLSearchParams(location.search).get('nextJudge')||'0')%players.length;
-  var judgeIdx=(startJudge+round-1)%players.length;
-  sessionStorage.setItem('lastJudgeIdx',String(judgeIdx));
-  // Rounds 1-2 = Really Bad Day, rounds 3-4 = Best Day Ever
-  var isBDE=round>2;
-  var deckSource=isBDE?BDE_CARDS:CARDS;
-  var cardIdx=(round-(isBDE?3:1))%deckSource.length;
-  var card=deckSource[cardIdx];
+  var isBDE=turn>(n*2);
+  var deck=isBDE?BDE_CARDS:CARDS;
+  var card=deck[(turn-1)%deck.length];
   var scenarios=shuffle(card.s).slice(0,rankSize);
   await atUpdate(currentRecordId,{
-    'Status':isBDE?'bde_judging':'judging',
-    'Round':round,'Judge Index':judgeIdx,
+    'Status':'judging','Round':turn,'Judge Index':judgeIdx,
     'Current Scenarios':JSON.stringify(scenarios),
     'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
     'Updated At':new Date().toISOString()
   });
-  judgeRankingLocal=[];wheelSpun=false;
-  lastUpdatedAt='';
+  judgeRankingLocal=[];wheelSpun=false;lastUpdatedAt='';
 }
 
 async function endGame(){
   await atUpdate(currentRecordId,{'Status':'complete','Updated At':new Date().toISOString()});
-}
-
-function playAgain(){
-  // Next game starts with the player after the last judge, in registration order
-  var rec_players=parseJSON(document.getElementById('endScores').dataset.players||'[]',[]);
-  var lastJudge=parseInt(sessionStorage.getItem('lastJudgeIdx')||'0');
-  var next=(lastJudge+1)%(rec_players.length||2);
-  location.href=location.pathname+'?nextJudge='+next;
 }
 
 function showEndScreen(players,scores){
@@ -1520,10 +1362,6 @@ function showEndScreen(players,scores){
   var sorted=players.slice().sort(function(a,b){return (scores[b.name]||0)-(scores[a.name]||0);});
   document.getElementById('endWinner').textContent='🏆 '+sorted[0].name;
   buildScoreboard('endScores',players,scores);
-  document.getElementById('endScores').dataset.players=JSON.stringify(players);
-  // Track which judge was last so next game rotates
-  var lastJudge=parseInt(sessionStorage.getItem('lastJudgeIdx')||'0');
-  sessionStorage.setItem('lastJudgeIdx',lastJudge);
   goTo('scEnd');
 }
 
@@ -1534,7 +1372,7 @@ function leaveGame(){
 }
 
 // ─── SOLO (PASS & PLAY) ───────────────────────────────
-var soloRankSize2=5;
+var soloRankSize2=6;
 
 function startSolo(){goTo('scSoloSetup');renderSoloPlayers();}
 
@@ -1718,27 +1556,19 @@ function soloReveal(card,judge,w){
 
 function shareInviteLink(){
   var code=currentRoomCode;
-  var url=window.location.origin+window.location.pathname+'?join='+code;
-  var text='Join my Really Bad Day™ game! Tap to jump in → '+url;
-  if(navigator.share){
-    navigator.share({title:'Join my Really Bad Day™ game!',text:text}).catch(function(){});
-  } else {
-    navigator.clipboard.writeText(url).then(function(){
-      alert('Link copied! Paste it in a text or email.');
-    });
-  }
+  var url=location.origin+location.pathname+'?join='+code;
+  var text='Join my Really Bad Day™ game! Tap to jump straight in → '+url;
+  if(navigator.share){navigator.share({title:'Join my game!',text:text}).catch(function(){});}
+  else{navigator.clipboard.writeText(url).then(function(){alert('Link copied — paste it in a text!');});}
 }
 
 window.onload=function(){
   myPlayerId=getMyId();
   drawWheel(0);
-  // Auto-fill join screen if ?join=CODE in URL
-  var params=new URLSearchParams(window.location.search);
-  var joinParam=params.get('join');
-  if(joinParam){
+  var join=new URLSearchParams(location.search).get('join');
+  if(join){
     goTo('scJoin');
-    initJoinScreen();
-    document.getElementById('joinCode').value=joinParam.toUpperCase();
+    document.getElementById('joinCode').value=join.toUpperCase();
     checkJoinReady();
   }
 };
