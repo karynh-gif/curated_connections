@@ -1099,6 +1099,7 @@ function showWaitPred(card,theme,round,players,preds){
 var wheelSpun=false;
 var wheelAngle=0;
 var wheelAnimFrame=null;
+var wheelFreespinning=false;
 
 var WHEEL_COLORS=['#c0392b','#e67e22','#27ae60','#2980b9','#8e44ad','#16a085'];
 
@@ -1113,20 +1114,16 @@ function drawWheel(angle){
   WHEEL.forEach(function(w,i){
     var start=angle+i*arc-Math.PI/2;
     var end=start+arc;
-    // Segment
     ctx.beginPath();ctx.moveTo(cx,cy);
     ctx.arc(cx,cy,r,start,end);ctx.closePath();
     ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
     ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=2;ctx.stroke();
-    // Emoji + text
     ctx.save();
     ctx.translate(cx,cy);
     ctx.rotate(start+arc/2);
     ctx.textAlign='right';
-    // Emoji
     ctx.font='18px serif';
     ctx.fillText(w.emoji,r-8,6);
-    // Name
     ctx.font='bold 11px Barlow Condensed, sans-serif';
     ctx.fillStyle='white';
     ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=3;
@@ -1134,7 +1131,6 @@ function drawWheel(angle){
     ctx.fillText(label,r-32,6);
     ctx.restore();
   });
-  // Center circle
   ctx.beginPath();ctx.arc(cx,cy,22,0,2*Math.PI);
   ctx.fillStyle='#080604';ctx.fill();
   ctx.strokeStyle='rgba(255,102,0,.6)';ctx.lineWidth=3;ctx.stroke();
@@ -1143,44 +1139,90 @@ function drawWheel(angle){
   ctx.fillText('🎰',cx,cy+6);
 }
 
+function startFreeSpin(){
+  wheelFreespinning=true;
+  var speed=0.055;
+  function frame(){
+    if(!wheelFreespinning)return;
+    wheelAngle+=speed;
+    drawWheel(wheelAngle);
+    wheelAnimFrame=requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function stopFreeSpinAndLand(winIdx,onDone){
+  wheelFreespinning=false;
+  if(wheelAnimFrame)cancelAnimationFrame(wheelAnimFrame);
+  var n=WHEEL.length;
+  var arc=2*Math.PI/n;
+  var current=wheelAngle%(2*Math.PI);
+  if(current<0)current+=2*Math.PI;
+  var target=current-(current%(2*Math.PI))-(winIdx*arc)+Math.PI*10;
+  var startAngle=wheelAngle;
+  var startTime=null;
+  var duration=3200;
+  function ease(t){return 1-Math.pow(1-t,4);}
+  function animate(ts){
+    if(!startTime)startTime=ts;
+    var t=Math.min((ts-startTime)/duration,1);
+    wheelAngle=startAngle+(target-startAngle)*ease(t);
+    drawWheel(wheelAngle);
+    if(t<1){wheelAnimFrame=requestAnimationFrame(animate);}
+    else if(onDone){onDone();}
+  }
+  requestAnimationFrame(animate);
+}
+
+function showWheelResult(winIdx){
+  var w=WHEEL[winIdx];
+  document.getElementById('wheelTitle').textContent=w.emoji+' '+w.name;
+  document.getElementById('wheelResultBox').style.display='';
+  document.getElementById('wheelResultName').textContent=w.emoji+' '+w.name;
+  document.getElementById('wheelResultDesc').textContent=w.desc;
+  document.getElementById('wheelSub').style.display='none';
+}
+
 function showWheelScreen(card,theme,round,wheelResult){
+  wheelFreespinning=false;
+  if(wheelAnimFrame)cancelAnimationFrame(wheelAnimFrame);
   document.getElementById('wheelRound').textContent=card.emoji+' '+theme+' · Round '+round;
   document.getElementById('wheelResultBox').style.display='none';
   document.getElementById('wheelSub').style.display='';
+  document.getElementById('wheelSub').textContent='Spin to see what rule applies this round';
+
   if(wheelResult){
     var wi=WHEEL.findIndex(function(x){return x.name===wheelResult;});
-    var w=WHEEL[wi>=0?wi:0];
-    var n=WHEEL.length;
-    var arc=2*Math.PI/n;
-    // Rotate so winner is at top (under pointer)
-    wheelAngle=-(wi*arc);
-    drawWheel(wheelAngle);
-    document.getElementById('wheelTitle').textContent=w.emoji+' '+w.name;
-    document.getElementById('wheelSub').style.display='none';
-    document.getElementById('wheelResultBox').style.display='';
-    document.getElementById('wheelResultName').textContent=w.emoji+' '+w.name;
-    document.getElementById('wheelResultDesc').textContent=w.desc;
+    if(wi<0)wi=0;
     document.getElementById('spinBtn').style.display='none';
+    document.getElementById('wheelWaitMsg').style.display='none';
     if(isHost){
       document.getElementById('wheelNextBtn').style.display='';
-      document.getElementById('wheelWaitMsg').style.display='none';
     } else {
       document.getElementById('wheelNextBtn').style.display='none';
       document.getElementById('wheelWaitMsg').style.display='';
+      document.getElementById('wheelWaitMsg').textContent='Waiting for host to continue…';
     }
     goTo('scWheel');
-    setTimeout(function(){drawWheel(wheelAngle);},50);
+    // Everyone sees the wheel spin down to the result
+    setTimeout(function(){
+      startFreeSpin();
+      setTimeout(function(){
+        stopFreeSpinAndLand(wi,function(){showWheelResult(wi);});
+      },800);
+    },50);
     return;
   }
-  // Not yet spun
-  wheelAngle=0;
+
+  // No result yet — everyone free-spins; judge gets spin button
+  wheelSpun=false;
   document.getElementById('wheelTitle').textContent='🎰 What\'s the rule?';
   document.getElementById('spinBtn').style.display=window._isJudge?'':'none';
   document.getElementById('wheelWaitMsg').style.display=window._isJudge?'none':'';
+  document.getElementById('wheelWaitMsg').textContent='Judge is spinning…';
   document.getElementById('wheelNextBtn').style.display='none';
-  wheelSpun=false;
   goTo('scWheel');
-  setTimeout(function(){drawWheel(wheelAngle);},50);
+  setTimeout(function(){startFreeSpin();},50);
 }
 
 function spinWheel(){
@@ -1188,63 +1230,41 @@ function spinWheel(){
   wheelSpun=true;
   document.getElementById('spinBtn').style.display='none';
   document.getElementById('wheelTitle').textContent='🎰 Spinning…';
-  // Pick winner immediately, spin animation to land there
   var winIdx=Math.floor(Math.random()*WHEEL.length);
-  var n=WHEEL.length;
-  var arc=2*Math.PI/n;
-  // Target angle: spin 6 full rotations + land on winner segment
-  var targetAngle=wheelAngle-(Math.PI*12)-(winIdx*arc);
-  var startAngle=wheelAngle;
-  var startTime=null;
-  var duration=4000;
-  function ease(t){return t<1?1-Math.pow(1-t,4):1;}
-  function animate(ts){
-    if(!startTime)startTime=ts;
-    var elapsed=ts-startTime;
-    var t=Math.min(elapsed/duration,1);
-    wheelAngle=startAngle+(targetAngle-startAngle)*ease(t);
-    drawWheel(wheelAngle);
-    if(t<1){wheelAnimFrame=requestAnimationFrame(animate);}
-    else{onWheelLanded(winIdx);}
-  }
-  requestAnimationFrame(animate);
-}
-
-async function onWheelLanded(winIdx){
   var w=WHEEL[winIdx];
-  document.getElementById('wheelTitle').textContent=w.emoji+' '+w.name;
-  document.getElementById('wheelResultBox').style.display='';
-  document.getElementById('wheelResultName').textContent=w.emoji+' '+w.name;
-  document.getElementById('wheelResultDesc').textContent=w.desc;
-  document.getElementById('wheelSub').style.display='none';
-  // Calculate scores and save
-  var rec=await atFind(currentRoomCode);
-  var players=parseJSON(rec.fields['Players']||'[]',[]);
-  var judgeIdx=parseInt(rec.fields['Judge Index']||0);
-  var judge=players[judgeIdx%players.length];
-  var jRanking=parseJSON(rec.fields['Judge Ranking']||'null',null)||[];
-  var preds=parseJSON(rec.fields['Predictions']||'{}',{});
-  var scores=parseJSON(rec.fields['Scores']||'{}',{});
-  var rankSize=parseInt(rec.fields['Rank Size']||6);
-  var predArr=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
-    return{name:p.name,rank:preds[p.name]||[],earned:0};
+  // Write result to Airtable immediately — everyone's poll will trigger landing
+  atFind(currentRoomCode).then(async function(rec){
+    var players=parseJSON(rec.fields['Players']||'[]',[]);
+    var judgeIdx=parseInt(rec.fields['Judge Index']||0);
+    var judge=players[judgeIdx%players.length];
+    var jRanking=parseJSON(rec.fields['Judge Ranking']||'null',null)||[];
+    var preds=parseJSON(rec.fields['Predictions']||'{}',{});
+    var scores=parseJSON(rec.fields['Scores']||'{}',{});
+    var rankSize=parseInt(rec.fields['Rank Size']||6);
+    var predArr=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
+      return{name:p.name,rank:preds[p.name]||[],earned:0};
+    });
+    predArr.forEach(function(pred){
+      var pts=0;
+      (pred.rank||[]).forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
+      scores[pred.name]=(scores[pred.name]||0)+pts;pred.earned=pts;
+    });
+    var maxPred=0;predArr.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
+    scores[judge.name]=(scores[judge.name]||0)+maxPred;
+    scores=w.apply(scores,judge.name,predArr,rankSize);
+    players.forEach(function(p){p.score=scores[p.name]||0;});
+    await atUpdate(currentRecordId,{
+      'Wheel Result':w.name,'Status':'wheel',
+      'Scores':JSON.stringify(scores),
+      'Players':JSON.stringify(players),
+      'Updated At':new Date().toISOString()
+    });
+    // Judge lands locally; non-hosts will land via poll
+    stopFreeSpinAndLand(winIdx,function(){
+      showWheelResult(winIdx);
+      document.getElementById('wheelNextBtn').style.display='';
+    });
   });
-  predArr.forEach(function(pred){
-    var pts=0;
-    (pred.rank||[]).forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
-    scores[pred.name]=(scores[pred.name]||0)+pts;pred.earned=pts;
-  });
-  var maxPred=0;predArr.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
-  scores[judge.name]=(scores[judge.name]||0)+maxPred;
-  scores=w.apply(scores,judge.name,predArr,rankSize);
-  players.forEach(function(p){p.score=scores[p.name]||0;});
-  await atUpdate(currentRecordId,{
-    'Wheel Result':w.name,'Status':'wheel',
-    'Scores':JSON.stringify(scores),
-    'Players':JSON.stringify(players),
-    'Updated At':new Date().toISOString()
-  });
-  document.getElementById('wheelNextBtn').style.display='';
 }
 
 function goToReveal(){
@@ -1358,8 +1378,7 @@ async function nextRound(){
   var players=parseJSON(rec.fields['Players']||'[]',[]);
   var cardSeq=parseJSON(rec.fields['Card Sequence']||'[]',[]);
   var round=parseInt(rec.fields['Round']||1)+1;
-  var prevIdx=parseInt(rec.fields['Judge Index']||0);
-  var judgeIdx=(prevIdx+1)%players.length;
+  var judgeIdx=(round-1)%players.length;  // Always derived from round, never drifts
   var rankSize=parseInt(rec.fields['Rank Size']||6);
   var cardTheme=cardSeq[(round-1)%cardSeq.length];
   var card=CARDS.find(function(c){return c.theme===cardTheme;})||CARDS[0];
@@ -1368,8 +1387,6 @@ async function nextRound(){
     'Status':'judging','Round':round,'Judge Index':judgeIdx,
     'Current Scenarios':JSON.stringify(scenarios),
     'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
-    'Scores':rec.fields['Scores']||'{}',
-    'Players':JSON.stringify(players),
     'Updated At':new Date().toISOString()
   });
   judgeRankingLocal=[];wheelSpun=false;
