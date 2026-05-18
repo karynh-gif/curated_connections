@@ -14,7 +14,7 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 @keyframes wheelPulse{0%,100%{box-shadow:0 0 30px rgba(255,102,0,.3);}50%{box-shadow:0 0 60px rgba(255,102,0,.7);}}
 .screen{display:none;min-height:100vh;flex-direction:column;}.screen.active{display:flex;}
-.hdr{background:repeating-linear-gradient(45deg,var(--orange) 0,var(--orange) 10px,#1a0800 10px,#1a0800 20px);padding:1rem 1.25rem .9rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.hdr{background:transparent;padding:1rem 1.25rem .9rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(255,102,0,.18);}
 .hdr-logo{font-family:"Black Ops One",display;font-size:1.05rem;color:var(--white);}
 .hdr-meta{font-family:"Barlow Condensed",sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.75);text-align:center;flex:1;padding:0 .5rem;}
 .hdr-code{font-family:"Barlow Condensed",sans-serif;font-size:.85rem;font-weight:900;color:var(--orange);letter-spacing:.1em;}
@@ -292,7 +292,7 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="wheel-desc" id="wDesc">Spin the wheel to see what happens this round</div>
     <button class="btn-p" id="spinBtn" onclick="spinWheel()" style="max-width:280px">Spin the Wheel →</button>
     <button class="btn-s" id="wheelNextBtn" onclick="goToReveal()" style="max-width:280px;display:none">See the Reveal →</button>
-    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite">Host is spinning the wheel…</div>
+    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite">Waiting for host to reveal…</div>
   </div>
 </div>
 
@@ -858,6 +858,8 @@ async function getCurrentPlayers(){
 }
 
 // ─── POLLING ──────────────────────────────────────────
+var lastUpdatedAt='';
+
 function startPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(poll,2500);}
 function stopPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=null;}
 
@@ -867,6 +869,10 @@ async function poll(){
     var rec=await atFind(currentRoomCode);
     if(!rec)return;
     currentRecordId=rec.id;
+    var updatedAt=rec.fields['Updated At']||'';
+    // Only re-render if something actually changed in Airtable
+    if(updatedAt&&updatedAt===lastUpdatedAt)return;
+    lastUpdatedAt=updatedAt;
     handleSession(rec);
   }catch(e){}
 }
@@ -874,7 +880,6 @@ async function poll(){
 function handleSession(rec){
   var f=rec.fields;
   var status=f['Status']||'lobby';
-  if(status===lastStatus&&status!=='predicting'&&status!=='lobby')return;
   lastStatus=status;
   var players=parseJSON(f['Players']||'[]',[]);
   var judgeIdx=parseInt(f['Judge Index']||0);
@@ -1075,29 +1080,28 @@ var wheelSpun=false;
 function showWheelScreen(card,theme,round,wheelResult){
   document.getElementById('wheelRound').textContent=card.emoji+' '+theme+' · Round '+round;
   if(wheelResult){
-    // Already spun — show result
+    // Already spun — show result on both screens
     var w=WHEEL.find(function(x){return x.name===wheelResult;})||WHEEL[0];
     document.getElementById('wEmoji').textContent=w.emoji;
     document.getElementById('wName').textContent=w.name;
     document.getElementById('wDesc').textContent=w.desc;
     document.getElementById('spinBtn').style.display='none';
-    document.getElementById('wheelWaitMsg').style.display='none';
+    document.getElementById('wheelRing').classList.remove('spinning');
     if(isHost){
       document.getElementById('wheelNextBtn').style.display='';
-      document.getElementById('revWaitMsg').style.display='none';
+      document.getElementById('wheelWaitMsg').style.display='none';
     } else {
       document.getElementById('wheelNextBtn').style.display='none';
       document.getElementById('wheelWaitMsg').style.display='';
     }
-    document.getElementById('wheelRing').classList.remove('spinning');
     goTo('scWheel');
     return;
   }
-  // Not yet spun
+  // Not yet spun — show wheel to everyone, only host gets spin button
   document.getElementById('wEmoji').textContent='🎰';
   document.getElementById('wName').textContent='Spin It';
   document.getElementById('wDesc').textContent='Spin the wheel to see what happens this round';
-  document.getElementById('wheelRing').classList.remove('spinning');
+  document.getElementById('wheelRing').classList.add('spinning');
   document.getElementById('spinBtn').style.display=isHost?'':'none';
   document.getElementById('wheelWaitMsg').style.display=isHost?'none':'';
   document.getElementById('wheelNextBtn').style.display='none';
