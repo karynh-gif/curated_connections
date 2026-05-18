@@ -710,6 +710,7 @@ var myName=null;
 var currentRoomCode=null;
 var currentRecordId=null;
 var isHost=false;
+var isJudge=false;
 var pollTimer=null;
 var lastStatus=null;
 
@@ -903,6 +904,7 @@ function handleSession(rec){
   var judgeIdx=parseInt(f['Judge Index']||0);
   var judge=players[judgeIdx%players.length];
   var isJudge=judge&&judge.id===myPlayerId;
+  window._isJudge=isJudge;
   var scenarios=parseJSON(f['Current Scenarios']||'[]',[]);
   var cardSeq=parseJSON(f['Card Sequence']||'[]',[]);
   var round=parseInt(f['Round']||1);
@@ -1167,16 +1169,18 @@ function showWheelScreen(card,theme,round,wheelResult){
       document.getElementById('wheelWaitMsg').style.display='';
     }
     goTo('scWheel');
+    setTimeout(function(){drawWheel(wheelAngle);},50);
     return;
   }
   // Not yet spun
-  wheelAngle=0;drawWheel(wheelAngle);
+  wheelAngle=0;
   document.getElementById('wheelTitle').textContent='🎰 What\'s the rule?';
-  document.getElementById('spinBtn').style.display=isHost?'':'none';
-  document.getElementById('wheelWaitMsg').style.display=isHost?'none':'';
+  document.getElementById('spinBtn').style.display=window._isJudge?'':'none';
+  document.getElementById('wheelWaitMsg').style.display=window._isJudge?'none':'';
   document.getElementById('wheelNextBtn').style.display='none';
   wheelSpun=false;
   goTo('scWheel');
+  setTimeout(function(){drawWheel(wheelAngle);},50);
 }
 
 function spinWheel(){
@@ -1285,24 +1289,33 @@ function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResu
     });
   }
 
-  // Predictions
+  // Predictions — show each predictor's full order
   var predDiv=document.getElementById('revPredictions');
   predDiv.innerHTML='';
   players.filter(function(p){return p.id!==judge.id;}).forEach(function(p){
     var pr=preds[p.name]||[];
     var earned=0;
     if(jRanking)pr.forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)earned+=(pos+1);});
-    var sqs=Array(rankSize).fill(0).map(function(_,i){
-      var match=jRanking&&pr[i]===jRanking[i];
-      return '<div class="pred-sq" style="background:'+(match?p.color:'rgba(255,255,255,.1)')+'"></div>';
-    }).join('');
-    var row=document.createElement('div');
-    row.className='pred-row';
-    row.innerHTML='<div class="pred-dot" style="background:'+p.color+'"></div>'
-      +'<div class="pred-name">'+esc(p.name)+'</div>'
-      +'<div class="pred-sqs">'+sqs+'</div>'
-      +'<div class="pred-pts">+'+earned+'</div>';
-    predDiv.appendChild(row);
+    // Header row: name + points
+    var header=document.createElement('div');
+    header.style.cssText='display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem;margin-top:.6rem;';
+    header.innerHTML='<div style="width:11px;height:11px;border-radius:50%;background:'+p.color+';flex-shrink:0;"></div>'
+      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:1rem;font-weight:800;color:rgba(255,255,255,.85);flex:1;">'+esc(p.name)+'</div>'
+      +'<div style="font-family:\'Black Ops One\',display;font-size:1.1rem;color:'+p.color+';">+'+earned+'</div>';
+    predDiv.appendChild(header);
+    // Their ranked order
+    pr.forEach(function(scIdx,pos){
+      var s=scenarios[scIdx]||{tag:'',t:''};
+      var judgePos=jRanking?jRanking.indexOf(scIdx):-1;
+      var match=jRanking&&jRanking[pos]===scIdx;
+      var posLbl=pos===0?'1 😅':pos===pr.length-1?pr.length+' 💀':String(pos+1);
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:.55rem;background:var(--surface);border-radius:10px;padding:.55rem .75rem;margin-bottom:.3rem;border:1.5px solid '+(match?p.color:'rgba(255,255,255,.06)')+';';
+      row.innerHTML='<div style="min-width:36px;height:28px;border-radius:6px;background:'+(match?p.color:'rgba(255,255,255,.08)')+';display:flex;align-items:center;justify-content:center;font-family:\'Barlow Condensed\',sans-serif;font-size:.78rem;font-weight:900;color:'+(match?'white':'rgba(255,255,255,.4)')+';">'+posLbl+'</div>'
+        +'<div style="font-family:\'Barlow\',sans-serif;font-size:.8rem;color:rgba(255,255,255,.75);flex:1;line-height:1.35;"><span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.7rem;font-weight:700;color:rgba(255,102,0,.5);display:block;">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>'
+        +(match?'<div style="font-size:.9rem;">✓</div>':'');
+      predDiv.appendChild(row);
+    });
   });
 
   // Scoreboard
@@ -1345,7 +1358,8 @@ async function nextRound(){
   var players=parseJSON(rec.fields['Players']||'[]',[]);
   var cardSeq=parseJSON(rec.fields['Card Sequence']||'[]',[]);
   var round=parseInt(rec.fields['Round']||1)+1;
-  var judgeIdx=(parseInt(rec.fields['Judge Index']||0)+1)%players.length;
+  var prevIdx=parseInt(rec.fields['Judge Index']||0);
+  var judgeIdx=(prevIdx+1)%players.length;
   var rankSize=parseInt(rec.fields['Rank Size']||6);
   var cardTheme=cardSeq[(round-1)%cardSeq.length];
   var card=CARDS.find(function(c){return c.theme===cardTheme;})||CARDS[0];
@@ -1354,9 +1368,12 @@ async function nextRound(){
     'Status':'judging','Round':round,'Judge Index':judgeIdx,
     'Current Scenarios':JSON.stringify(scenarios),
     'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
+    'Scores':rec.fields['Scores']||'{}',
+    'Players':JSON.stringify(players),
     'Updated At':new Date().toISOString()
   });
   judgeRankingLocal=[];wheelSpun=false;
+  lastUpdatedAt='';
 }
 
 async function endGame(){
