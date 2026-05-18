@@ -187,8 +187,8 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
       <div class="s-label">How Many to Rank?</div>
       <div class="rank-opts">
         <button class="rank-btn" onclick="setRankSize(this,4)">4</button>
-        <button class="rank-btn sel" onclick="setRankSize(this,6)">6</button>
-        <button class="rank-btn" onclick="setRankSize(this,8)">8</button>
+        <button class="rank-btn sel" onclick="setRankSize(this,5)">5</button>
+        <button class="rank-btn" onclick="setRankSize(this,6)">6</button>
       </div>
     </div>
   </div>
@@ -208,9 +208,12 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-code" id="judgeCode"></div>
   </div>
   <div class="card-body">
+    <div class="active-player-banner">
+      <div class="active-player-label">⚖️ You Are the Judge</div>
+      <div class="active-player-name" id="judgeNameBanner" style="color:#60a5fa;">Your Turn</div>
+    </div>
     <div class="c-header">
       <div class="c-deck" id="judgeDeck"></div>
-      <div class="c-badge">⚖️ YOU ARE THE JUDGE</div>
       <div class="c-instr" id="judgeInstr">Rank from least bad to worst</div>
     </div>
     <div class="rank-legend">
@@ -370,7 +373,7 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="end-winner">Final Standings</div>
     <div class="final-scores" id="endScores"></div>
     <div style="display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:340px;">
-      <button class="btn-p" onclick="location.reload()">Play Again</button>
+      <button class="btn-p" onclick="playAgain()">Play Again →</button>
     </div>
   </div>
 </div>
@@ -392,8 +395,8 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
       <div class="s-label">How Many to Rank?</div>
       <div class="rank-opts">
         <button class="rank-btn" onclick="setSoloRank(this,4)">4</button>
-        <button class="rank-btn sel" onclick="setSoloRank(this,6)">6</button>
-        <button class="rank-btn" onclick="setSoloRank(this,8)">8</button>
+        <button class="rank-btn sel" onclick="setSoloRank(this,5)">5</button>
+        <button class="rank-btn" onclick="setSoloRank(this,6)">6</button>
       </div>
     </div>
   </div>
@@ -857,13 +860,14 @@ function renderLobby(session){
 
 async function startGame(){
   var players=await getCurrentPlayers();
-  var cardQ=shuffle(CARDS.map(function(c){return c.theme;}));
-  var rankSize=parseInt(document.querySelector('.rank-btn.sel').textContent)||6;
-  var card=CARDS.find(function(c){return c.theme===cardQ[0];});
+  var rankSize=parseInt(document.querySelector('.rank-btn.sel').textContent)||5;
+  var startJudge=parseInt(new URLSearchParams(location.search).get('nextJudge')||'0')%players.length;
+  sessionStorage.setItem('lastJudgeIdx',String(startJudge));
+  // Round 1 = RBD, use first RBD card
+  var card=CARDS[0];
   var scenarios=shuffle(card.s).slice(0,rankSize);
   await atUpdate(currentRecordId,{
-    'Status':'judging','Round':1,'Judge Index':0,'Rank Size':rankSize,
-    'Card Sequence':JSON.stringify(cardQ),
+    'Status':'judging','Round':1,'Judge Index':startJudge,'Rank Size':rankSize,
     'Current Scenarios':JSON.stringify(scenarios),
     'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
     'Scores':JSON.stringify(Object.fromEntries(players.map(function(p){return [p.name,0];}))),
@@ -927,30 +931,36 @@ function handleSession(rec){
   if(status==='lobby'){
     renderLobby(rec);
   }
-  else if(status==='judging'){
+  else if(status==='judging'||status==='bde_judging'){
+    BDE_MODE=round>2;
+    var activeCard=BDE_MODE?(BDE_CARDS[(round-3)%BDE_CARDS.length]):card;
     if(isJudge){
-      showJudgingScreen(card,cardTheme,round,rankSize,scenarios);
+      showJudgingScreen(activeCard,cardTheme,round,rankSize,scenarios,BDE_MODE);
     } else {
-      showWaitJudge(card,cardTheme,round,judge,players,preds);
+      showWaitJudge(activeCard,cardTheme,round,judge,players,preds,BDE_MODE);
     }
   }
   else if(status==='predicting'){
+    BDE_MODE=round>2;
+    var activeCard2=BDE_MODE?(BDE_CARDS[(round-3)%BDE_CARDS.length]):card;
     if(isJudge){
-      showWaitJudge(card,cardTheme,round,judge,players,preds);
+      showWaitJudge(activeCard2,cardTheme,round,judge,players,preds,BDE_MODE);
     } else {
       var myPred=preds[myName];
       if(myPred){
-        showWaitPred(card,cardTheme,round,players,preds);
+        showWaitPred(activeCard2,cardTheme,round,players,preds);
       } else {
-        showPredicting(card,cardTheme,round,judge,rankSize,scenarios);
+        showPredicting(activeCard2,cardTheme,round,judge,rankSize,scenarios,BDE_MODE);
       }
     }
   }
   else if(status==='wheel'){
-    showWheelScreen(card,cardTheme,round,wheelResult);
+    BDE_MODE=round>2;
+    showWheelScreen(card,cardTheme,round,wheelResult,BDE_MODE);
   }
   else if(status==='reveal'){
-    showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResult);
+    BDE_MODE=round>2;
+    showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResult,BDE_MODE);
   }
   else if(status==='complete'){
     showEndScreen(players,scores);
@@ -960,11 +970,12 @@ function handleSession(rec){
 // ─── JUDGING SCREEN ───────────────────────────────────
 var judgeRankingLocal=[];
 
-function showJudgingScreen(card,theme,round,rankSize,scenarios){
+function showJudgingScreen(card,theme,round,rankSize,scenarios,bde){
   if(document.getElementById('scJudging').classList.contains('active')&&judgeRankingLocal.length>0)return;
   document.getElementById('judgeRound').textContent=card.emoji+' '+theme+' · Round '+round;
   document.getElementById('judgeDeck').textContent=card.emoji+' '+theme;
-  document.getElementById('judgeInstr').textContent='Rank from least bad to worst';
+  document.getElementById('judgeNameBanner').textContent=myName||'You';
+  document.getElementById('judgeInstr').textContent=bde?'Rank from "meh" to BEST DAY EVER ☀️':'Rank from least bad to worst';
   judgeRankingLocal=[];
   renderRankList('judgeList',scenarios,judgeRankingLocal,'judgeLockBtn','judgeProgTxt',rankSize);
   document.getElementById('judgeLockBtn').disabled=true;
@@ -1094,6 +1105,83 @@ function showWaitPred(card,theme,round,players,preds){
   });
   goTo('scWaitPred');
 }
+
+// ─── BEST DAY EVER ────────────────────────────────────
+var BDE_CARDS=[
+  {theme:'Money & Luck',emoji:'💰',prompt:'What would you actually do with a windfall?',s:[
+    {tag:'Money',t:'You find $500 cash in an old coat pocket'},
+    {tag:'Luck',t:'Your lottery ticket wins $10,000 tax-free'},
+    {tag:'Money',t:'Your boss gives you an unexpected $2,000 bonus'},
+    {tag:'Luck',t:'You get bumped to first class on a 6-hour flight'},
+    {tag:'Money',t:'Someone anonymously pays off one of your bills'},
+    {tag:'Luck',t:'You win a free week-long trip, all expenses paid'}
+  ]},
+  {theme:'Love & Connection',emoji:'💛',prompt:'When did you last feel truly seen by someone?',s:[
+    {tag:'Connection',t:'Your best friend flies in as a surprise just to hang out'},
+    {tag:'Love',t:'Someone you admire tells you you\'ve inspired them'},
+    {tag:'Connection',t:'A stranger randomly compliments something meaningful about you'},
+    {tag:'Love',t:'You get a long letter from someone who loves you'},
+    {tag:'Connection',t:'Your whole family shows up to something important to you'},
+    {tag:'Love',t:'Someone makes you a home-cooked meal after a brutal week'}
+  ]},
+  {theme:'Rest & Freedom',emoji:'☀️',prompt:'What does a perfect do-nothing day look like for you?',s:[
+    {tag:'Freedom',t:'You wake up with zero obligations and a full weekend ahead'},
+    {tag:'Rest',t:'You sleep 10 hours and still feel like you could nap'},
+    {tag:'Freedom',t:'Every task on your to-do list is already done'},
+    {tag:'Rest',t:'You spend the whole day outside with no phone'},
+    {tag:'Freedom',t:'You cancel plans guilt-free and feel great about it'},
+    {tag:'Rest',t:'You have two uninterrupted hours to do exactly what you love'}
+  ]},
+  {theme:'Wins & Recognition',emoji:'🏆',prompt:'What recognition would mean the most to you?',s:[
+    {tag:'Win',t:'You nail a high-stakes presentation and everyone applauds'},
+    {tag:'Recognition',t:'Your work goes viral for all the right reasons'},
+    {tag:'Win',t:'You beat your personal best at something you\'ve worked hard at'},
+    {tag:'Recognition',t:'Someone you respect publicly credits you in a big moment'},
+    {tag:'Win',t:'You get accepted into something you didn\'t think you\'d get into'},
+    {tag:'Recognition',t:'A mentor tells you they\'re proud of you'}
+  ]},
+  {theme:'Simple Joy',emoji:'🌤️',prompt:'What small thing genuinely makes your whole day?',s:[
+    {tag:'Joy',t:'You hit every green light on the way somewhere important'},
+    {tag:'Simple',t:'The coffee is exactly right and you have nowhere to be'},
+    {tag:'Joy',t:'You find money in a pocket you forgot about'},
+    {tag:'Simple',t:'The restaurant has your exact order ready faster than expected'},
+    {tag:'Joy',t:'You wake up thinking it\'s Monday and it\'s actually Saturday'},
+    {tag:'Simple',t:'You finish a book you\'ve been reading for months'}
+  ]}
+];
+
+var BDE_WHEEL=[
+  {name:'Double Joy',emoji:'✨',desc:'Top scorer earns a bonus point — luck stacks on luck',apply:function(s,j,pa,rs){var top=pa.reduce(function(a,b){return a.earned>b.earned?a:b},{earned:-1});if(top.earned>0)s[top.name]=(s[top.name]||0)+1;return s;}},
+  {name:'Shared Win',emoji:'🤝',desc:'Everyone gets +1 — today\'s a good day for all',apply:function(s,j,pa,rs){Object.keys(s).forEach(function(k){s[k]=(s[k]||0)+1;});return s;}},
+  {name:'Judge\'s Gift',emoji:'🎁',desc:'Judge gives +2 to the predictor they choose',apply:function(s,j,pa,rs){if(pa.length>0){var pick=pa[Math.floor(Math.random()*pa.length)];s[pick.name]=(s[pick.name]||0)+2;}return s;}},
+  {name:'Underdog Rises',emoji:'🌱',desc:'Lowest scorer earns +2 — everyone gets their moment',apply:function(s,j,pa,rs){var min=Infinity;Object.values(s).forEach(function(v){if(v<min)min=v;});Object.keys(s).forEach(function(k){if(s[k]===min)s[k]=(s[k]||0)+2;});return s;}},
+  {name:'Perfect Round',emoji:'🌟',desc:'Any predictor who got all correct earns a bonus +3',apply:function(s,j,pa,rs){pa.forEach(function(p){if(p.earned===rs*(rs+1)/2)s[p.name]=(s[p.name]||0)+3;});return s;}},
+  {name:'Keep Going',emoji:'☀️',desc:'No change — the joy of playing is enough',apply:function(s){return s;}}
+];
+
+function startBDE(){
+  // Transition to Best Day Ever mode — same mechanics, positive framing
+  atFind(currentRoomCode).then(async function(rec){
+    var players=parseJSON(rec.fields['Players']||'[]',[]);
+    var rankSize=parseInt(rec.fields['Rank Size']||5);
+    var round=parseInt(rec.fields['Round']||1)+1;
+    var cardQ=shuffle(BDE_CARDS.map(function(c){return c.theme;}));
+    var card=BDE_CARDS[0];
+    var scenarios=shuffle(card.s).slice(0,rankSize);
+    var judgeIdx=(parseInt(new URLSearchParams(location.search).get('nextJudge')||'0')+round-1)%players.length;
+    await atUpdate(currentRecordId,{
+      'Status':'bde_judging','Round':round,'Judge Index':judgeIdx,
+      'BDE Mode':'1',
+      'Card Sequence':JSON.stringify(cardQ),
+      'Current Scenarios':JSON.stringify(scenarios),
+      'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
+      'Updated At':new Date().toISOString()
+    });
+    lastUpdatedAt='';
+  });
+}
+
+var BDE_MODE=false;
 
 // ─── WHEEL ────────────────────────────────────────────
 var wheelSpun=false;
@@ -1342,9 +1430,26 @@ function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResu
   buildScoreboard('revScores',players,scores);
   document.getElementById('revPrompt').textContent=card.prompt||'';
 
-  // Buttons
+  // Fixed structure: rounds 1-2 = RBD, 3-4 = BDE, end after round 4
+  var isLastRound=round>=4;
+  var enteringBDE=round===2; // About to flip to BDE
+
   if(isHost){
-    document.getElementById('nextRoundBtn').style.display='';
+    var nrBtn=document.getElementById('nextRoundBtn');
+    if(isLastRound){
+      nrBtn.style.display='none';
+    } else if(enteringBDE){
+      nrBtn.textContent='☀️ Enter Best Day Ever →';
+      nrBtn.style.background='linear-gradient(135deg,#f59e0b,#fbbf24)';
+      nrBtn.style.color='#1a0a00';
+      nrBtn.style.display='';
+      nrBtn.onclick=function(){nextRound();};
+    } else {
+      nrBtn.textContent='Next Round →';
+      nrBtn.style.background='';nrBtn.style.color='';
+      nrBtn.style.display='';
+      nrBtn.onclick=function(){nextRound();};
+    }
     document.getElementById('endGameBtn').style.display='';
     document.getElementById('revWaitMsg').style.display='none';
   } else {
@@ -1376,15 +1481,20 @@ function buildScoreboard(id,players,scores){
 async function nextRound(){
   var rec=await atFind(currentRoomCode);
   var players=parseJSON(rec.fields['Players']||'[]',[]);
-  var cardSeq=parseJSON(rec.fields['Card Sequence']||'[]',[]);
   var round=parseInt(rec.fields['Round']||1)+1;
-  var judgeIdx=(round-1)%players.length;  // Always derived from round, never drifts
-  var rankSize=parseInt(rec.fields['Rank Size']||6);
-  var cardTheme=cardSeq[(round-1)%cardSeq.length];
-  var card=CARDS.find(function(c){return c.theme===cardTheme;})||CARDS[0];
+  var rankSize=parseInt(rec.fields['Rank Size']||5);
+  var startJudge=parseInt(new URLSearchParams(location.search).get('nextJudge')||'0')%players.length;
+  var judgeIdx=(startJudge+round-1)%players.length;
+  sessionStorage.setItem('lastJudgeIdx',String(judgeIdx));
+  // Rounds 1-2 = Really Bad Day, rounds 3-4 = Best Day Ever
+  var isBDE=round>2;
+  var deckSource=isBDE?BDE_CARDS:CARDS;
+  var cardIdx=(round-(isBDE?3:1))%deckSource.length;
+  var card=deckSource[cardIdx];
   var scenarios=shuffle(card.s).slice(0,rankSize);
   await atUpdate(currentRecordId,{
-    'Status':'judging','Round':round,'Judge Index':judgeIdx,
+    'Status':isBDE?'bde_judging':'judging',
+    'Round':round,'Judge Index':judgeIdx,
     'Current Scenarios':JSON.stringify(scenarios),
     'Judge Ranking':'','Predictions':'{}','Wheel Result':'',
     'Updated At':new Date().toISOString()
@@ -1397,11 +1507,23 @@ async function endGame(){
   await atUpdate(currentRecordId,{'Status':'complete','Updated At':new Date().toISOString()});
 }
 
+function playAgain(){
+  // Next game starts with the player after the last judge, in registration order
+  var rec_players=parseJSON(document.getElementById('endScores').dataset.players||'[]',[]);
+  var lastJudge=parseInt(sessionStorage.getItem('lastJudgeIdx')||'0');
+  var next=(lastJudge+1)%(rec_players.length||2);
+  location.href=location.pathname+'?nextJudge='+next;
+}
+
 function showEndScreen(players,scores){
   stopPolling();
   var sorted=players.slice().sort(function(a,b){return (scores[b.name]||0)-(scores[a.name]||0);});
   document.getElementById('endWinner').textContent='🏆 '+sorted[0].name;
   buildScoreboard('endScores',players,scores);
+  document.getElementById('endScores').dataset.players=JSON.stringify(players);
+  // Track which judge was last so next game rotates
+  var lastJudge=parseInt(sessionStorage.getItem('lastJudgeIdx')||'0');
+  sessionStorage.setItem('lastJudgeIdx',lastJudge);
   goTo('scEnd');
 }
 
@@ -1412,7 +1534,7 @@ function leaveGame(){
 }
 
 // ─── SOLO (PASS & PLAY) ───────────────────────────────
-var soloRankSize2=6;
+var soloRankSize2=5;
 
 function startSolo(){goTo('scSoloSetup');renderSoloPlayers();}
 
@@ -1599,7 +1721,7 @@ function shareInviteLink(){
   var url=window.location.origin+window.location.pathname+'?join='+code;
   var text='Join my Really Bad Day™ game! Tap to jump in → '+url;
   if(navigator.share){
-    navigator.share({title:'Join my Really Bad Day™ game!',text:text,url:url}).catch(function(){});
+    navigator.share({title:'Join my Really Bad Day™ game!',text:text}).catch(function(){});
   } else {
     navigator.clipboard.writeText(url).then(function(){
       alert('Link copied! Paste it in a text or email.');
