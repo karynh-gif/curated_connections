@@ -1574,9 +1574,11 @@ function soloReveal(card,judge,w){
 function shareInviteLink(){
   var code=currentRoomCode;
   var url=location.origin+location.pathname+'?join='+code;
-  var text='Join my Really Bad Day™ game! Tap to jump straight in → '+url;
-  if(navigator.share){navigator.share({title:'Join my game!',text:text}).catch(function(){});}
-  else{navigator.clipboard.writeText(url).then(function(){alert('Link copied — paste it in a text!');});}
+  if(navigator.share){
+    navigator.share({title:'Join my Really Bad Day™ game!',text:'Your room code is '+code+'. Tap the link to jump straight in:',url:url}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(url).then(function(){alert('Link copied — paste it in a text!');});
+  }
 }
 
 window.onload=function(){
