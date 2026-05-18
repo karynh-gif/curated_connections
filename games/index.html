@@ -1575,7 +1575,11 @@ function shareInviteLink(){
   var code=currentRoomCode;
   var url=location.origin+location.pathname+'?join='+code;
   if(navigator.share){
-    navigator.share({title:'Join my Really Bad Day™ game!',text:'Your room code is '+code+'. Tap the link to jump straight in:',url:url}).catch(function(){});
+    navigator.share({
+      title:'Join my Really Bad Day™ game!',
+      text:'Room code: '+code+' — tap to jump straight in',
+      url:url
+    }).catch(function(){});
   } else {
     navigator.clipboard.writeText(url).then(function(){alert('Link copied — paste it in a text!');});
   }
