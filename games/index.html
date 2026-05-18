@@ -170,9 +170,9 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
   </div>
   <div class="lobby-body">
     <div class="lobby-code-box">
-      <div class="lobby-code-label">Share this code</div>
+      <div class="lobby-code-label">Room Code</div>
       <div class="lobby-code" id="lobbyCode">------</div>
-      <div class="lobby-hint">Friends go to this site and tap "Join a Game"</div>
+      <button class="btn-p" onclick="shareInviteLink()" style="margin-top:.85rem;font-size:1rem;">📤 Share Invite Link</button>
     </div>
     <div>
       <div class="s-label" id="playerCountLabel">Players (0)</div>
@@ -1473,7 +1473,31 @@ function soloReveal(card,judge,w){
   goTo('scReveal');
 }
 
-window.onload=function(){myPlayerId=getMyId();};
+function shareInviteLink(){
+  var code=currentRoomCode;
+  var url=window.location.origin+window.location.pathname+'?join='+code;
+  var text='Join my Really Bad Day™ game! Tap to jump in → '+url;
+  if(navigator.share){
+    navigator.share({title:'Join my Really Bad Day™ game!',text:text,url:url}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(url).then(function(){
+      alert('Link copied! Paste it in a text or email.');
+    });
+  }
+}
+
+window.onload=function(){
+  myPlayerId=getMyId();
+  // Auto-fill join screen if ?join=CODE in URL
+  var params=new URLSearchParams(window.location.search);
+  var joinParam=params.get('join');
+  if(joinParam){
+    goTo('scJoin');
+    initJoinScreen();
+    document.getElementById('joinCode').value=joinParam.toUpperCase();
+    checkJoinReady();
+  }
+};
 </script>
 </body>
 </html>
