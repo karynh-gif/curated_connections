@@ -14,10 +14,13 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 @keyframes wheelPulse{0%,100%{box-shadow:0 0 30px rgba(255,102,0,.3);}50%{box-shadow:0 0 60px rgba(255,102,0,.7);}}
 .screen{display:none;min-height:100vh;flex-direction:column;}.screen.active{display:flex;}
-.hdr{background:transparent;padding:1rem 1.25rem .9rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(255,102,0,.18);}
-.hdr-logo{font-family:"Black Ops One",display;font-size:1.05rem;color:var(--white);}
-.hdr-meta{font-family:"Barlow Condensed",sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.75);text-align:center;flex:1;padding:0 .5rem;}
-.hdr-code{font-family:"Barlow Condensed",sans-serif;font-size:.85rem;font-weight:900;color:var(--orange);letter-spacing:.1em;}
+.hdr{background:transparent;padding:1.25rem 1.4rem 1.1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(255,102,0,.18);}
+.hdr-logo{font-family:"Black Ops One",display;font-size:1.25rem;color:var(--white);}
+.hdr-meta{font-family:"Barlow Condensed",sans-serif;font-size:.92rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.75);text-align:center;flex:1;padding:0 .5rem;}
+.hdr-code{font-family:"Barlow Condensed",sans-serif;font-size:.95rem;font-weight:900;color:var(--orange);letter-spacing:.1em;}
+.active-player-banner{background:linear-gradient(135deg,#0a2a4a,#1a3a6a);border:1.5px solid rgba(59,130,246,.35);border-radius:14px;padding:.9rem 1.1rem;text-align:center;margin-bottom:.25rem;}
+.active-player-label{font-family:"Barlow Condensed",sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(59,130,246,.7);margin-bottom:.3rem;}
+.active-player-name{font-family:"Black Ops One",display;font-size:1.5rem;color:#60a5fa;}
 .btn-p{background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;border-radius:50px;padding:.88rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.15rem;font-weight:900;letter-spacing:.06em;color:var(--white);cursor:pointer;width:100%;box-shadow:0 4px 24px rgba(255,102,0,.3);}
 .btn-p:disabled{opacity:.4;cursor:not-allowed;}
 .btn-s{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:50px;padding:.82rem 2rem;font-family:"Barlow Condensed",sans-serif;font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.55);cursor:pointer;width:100%;}
@@ -75,12 +78,14 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
 .sc-text{font-family:"Barlow",sans-serif;font-size:clamp(1.05rem,3.3vw,1.2rem);font-weight:600;color:rgba(255,255,255,.9);line-height:1.5;flex:1;}
 .sc-tag{font-family:"Barlow Condensed",sans-serif;font-size:.75rem;font-weight:700;color:rgba(255,102,0,.58);display:block;margin-bottom:.2rem;}
 /* WHEEL */
-.wheel-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;gap:1.5rem;text-align:center;}
-.wheel-ring{width:210px;height:210px;border-radius:50%;border:4px solid var(--orange);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;background:var(--card);box-shadow:0 0 40px rgba(255,102,0,.2);}
-.wheel-ring.spinning{animation:wheelPulse .4s ease infinite;}
-.wheel-emoji{font-size:3rem;line-height:1;}
-.wheel-name{font-family:"Black Ops One",display;font-size:1.1rem;color:var(--orange);}
-.wheel-desc{font-family:"Barlow",sans-serif;font-size:.95rem;color:rgba(255,255,255,.6);max-width:270px;line-height:1.5;}
+.wheel-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1.25rem 2rem;gap:1.1rem;}
+.wheel-canvas-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.wheel-pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:22px solid var(--orange);filter:drop-shadow(0 0 6px rgba(255,102,0,.9));z-index:10;}
+.wheel-title{font-family:"Black Ops One",display;font-size:1.25rem;color:var(--white);text-align:center;}
+.wheel-sub{font-family:"Barlow",sans-serif;font-size:.88rem;color:rgba(255,255,255,.45);text-align:center;max-width:280px;line-height:1.5;}
+.wheel-result-box{background:rgba(255,102,0,.1);border:1.5px solid rgba(255,102,0,.4);border-radius:14px;padding:.9rem 1.2rem;text-align:center;width:100%;max-width:320px;animation:fadeIn .4s ease both;display:none;}
+.wheel-result-name{font-family:"Black Ops One",display;font-size:1.4rem;color:var(--orange);}
+.wheel-result-desc{font-family:"Barlow",sans-serif;font-size:.85rem;color:rgba(255,255,255,.6);margin-top:.3rem;line-height:1.5;}
 /* REVEAL */
 .reveal-body{flex:1;padding:1rem 1.25rem;display:flex;flex-direction:column;gap:1rem;overflow-y:auto;}
 .reveal-title{font-family:"Black Ops One",display;font-size:1.6rem;color:var(--orange);text-align:center;padding:.5rem 0;}
@@ -228,11 +233,16 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-meta" id="waitJudgeRound">Round 1</div>
     <div class="hdr-code" id="waitJudgeCode"></div>
   </div>
-  <div class="wait-wrap">
-    <div class="wait-spinner"></div>
-    <div class="wait-title" id="waitJudgeTitle">Judge is ranking…</div>
-    <div class="wait-sub" id="waitJudgeSub">Sit tight — the reveal happens after everyone predicts.</div>
-    <div class="wait-players" id="waitJudgePlayers"></div>
+  <div class="card-body">
+    <div class="active-player-banner">
+      <div class="active-player-label">⚖️ Now Ranking</div>
+      <div class="active-player-name" id="waitJudgeTitle">Judge</div>
+    </div>
+    <div class="c-header" style="background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08);">
+      <div class="c-deck" id="waitJudgeDeck"></div>
+      <div class="c-instr" style="color:rgba(255,255,255,.4);font-size:.88rem;">Read the scenarios — predict their ranking while they decide</div>
+    </div>
+    <div id="waitJudgeScenarios"></div>
   </div>
 </div>
 
@@ -244,10 +254,13 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-code" id="predCode"></div>
   </div>
   <div class="card-body">
+    <div class="active-player-banner">
+      <div class="active-player-label">🎯 Predicting For</div>
+      <div class="active-player-name" id="predJudgeName">Judge</div>
+    </div>
     <div class="c-header">
       <div class="c-deck" id="predDeck"></div>
-      <div class="c-badge" id="predBadge">🎯 YOUR PREDICTION</div>
-      <div class="c-instr" id="predInstr">How do you think the judge ranked them?</div>
+      <div class="c-instr" id="predInstr">How do you think they ranked them?</div>
     </div>
     <div class="rank-legend">
       <div class="rl-i"><div class="rl-dot" style="background:var(--green)"></div>Least bad</div>
@@ -285,14 +298,19 @@ body{margin:0;padding:0;background:#080604;font-family:"Barlow",sans-serif;color
     <div class="hdr-code" id="wheelCode"></div>
   </div>
   <div class="wheel-wrap">
-    <div class="wheel-ring" id="wheelRing">
-      <div class="wheel-emoji" id="wEmoji">🎰</div>
-      <div class="wheel-name" id="wName">Spin It</div>
+    <div class="wheel-title" id="wheelTitle">🎰 What's the rule?</div>
+    <div class="wheel-canvas-wrap">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheelCanvas" width="260" height="260"></canvas>
     </div>
-    <div class="wheel-desc" id="wDesc">Spin the wheel to see what happens this round</div>
+    <div class="wheel-result-box" id="wheelResultBox">
+      <div class="wheel-result-name" id="wheelResultName"></div>
+      <div class="wheel-result-desc" id="wheelResultDesc"></div>
+    </div>
+    <div class="wheel-sub" id="wheelSub">Spin to see what rule applies this round</div>
     <button class="btn-p" id="spinBtn" onclick="spinWheel()" style="max-width:280px">Spin the Wheel →</button>
     <button class="btn-s" id="wheelNextBtn" onclick="goToReveal()" style="max-width:280px;display:none">See the Reveal →</button>
-    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite">Waiting for host to reveal…</div>
+    <div id="wheelWaitMsg" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:.9rem;color:rgba(255,255,255,.4);animation:pulse 2s ease infinite;text-align:center;">Waiting for host to reveal…</div>
   </div>
 </div>
 
@@ -1000,16 +1018,17 @@ async function submitJudgeRanking(){
 // ─── WAIT FOR JUDGE ───────────────────────────────────
 function showWaitJudge(card,theme,round,judge,players,preds){
   document.getElementById('waitJudgeRound').textContent=card.emoji+' '+theme+' · Round '+round;
-  document.getElementById('waitJudgeTitle').textContent=(judge?judge.name:'Judge')+' is ranking…';
-  document.getElementById('waitJudgeSub').textContent='Sit tight — everyone predicts after the judge submits.';
-  var pb=document.getElementById('waitJudgePlayers');
-  pb.innerHTML='';
-  players.forEach(function(p){
-    var chip=document.createElement('div');
-    chip.className='player-chip';
-    chip.innerHTML='<div class="p-dot" style="background:'+p.color+'"></div>'
-      +'<div class="p-chip-name">'+esc(p.name)+'</div>';
-    pb.appendChild(chip);
+  document.getElementById('waitJudgeTitle').textContent=judge?judge.name:'Judge';
+  document.getElementById('waitJudgeDeck').textContent=card.emoji+' '+theme;
+  // Show scenarios read-only
+  var scDiv=document.getElementById('waitJudgeScenarios');
+  scDiv.innerHTML='';
+  (currentScenarios||[]).forEach(function(s){
+    var div=document.createElement('div');
+    div.className='sc-item';
+    div.style.cursor='default';
+    div.innerHTML='<div class="sc-text"><span class="sc-tag">'+esc(s.tag)+'</span>'+esc(s.t)+'</div>';
+    scDiv.appendChild(div);
   });
   goTo('scWaitJudge');
 }
@@ -1023,7 +1042,7 @@ function showPredicting(card,theme,round,judge,rankSize,scenarios){
   predRankSizeLocal=rankSize;
   document.getElementById('predRound').textContent=card.emoji+' '+theme+' · Round '+round;
   document.getElementById('predDeck').textContent=card.emoji+' '+theme;
-  document.getElementById('predBadge').textContent='🎯 PREDICTING — HOW DID '+(judge?judge.name.toUpperCase():'JUDGE')+' RANK THEM?';
+  document.getElementById('predJudgeName').textContent=judge?judge.name:'Judge';
   document.getElementById('predInstr').textContent='Tap in the order you think they chose';
   myPredictionLocal=[];
   renderRankList('predList',scenarios,myPredictionLocal,'predLockBtn','predProgTxt',rankSize);
@@ -1076,17 +1095,70 @@ function showWaitPred(card,theme,round,players,preds){
 
 // ─── WHEEL ────────────────────────────────────────────
 var wheelSpun=false;
+var wheelAngle=0;
+var wheelAnimFrame=null;
+
+var WHEEL_COLORS=['#c0392b','#e67e22','#27ae60','#2980b9','#8e44ad','#16a085'];
+
+function drawWheel(angle){
+  var canvas=document.getElementById('wheelCanvas');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var cx=130,cy=130,r=122;
+  var n=WHEEL.length;
+  var arc=2*Math.PI/n;
+  ctx.clearRect(0,0,260,260);
+  WHEEL.forEach(function(w,i){
+    var start=angle+i*arc-Math.PI/2;
+    var end=start+arc;
+    // Segment
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=2;ctx.stroke();
+    // Emoji + text
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(start+arc/2);
+    ctx.textAlign='right';
+    // Emoji
+    ctx.font='18px serif';
+    ctx.fillText(w.emoji,r-8,6);
+    // Name
+    ctx.font='bold 11px Barlow Condensed, sans-serif';
+    ctx.fillStyle='white';
+    ctx.shadowColor='rgba(0,0,0,.6)';ctx.shadowBlur=3;
+    var label=w.name.length>10?w.name.slice(0,9)+'…':w.name;
+    ctx.fillText(label,r-32,6);
+    ctx.restore();
+  });
+  // Center circle
+  ctx.beginPath();ctx.arc(cx,cy,22,0,2*Math.PI);
+  ctx.fillStyle='#080604';ctx.fill();
+  ctx.strokeStyle='rgba(255,102,0,.6)';ctx.lineWidth=3;ctx.stroke();
+  ctx.font='bold 16px serif';ctx.textAlign='center';ctx.fillStyle='white';
+  ctx.shadowColor='none';ctx.shadowBlur=0;
+  ctx.fillText('🎰',cx,cy+6);
+}
 
 function showWheelScreen(card,theme,round,wheelResult){
   document.getElementById('wheelRound').textContent=card.emoji+' '+theme+' · Round '+round;
+  document.getElementById('wheelResultBox').style.display='none';
+  document.getElementById('wheelSub').style.display='';
   if(wheelResult){
-    // Already spun — show result on both screens
-    var w=WHEEL.find(function(x){return x.name===wheelResult;})||WHEEL[0];
-    document.getElementById('wEmoji').textContent=w.emoji;
-    document.getElementById('wName').textContent=w.name;
-    document.getElementById('wDesc').textContent=w.desc;
+    var wi=WHEEL.findIndex(function(x){return x.name===wheelResult;});
+    var w=WHEEL[wi>=0?wi:0];
+    var n=WHEEL.length;
+    var arc=2*Math.PI/n;
+    // Rotate so winner is at top (under pointer)
+    wheelAngle=-(wi*arc);
+    drawWheel(wheelAngle);
+    document.getElementById('wheelTitle').textContent=w.emoji+' '+w.name;
+    document.getElementById('wheelSub').style.display='none';
+    document.getElementById('wheelResultBox').style.display='';
+    document.getElementById('wheelResultName').textContent=w.emoji+' '+w.name;
+    document.getElementById('wheelResultDesc').textContent=w.desc;
     document.getElementById('spinBtn').style.display='none';
-    document.getElementById('wheelRing').classList.remove('spinning');
     if(isHost){
       document.getElementById('wheelNextBtn').style.display='';
       document.getElementById('wheelWaitMsg').style.display='none';
@@ -1097,11 +1169,9 @@ function showWheelScreen(card,theme,round,wheelResult){
     goTo('scWheel');
     return;
   }
-  // Not yet spun — show wheel to everyone, only host gets spin button
-  document.getElementById('wEmoji').textContent='🎰';
-  document.getElementById('wName').textContent='Spin It';
-  document.getElementById('wDesc').textContent='Spin the wheel to see what happens this round';
-  document.getElementById('wheelRing').classList.add('spinning');
+  // Not yet spun
+  wheelAngle=0;drawWheel(wheelAngle);
+  document.getElementById('wheelTitle').textContent='🎰 What\'s the rule?';
   document.getElementById('spinBtn').style.display=isHost?'':'none';
   document.getElementById('wheelWaitMsg').style.display=isHost?'none':'';
   document.getElementById('wheelNextBtn').style.display='none';
@@ -1113,49 +1183,64 @@ function spinWheel(){
   if(wheelSpun)return;
   wheelSpun=true;
   document.getElementById('spinBtn').style.display='none';
-  document.getElementById('wheelRing').classList.add('spinning');
-  setTimeout(async function(){
-    // Pick wheel and save to Airtable
-    var rec=await atFind(currentRoomCode);
-    var w=WHEEL.find(function(x){return x.name===(rec.fields['Wheel Result']||'');});
-    if(!w)w=WHEEL[Math.floor(Math.random()*WHEEL.length)];
-    // Calculate scores
-    var players=parseJSON(rec.fields['Players']||'[]',[]);
-    var judgeIdx=parseInt(rec.fields['Judge Index']||0);
-    var judge=players[judgeIdx%players.length];
-    var jRanking=parseJSON(rec.fields['Judge Ranking']||'null',null)||[];
-    var preds=parseJSON(rec.fields['Predictions']||'{}',{});
-    var scores=parseJSON(rec.fields['Scores']||'{}',{});
-    var rankSize=parseInt(rec.fields['Rank Size']||6);
-    var predArr=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
-      return{name:p.name,rank:preds[p.name]||[],earned:0};
-    });
-    // Score each predictor
-    predArr.forEach(function(pred){
-      var pts=0;
-      (pred.rank||[]).forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
-      scores[pred.name]=(scores[pred.name]||0)+pts;
-      pred.earned=pts;
-    });
-    // Judge earns top predictor score
-    var maxPred=0;predArr.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
-    scores[judge.name]=(scores[judge.name]||0)+maxPred;
-    // Apply wheel
-    scores=w.apply(scores,judge.name,predArr,rankSize);
-    // Update players scores
-    players.forEach(function(p){p.score=scores[p.name]||0;});
-    await atUpdate(currentRecordId,{
-      'Wheel Result':w.name,'Status':'reveal',
-      'Scores':JSON.stringify(scores),
-      'Players':JSON.stringify(players),
-      'Updated At':new Date().toISOString()
-    });
-    document.getElementById('wheelRing').classList.remove('spinning');
-    document.getElementById('wEmoji').textContent=w.emoji;
-    document.getElementById('wName').textContent=w.name;
-    document.getElementById('wDesc').textContent=w.desc;
-    document.getElementById('wheelNextBtn').style.display='';
-  },2200);
+  document.getElementById('wheelTitle').textContent='🎰 Spinning…';
+  // Pick winner immediately, spin animation to land there
+  var winIdx=Math.floor(Math.random()*WHEEL.length);
+  var n=WHEEL.length;
+  var arc=2*Math.PI/n;
+  // Target angle: spin 6 full rotations + land on winner segment
+  var targetAngle=wheelAngle-(Math.PI*12)-(winIdx*arc);
+  var startAngle=wheelAngle;
+  var startTime=null;
+  var duration=4000;
+  function ease(t){return t<1?1-Math.pow(1-t,4):1;}
+  function animate(ts){
+    if(!startTime)startTime=ts;
+    var elapsed=ts-startTime;
+    var t=Math.min(elapsed/duration,1);
+    wheelAngle=startAngle+(targetAngle-startAngle)*ease(t);
+    drawWheel(wheelAngle);
+    if(t<1){wheelAnimFrame=requestAnimationFrame(animate);}
+    else{onWheelLanded(winIdx);}
+  }
+  requestAnimationFrame(animate);
+}
+
+async function onWheelLanded(winIdx){
+  var w=WHEEL[winIdx];
+  document.getElementById('wheelTitle').textContent=w.emoji+' '+w.name;
+  document.getElementById('wheelResultBox').style.display='';
+  document.getElementById('wheelResultName').textContent=w.emoji+' '+w.name;
+  document.getElementById('wheelResultDesc').textContent=w.desc;
+  document.getElementById('wheelSub').style.display='none';
+  // Calculate scores and save
+  var rec=await atFind(currentRoomCode);
+  var players=parseJSON(rec.fields['Players']||'[]',[]);
+  var judgeIdx=parseInt(rec.fields['Judge Index']||0);
+  var judge=players[judgeIdx%players.length];
+  var jRanking=parseJSON(rec.fields['Judge Ranking']||'null',null)||[];
+  var preds=parseJSON(rec.fields['Predictions']||'{}',{});
+  var scores=parseJSON(rec.fields['Scores']||'{}',{});
+  var rankSize=parseInt(rec.fields['Rank Size']||6);
+  var predArr=players.filter(function(p){return p.id!==judge.id;}).map(function(p){
+    return{name:p.name,rank:preds[p.name]||[],earned:0};
+  });
+  predArr.forEach(function(pred){
+    var pts=0;
+    (pred.rank||[]).forEach(function(scIdx,pos){if(jRanking[pos]===scIdx)pts+=(pos+1);});
+    scores[pred.name]=(scores[pred.name]||0)+pts;pred.earned=pts;
+  });
+  var maxPred=0;predArr.forEach(function(p){if(p.earned>maxPred)maxPred=p.earned;});
+  scores[judge.name]=(scores[judge.name]||0)+maxPred;
+  scores=w.apply(scores,judge.name,predArr,rankSize);
+  players.forEach(function(p){p.score=scores[p.name]||0;});
+  await atUpdate(currentRecordId,{
+    'Wheel Result':w.name,'Status':'wheel',
+    'Scores':JSON.stringify(scores),
+    'Players':JSON.stringify(players),
+    'Updated At':new Date().toISOString()
+  });
+  document.getElementById('wheelNextBtn').style.display='';
 }
 
 function goToReveal(){
@@ -1240,15 +1325,17 @@ function showRevealScreen(rec,card,round,players,jRanking,preds,scores,wheelResu
 function buildScoreboard(id,players,scores){
   var sorted=players.slice().sort(function(a,b){return (scores[b.name]||0)-(scores[a.name]||0);});
   var div=document.getElementById(id);div.innerHTML='';
+  var rankLabels=['1st','2nd','3rd'];
   sorted.forEach(function(p,i){
     var pts=scores[p.name]||0;
     var isLeader=i===0&&pts>0;
     var chip=document.createElement('div');
     chip.className='sc-chip'+(isLeader?' leader':'');
-    chip.innerHTML='<div class="sc-rank'+(isLeader?' gold':'')+'">'+['1st','2nd','3rd'][i]||((i+1)+'th')+'</div>'
-      +'<div class="sc-dot" style="background:'+p.color+'"></div>'
+    var rankLbl=rankLabels[i]||(i+1)+'th';
+    chip.innerHTML='<div class="sc-rank'+(isLeader?' gold':'')+'">'+rankLbl+'</div>'
+      +'<div class="sc-dot" style="background:'+p.color+';width:14px;height:14px;"></div>'
       +'<div class="sc-name">'+esc(p.name)+'</div>'
-      +'<div class="sc-pts">'+pts+'</div>';
+      +'<div class="sc-pts">'+pts+'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.3);margin-left:2px;">pts</span></div>';
     div.appendChild(chip);
   });
 }
@@ -1488,6 +1575,7 @@ function shareInviteLink(){
 
 window.onload=function(){
   myPlayerId=getMyId();
+  drawWheel(0);
   // Auto-fill join screen if ?join=CODE in URL
   var params=new URLSearchParams(window.location.search);
   var joinParam=params.get('join');
